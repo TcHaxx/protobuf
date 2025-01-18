@@ -1,0 +1,57 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1">
+  <POU Name="FB_ParseRawInt32Tests" Id="{44811a81-32e2-4280-abe5-ae00f37e25f2}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK INTERNAL FINAL FB_ParseRawInt32Tests EXTENDS TcUnit.FB_TestSuite
+VAR CONSTANT
+    cRawValue0          : ARRAY[0..15] OF BYTE := [16#0];
+    cRawValue127        : ARRAY[0..15] OF BYTE := [16#7F];
+    cRawValue128        : ARRAY[0..15] OF BYTE := [16#80, 16#01];
+    cRawValue150        : ARRAY[0..15] OF BYTE := [16#96, 16#01];
+    cRawValue65535      : ARRAY[0..15] OF BYTE := [16#FF, 16#FF, 16#03];
+    cRawValue233805534  : ARRAY[0..15] OF BYTE := [16#DE, 16#AD, 16#BE, 16#EF];
+    cRawValueMaxUdint   : ARRAY[0..15] OF BYTE := [16#FF, 16#FF, 16#FF, 16#FF, 16#0F];
+END_VAR]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[TEST(__POUNAME());
+
+ShouldParseVarint(aBuffer:= cRawValue0, nExpected:= 0);
+ShouldParseVarint(aBuffer:= cRawValue127, nExpected:= 127);
+ShouldParseVarint(aBuffer:= cRawValue128, nExpected:= 128);
+ShouldParseVarint(aBuffer:= cRawValue150, nExpected:= 150);
+ShouldParseVarint(aBuffer:= cRawValue65535, nExpected:= 65535);
+ShouldParseVarint(aBuffer:= cRawValue233805534, nExpected:= 233805534);
+ShouldParseVarint(aBuffer:= cRawValueMaxUdint, nExpected:= 16#FFFFFFFF);
+
+TEST_FINISHED_NAMED(__POUNAME());]]></ST>
+    </Implementation>
+    <Method Name="ShouldParseVarint" Id="{2386087c-e6a6-41ed-9a60-d171e0776b6a}">
+      <Declaration><![CDATA[METHOD PRIVATE ShouldParseVarint
+VAR_IN_OUT CONSTANT
+    aBuffer     : ARRAY [*] OF BYTE;    
+END_VAR
+VAR_INPUT CONSTANT
+    nExpected   : UDINT;
+END_VAR
+VAR_INST
+    stState : ST_ParserInternalState;
+END_VAR
+VAR
+    nActual         : UDINT;    
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[// Arrange
+stState.nBufferPos := 0;
+stState.nBufferSize := TO_UDINT(UPPER_BOUND(aBuffer, 1));
+
+// Act
+nActual := F_ParseRawVarint32(aBuffer, stState);
+
+// Assert
+AssertEquals_UDINT(
+    Expected:= nExpected,
+    Actual := nActual,
+    Message:=CONCAT(__POUNAME(), CONCAT(': ', CONCAT('Expected Varint to equal ', TO_STRING(nExpected)))));]]></ST>
+      </Implementation>
+    </Method>
+  </POU>
+</TcPlcObject>

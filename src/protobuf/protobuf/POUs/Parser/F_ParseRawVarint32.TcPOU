@@ -1,0 +1,43 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1">
+  <POU Name="F_ParseRawVarint32" Id="{51c6c8a1-a14a-4443-b331-fa1787d7bb62}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION F_ParseRawVarint32 : UDINT
+VAR_IN_OUT CONSTANT
+    aBuffer : ARRAY [*] OF BYTE;
+END_VAR
+VAR_IN_OUT
+    stState : ST_ParserInternalState;
+END_VAR
+VAR 
+    bTmpByte        : BYTE;
+    nResult         : UDINT;
+    nShift          : UINT := 1;
+END_VAR]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[
+IF UPPER_BOUND(aBuffer,1) > TO_DINT(stState.nBufferSize) THEN
+    // TODO: Handle Errors
+    RETURN;    
+END_IF
+
+bTmpByte := aBuffer[stState.nBufferPos];
+
+IF bTmpByte < 16#80 THEN
+    F_ParseRawVarint32 := TO_UDINT(bTmpByte);
+    RETURN;
+END_IF 
+
+nResult := bTmpByte AND 16#7F;
+stState.nBufferPos := stState.nBufferPos + 1;
+
+WHILE (bTmpByte > 16#7F) DO
+    bTmpByte := aBuffer[stState.nBufferPos];
+    nResult := nResult OR SHL((bTmpByte AND 16#7F), nShift * 7); 
+    nShift := nShift + 1; 
+    stState.nBufferPos := stState.nBufferPos + 1;
+END_WHILE 
+
+F_ParseRawVarint32 := nResult;]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>
