@@ -1,0 +1,19 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1">
+  <DUT Name="E_ParserErrorCode" Id="{4e8f9653-e443-4be4-a27e-634a537de09d}">
+    <Declaration><![CDATA[// Parser ErrorCode is set when a message being parsed is invalid in some way,
+// e.g. malformed Varint. Zero means no error.
+{attribute 'qualified_only'}
+{attribute 'strict'}
+{attribute 'to_string'}
+TYPE E_ParserErrorCode :
+(
+	NoError := S_OK,            // No Error.
+    InternalError := -1,        // Internal parser error.
+    MalformedVarInt := -2,      // Encountered a malformed Varint.
+    InvalidDataType := -3      // Datatype not supported, e.g. F_ParseRawInt32 -> LINT
+) DINT := NoError;
+END_TYPE
+]]></Declaration>
+  </DUT>
+</TcPlcObject>

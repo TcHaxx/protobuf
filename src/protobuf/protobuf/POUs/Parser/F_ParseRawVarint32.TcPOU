@@ -1,20 +1,28 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <TcPlcObject Version="1.1.0.1">
   <POU Name="F_ParseRawVarint32" Id="{51c6c8a1-a14a-4443-b331-fa1787d7bb62}" SpecialFunc="None">
-    <Declaration><![CDATA[FUNCTION F_ParseRawVarint32 : UDINT
+    <Declaration><![CDATA[FUNCTION F_ParseRawVarint32 : HRESULT
 VAR_IN_OUT CONSTANT
     aBuffer : ARRAY [*] OF BYTE;
 END_VAR
 VAR_IN_OUT
     stState : ST_ParserInternalState;
 END_VAR
+VAR_INPUT
+    anyVarInt32Result : ANY_INT;
+END_VAR
 VAR 
     bTmpByte        : BYTE;
     nResult         : UDINT;
     nShift          : UINT := 1;
+    i               : INT;
 END_VAR]]></Declaration>
     <Implementation>
-      <ST><![CDATA[
+      <ST><![CDATA[IF anyVarInt32Result.diSize > SIZEOF(UDINT) THEN
+    F_ParseRawVarint32 := stState.eParserErrorCode := E_ParserErrorCode.InvalidDataType;     
+    RETURN; 
+END_IF
+
 IF UPPER_BOUND(aBuffer,1) > TO_DINT(stState.nBufferSize) THEN
     // TODO: Handle Errors
     RETURN;    
@@ -25,20 +33,23 @@ bTmpByte := aBuffer[stState.nBufferPos];
 stState.nBufferPos := stState.nBufferPos + 1;
 
 IF bTmpByte < 16#80 THEN
-    F_ParseRawVarint32 := TO_UDINT(bTmpByte);
+    nResult := TO_UDINT(bTmpByte);
+    MEMMOVE(destAddr:= anyVarInt32Result.pValue, srcAddr:= ADR(nResult), SIZEOF(nResult));
     RETURN;
 END_IF 
 
 nResult := bTmpByte AND 16#7F;
 
-WHILE (bTmpByte > 16#7F) DO
+WHILE (bTmpByte > 16#7F AND TO_DINT(stState.nBufferPos) <= UPPER_BOUND(aBuffer, 1)) DO
     bTmpByte := aBuffer[stState.nBufferPos];
     nResult := nResult OR SHL((bTmpByte AND 16#7F), nShift * 7); 
     nShift := nShift + 1; 
     stState.nBufferPos := stState.nBufferPos + 1;
 END_WHILE 
 
-F_ParseRawVarint32 := nResult;]]></ST>
+MEMMOVE(destAddr:= anyVarInt32Result.pValue, srcAddr:= ADR(nResult), SIZEOF(nResult));
+
+F_ParseRawVarint32 := S_OK;]]></ST>
     </Implementation>
   </POU>
 </TcPlcObject>

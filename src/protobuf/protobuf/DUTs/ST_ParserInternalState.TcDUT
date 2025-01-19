@@ -3,8 +3,10 @@
   <DUT Name="ST_ParserInternalState" Id="{ab017140-f9c9-488e-a77f-7de05466f020}">
     <Declaration><![CDATA[TYPE ST_ParserInternalState :
 STRUCT
-    nBufferSize     :   UDINT;              // Size of the current buffer
-    nBufferPos      :   UDINT;             // The position within the current buffer (i.e. the next byte to read)
+    nBufferSize         : UDINT;                // Size of the current buffer
+    nBufferPos          : UDINT;                // The position within the current buffer (i.e. the next byte to read)
+    bError              : BOOL;
+    eParserErrorCode    : E_ParserErrorCode;    // 0 = no error, <> 0 = error
 END_STRUCT
 END_TYPE
 ]]></Declaration>
