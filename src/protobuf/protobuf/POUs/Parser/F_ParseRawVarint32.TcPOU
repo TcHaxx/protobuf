@@ -22,13 +22,14 @@ END_IF
 
 bTmpByte := aBuffer[stState.nBufferPos];
 
+stState.nBufferPos := stState.nBufferPos + 1;
+
 IF bTmpByte < 16#80 THEN
     F_ParseRawVarint32 := TO_UDINT(bTmpByte);
     RETURN;
 END_IF 
 
 nResult := bTmpByte AND 16#7F;
-stState.nBufferPos := stState.nBufferPos + 1;
 
 WHILE (bTmpByte > 16#7F) DO
     bTmpByte := aBuffer[stState.nBufferPos];
