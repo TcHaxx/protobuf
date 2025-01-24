@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1">
+  <DUT Name="ST_WriterInternalState" Id="{f65f559f-4118-4f64-8be6-cf1721b70ddd}">
+    <Declaration><![CDATA[TYPE ST_WriterInternalState :
+STRUCT
+    nBufferSize         : UDINT;                // Size of the current buffer
+    nBufferPos          : UDINT;                // The position within the current buffer (i.e. the next byte to read)
+    bError              : BOOL;
+    eWriterErrorCode    : E_WriterErrorCode;    // 0 = no error, <> 0 = error
+END_STRUCT
+END_TYPE
+]]></Declaration>
+  </DUT>
+</TcPlcObject>

@@ -9,7 +9,7 @@
     <WriteProductVersion>false</WriteProductVersion>
     <GenerateTpy>false</GenerateTpy>
     <Name>protobuf</Name>
-    <ProgramVersion>3.1.4026.11</ProgramVersion>
+    <ProgramVersion>3.1.4026.13</ProgramVersion>
     <Application>{aab3386f-1433-4e51-aee9-b496d522750f}</Application>
     <TypeSystem>{aa3fbe6c-8030-475f-a685-e873b003fd01}</TypeSystem>
     <Implicit_Task_Info>{4c235652-0fed-4dea-be12-419d132604dd}</Implicit_Task_Info>
@@ -45,7 +45,13 @@
     <Compile Include="DUTs\E_ParserErrorCode.TcDUT">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="DUTs\E_WriterErrorCode.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="DUTs\ST_ParserInternalState.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DUTs\ST_WriterInternalState.TcDUT">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="PlcTask.TcTTO">
@@ -58,6 +64,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="POUs\Parser\F_ParseRawVarint32.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\Writer\F_WriteRawVarint32.TcPOU">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Project Information\F_GetCompany.TcPOU">
@@ -75,6 +84,9 @@
     <Compile Include="TESTs\Parser\FB_ParseRawInt32Tests.TcPOU">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="TESTs\Parser\FB_WriteRawInt32Tests.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="TESTs\PRG_UnitTests.TcPOU">
       <SubType>Code</SubType>
     </Compile>
@@ -85,6 +97,7 @@
   <ItemGroup>
     <Folder Include="DUTs" />
     <Folder Include="GVLs" />
+    <Folder Include="POUs\Writer" />
     <Folder Include="TESTs" />
     <Folder Include="POUs\Parser" />
     <Folder Include="Project Information" />
@@ -101,32 +114,6 @@
     <PlaceholderReference Include="Tc2_System">
       <DefaultResolution>Tc2_System, * (Beckhoff Automation GmbH)</DefaultResolution>
       <Namespace>Tc2_System</Namespace>
-      <Parameters>
-        <Parameter ListName="PARAM">
-          <Key>STRING_LENGTH_ADDRESS</Key>
-          <Value>20</Value>
-        </Parameter>
-        <Parameter ListName="PARAM">
-          <Key>STRING_LENGTH_COMMENT</Key>
-          <Value>255</Value>
-        </Parameter>
-        <Parameter ListName="PARAM">
-          <Key>STRING_LENGTH_EXP</Key>
-          <Value>255</Value>
-        </Parameter>
-        <Parameter ListName="PARAM">
-          <Key>STRING_LENGTH_OUTSTRING</Key>
-          <Value>255</Value>
-        </Parameter>
-        <Parameter ListName="PARAM">
-          <Key>TABLE_SHOW_VALID_ITEMS</Key>
-          <Value>FALSE</Value>
-        </Parameter>
-        <Parameter ListName="PARAM">
-          <Key>TABLE_UPPER_BOUND</Key>
-          <Value>15</Value>
-        </Parameter>
-      </Parameters>
     </PlaceholderReference>
     <PlaceholderReference Include="Tc3_Module">
       <DefaultResolution>Tc3_Module, * (Beckhoff Automation GmbH)</DefaultResolution>
@@ -140,40 +127,12 @@
       <Condition>UNIT_TEST</Condition>
       <Parameters>
         <Parameter ListName="GVL_PARAM_TCUNIT">
-          <Key>ADSLOGMESSAGEFIFORINGBUFFERSIZE</Key>
-          <Value>2000</Value>
-        </Parameter>
-        <Parameter ListName="GVL_PARAM_TCUNIT">
-          <Key>LOGEXTENDEDRESULTS</Key>
-          <Value>TRUE</Value>
-        </Parameter>
-        <Parameter ListName="GVL_PARAM_TCUNIT">
           <Key>MAXNUMBEROFASSERTSFOREACHTESTSUITE</Key>
-          <Value>100</Value>
-        </Parameter>
-        <Parameter ListName="GVL_PARAM_TCUNIT">
-          <Key>MAXNUMBEROFTESTSFOREACHTESTSUITE</Key>
           <Value>100</Value>
         </Parameter>
         <Parameter ListName="GVL_PARAM_TCUNIT">
           <Key>MAXNUMBEROFTESTSUITES</Key>
           <Value>100</Value>
-        </Parameter>
-        <Parameter ListName="GVL_PARAM_TCUNIT">
-          <Key>TIMEBETWEENTESTSUITESEXECUTION</Key>
-          <Value>TIME#0ms</Value>
-        </Parameter>
-        <Parameter ListName="GVL_PARAM_TCUNIT">
-          <Key>XUNITBUFFERSIZE</Key>
-          <Value>65535</Value>
-        </Parameter>
-        <Parameter ListName="GVL_PARAM_TCUNIT">
-          <Key>XUNITENABLEPUBLISH</Key>
-          <Value>FALSE</Value>
-        </Parameter>
-        <Parameter ListName="GVL_PARAM_TCUNIT">
-          <Key>XUNITFILEPATH</Key>
-          <Value>'%TC_BOOTPRJPATH%tcunit_xunit_testresults.xml'</Value>
         </Parameter>
       </Parameters>
     </PlaceholderReference>

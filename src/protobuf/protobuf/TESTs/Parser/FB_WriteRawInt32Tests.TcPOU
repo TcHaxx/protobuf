@@ -1,0 +1,99 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1">
+  <POU Name="FB_WriteRawInt32Tests" Id="{0546a909-5703-449b-b562-3bfb6139e10c}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK INTERNAL FINAL FB_WriteRawInt32Tests EXTENDS TcUnit.FB_TestSuite
+VAR_INPUT
+END_VAR
+VAR_OUTPUT
+END_VAR
+VAR
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[ShouldWriteVarintTheory();]]></ST>
+    </Implementation>
+    <Method Name="ShouldWriteVarint" Id="{d291b4d8-45d5-4d08-8319-db64da2405cf}">
+      <Declaration><![CDATA[METHOD PRIVATE ShouldWriteVarint
+VAR_IN_OUT CONSTANT
+    aExpectedBuffer     : ARRAY [*] OF BYTE;    
+END_VAR
+VAR_INPUT
+    nValue              : UDINT;
+END_VAR
+VAR_INPUT CONSTANT
+    nBufferPosStart     : UDINT;
+    nExpectedBufferPos  : UDINT;
+END_VAR
+VAR_INST
+    stState : ST_WriterInternalState;
+END_VAR
+VAR
+    aActualBuffer       : ARRAY[0..15] OF BYTE; 
+    hrActual        : HRESULT;  
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[
+// Arrange
+stState.nBufferSize := SIZEOF(aActualBuffer);
+stState.nBufferPos := nBufferPosStart;
+
+// Act
+hrActual := F_WriteRawVarint32(aActualBuffer, stState, nValue);
+
+// Assert
+AssertEquals_DINT(
+     Expected:= hrActual,
+     Actual:= S_OK,
+     Message:= 'Expected S_OK instead of error');
+
+AssertArrayEquals_BYTE(
+    {warning disable C0041}     // warning: C0041: VAR_IN_OUT respectively REFERENCE parameter 'Expecteds' of 'AssertArrayEquals_BYTE' needs variable with write access as input
+    Expecteds:= aExpectedBuffer,
+    {warning restore C0041}
+    Actuals:= aActualBuffer,
+    MEssage:= CONCAT('Expected buffers to be equal for Varint ', TO_STRING(nValue))
+);
+
+AssertEquals_UDINT(
+    Expected:= nExpectedBufferPos,
+    Actual:= stState.nBufferPos,
+    Message:= CONCAT(CONCAT('Expected stState.nBufferPos to equal ', TO_STRING(nExpectedBufferPos)), CONCAT(', for Varint ', TO_STRING(nExpectedBufferPos))));]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="ShouldWriteVarintTheory" Id="{d9684c5f-bded-4541-8207-2c85a5d7429c}">
+      <Declaration><![CDATA[METHOD PRIVATE ShouldWriteVarintTheory : REFERENCE TO FB_Test
+VAR CONSTANT
+    cExpectedRawValue0          : ARRAY[0..15] OF BYTE := [16#0];
+    cExpectedRawValue127        : ARRAY[0..15] OF BYTE := [16#00, 16#00, 16#00, 16#7F];
+    cExpectedRawValue128        : ARRAY[0..15] OF BYTE := [16#80, 16#01];
+    cExpectedRawValue150        : ARRAY[0..15] OF BYTE := [16#96, 16#01];
+    cExpectedRawValue65535      : ARRAY[0..15] OF BYTE := [16#FF, 16#FF, 16#03];
+    cExpectedRawValue502240990  : ARRAY[0..15] OF BYTE := [16#DE, 16#AD, 16#BE, 16#EF, 16#01];
+    cExpectedRawValueMaxUdint   : ARRAY[0..15] OF BYTE := [16#00, 16#00, 16#00, 16#FF, 16#FF, 16#FF, 16#FF, 16#0F];
+END_VAR
+VAR
+    aBuffer             : ARRAY[0..15] OF BYTE;
+    stState             : ST_WriterInternalState;
+    hrActual            : HRESULT;
+    
+    nByte               : BYTE;
+    nUint               : UINT;
+    nUDint              : UDINT;
+    nInt                : INT;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST(__POUNAME());
+
+ShouldWriteVarint(aExpectedBuffer:= cExpectedRawValue0, nValue:= 0, nBufferPosStart:= 0, nExpectedBufferPos:= 1);
+ShouldWriteVarint(aExpectedBuffer:= cExpectedRawValue127, nValue:= 127, nBufferPosStart:= 3, nExpectedBufferPos:= 4);
+ShouldWriteVarint(aExpectedBuffer:= cExpectedRawValue128, nValue:= 128, nBufferPosStart:= 0, nExpectedBufferPos:= 2);
+ShouldWriteVarint(aExpectedBuffer:= cExpectedRawValue150, nValue:= 150, nBufferPosStart:= 0, nExpectedBufferPos:= 2);
+ShouldWriteVarint(aExpectedBuffer:= cExpectedRawValue65535, nValue:= 65535, nBufferPosStart:= 0, nExpectedBufferPos:= 3);
+ShouldWriteVarint(aExpectedBuffer:= cExpectedRawValue502240990, nValue:= 502240990, nBufferPosStart:= 0, nExpectedBufferPos:= 5);
+ShouldWriteVarint(aExpectedBuffer:= cExpectedRawValueMaxUdint, nValue:= 16#FFFFFFFF, nBufferPosStart:= 3, nExpectedBufferPos:= 8);
+
+TEST_FINISHED_NAMED(__POUNAME());]]></ST>
+      </Implementation>
+    </Method>
+  </POU>
+</TcPlcObject>
