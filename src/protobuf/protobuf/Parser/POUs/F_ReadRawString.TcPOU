@@ -1,0 +1,50 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1">
+  <POU Name="F_ReadRawString" Id="{e87fdb38-99fb-4e2f-b3dc-522d23307b10}" SpecialFunc="None">
+    <Declaration><![CDATA[// Reads a UTF-8 string from the next "length" bytes.
+FUNCTION INTERNAL F_ReadRawString : HRESULT
+VAR_INPUT CONSTANT
+    aBuffer : ARRAY [*] OF BYTE;
+    nLength : UDINT;   
+    stAnyStringOut : ST_AnyType;
+END_VAR
+VAR_IN_OUT
+    stState : ST_ParserInternalState;
+END_VAR
+VAR
+    nStrLength : UDINT;
+    pNullByte : POINTER TO BYTE;
+    refString : REFERENCE TO STRING;
+END_VAR]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[F_ReadRawString := S_OK;
+
+IF stAnyStringOut.TypeClass = __SYSTEM.TYPE_CLASS.TYPE_WSTRING THEN
+    F_ReadRawString := stState.eParserErrorCode := E_ParserErrorCode.InvalidDataType;
+    stState.bError := TRUE;
+    RETURN;
+END_IF
+
+IF nLength > TO_UDINT(stAnyStringOut.nSize - 1) OR 
+    nLength > stState.nBufferSize - stState.nBufferPos THEN
+    F_ReadRawString := stState.eParserErrorCode := E_ParserErrorCode.TruncatedMessage;
+    stState.bError := TRUE;
+    RETURN;  
+END_IF
+
+IF nLength = 0 THEN
+    pNullByte := stAnyStringOut.pValue;
+    pNullByte^ := 16#0;
+    RETURN;
+END_IF
+
+
+MEMCPY(destAddr:= stAnyStringOut.pValue, srcAddr:= ADR(aBuffer[stState.nBufferPos]), n:=  nLength);
+pNullByte := stAnyStringOut.pValue + nLength;
+pNullByte^ := 16#0;
+
+stState.nBufferPos := stState.nBufferPos + nLength;
+]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>

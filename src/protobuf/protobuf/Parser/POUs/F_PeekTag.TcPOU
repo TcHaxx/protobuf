@@ -1,0 +1,39 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1">
+  <POU Name="F_PeekTag" Id="{8573c23f-a6ae-4595-a140-59fbe599423b}" SpecialFunc="None">
+    <Declaration><![CDATA[(* Peeks at the next field tag. This is like calling  "ParseTag", but the
+ tag is not consumed. (So a subsequent call to "ParseTag" will return the
+same value.)*)
+FUNCTION F_PeekTag : HRESULT
+VAR_INPUT CONSTANT
+    aBuffer : ARRAY [*] OF BYTE;   
+END_VAR
+VAR_IN_OUT
+    stState : ST_ParserInternalState;
+END_VAR
+VAR_OUTPUT
+    nTag : UDINT;
+END_VAR
+
+VAR
+    nSavedLast : UDINT;
+END_VAR]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[F_PeekTag := S_OK;
+
+IF stState.bHasNextTag THEN
+    nTag := stState.nNextTag;
+    RETURN;
+END_IF
+
+nSavedLast := stState.nLastTag;
+F_PeekTag := F_ParseTag(aBuffer, stState, nTag=> nTag);
+IF FAILED(F_PeekTag) THEN
+    RETURN;
+END_IF
+
+stState.bHasNextTag := TRUE;
+stState.nLastTag := nSavedLast; // Undo the side effect of ReadTag]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>

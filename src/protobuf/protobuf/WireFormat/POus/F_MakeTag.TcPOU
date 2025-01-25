@@ -1,0 +1,18 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1">
+  <POU Name="F_MakeTag" Id="{b9606187-4e52-492f-84eb-0ec03de0ce81}" SpecialFunc="None">
+    <Declaration><![CDATA[// Makes a tag value given a field number and wire type.
+FUNCTION F_MakeTag : UINT
+VAR_INPUT
+    nFieldNumber    : UINT;
+    eWireType       : E_WireType;
+END_VAR
+VAR
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[
+F_MakeTag := SHL(nFieldNumber, GCL_WireFormat.cTagTypeBits) OR eWireType;]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>

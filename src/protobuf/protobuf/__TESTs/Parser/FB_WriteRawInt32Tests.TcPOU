@@ -42,8 +42,8 @@ hrActual := F_WriteRawVarint32(aActualBuffer, stState, nValue);
 
 // Assert
 AssertEquals_DINT(
-     Expected:= hrActual,
-     Actual:= S_OK,
+     Expected:= S_OK,
+     Actual:= hrActual,
      Message:= 'Expected S_OK instead of error');
 
 AssertArrayEquals_BYTE(

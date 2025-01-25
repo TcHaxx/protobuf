@@ -1,0 +1,15 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1">
+  <POU Name="F_ToAnyType" Id="{dadf5a57-eeb7-4a05-afb8-69b1ccd3a266}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION F_ToAnyType : ST_AnyType
+VAR_INPUT
+    anyArg	: ANY;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[F_ToAnyType.pValue := anyArg.pValue;
+F_ToAnyType.nSize := anyArg.diSize;
+F_ToAnyType.TypeClass := anyArg.TypeClass;]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>

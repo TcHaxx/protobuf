@@ -1,0 +1,75 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1">
+  <POU Name="FB_ReadStringTests" Id="{4506acea-930f-46b3-91ef-9e4e347d01fe}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK INTERNAL FINAL FB_ReadStringTests EXTENDS FB_TestSuite
+VAR_INPUT
+END_VAR
+VAR_OUTPUT
+END_VAR
+VAR
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[ShouldReadStringTheory();]]></ST>
+    </Implementation>
+    <Method Name="ShouldReadString" Id="{8388b6a2-fe98-4ee0-bf2a-9a481d8933dc}">
+      <Declaration><![CDATA[METHOD PRIVATE ShouldReadString
+VAR_IN_OUT CONSTANT
+    aBuffer         : ARRAY[*] OF BYTE;
+    sExpectedString : T_MAXSTRING;
+END_VAR
+VAR_INPUT CONSTANT
+    nBufferPosStart     : UDINT;
+    nExpectedBufferPos  : UDINT;
+END_VAR
+VAR
+    stState : ST_ParserInternalState;
+    hrActual : HRESULT; 
+    // '--- ' to check for null-byte!
+    sActual : T_MAXSTRING := '--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------';
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[
+// Arrange
+stState.nBufferSize := TO_UDINT(UPPER_BOUND(aBuffer, 1) + 1);
+stState.nBufferPos := nBufferPosStart;
+
+// Act
+hrActual := F_ReadString(aBuffer, stState, sActual);
+
+// Assert
+AssertEquals_DINT(
+     Expected:= S_OK,
+     Actual:= hrActual,
+     Message:= 'Expected S_OK instead of error');
+AssertEquals_STRING(
+    Expected:= sExpectedString,
+    Actual:= sActual,
+    Message:= '');
+AssertEquals_UDINT(
+    Expected:= nExpectedBufferPos,
+    Actual:= stState.nBufferPos,
+    Message:= CONCAT(CONCAT('Expected stState.nBufferPos to equal ', TO_STRING(nExpectedBufferPos)), CONCAT(', for String ', LEFT(sExpectedString, 32))));]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="ShouldReadStringTheory" Id="{25775719-14ea-4d76-8192-91c9cf1b8c9b}">
+      <Declaration><![CDATA[METHOD PRIVATE ShouldReadStringTheory
+VAR CONSTANT
+    cRawString_Empty    : ARRAY[0..255] OF BYTE := [16#0];
+    cRawString_Space    : ARRAY[0..255] OF BYTE := [16#00, 16#1, 16#20];
+    cRawString_012345   : ARRAY[0..255] OF BYTE := [16#00, 16#00, 16#06, 16#30, 16#31, 16#32, 16#33, 16#34, 16#35];
+    cRawString_UTF8     : ARRAY[0..255] OF BYTE := [16#28, 16#75, 16#74, 16#66, 16#2D, 16#38, 16#3A, 16#20, 16#61, 16#2D, 16#7A, 16#2C, 16#20, 16#41, 16#2D, 16#5A, 16#2C, 16#20, 16#30, 16#2D, 16#39, 16#2C, 16#20, 16#C3, 16#A4, 16#C3, 16#84, 16#C3, 16#B6, 16#C3, 16#96, 16#C3, 16#BC, 16#C3, 16#9C, 16#C3, 16#9F, 16#F0, 16#9F, 16#9A, 16#80];
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST(__POUNAME());
+
+ShouldReadString(aBuffer:= cRawString_Empty, sExpectedString:= '', nBufferPosStart:= 0, nExpectedBufferPos:= 1); 
+ShouldReadString(aBuffer:= cRawString_Space, sExpectedString:= ' ', nBufferPosStart:= 1, nExpectedBufferPos:= 3); 
+ShouldReadString(aBuffer:= cRawString_012345, sExpectedString:= '012345', nBufferPosStart:= 2, nExpectedBufferPos:= 9); 
+ShouldReadString(aBuffer:= cRawString_UTF8, sExpectedString:= 'utf-8: a-z, A-Z, 0-9, äÄöÖüÜß🚀', nBufferPosStart:= 0, nExpectedBufferPos:= 41);
+ 
+TEST_FINISHED_NAMED(__POUNAME());]]></ST>
+      </Implementation>
+    </Method>
+  </POU>
+</TcPlcObject>

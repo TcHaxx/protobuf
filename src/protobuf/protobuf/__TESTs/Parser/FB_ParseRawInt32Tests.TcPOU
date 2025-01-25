@@ -89,8 +89,8 @@ hr := F_ParseRawVarint32(aBuffer, stState, anyVarInt32Result:= nActual);
 
 // Assert
 AssertEquals_DINT(
-    Expected:= hr,
-    Actual:= S_OK,
+    Expected:= S_OK,
+    Actual:= hr,
     Message:= 'Expected S_OK instead of error');
     
 AssertEquals_UDINT(

@@ -1,0 +1,37 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1">
+  <POU Name="F_MaybeConsumeTag" Id="{d03abdb6-73e4-4881-8576-5d2ec0cb226e}" SpecialFunc="None">
+    <Declaration><![CDATA[(*
+    Peeks at the next tag in the stream. If it matches "nTag",
+    the tag is consumed and the method returns "TRUE",
+    otherwise, the stream is left in the original position and the method returns "FALSE".
+*)
+FUNCTION F_MaybeConsumeTag : HRESULT
+VAR_INPUT CONSTANT
+    aBuffer : ARRAY [*] OF BYTE;   
+END_VAR
+VAR_IN_OUT
+    stState : ST_ParserInternalState;
+END_VAR
+VAR_INPUT
+    nTag : UDINT;
+END_VAR
+VAR_OUTPUT
+    bConsumed : BOOL := FALSE;
+END_VAR
+VAR
+    nPeekTag : UDINT;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[
+F_MaybeConsumeTag := F_PeekTag(aBuffer, stState, nTag=> nPeekTag);
+
+IF SUCCEEDED(F_MaybeConsumeTag) AND nTag = nPeekTag THEN
+    stState.bHasNextTag := FALSE;
+    bConsumed := TRUE;
+    RETURN;
+END_IF]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>

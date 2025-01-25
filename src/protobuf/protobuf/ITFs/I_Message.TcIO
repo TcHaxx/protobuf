@@ -1,0 +1,39 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1">
+  <Itf Name="I_Message" Id="{661c5d63-aac8-4fbe-8595-833042ab407b}">
+    <Declaration><![CDATA[INTERFACE I_Message
+]]></Declaration>
+    <Method Name="CalculateSize" Id="{9db2928f-9677-4919-b193-b2e353fc53fc}">
+      <Declaration><![CDATA[// Calculates the size of this message in Protocol Buffer wire format, in bytes.
+METHOD CalculateSize : UDINT
+VAR_INPUT
+END_VAR
+]]></Declaration>
+    </Method>
+    <Method Name="MergeFrom" Id="{f0218577-d1f3-43ba-b044-8051c53ae231}">
+      <Declaration><![CDATA[// Merges the data from the specified coded input stream with the current message.
+METHOD MergeFrom
+VAR_IN_OUT
+    fbInput : FB_CodedInputStream;  //
+END_VAR
+]]></Declaration>
+    </Method>
+    <Property Name="MessageDescriptor" Id="{6ab92ca8-0868-416c-9525-df470c1a881e}">
+      <Declaration><![CDATA[/// Descriptor for this message. All instances are expected to return the same descriptor,
+/// and for generated types this will be an explicitly-implemented member, returning the
+/// same value as the static property declared on the type.
+PROPERTY MessageDescriptor : REFERENCE TO FB_MessageDescriptor]]></Declaration>
+      <Get Name="Get" Id="{9fc93d54-5f70-4bec-980e-8ce0de368e72}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Get>
+    </Property>
+    <Method Name="WriteTo" Id="{db7a2abd-e786-44cf-afdc-29280be946e5}">
+      <Declaration><![CDATA[// Writes the data to the given coded output stream.
+METHOD WriteTo
+VAR_IN_OUT
+    fbOutput : FB_CodedOutputStream;        // Coded output stream to write the data to. 
+END_VAR
+]]></Declaration>
+    </Method>
+  </Itf>
+</TcPlcObject>

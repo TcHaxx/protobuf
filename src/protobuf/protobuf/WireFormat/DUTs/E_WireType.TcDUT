@@ -1,0 +1,19 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1">
+  <DUT Name="E_WireType" Id="{de6a27f3-d601-4a84-9ab1-4b734b3f7027}">
+    <Declaration><![CDATA[// Wire types within protobuf encoding/decoding.
+{attribute 'qualified_only'}
+{attribute 'to_string'}
+TYPE E_WireType :
+(
+	Varint := 0,            // Variable-length integer.
+    Fixed64 := 1,           // Fixed-length 64-bit integer.
+    LengthDelimited := 2,   // Length-delimited value, i.e. a length followed by that many bytes of data.
+    StartGroup := 3,        // "start group" value
+    EndGroup := 4,          // "end group" value
+    Fixed32 := 5            // Fixed-length 32-bit value.
+) UINT;
+END_TYPE
+]]></Declaration>
+  </DUT>
+</TcPlcObject>

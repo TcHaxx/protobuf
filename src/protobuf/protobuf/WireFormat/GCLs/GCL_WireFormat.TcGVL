@@ -1,0 +1,10 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1">
+  <GVL Name="GCL_WireFormat" Id="{ed0e2fb5-2b5e-40b9-abc2-01f63cd9771f}">
+    <Declaration><![CDATA[{attribute 'qualified_only'}
+VAR_GLOBAL CONSTANT INTERNAL
+    cTagTypeBits : UINT := 3;
+    cTagTypeMask : UINT := 7;   // (1 << cTagTypeBits) - 1;
+END_VAR]]></Declaration>
+  </GVL>
+</TcPlcObject>

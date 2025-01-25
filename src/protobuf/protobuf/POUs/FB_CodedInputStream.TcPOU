@@ -1,0 +1,38 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1">
+  <POU Name="FB_CodedInputStream" Id="{35b92bb0-d9a1-4930-946e-115771fdcbe2}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK FINAL FB_CodedInputStream
+VAR_INPUT
+END_VAR
+VAR_OUTPUT
+END_VAR
+
+// Parser
+VAR
+    stState : ST_ParserInternalState;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[]]></ST>
+    </Implementation>
+    <Property Name="DiscardUnknownFields" Id="{f884f980-aa94-4834-b518-e5cf19c5d656}">
+      <Declaration><![CDATA[PROPERTY INTERNAL DiscardUnknownFields : BOOL]]></Declaration>
+      <Get Name="Get" Id="{f797a18d-253e-4604-aa2e-a6de4fadc50c}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[DiscardUnknownFields := stState.bDiscardUnknownFields;]]></ST>
+        </Implementation>
+      </Get>
+      <Set Name="Set" Id="{ee0e1b08-142e-47e8-b4a9-34c95ea6be2f}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[stState.bDiscardUnknownFields := DiscardUnknownFields;]]></ST>
+        </Implementation>
+      </Set>
+    </Property>
+  </POU>
+</TcPlcObject>

@@ -42,17 +42,48 @@
     <WriteCommentsToTmc>false</WriteCommentsToTmc>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="DUTs\E_ParserErrorCode.TcDUT">
+    <Compile Include="Helper\DUTs\ST_AnyType.TcDUT">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="DUTs\E_WriterErrorCode.TcDUT">
+    <Compile Include="Helper\POUs\F_ToAnyType.TcPOU">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="DUTs\ST_ParserInternalState.TcDUT">
+    <Compile Include="ITFs\I_Message.TcIO">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="DUTs\ST_WriterInternalState.TcDUT">
+    <Compile Include="Parser\DUTs\E_ParserErrorCode.TcDUT">
       <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Parser\DUTs\ST_ParserInternalState.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Parser\POUs\F_MaybeConsumeTag.TcPOU">
+      <SubType>Code</SubType>
+      <LinkAlways>true</LinkAlways>
+    </Compile>
+    <Compile Include="Parser\POUs\F_ParseLength.TcPOU">
+      <SubType>Code</SubType>
+      <LinkAlways>true</LinkAlways>
+    </Compile>
+    <Compile Include="Parser\POUs\F_ParseTag.TcPOU">
+      <SubType>Code</SubType>
+      <LinkAlways>true</LinkAlways>
+    </Compile>
+    <Compile Include="Parser\POUs\F_ParseRawVarint32.TcPOU">
+      <SubType>Code</SubType>
+      <LinkAlways>true</LinkAlways>
+    </Compile>
+    <Compile Include="Parser\POUs\F_PeekTag.TcPOU">
+      <SubType>Code</SubType>
+      <LinkAlways>true</LinkAlways>
+    </Compile>
+    <Compile Include="Parser\POUs\F_ReadRawString.TcPOU">
+      <SubType>Code</SubType>
+      <LinkAlways>true</LinkAlways>
+    </Compile>
+    <Compile Include="Parser\POUs\F_ReadString.TcPOU">
+      <SubType>Code</SubType>
+      <LinkAlways>true</LinkAlways>
     </Compile>
     <Compile Include="PlcTask.TcTTO">
       <SubType>Code</SubType>
@@ -60,13 +91,7 @@
     <Compile Include="PlcTaskUnitTests.TcTTO">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="POUs\MAIN.TcPOU">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="POUs\Parser\F_ParseRawVarint32.TcPOU">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="POUs\Writer\F_WriteRawVarint32.TcPOU">
+    <Compile Include="POUs\FB_CodedInputStream.TcPOU">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Project Information\F_GetCompany.TcPOU">
@@ -81,13 +106,47 @@
       <SubType>Code</SubType>
       <SystemCall>true</SystemCall>
     </Compile>
-    <Compile Include="TESTs\Parser\FB_ParseRawInt32Tests.TcPOU">
+    <Compile Include="WireFormat\DUTs\E_WireType.TcDUT">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="TESTs\Parser\FB_WriteRawInt32Tests.TcPOU">
+    <Compile Include="WireFormat\GCLs\GCL_WireFormat.TcGVL">
+      <SubType>Code</SubType>
+      <LinkAlways>true</LinkAlways>
+    </Compile>
+    <Compile Include="WireFormat\POus\F_GetTagFieldNumber.TcPOU">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="TESTs\PRG_UnitTests.TcPOU">
+    <Compile Include="WireFormat\POus\F_GetTagWireType.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="WireFormat\POus\F_MakeTag.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Writer\DUTs\E_WriterErrorCode.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Writer\DUTs\ST_WriterInternalState.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Writer\POUs\F_WriteRawVarint32.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="__TESTs\Parser\FB_ParseRawInt32Tests.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="__TESTs\Parser\FB_ReadRawStringTests.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="__TESTs\Parser\FB_ReadStringTests.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="__TESTs\Parser\FB_ReadStringTests_Delete.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="__TESTs\Parser\FB_WriteRawInt32Tests.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="__TESTs\PRG_UnitTests.TcPOU">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Version\Global_Version.TcGVL">
@@ -95,16 +154,25 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="DUTs" />
-    <Folder Include="GVLs" />
-    <Folder Include="POUs\Writer" />
-    <Folder Include="TESTs" />
-    <Folder Include="POUs\Parser" />
-    <Folder Include="Project Information" />
-    <Folder Include="TESTs\Parser" />
-    <Folder Include="Version" />
-    <Folder Include="VISUs" />
+    <Folder Include="Helper\DUTs" />
+    <Folder Include="Helper\POUs" />
+    <Folder Include="ITFs" />
+    <Folder Include="Helper" />
     <Folder Include="POUs" />
+    <Folder Include="WireFormat" />
+    <Folder Include="Parser\DUTs" />
+    <Folder Include="Parser\POUs" />
+    <Folder Include="WireFormat\DUTs" />
+    <Folder Include="WireFormat\GCLs" />
+    <Folder Include="WireFormat\POus" />
+    <Folder Include="Writer" />
+    <Folder Include="Parser" />
+    <Folder Include="Writer\DUTs" />
+    <Folder Include="Writer\POUs" />
+    <Folder Include="__TESTs" />
+    <Folder Include="Project Information" />
+    <Folder Include="__TESTs\Parser" />
+    <Folder Include="Version" />
   </ItemGroup>
   <ItemGroup>
     <PlaceholderReference Include="Tc2_Standard">
@@ -114,6 +182,10 @@
     <PlaceholderReference Include="Tc2_System">
       <DefaultResolution>Tc2_System, * (Beckhoff Automation GmbH)</DefaultResolution>
       <Namespace>Tc2_System</Namespace>
+    </PlaceholderReference>
+    <PlaceholderReference Include="Tc2_Utilities">
+      <DefaultResolution>Tc2_Utilities, * (Beckhoff Automation GmbH)</DefaultResolution>
+      <Namespace>Tc2_Utilities</Namespace>
     </PlaceholderReference>
     <PlaceholderReference Include="Tc3_Module">
       <DefaultResolution>Tc3_Module, * (Beckhoff Automation GmbH)</DefaultResolution>

@@ -1,0 +1,17 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1">
+  <POU Name="F_GetTagFieldNumber" Id="{14c3d22c-3842-4869-a162-a36f91207a6a}" SpecialFunc="None">
+    <Declaration><![CDATA[// Given a tag value, determines the field number (the upper 29 bits).
+FUNCTION F_GetTagFieldNumber : UINT
+VAR_INPUT
+    nTag    : UINT;
+END_VAR
+VAR
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[
+F_GetTagFieldNumber := SHR(nTag, GCL_WireFormat.cTagTypeBits);]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>

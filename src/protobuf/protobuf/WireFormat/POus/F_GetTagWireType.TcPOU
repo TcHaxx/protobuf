@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1">
+  <POU Name="F_GetTagWireType" Id="{f6a0a50c-fe45-46bd-8384-fa2d0e5b14d9}" SpecialFunc="None">
+    <Declaration><![CDATA[// Given a tag value, determines the wire type (lower 3 bits).
+FUNCTION F_GetTagWireType : E_WireType
+VAR_INPUT
+    nTag    : UINT;
+END_VAR
+VAR
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[F_GetTagWireType := nTag AND GCL_WireFormat.cTagTypeMask;]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>

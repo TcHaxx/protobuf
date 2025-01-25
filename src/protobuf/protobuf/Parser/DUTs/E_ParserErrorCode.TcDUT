@@ -12,7 +12,8 @@ TYPE E_ParserErrorCode :
     InternalError := -1,        // Internal parser error.
     MalformedVarInt := -2,      // Encountered a malformed Varint.
     InvalidDataType := -3,      // Datatype not supported, e.g. F_ParseRawInt32 -> LINT
-    TruncatedMessage := -4      // 
+    TruncatedMessage := -4,     // 
+    InvalidUtf8 := -5           //
 ) DINT := NoError;
 END_TYPE
 ]]></Declaration>
