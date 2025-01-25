@@ -57,6 +57,12 @@
     <Compile Include="Parser\DUTs\ST_ParserInternalState.TcDUT">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Parser\POUs\F_DecodeZigZag32.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Parser\POUs\F_DecodeZigZag64.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Parser\POUs\F_MaybeConsumeTag.TcPOU">
       <SubType>Code</SubType>
       <LinkAlways>true</LinkAlways>
@@ -129,6 +135,12 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Writer\POUs\F_WriteRawVarint32.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="__TESTs\Parser\FB_DecodeZigZag32Tests.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="__TESTs\Parser\FB_DecodeZigZag64Tests.TcPOU">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="__TESTs\Parser\FB_ParseRawInt32Tests.TcPOU">

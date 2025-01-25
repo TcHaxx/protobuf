@@ -1,0 +1,29 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1">
+  <POU Name="FB_DecodeZigZag64Tests" Id="{68a346c2-4894-462b-8d86-8f6bc017bb03}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK INTERNAL FINAL FB_DecodeZigZag64Tests EXTENDS FB_TestSuite
+VAR_INPUT
+END_VAR
+VAR_OUTPUT
+END_VAR
+VAR
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[TEST(__POUNAME());
+
+AssertEquals_LINT(Expected:= 0, Actual:= F_DecodeZigZag64(0),Message:= '');
+AssertEquals_LINT(Expected:= -1, Actual:= F_DecodeZigZag64(1),Message:= '');
+AssertEquals_LINT(Expected:= 1, Actual:= F_DecodeZigZag64(2),Message:= '');
+AssertEquals_LINT(Expected:= -2, Actual:= F_DecodeZigZag64(3),Message:= '');
+AssertEquals_LINT(Expected:= 16#000000003FFFFFFF, Actual:= F_DecodeZigZag64(16#000000007FFFFFFE),Message:= '');
+AssertEquals_LINT(Expected:= 16#FFFFFFFFC0000000, Actual:= F_DecodeZigZag64(16#000000007FFFFFFF),Message:= '');
+AssertEquals_LINT(Expected:= 16#000000007FFFFFFF, Actual:= F_DecodeZigZag64(16#00000000FFFFFFFE),Message:= '');
+AssertEquals_LINT(Expected:= 16#FFFFFFFF80000000, Actual:= F_DecodeZigZag64(16#00000000FFFFFFFF),Message:= '');
+AssertEquals_LINT(Expected:= 16#7FFFFFFFFFFFFFFF, Actual:= F_DecodeZigZag64(16#FFFFFFFFFFFFFFFE),Message:= '');
+AssertEquals_LINT(Expected:= 16#8000000000000000, Actual:= F_DecodeZigZag64(16#FFFFFFFFFFFFFFFF),Message:= '');
+ 
+TEST_FINISHED_NAMED(__POUNAME());]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>

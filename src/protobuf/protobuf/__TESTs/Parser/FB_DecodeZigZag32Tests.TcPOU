@@ -1,0 +1,28 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1">
+  <POU Name="FB_DecodeZigZag32Tests" Id="{d26d20e0-7e0c-4181-841e-bebe2dc1b910}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK INTERNAL FINAL FB_DecodeZigZag32Tests EXTENDS FB_TestSuite
+VAR_INPUT
+END_VAR
+VAR_OUTPUT
+END_VAR
+VAR
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[TEST(__POUNAME());
+
+AssertEquals_DINT(Expected:= 0, Actual:= F_DecodeZigZag32(0),Message:= '');
+AssertEquals_DINT(Expected:= -1, Actual:= F_DecodeZigZag32(1),Message:= '');
+AssertEquals_DINT(Expected:= 1, Actual:= F_DecodeZigZag32(2),Message:= '');
+AssertEquals_DINT(Expected:= -2, Actual:= F_DecodeZigZag32(3),Message:= '');
+AssertEquals_DINT(Expected:= 16#3FFFFFFF, Actual:= F_DecodeZigZag32(16#7FFFFFFE),Message:= '');
+AssertEquals_DINT(Expected:= 16#C0000000, Actual:= F_DecodeZigZag32(16#7FFFFFFF),Message:= '');
+AssertEquals_DINT(Expected:= 16#7FFFFFFF, Actual:= F_DecodeZigZag32(16#FFFFFFFE),Message:= '');
+AssertEquals_DINT(Expected:= 16#80000000, Actual:= F_DecodeZigZag32(16#FFFFFFFF),Message:= '');
+
+ 
+TEST_FINISHED_NAMED(__POUNAME());]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>

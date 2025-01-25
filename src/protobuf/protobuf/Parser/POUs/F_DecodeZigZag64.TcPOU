@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1">
+  <POU Name="F_DecodeZigZag64" Id="{9211cbf4-7d2b-428a-bf67-ceb9431a79f5}" SpecialFunc="None">
+    <Declaration><![CDATA[// Decode a 64-bit value with ZigZag encoding.
+FUNCTION F_DecodeZigZag64 : LINT
+VAR_INPUT
+    nValue : ULINT;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[F_DecodeZigZag64 := TO_LINT(SHR(nValue, TO_ULINT(1)) XOR TO_ULINT(-TO_LINT((nValue AND TO_ULINT(1)))));]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>

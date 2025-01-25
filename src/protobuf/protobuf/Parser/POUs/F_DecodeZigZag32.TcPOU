@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1">
+  <POU Name="F_DecodeZigZag32" Id="{e2ea44ff-ba65-4e15-827c-98d6e7575b56}" SpecialFunc="None">
+    <Declaration><![CDATA[// Decode a 32-bit value with ZigZag encoding.
+FUNCTION F_DecodeZigZag32 : DINT
+VAR_INPUT
+    nValue : UDINT;
+END_VAR]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[F_DecodeZigZag32 := TO_DINT(SHR(nValue, TO_UDINT(1)) XOR TO_UDINT(-TO_DINT((nValue AND TO_UDINT(1)))));]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>
