@@ -33,12 +33,12 @@ END_IF
 // Optimize for the incredibly common case of having at least two bytes left in the buffer,
 // and those two bytes being enough to get the tag. This will be true for fields up to 4095.
 IF stState.nBufferPos + 2 <= stState.nBufferSize THEN
-    nTmp := aBuffer[stState.nBufferPos];
-    stState.nBufferPos := stState.nBufferPos + 1;
+    nTmp := aBuffer[stState.nBufferPos];    
     IF nTmp < 16#80 THEN
         stState.nLastTag := nTmp;
+        stState.nBufferPos := stState.nBufferPos + 1;
     ELSE
-        F_ParseTag := F_ParseRawVarint32(aBuffer, stState, nTag);
+        F_ParseTag := F_ParseRawVarint32(aBuffer, stState, nTmp);
         IF FAILED(F_ParseTag) THEN            
             RETURN;
         END_IF
@@ -50,10 +50,10 @@ ELSE
         RETURN;
     END_IF;
     
-    F_ParseTag := F_ParseRawVarint32(aBuffer, stState, nTag);
+    F_ParseTag := F_ParseRawVarint32(aBuffer, stState, nTmp);
 END_IF
 
-nTag := stState.nLastTag;]]></ST>
+nTag := stState.nLastTag := nTmp;]]></ST>
     </Implementation>
   </POU>
 </TcPlcObject>

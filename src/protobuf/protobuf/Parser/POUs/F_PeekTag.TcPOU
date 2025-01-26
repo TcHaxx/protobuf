@@ -33,6 +33,7 @@ IF FAILED(F_PeekTag) THEN
 END_IF
 
 stState.bHasNextTag := TRUE;
+stState.nNextTag := nTag;
 stState.nLastTag := nSavedLast; // Undo the side effect of ReadTag]]></ST>
     </Implementation>
   </POU>
