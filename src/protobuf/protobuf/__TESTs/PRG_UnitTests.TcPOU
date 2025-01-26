@@ -19,6 +19,8 @@ VAR
     
     fbWriteStringTests          : FB_WriteStringTests;
     fbRoundTripStringTests      : FB_RoundTripStringTests;
+    
+    fbWriteTagTests             : FB_WriteTagTests;
 {END_IF}
 END_VAR
 ]]></Declaration>

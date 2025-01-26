@@ -195,6 +195,9 @@
     <Compile Include="__TESTs\Writer\FB_WriteRawInt32Tests.TcPOU">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="__TESTs\Writer\FB_WriteTagTests.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="__TESTs\Writer\FB_WriteStringTests.TcPOU">
       <SubType>Code</SubType>
     </Compile>

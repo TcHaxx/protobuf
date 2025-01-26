@@ -1,0 +1,98 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1">
+  <POU Name="FB_WriteTagTests" Id="{7b3f9582-e935-4c44-9ee4-5436dc103500}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK INTERNAL FINAL FB_WriteTagTests EXTENDS TcUnit.FB_TestSuite
+VAR_INPUT
+END_VAR
+VAR_OUTPUT
+END_VAR
+VAR
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[ShouldWriteTagTheory();]]></ST>
+    </Implementation>
+    <Method Name="ShouldWriteTag" Id="{b00fcff4-0c4c-42fa-ba11-fe156c90c319}">
+      <Declaration><![CDATA[METHOD PRIVATE ShouldWriteTag
+VAR_IN_OUT CONSTANT
+    aExpectedBuffer     : ARRAY [*] OF BYTE;    
+END_VAR
+VAR_INPUT
+    nFieldNumber    : UDINT;
+    eWireType       : E_WireType;
+END_VAR
+VAR_INPUT CONSTANT
+    nBufferPosStart     : UDINT;
+    nExpectedBufferPos  : UDINT;
+END_VAR
+VAR_INST
+    stState : ST_WriterInternalState;
+END_VAR
+VAR
+    aActualBuffer       : ARRAY[0..15] OF BYTE; 
+    hrActual        : HRESULT;  
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[
+// Arrange
+stState.nBufferSize := SIZEOF(aActualBuffer);
+stState.nBufferPos := nBufferPosStart;
+
+// Act
+hrActual := F_WriteTag(aActualBuffer, stState, nFieldNumber, eWireType);
+
+// Assert
+AssertEquals_DINT(
+     Expected:= S_OK,
+     Actual:= hrActual,
+     Message:= 'Expected S_OK instead of error');
+
+{warning disable C0041}
+AssertArrayEquals_BYTE(    
+    Expecteds:= aExpectedBuffer,
+    Actuals:= aActualBuffer,
+    MEssage:= CONCAT('Expected buffers to be equal for Tag ', CONCAT(TO_STRING(nFieldNumber),CONCAT(':', TO_STRING(eWireType))))
+);
+
+AssertEquals_UDINT(
+    Expected:= nExpectedBufferPos,
+    Actual:= stState.nBufferPos,
+    Message:= CONCAT(CONCAT('Expected stState.nBufferPos to equal ', TO_STRING(nExpectedBufferPos)), CONCAT(', for Varint ', TO_STRING(nExpectedBufferPos))));]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="ShouldWriteTagTheory" Id="{5f46de37-7019-471d-a0c1-9b3e9e35546e}">
+      <Declaration><![CDATA[METHOD PRIVATE ShouldWriteTagTheory : REFERENCE TO FB_Test
+VAR CONSTANT
+    cExpectedRawValueTagVarintField1        : ARRAY[0..15] OF BYTE := [16#08];
+    cExpectedRawValueTagVarintField2        : ARRAY[0..15] OF BYTE := [16#10];
+    cExpectedRawValueTagVarintField10       : ARRAY[0..15] OF BYTE := [16#50];
+    cExpectedRawValueTagFixed64Field3       : ARRAY[0..15] OF BYTE := [16#19];
+    cExpectedRawValueTagFixed32Field4       : ARRAY[0..15] OF BYTE := [16#25];
+    cExpectedRawValueTagLengthDelimField5   : ARRAY[0..15] OF BYTE := [16#2A];
+
+END_VAR
+VAR
+    aBuffer             : ARRAY[0..15] OF BYTE;
+    stState             : ST_WriterInternalState;
+    hrActual            : HRESULT;
+    
+    nByte               : BYTE;
+    nUint               : UINT;
+    nUDint              : UDINT;
+    nInt                : INT;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST(__POUNAME());
+
+ShouldWriteTag(aExpectedBuffer:= cExpectedRawValueTagVarintField1, nFieldNumber:= 1, eWireType:= E_WireType.Varint, nBufferPosStart:= 0, nExpectedBufferPos:= 1);
+ShouldWriteTag(aExpectedBuffer:= cExpectedRawValueTagVarintField2, nFieldNumber:= 2, eWireType:= E_WireType.Varint, nBufferPosStart:= 0, nExpectedBufferPos:= 1);
+ShouldWriteTag(aExpectedBuffer:= cExpectedRawValueTagVarintField10, nFieldNumber:= 10, eWireType:= E_WireType.Varint, nBufferPosStart:= 0, nExpectedBufferPos:= 1);
+ShouldWriteTag(aExpectedBuffer:= cExpectedRawValueTagFixed64Field3, nFieldNumber:= 3, eWireType:= E_WireType.Fixed64, nBufferPosStart:= 0, nExpectedBufferPos:= 1);
+ShouldWriteTag(aExpectedBuffer:= cExpectedRawValueTagFixed32Field4, nFieldNumber:= 4, eWireType:= E_WireType.Fixed32, nBufferPosStart:= 0, nExpectedBufferPos:= 1);
+ShouldWriteTag(aExpectedBuffer:= cExpectedRawValueTagLengthDelimField5, nFieldNumber:= 5, eWireType:= E_WireType.LengthDelimited, nBufferPosStart:= 0, nExpectedBufferPos:= 1);
+
+TEST_FINISHED_NAMED(__POUNAME());]]></ST>
+      </Implementation>
+    </Method>
+  </POU>
+</TcPlcObject>

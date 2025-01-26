@@ -11,9 +11,12 @@ VAR_INPUT
     nFieldNumber    : UDINT;
     eWireType       : E_WireType;
 END_VAR
-]]></Declaration>
+VAR 
+    nTag : UDINT;
+END_VAR]]></Declaration>
     <Implementation>
-      <ST><![CDATA[F_WriteTag := F_WriteRawVarint32(aBuffer, stState, F_MakeTag(nFieldNumber, eWireType));]]></ST>
+      <ST><![CDATA[nTag := F_MakeTag(nFieldNumber, eWireType);
+F_WriteTag := F_WriteRawVarint32(aBuffer, stState, nTag);]]></ST>
     </Implementation>
   </POU>
 </TcPlcObject>
