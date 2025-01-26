@@ -16,6 +16,9 @@ VAR
     fbEncodeZigZag64Tests       : FB_EncodeZigZag64Tests;
     fbRoundTripZigZag32Tests    : FB_RoundTripZigZag32Tests;
     fbRoundTripZigZag64Tests    : FB_RoundTripZigZag64Tests;
+    
+    fbWriteStringTests          : FB_WriteStringTests;
+    fbRoundTripStringTests      : FB_RoundTripStringTests;
 {END_IF}
 END_VAR
 ]]></Declaration>

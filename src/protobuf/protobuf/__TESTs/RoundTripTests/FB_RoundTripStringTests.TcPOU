@@ -1,0 +1,37 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1">
+  <POU Name="FB_RoundTripStringTests" Id="{c0f4c1c3-bced-43b2-8248-40ad0673bb31}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK INTERNAL FINAL FB_RoundTripStringTests EXTENDS FB_TestSuite
+VAR CONSTANT
+    cExpectedString : T_MAXSTRING := 'This is a UTF8 string with some special characters with length of 140 characters: äöüÄÖÜß€µ@#~!§$$%&/()=?`´^°*+;:,.><|{}[]\$'🤖👾👽👻👹👺🤡🤠🤥🤤🤢🤧🤒🤕';
+END_VAR
+VAR
+    aBuffer         : ARRAY[0..255] OF BYTE;
+    stWriterState   : ST_WriterInternalState;
+    stParserState   : ST_ParserInternalState;
+    hrWriterActual  : HRESULT;
+    hrParserActual  : HRESULT;
+// '--- ' to check for null-byte!
+    sActual : T_MAXSTRING := '--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------';
+END_VAR]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[TEST(__POUNAME());
+
+// Arrange
+stWriterState.nBufferSize := stParserState.nBufferSize := TO_UDINT(UPPER_BOUND(aBuffer, 1) + 1);
+stWriterState.nBufferPos := stParserState.nBufferPos := 3;
+
+// Act
+
+hrWriterActual := F_WriteString(aBuffer, stWriterState, cExpectedString);
+hrParserActual := F_ReadString(aBuffer, stParserState, sActual);
+
+// Assert
+AssertEquals_DINT(Expected:= S_OK, Actual:= hrWriterActual, Message:= 'Expected hrWriterActual = S_OK');
+AssertEquals_DINT(Expected:= S_OK, Actual:= hrParserActual, Message:= 'Expected hrParserActual = S_OK');
+AssertEquals_STRING(Expected:= cExpectedString, Actual:= sActual, Message:= 'Strings differ');
+
+TEST_FINISHED_NAMED(__POUNAME());]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>
