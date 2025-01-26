@@ -180,6 +180,9 @@
     <Compile Include="__TESTs\RoundTripTests\FB_RoundTripStringTests.TcPOU">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="__TESTs\RoundTripTests\FB_RoundTripTagTests.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="__TESTs\RoundTripTests\FB_RoundTripZigZag32Tests.TcPOU">
       <SubType>Code</SubType>
     </Compile>

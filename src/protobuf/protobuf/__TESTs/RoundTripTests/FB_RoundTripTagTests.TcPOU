@@ -1,0 +1,53 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1">
+  <POU Name="FB_RoundTripTagTests" Id="{49b318dc-c8f2-4783-8212-2319bfff03d9}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK INTERNAL FINAL FB_RoundTripTagTests EXTENDS FB_TestSuite
+VAR_INPUT
+END_VAR
+VAR_OUTPUT
+END_VAR
+VAR CONSTANT
+    cStartBufferPos         : UDINT := 3;
+    cEcpectedTagRawValue    : UDINT := 985;
+    cExpectedFieldNumber    : UDINT := 123;
+    cEcpectedWireType       : E_WireType := E_WireType.Fixed64;
+END_VAR
+VAR
+    aBuffer         : ARRAY[0..15] OF BYTE;
+    stWriterState   : ST_WriterInternalState;
+    stParserState   : ST_ParserInternalState;
+    hrWriterActual  : HRESULT := S_PENDING;
+    hrPeekActual    : HRESULT := S_PENDING;
+    hrParserActual  : HRESULT;
+    nActualTag      : UDINT;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[TEST(__POUNAME());
+
+// Arrange
+stWriterState.nBufferSize := stParserState.nBufferSize := TO_UDINT(UPPER_BOUND(aBuffer, 1) + 1);
+stWriterState.nBufferPos := stParserState.nBufferPos := cStartBufferPos;
+
+// Act / Assert
+hrWriterActual := F_WriteTag(aBuffer, stWriterState, cExpectedFieldNumber, cEcpectedWireType);
+AssertEquals_DINT(Expected:= S_OK, Actual:= hrWriterActual, Message:= 'Expected hrWriterActual = S_OK');
+
+hrPeekActual := F_PeekTag(aBuffer, stParserState, nTag=> nActualTag);
+AssertEquals_DINT(Expected:= S_OK, Actual:= hrPeekActual, Message:= 'Expected hrPeekActual = S_OK');
+AssertEquals_UDINT(Expected:= 5, Actual:= stParserState.nBufferPos, Message:= 'F_PeekTag must advance stParserState.nBufferPos');
+AssertEquals_UDINT(Expected:= cEcpectedTagRawValue, Actual:= stParserState.nNextTag, Message:= CONCAT('F_PeekTag: stParserState.nNextTag ', TO_STRING(cEcpectedTagRawValue)));
+AssertEquals_Bool(Expected:= TRUE, Actual:= stParserState.bHasNextTag, Message:= CONCAT('F_PeekTag: stParserState.bHasNextTag ', TO_STRING(TRUE)));
+AssertEquals_UDINT(Expected:= cEcpectedTagRawValue, Actual:= nActualTag, Message:= CONCAT('F_PeekTag: Expected value ', TO_STRING(cEcpectedTagRawValue)));
+
+hrParserActual := F_ParseTag(aBuffer, stParserState, nTag=> nActualTag);
+AssertEquals_DINT(Expected:= S_OK, Actual:= hrPeekActual, Message:= 'Expected hrParserActual = S_OK');
+AssertEquals_UDINT(Expected:= 5, Actual:= stParserState.nBufferPos, Message:= 'F_ParseTag must not advance stParserState.nBufferPos');
+AssertEquals_UDINT(Expected:= cEcpectedTagRawValue, Actual:= nActualTag, Message:= CONCAT('F_PeekTag: Expected value ', TO_STRING(cEcpectedTagRawValue)));
+
+AssertEquals_UDINT(Expected:= cExpectedFieldNumber, Actual:= F_GetTagFieldNumber(nActualTag), Message:= CONCAT('F_GetTagFieldNumber: Expected value ', TO_STRING(cExpectedFieldNumber)));
+AssertEquals_UDINT(Expected:= cEcpectedWireType, Actual:= F_GetTagWireType(nActualTag), Message:= CONCAT('F_GetTagWireType: Expected value ', TO_STRING(cEcpectedWireType)));
+TEST_FINISHED_NAMED(__POUNAME());]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>

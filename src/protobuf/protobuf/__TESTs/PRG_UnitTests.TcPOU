@@ -21,6 +21,7 @@ VAR
     fbRoundTripStringTests      : FB_RoundTripStringTests;
     
     fbWriteTagTests             : FB_WriteTagTests;
+    fbRoundTripTagTests         : FB_RoundTripTagTests;
 {END_IF}
 END_VAR
 ]]></Declaration>
