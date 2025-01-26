@@ -1,0 +1,19 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1">
+  <POU Name="F_WriteTag" Id="{ae3ccd4b-1305-434e-9f0c-c1a8e3523e7a}" SpecialFunc="None">
+    <Declaration><![CDATA[// Encodes and writes a tag.
+FUNCTION F_WriteTag : HRESULT
+VAR_IN_OUT
+    aBuffer : ARRAY [*] OF BYTE;
+    stState : ST_WriterInternalState;
+END_VAR
+VAR_INPUT
+    nFieldNumber    : UDINT;
+    eWireType       : E_WireType;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[F_WriteTag := F_WriteRawVarint32(aBuffer, stState, F_MakeTag(nFieldNumber, eWireType));]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>

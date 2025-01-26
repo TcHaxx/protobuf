@@ -4,7 +4,7 @@
     <Declaration><![CDATA[// Given a tag value, determines the wire type (lower 3 bits).
 FUNCTION F_GetTagWireType : E_WireType
 VAR_INPUT
-    nTag    : UINT;
+    nTag    : UDINT;
 END_VAR
 VAR
 END_VAR
