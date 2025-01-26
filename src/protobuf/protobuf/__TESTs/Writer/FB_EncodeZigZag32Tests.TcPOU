@@ -1,0 +1,31 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1">
+  <POU Name="FB_EncodeZigZag32Tests" Id="{5c84d4fd-8d5f-433b-b637-3fc880aa5bf9}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK INTERNAL FINAL FB_EncodeZigZag32Tests EXTENDS FB_TestSuite
+VAR_INPUT
+END_VAR
+VAR_OUTPUT
+END_VAR
+VAR
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[TEST(__POUNAME());
+
+
+AssertEquals_UDINT(Expected:= 0, Actual:= F_EncodeZigZag32(0),Message:= '');
+AssertEquals_UDINT(Expected:= 1, Actual:= F_EncodeZigZag32(-1),Message:= '');
+AssertEquals_UDINT(Expected:= 2, Actual:= F_EncodeZigZag32(1),Message:= '');
+AssertEquals_UDINT(Expected:= 3, Actual:= F_EncodeZigZag32(-2),Message:= '');
+AssertEquals_UDINT(Expected:= 16#7FFFFFFE, Actual:= F_EncodeZigZag32(16#3FFFFFFF),Message:= '');
+{warning disable C0196}
+AssertEquals_UDINT(Expected:= 16#7FFFFFFF, Actual:= F_EncodeZigZag32(16#C0000000),Message:= '');
+AssertEquals_UDINT(Expected:= 16#FFFFFFFE, Actual:= F_EncodeZigZag32(16#7FFFFFFF),Message:= '');
+{warning disable C0196}
+AssertEquals_UDINT(Expected:= 16#FFFFFFFF, Actual:= F_EncodeZigZag32(16#80000000),Message:= '');
+
+ 
+TEST_FINISHED_NAMED(__POUNAME());]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>

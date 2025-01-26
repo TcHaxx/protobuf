@@ -17,8 +17,10 @@ AssertEquals_LINT(Expected:= -1, Actual:= F_DecodeZigZag64(1),Message:= '');
 AssertEquals_LINT(Expected:= 1, Actual:= F_DecodeZigZag64(2),Message:= '');
 AssertEquals_LINT(Expected:= -2, Actual:= F_DecodeZigZag64(3),Message:= '');
 AssertEquals_LINT(Expected:= 16#000000003FFFFFFF, Actual:= F_DecodeZigZag64(16#000000007FFFFFFE),Message:= '');
+{warning disable C0196}
 AssertEquals_LINT(Expected:= 16#FFFFFFFFC0000000, Actual:= F_DecodeZigZag64(16#000000007FFFFFFF),Message:= '');
 AssertEquals_LINT(Expected:= 16#000000007FFFFFFF, Actual:= F_DecodeZigZag64(16#00000000FFFFFFFE),Message:= '');
+{warning disable C0196}
 AssertEquals_LINT(Expected:= 16#FFFFFFFF80000000, Actual:= F_DecodeZigZag64(16#00000000FFFFFFFF),Message:= '');
 AssertEquals_LINT(Expected:= 16#7FFFFFFFFFFFFFFF, Actual:= F_DecodeZigZag64(16#FFFFFFFFFFFFFFFE),Message:= '');
 AssertEquals_LINT(Expected:= 16#8000000000000000, Actual:= F_DecodeZigZag64(16#FFFFFFFFFFFFFFFF),Message:= '');

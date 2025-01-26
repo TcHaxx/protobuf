@@ -134,6 +134,12 @@
     <Compile Include="Writer\DUTs\ST_WriterInternalState.TcDUT">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Writer\POUs\F_EncodeZigZag32.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Writer\POUs\F_EncodeZigZag64.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Writer\POUs\F_WriteRawVarint32.TcPOU">
       <SubType>Code</SubType>
     </Compile>
@@ -152,9 +158,6 @@
     <Compile Include="__TESTs\Parser\FB_ReadStringTests.TcPOU">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="__TESTs\Parser\FB_ReadStringTests_Delete.TcPOU">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="__TESTs\Parser\FB_WriteRawInt32Tests.TcPOU">
       <SubType>Code</SubType>
     </Compile>
@@ -162,6 +165,18 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Version\Global_Version.TcGVL">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="__TESTs\RoundTripTests\FB_RoundTripZigZag32Tests.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="__TESTs\RoundTripTests\FB_RoundTripZigZag64Tests.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="__TESTs\Writer\FB_EncodeZigZag64Tests.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="__TESTs\Writer\FB_EncodeZigZag32Tests.TcPOU">
       <SubType>Code</SubType>
     </Compile>
   </ItemGroup>
@@ -183,6 +198,8 @@
     <Folder Include="Writer\POUs" />
     <Folder Include="__TESTs" />
     <Folder Include="Project Information" />
+    <Folder Include="__TESTs\RoundTripTests" />
+    <Folder Include="__TESTs\Writer" />
     <Folder Include="__TESTs\Parser" />
     <Folder Include="Version" />
   </ItemGroup>

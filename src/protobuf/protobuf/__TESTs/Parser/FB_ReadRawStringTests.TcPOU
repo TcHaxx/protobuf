@@ -35,6 +35,7 @@ stState.nBufferSize := TO_UDINT(UPPER_BOUND(aBuffer, 1) + 1);
 stState.nBufferPos := nBufferPosStart;
 
 // Act
+{warning disable C0041}
 hrActual := F_ReadRawString(aBuffer, LEN2(ADR(sExpectedString)), F_ToAnyType(sActual), stState);
 
 // Assert

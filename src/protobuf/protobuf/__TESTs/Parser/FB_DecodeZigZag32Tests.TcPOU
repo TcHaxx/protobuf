@@ -17,11 +17,12 @@ AssertEquals_DINT(Expected:= -1, Actual:= F_DecodeZigZag32(1),Message:= '');
 AssertEquals_DINT(Expected:= 1, Actual:= F_DecodeZigZag32(2),Message:= '');
 AssertEquals_DINT(Expected:= -2, Actual:= F_DecodeZigZag32(3),Message:= '');
 AssertEquals_DINT(Expected:= 16#3FFFFFFF, Actual:= F_DecodeZigZag32(16#7FFFFFFE),Message:= '');
+{warning disable C0196}
 AssertEquals_DINT(Expected:= 16#C0000000, Actual:= F_DecodeZigZag32(16#7FFFFFFF),Message:= '');
 AssertEquals_DINT(Expected:= 16#7FFFFFFF, Actual:= F_DecodeZigZag32(16#FFFFFFFE),Message:= '');
+{warning disable C0196}
 AssertEquals_DINT(Expected:= 16#80000000, Actual:= F_DecodeZigZag32(16#FFFFFFFF),Message:= '');
 
- 
 TEST_FINISHED_NAMED(__POUNAME());]]></ST>
     </Implementation>
   </POU>

@@ -11,6 +11,11 @@ VAR
     fbReadStringTests           : FB_ReadStringTests;
     fbDecodeZigZag32Tests       : FB_DecodeZigZag32Tests;
     fbDecodeZigZag64Tests       : FB_DecodeZigZag64Tests;
+    
+    fbEncodeZigZag32Tests       : FB_EncodeZigZag32Tests;
+    fbEncodeZigZag64Tests       : FB_EncodeZigZag64Tests;
+    fbRoundTripZigZag32Tests    : FB_RoundTripZigZag32Tests;
+    fbRoundTripZigZag64Tests    : FB_RoundTripZigZag64Tests;
 {END_IF}
 END_VAR
 ]]></Declaration>

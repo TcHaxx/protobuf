@@ -1,0 +1,32 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1">
+  <POU Name="FB_EncodeZigZag64Tests" Id="{83c40c28-63be-4d48-b6c0-975c7c0838ae}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK INTERNAL FINAL FB_EncodeZigZag64Tests EXTENDS FB_TestSuite
+VAR_INPUT
+END_VAR
+VAR_OUTPUT
+END_VAR
+VAR
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[TEST(__POUNAME());
+
+AssertEquals_ULINT(Expected:= 0, Actual:= F_EncodeZigZag64(0),Message:= '');
+AssertEquals_ULINT(Expected:= 1, Actual:= F_EncodeZigZag64(-1),Message:= '');
+AssertEquals_ULINT(Expected:= 2, Actual:= F_EncodeZigZag64(1),Message:= '');
+AssertEquals_ULINT(Expected:= 3, Actual:= F_EncodeZigZag64(-2),Message:= '');
+AssertEquals_ULINT(Expected:= 16#000000007FFFFFFE, Actual:= F_EncodeZigZag64(16#000000003FFFFFFF),Message:= '');
+{warning disable C0196}
+AssertEquals_ULINT(Expected:= 16#000000007FFFFFFF, Actual:= F_EncodeZigZag64(16#FFFFFFFFC0000000),Message:= '');
+AssertEquals_ULINT(Expected:= 16#00000000FFFFFFFE, Actual:= F_EncodeZigZag64(16#000000007FFFFFFF),Message:= '');
+{warning disable C0196}
+AssertEquals_ULINT(Expected:= 16#00000000FFFFFFFF, Actual:= F_EncodeZigZag64(16#FFFFFFFF80000000),Message:= '');
+AssertEquals_ULINT(Expected:= 16#FFFFFFFFFFFFFFFE, Actual:= F_EncodeZigZag64(16#7FFFFFFFFFFFFFFF),Message:= '');
+{warning disable C0196}
+AssertEquals_ULINT(Expected:= 16#FFFFFFFFFFFFFFFF, Actual:= F_EncodeZigZag64(16#8000000000000000),Message:= '');
+ 
+TEST_FINISHED_NAMED(__POUNAME());]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>

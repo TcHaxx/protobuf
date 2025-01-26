@@ -1,0 +1,25 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1">
+  <POU Name="FB_RoundTripZigZag32Tests" Id="{be61851c-3ca3-471b-b8a1-794a5398bf89}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK INTERNAL FINAL FB_RoundTripZigZag32Tests EXTENDS FB_TestSuite
+VAR_INPUT
+END_VAR
+VAR_OUTPUT
+END_VAR
+VAR
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[TEST(__POUNAME());
+
+
+AssertEquals_DINT(Expected:= 0, Actual:= F_DecodeZigZag32(F_EncodeZigZag32(0)),Message:= '');
+AssertEquals_DINT(Expected:= 1, Actual:= F_DecodeZigZag32(F_EncodeZigZag32(1)),Message:= '');
+AssertEquals_DINT(Expected:= -1, Actual:= F_DecodeZigZag32(F_EncodeZigZag32(-1)),Message:= '');
+AssertEquals_DINT(Expected:= 14927, Actual:= F_DecodeZigZag32(F_EncodeZigZag32(14927)),Message:= '');
+AssertEquals_DINT(Expected:= -3612, Actual:= F_DecodeZigZag32(F_EncodeZigZag32(-3612)),Message:= '');
+
+TEST_FINISHED_NAMED(__POUNAME());]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>

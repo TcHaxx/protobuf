@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1">
+  <POU Name="F_EncodeZigZag64" Id="{a952e322-7623-430a-9bb4-87ba73ca65ec}" SpecialFunc="None">
+    <Declaration><![CDATA[// Encode a 64BIT value with ZigZag encoding.
+FUNCTION F_EncodeZigZag64 : ULINT
+VAR_INPUT
+    nValue : LINT;
+END_VAR]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[F_EncodeZigZag64 := TO_ULINT(SHL(nValue, 1)) XOR TO_ULINT(SHR(nValue, 63));]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>

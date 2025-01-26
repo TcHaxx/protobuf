@@ -46,10 +46,9 @@ AssertEquals_DINT(
      Actual:= hrActual,
      Message:= 'Expected S_OK instead of error');
 
-AssertArrayEquals_BYTE(
-    {warning disable C0041}     // warning: C0041: VAR_IN_OUT respectively REFERENCE parameter 'Expecteds' of 'AssertArrayEquals_BYTE' needs variable with write access as input
+{warning disable C0041}
+AssertArrayEquals_BYTE(    
     Expecteds:= aExpectedBuffer,
-    {warning restore C0041}
     Actuals:= aActualBuffer,
     MEssage:= CONCAT('Expected buffers to be equal for Varint ', TO_STRING(nValue))
 );
