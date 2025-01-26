@@ -90,6 +90,12 @@
       <SubType>Code</SubType>
       <LinkAlways>true</LinkAlways>
     </Compile>
+    <Compile Include="Parser\POUs\F_ReadBytes.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Parser\POUs\F_ReadRawBytes.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Parser\POUs\F_ReadRawString.TcPOU">
       <SubType>Code</SubType>
       <LinkAlways>true</LinkAlways>
@@ -163,6 +169,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="__TESTs\Parser\FB_ParseRawInt32Tests.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="__TESTs\Parser\FB_ReadBytesTests.TcPOU">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="__TESTs\Parser\FB_ReadRawStringTests.TcPOU">

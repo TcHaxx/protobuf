@@ -13,7 +13,8 @@ TYPE E_ParserErrorCode :
     MalformedVarInt := -2,      // Encountered a malformed Varint.
     InvalidDataType := -3,      // Datatype not supported, e.g. F_ParseRawInt32 -> LINT
     TruncatedMessage := -4,     // 
-    InvalidUtf8 := -5           //
+    InvalidUtf8 := -5,          //
+    NotEnoughMem := -6          // e.g. Array [0..15] OF BYTES but F_ReadRawBytes length is 32.
 ) DINT := NoError;
 END_TYPE
 ]]></Declaration>

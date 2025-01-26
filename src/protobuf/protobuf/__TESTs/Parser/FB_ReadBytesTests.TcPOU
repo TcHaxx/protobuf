@@ -1,0 +1,76 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1">
+  <POU Name="FB_ReadBytesTests" Id="{c99c13cd-f8c1-42ea-97e2-f291459b90d3}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK INTERNAL FINAL FB_ReadBytesTests EXTENDS FB_TestSuite
+VAR_INPUT
+END_VAR
+VAR_OUTPUT
+END_VAR
+VAR
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[ShouldReadBytesTheory();]]></ST>
+    </Implementation>
+    <Method Name="ShouldReadBytes" Id="{99c5439c-a66a-4f52-a6da-c9a2a878a34e}">
+      <Declaration><![CDATA[METHOD PRIVATE ShouldReadBytes
+VAR_IN_OUT CONSTANT
+    aBuffer         : ARRAY[*] OF BYTE;
+    aExpectedBytes  : ARRAY[0..31] OF BYTE;
+END_VAR
+VAR_INPUT CONSTANT
+    nBufferPosStart     : UDINT;
+    nExpectedBufferPos  : UDINT;
+END_VAR
+VAR
+    aActualBytes : ARRAY[0..31] OF BYTE;
+    stState : ST_ParserInternalState;
+    hrActual : HRESULT; 
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[
+// Arrange
+stState.nBufferSize := TO_UDINT(UPPER_BOUND(aBuffer, 1) + 1);
+stState.nBufferPos := nBufferPosStart;
+
+
+// Act
+{warning disable C0041}
+hrActual := F_ReadBytes(aBuffer, stState, aActualBytes);
+
+// Assert
+AssertEquals_DINT(
+     Expected:= S_OK,
+     Actual:= hrActual,
+     Message:= 'Expected S_OK instead of error');
+
+AssertArrayEquals_BYTE(
+    Expecteds:= aExpectedBytes,
+    Actuals:= aActualBytes,
+    Message:= '');
+    
+AssertEquals_UDINT(
+    Expected:= nExpectedBufferPos,
+    Actual:= stState.nBufferPos,
+    Message:= CONCAT('Expected stState.nBufferPos to equal ', TO_STRING(nExpectedBufferPos)));]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="ShouldReadBytesTheory" Id="{99dad483-edea-4e8b-a325-fce591314592}">
+      <Declaration><![CDATA[METHOD PRIVATE ShouldReadBytesTheory
+VAR CONSTANT
+    cRawBytesTest1          : ARRAY [0..31] OF BYTE := [16#0, 16#04, 16#FF, 16#01, 16#02, 16#03, 16#02, 16#AF, 16#FE];
+    cExpectedBytesTest1     : ARRAY[0..31] OF BYTE := [16#FF, 16#01, 16#02, 16#03];
+    cExpectedBytesTest2     : ARRAY[0..31] OF BYTE := [16#AF, 16#FE];
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST(__POUNAME());
+
+ShouldReadBytes(aBuffer:= cRawBytesTest1, aExpectedBytes:= cExpectedBytesTest1, nBufferPosStart:= 1, nExpectedBufferPos:= 6);
+ShouldReadBytes(aBuffer:= cRawBytesTest1, aExpectedBytes:= cExpectedBytesTest2, nBufferPosStart:= 6, nExpectedBufferPos:= 9);
+
+TEST_FINISHED_NAMED(__POUNAME());]]></ST>
+      </Implementation>
+    </Method>
+  </POU>
+</TcPlcObject>

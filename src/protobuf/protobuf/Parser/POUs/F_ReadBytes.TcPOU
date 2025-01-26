@@ -1,0 +1,27 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1">
+  <POU Name="F_ReadBytes" Id="{fe8d4fa5-1dc0-4cb1-bc5f-aa95aabb97fd}" SpecialFunc="None">
+    <Declaration><![CDATA[// Reads a bytes field value from the input.
+FUNCTION F_ReadBytes : HRESULT
+VAR_INPUT CONSTANT
+    aBuffer : ARRAY [*] OF BYTE;   
+END_VAR
+VAR_IN_OUT
+    stState : ST_ParserInternalState;
+    aBytes  : ARRAY[*] OF BYTE;
+END_VAR
+VAR
+    nLength : UDINT;
+END_VAR]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[F_ReadBytes := S_OK;
+
+F_ReadBytes := F_ParseLength(aBuffer, stState, nLength=> nLength);
+IF FAILED(F_ReadBytes) THEN
+    RETURN;
+END_IF
+
+F_ReadBytes := F_ReadRawBytes(aBuffer, nLength, stState, aBytes);]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>

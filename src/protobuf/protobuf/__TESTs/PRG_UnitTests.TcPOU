@@ -8,6 +8,7 @@ VAR
     fbParseRawInt32Tests        : FB_ParseRawInt32Tests;
     fbWriteRawInt32Tests        : FB_WriteRawInt32Tests;
     fbReadRawStringStringTests  : FB_ReadRawStringTests;
+    fbReadBytesTests            : FB_ReadBytesTests;
     fbReadStringTests           : FB_ReadStringTests;
     fbDecodeZigZag32Tests       : FB_DecodeZigZag32Tests;
     fbDecodeZigZag64Tests       : FB_DecodeZigZag64Tests;
