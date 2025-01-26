@@ -12,7 +12,7 @@ TYPE E_WireType :
     StartGroup := 3,        // "start group" value
     EndGroup := 4,          // "end group" value
     Fixed32 := 5            // Fixed-length 32-bit value.
-) UINT;
+) UDINT;
 END_TYPE
 ]]></Declaration>
   </DUT>
