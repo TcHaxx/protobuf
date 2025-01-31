@@ -1,0 +1,75 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1">
+  <POU Name="FB_WriteBytesTests" Id="{623a6450-385e-49a5-8d3f-af9fc8d6603b}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK INTERNAL FINAL FB_WriteBytesTests EXTENDS FB_TestSuite
+VAR_INPUT
+END_VAR
+VAR_OUTPUT
+END_VAR
+VAR
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[ShouldWriteBytesTheory();]]></ST>
+    </Implementation>
+    <Method Name="ShouldWriteBytes" Id="{6c4f2652-46fa-445e-9fae-34e5a74bdcfe}">
+      <Declaration><![CDATA[METHOD PRIVATE ShouldWriteBytes
+VAR_IN_OUT CONSTANT    
+    aExpectedBytes  : ARRAY[0..31] OF BYTE;
+    aBytesToWrite   : ARRAY[*] OF BYTE;
+END_VAR
+VAR_INPUT CONSTANT
+    nBufferPosStart     : UDINT;
+    nExpectedBufferPos  : UDINT;
+END_VAR
+VAR
+    aActualBytes : ARRAY[0..31] OF BYTE;
+    stState : ST_WriterInternalState;
+    hrActual : HRESULT; 
+    nLength : UDINT;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[
+// Arrange
+stState.nBufferSize := TO_UDINT(UPPER_BOUND(aActualBytes, 1) + 1);
+stState.nBufferPos := nBufferPosStart;
+nLength := TO_UDINT(UPPER_BOUND(aBytesToWrite, 1) + 1);
+
+// Act
+{warning disable C0041}
+hrActual := F_WriteBytes(aActualBytes, stState, aBytesToWrite, nLength);
+
+// Assert
+AssertEquals_DINT(
+     Expected:= S_OK,
+     Actual:= hrActual,
+     Message:= 'Expected S_OK instead of error');
+
+AssertArrayEquals_BYTE(
+    Expecteds:= aExpectedBytes,
+    Actuals:= aActualBytes,
+    Message:= '');
+    
+AssertEquals_UDINT(
+    Expected:= nExpectedBufferPos,
+    Actual:= stState.nBufferPos,
+    Message:= CONCAT('Expected stState.nBufferPos to equal ', TO_STRING(nExpectedBufferPos)));]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="ShouldWriteBytesTheory" Id="{6aa9646c-8353-4e06-a43c-4b32755f577b}">
+      <Declaration><![CDATA[METHOD PRIVATE ShouldWriteBytesTheory
+VAR CONSTANT
+    cExpectedBytesTest1     : ARRAY[0..31] OF BYTE := [16#00, 16#03, 16#01, 16#02, 16#03];
+    cBytesToWriteTest1      : ARRAY[0..2] OF BYTE := [16#01, 16#02, 16#03];
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST(__POUNAME());
+
+ShouldWriteBytes(aExpectedBytes:= cExpectedBytesTest1, aBytesToWrite:= cBytesToWriteTest1, nBufferPosStart:= 1, nExpectedBufferPos:= 5);
+
+TEST_FINISHED_NAMED(__POUNAME());]]></ST>
+      </Implementation>
+    </Method>
+  </POU>
+</TcPlcObject>

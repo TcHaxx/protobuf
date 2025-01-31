@@ -1,0 +1,36 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1">
+  <POU Name="FB_RoundTripBytesTests" Id="{843ee9da-0268-4a25-ab5f-66c31e48b1c0}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK INTERNAL FINAL FB_RoundTripBytesTests EXTENDS FB_TestSuite
+VAR CONSTANT
+    cExpectedBytes : ARRAY[0..255] OF BYTE := [128(16#99), 16#AF, 16#FE, 16#BE, 16#EF, 16#F0, 16#0D, 16#00, 16#FF, 14(16#AC)];
+END_VAR
+VAR
+    aBuffer         : ARRAY[0..255] OF BYTE;
+    aActualBytes    : ARRAY[0..255] OF BYTE;
+    stWriterState   : ST_WriterInternalState;
+    stParserState   : ST_ParserInternalState;
+    hrWriterActual  : HRESULT;
+    hrParserActual  : HRESULT;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[TEST(__POUNAME());
+
+// Arrange
+stWriterState.nBufferSize := stParserState.nBufferSize := TO_UDINT(UPPER_BOUND(aBuffer, 1) + 1);
+stWriterState.nBufferPos := stParserState.nBufferPos := 2;
+
+// Act
+hrWriterActual := F_WriteBytes(aBuffer, stWriterState, cExpectedBytes, nLength:= 150);
+hrParserActual := F_ReadBytes(aBuffer,stParserState, aActualBytes);
+
+// Assert
+AssertEquals_DINT(Expected:= S_OK, Actual:= hrWriterActual, Message:= 'Expected hrWriterActual = S_OK');
+AssertEquals_DINT(Expected:= S_OK, Actual:= hrParserActual, Message:= 'Expected hrParserActual = S_OK');
+AssertArrayEquals_BYTE(Expecteds:= cExpectedBytes, Actuals:= aActualBytes, Message:= 'Bytes differ');
+
+TEST_FINISHED_NAMED(__POUNAME());]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>

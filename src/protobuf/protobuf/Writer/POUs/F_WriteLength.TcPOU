@@ -1,0 +1,22 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1">
+  <POU Name="F_WriteLength" Id="{07f3f053-aeab-4a55-bb4b-e3a63873a37e}" SpecialFunc="None">
+    <Declaration><![CDATA[// Writes a length (in bytes) for length-delimited data.
+FUNCTION F_WriteLength : HRESULT
+VAR_INPUT CONSTANT
+    aBuffer : ARRAY [*] OF BYTE;   
+END_VAR
+VAR_IN_OUT
+    stState : ST_WriterInternalState;
+END_VAR
+VAR_INPUT
+    nLength : UDINT;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[
+F_WriteLength := F_WriteRawVarint32(aBuffer, stState, nLength);
+]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>

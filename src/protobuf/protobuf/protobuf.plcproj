@@ -153,6 +153,16 @@
     <Compile Include="Writer\POUs\F_EncodeZigZag64.TcPOU">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Writer\POUs\F_WriteBytes.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Writer\POUs\F_WriteLength.TcPOU">
+      <SubType>Code</SubType>
+      <LinkAlways>true</LinkAlways>
+    </Compile>
+    <Compile Include="Writer\POUs\F_WriteRawBytes.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Writer\POUs\F_WriteRawVarint32.TcPOU">
       <SubType>Code</SubType>
     </Compile>
@@ -186,6 +196,9 @@
     <Compile Include="Version\Global_Version.TcGVL">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="__TESTs\RoundTripTests\FB_RoundTripBytesTests.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="__TESTs\RoundTripTests\FB_RoundTripStringTests.TcPOU">
       <SubType>Code</SubType>
     </Compile>
@@ -202,6 +215,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="__TESTs\Writer\FB_EncodeZigZag32Tests.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="__TESTs\Writer\FB_WriteBytesTests.TcPOU">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="__TESTs\Writer\FB_WriteRawInt32Tests.TcPOU">

@@ -12,7 +12,9 @@ TYPE E_WriterErrorCode :
     InternalError := -1,        // Internal parser error.
     MalformedVarInt := -2,      // Encountered a malformed Varint.
     InvalidDataType := -3,      // Datatype not supported, e.g. F_WriteVarInt32 -> LINT
-    TruncatedMessage := -4      // Not enough space left in given buffer
+    TruncatedMessage := -4,     // Not enough space left in given buffer
+    InvalidUtf8 := -5,          //
+    NotEnoughMem := -6          // e.g. Array [0..15] OF BYTES but F_ReadRawBytes length is 32.
 ) DINT := NoError;
 END_TYPE
 ]]></Declaration>
