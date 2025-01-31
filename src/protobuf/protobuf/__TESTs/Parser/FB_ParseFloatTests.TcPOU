@@ -1,0 +1,89 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1">
+  <POU Name="FB_ParseFloatTests" Id="{130d6528-78da-4371-a652-13d9a2892e93}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK INTERNAL FINAL FB_ParseFloatTests EXTENDS FB_TestSuite
+VAR_INPUT
+END_VAR
+VAR_OUTPUT
+END_VAR
+VAR
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[ShouldParseFloatTheory();]]></ST>
+    </Implementation>
+    <Method Name="ShouldParseFloat" Id="{83bfebd0-7e4a-40c7-8275-2e45529dacfd}">
+      <Declaration><![CDATA[METHOD PRIVATE ShouldParseFloat
+VAR_IN_OUT CONSTANT
+    aBuffer     : ARRAY [*] OF BYTE;    
+END_VAR
+VAR_INPUT CONSTANT
+    fExpected           : REAL;
+    nBufferPosStart     : UDINT;
+    nExpectedBufferPos  : UDINT;
+END_VAR
+VAR_INST
+    stState : ST_ParserInternalState;
+END_VAR
+VAR
+    fActual         : REAL;  
+    hr              : HRESULT;  
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[// Arrange
+stState.nBufferPos := nBufferPosStart;
+stState.nBufferSize := TO_UDINT(UPPER_BOUND(aBuffer, 1) + 1);
+
+// Act
+{warning disable C0041}
+hr := F_ParseFloat(aBuffer, stState, fValue=> fActual);
+
+// Assert
+AssertEquals_DINT(
+    Expected:= S_OK,
+    Actual:= hr,
+    Message:= 'Expected S_OK instead of error');
+    
+AssertEquals_REAL(
+    Expected:= fExpected,
+    Delta := 1.0E-44,
+    Actual:= fActual,
+    Message:= CONCAT('Expected Float to equal ', TO_STRING(fExpected)));
+ 
+AssertEquals_UDINT(
+    Expected:= nExpectedBufferPos,
+    Actual:= stState.nBufferPos,
+    Message:= CONCAT(CONCAT('Expected stState.nBufferPos to equal ', TO_STRING(nExpectedBufferPos)), CONCAT(', for Float ', TO_STRING(fExpected))));]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="ShouldParseFloatTheory" Id="{171431b6-1790-40af-a52e-cd9ba2f6a10b}">
+      <Declaration><![CDATA[METHOD PRIVATE ShouldParseFloatTheory : REFERENCE TO FB_Test
+VAR CONSTANT
+    cRawValue0          : ARRAY[0..15] OF BYTE := [16#0];
+    cRawValue0_1        : ARRAY[0..15] OF BYTE := [16#0, 16#CD, 16#CC, 16#CC, 16#3D];
+    cRawValueNeg1       : ARRAY[0..15] OF BYTE := [16#0, 16#00, 16#00, 16#80, 16#BF];
+    cRawValue13_37      : ARRAY[0..15] OF BYTE := [16#0, 16#0, 16#85, 16#EB, 16#55, 16#41];
+    cRawValueNeg13_37   : ARRAY[0..15] OF BYTE := [16#0, 16#0, 16#85, 16#EB, 16#55, 16#C1];
+    cRawValueMaxReal    : ARRAY[0..15] OF BYTE := [16#FD, 16#FF, 16#7F, 16#7F];
+    cRawValuePosMinReal : ARRAY[0..15] OF BYTE := [16#07, 16#00, 16#00, 16#00];
+    cRawValueNegMaxReal : ARRAY[0..15] OF BYTE := [16#07, 16#00, 16#00, 16#80];
+    cRawValueMinReal    : ARRAY[0..15] OF BYTE := [16#FD, 16#FF, 16#7F, 16#FF];       
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST(__POUNAME());
+
+ShouldParseFloat(aBuffer:= cRawValue0, fExpected:= 0, nBufferPosStart:= 0, nExpectedBufferPos:= 4);
+ShouldParseFloat(aBuffer:= cRawValue0_1, fExpected:= 0.1, nBufferPosStart:= 1, nExpectedBufferPos:= 5);
+ShouldParseFloat(aBuffer:= cRawValueNeg1, fExpected:= -1.0, nBufferPosStart:= 1, nExpectedBufferPos:= 5);
+ShouldParseFloat(aBuffer:= cRawValue13_37, fExpected:= 13.37, nBufferPosStart:= 2, nExpectedBufferPos:= 6);
+ShouldParseFloat(aBuffer:= cRawValueNeg13_37, fExpected:= -13.37, nBufferPosStart:= 2, nExpectedBufferPos:= 6);
+ShouldParseFloat(aBuffer:= cRawValueMaxReal, fExpected:= 3.402823E+38, nBufferPosStart:= 0, nExpectedBufferPos:= 4);
+ShouldParseFloat(aBuffer:= cRawValuePosMinReal, fExpected:= 1.0E-44, nBufferPosStart:= 0, nExpectedBufferPos:= 4);
+ShouldParseFloat(aBuffer:= cRawValueNegMaxReal, fExpected:= -1.0E-44, nBufferPosStart:= 0, nExpectedBufferPos:= 4);
+ShouldParseFloat(aBuffer:= cRawValueMinReal, fExpected:= -3.402823E+38, nBufferPosStart:= 0, nExpectedBufferPos:= 4);
+
+TEST_FINISHED_NAMED(__POUNAME());]]></ST>
+      </Implementation>
+    </Method>
+  </POU>
+</TcPlcObject>

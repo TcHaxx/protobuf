@@ -3,7 +3,7 @@
   <POU Name="F_WriteLength" Id="{07f3f053-aeab-4a55-bb4b-e3a63873a37e}" SpecialFunc="None">
     <Declaration><![CDATA[// Writes a length (in bytes) for length-delimited data.
 FUNCTION F_WriteLength : HRESULT
-VAR_INPUT CONSTANT
+VAR_IN_OUT CONSTANT
     aBuffer : ARRAY [*] OF BYTE;   
 END_VAR
 VAR_IN_OUT
@@ -14,7 +14,7 @@ VAR_INPUT
 END_VAR
 ]]></Declaration>
     <Implementation>
-      <ST><![CDATA[
+      <ST><![CDATA[{warning disable C0041}
 F_WriteLength := F_WriteRawVarint32(aBuffer, stState, nLength);
 ]]></ST>
     </Implementation>

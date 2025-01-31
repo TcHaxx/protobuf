@@ -1,0 +1,39 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1">
+  <POU Name="F_ParseFloat" Id="{1d40ac6c-43db-4054-963c-67b66f65dca7}" SpecialFunc="None">
+    <Declaration><![CDATA[// Parses a float value.
+FUNCTION F_ParseFloat : HRESULT
+VAR_INPUT CONSTANT
+    aBuffer : ARRAY [*] OF BYTE;   
+END_VAR
+VAR_IN_OUT
+    stState : ST_ParserInternalState;
+END_VAR
+VAR_OUTPUT
+    fValue : REAL;
+END_VAR
+VAR CONSTANT
+    cLength : UDINT := SIZEOF(fValue);
+END_VAR
+VAR
+    fTmp : REAL;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[
+F_ParseFloat := S_OK;
+
+IF stState.nBufferSize - stState.nBufferPos < cLength THEN
+    F_ParseFloat := stState.eParserErrorCode := E_ParserErrorCode.TruncatedMessage;
+    stState.bError := TRUE;
+    RETURN;
+END_IF
+
+MEMCPY(destAddr:= ADR(fTmp), srcAddr:= ADR(aBuffer[stState.nBufferPos]), n:= cLength);
+stState.nBufferPos := stState.nBufferPos + cLength;
+
+{warning 'TODO: Check for endianess?'}
+fValue := fTmp;]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>

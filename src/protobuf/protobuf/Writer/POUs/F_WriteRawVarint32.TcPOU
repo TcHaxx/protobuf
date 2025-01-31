@@ -17,12 +17,14 @@ END_VAR
       <ST><![CDATA[
 IF anyVarInt32.diSize > SIZEOF(UDINT) THEN
     F_WriteRawVarint32 := stState.eWriterErrorCode := E_WriterErrorCode.InvalidDataType;     
+    stState.bError := TRUE;
     RETURN; 
 END_IF
 
 // Enough capacity left for theoretical max Varint32?
 IF (stState.nBufferPos + SIZEOF(nValue) + 1) > stState.nBufferSize THEN
     F_WriteRawVarint32 := stState.eWriterErrorCode := E_WriterErrorCode.TruncatedMessage;     
+    stState.bError := TRUE;
     RETURN; 
 END_IF
 

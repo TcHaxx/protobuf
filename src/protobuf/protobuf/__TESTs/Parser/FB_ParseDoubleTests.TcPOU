@@ -1,0 +1,90 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1">
+  <POU Name="FB_ParseDoubleTests" Id="{e81762c5-17d5-4acd-856d-21a2b592afd4}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK INTERNAL FINAL FB_ParseDoubleTests EXTENDS FB_TestSuite
+VAR_INPUT
+END_VAR
+VAR_OUTPUT
+END_VAR
+VAR
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[ShouldParseDoubleTheory();]]></ST>
+    </Implementation>
+    <Method Name="ShouldParseDouble" Id="{881446e8-e2ed-41ac-956f-d88b97ff8763}">
+      <Declaration><![CDATA[METHOD PRIVATE ShouldParseDouble
+VAR_IN_OUT CONSTANT
+    aBuffer     : ARRAY [*] OF BYTE;    
+END_VAR
+VAR_INPUT CONSTANT
+    fExpected           : LREAL;
+    nBufferPosStart     : UDINT;
+    nExpectedBufferPos  : UDINT;
+END_VAR
+VAR_INST
+    stState : ST_ParserInternalState;
+END_VAR
+VAR
+    fActual         : LREAL;  
+    hr              : HRESULT;  
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[// Arrange
+stState.nBufferPos := nBufferPosStart;
+stState.nBufferSize := TO_UDINT(UPPER_BOUND(aBuffer, 1) + 1);
+
+// Act
+{warning disable C0041}
+hr := F_ParseDouble(aBuffer, stState, fValue=> fActual);
+
+// Assert
+AssertEquals_DINT(
+    Expected:= S_OK,
+    Actual:= hr,
+    Message:= 'Expected S_OK instead of error');
+    
+AssertEquals_LREAL(
+    Expected:= fExpected,
+    Delta := 4.94065645841247E-324,
+    Actual:= fActual,
+    Message:= CONCAT('Expected Double to equal ', TO_STRING(fExpected)));
+ 
+AssertEquals_UDINT(
+    Expected:= nExpectedBufferPos,
+    Actual:= stState.nBufferPos,
+    Message:= CONCAT(CONCAT('Expected stState.nBufferPos to equal ', TO_STRING(nExpectedBufferPos)), CONCAT(', for Double ', TO_STRING(fExpected))));]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="ShouldParseDoubleTheory" Id="{d7c531a6-6939-4eb7-944b-70ef3948dcf6}">
+      <Declaration><![CDATA[METHOD PRIVATE ShouldParseDoubleTheory : REFERENCE TO FB_Test
+VAR CONSTANT
+    cRawValue0          : ARRAY[0..15] OF BYTE := [16#0];
+    cRawValue0_1        : ARRAY[0..15] OF BYTE := [16#0, 16#9A, 16#99, 16#99, 16#99, 16#99, 16#99, 16#B9, 16#3F];
+    cRawValueNeg1       : ARRAY[0..15] OF BYTE := [16#0, 16#00, 16#00, 16#00, 16#00, 16#00, 16#00, 16#F0, 16#BF];
+    cRawValue13_37      : ARRAY[0..15] OF BYTE := [16#0, 16#0, 16#3D, 16#0A, 16#D7, 16#A3, 16#70, 16#BD, 16#2A, 16#40];
+    cRawValueNeg13_37   : ARRAY[0..15] OF BYTE := [16#0, 16#0, 16#3D, 16#0A, 16#D7, 16#A3, 16#70, 16#BD, 16#2A, 16#C0];
+    cRawValueMaxReal    : ARRAY[0..15] OF BYTE := [16#FF, 16#FF, 16#FF, 16#FF, 16#FF, 16#FF, 16#EF, 16#7F];
+    cRawValuePosMinReal : ARRAY[0..15] OF BYTE := [16#01, 16#00, 16#00, 16#00, 16#00, 16#00, 16#00, 16#00];
+    cRawValueNegMaxReal : ARRAY[0..15] OF BYTE := [16#01, 16#00, 16#00, 16#00, 16#00, 16#00, 16#00, 16#80];
+    cRawValueMinReal    : ARRAY[0..15] OF BYTE := [16#FF, 16#FF, 16#FF, 16#FF, 16#FF, 16#FF, 16#EF, 16#FF];
+      
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST(__POUNAME());
+
+ShouldParseDouble(aBuffer:= cRawValue0, fExpected:= 0, nBufferPosStart:= 0, nExpectedBufferPos:= 8);
+ShouldParseDouble(aBuffer:= cRawValue0_1, fExpected:= 0.1, nBufferPosStart:= 1, nExpectedBufferPos:= 9);
+ShouldParseDouble(aBuffer:= cRawValueNeg1, fExpected:= -1.0, nBufferPosStart:= 1, nExpectedBufferPos:= 9);
+ShouldParseDouble(aBuffer:= cRawValue13_37, fExpected:= 13.37, nBufferPosStart:= 2, nExpectedBufferPos:= 10);
+ShouldParseDouble(aBuffer:= cRawValueNeg13_37, fExpected:= -13.37, nBufferPosStart:= 2, nExpectedBufferPos:= 10);
+// ShouldParseDouble(aBuffer:= cRawValueMaxReal, fExpected:= 1.7976931348623157E+308, nBufferPosStart:= 0, nExpectedBufferPos:= 8);
+ShouldParseDouble(aBuffer:= cRawValuePosMinReal, fExpected:= 4.94065645841247E-324, nBufferPosStart:= 0, nExpectedBufferPos:= 8);
+ShouldParseDouble(aBuffer:= cRawValueNegMaxReal, fExpected:= -4.94065645841247E-324, nBufferPosStart:= 0, nExpectedBufferPos:= 8);
+// ShouldParseDouble(aBuffer:= cRawValueMinReal, fExpected:= -1.7976931348623157E+308, nBufferPosStart:= 0, nExpectedBufferPos:= 8);
+
+TEST_FINISHED_NAMED(__POUNAME());]]></ST>
+      </Implementation>
+    </Method>
+  </POU>
+</TcPlcObject>

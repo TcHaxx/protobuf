@@ -74,6 +74,12 @@
       <SubType>Code</SubType>
       <LinkAlways>true</LinkAlways>
     </Compile>
+    <Compile Include="Parser\POUs\F_ParseDouble.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Parser\POUs\F_ParseFloat.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Parser\POUs\F_ParseLength.TcPOU">
       <SubType>Code</SubType>
       <LinkAlways>true</LinkAlways>
@@ -156,6 +162,12 @@
     <Compile Include="Writer\POUs\F_WriteBytes.TcPOU">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Writer\POUs\F_WriteDouble.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Writer\POUs\F_WriteFloat.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Writer\POUs\F_WriteLength.TcPOU">
       <SubType>Code</SubType>
       <LinkAlways>true</LinkAlways>
@@ -176,6 +188,12 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="__TESTs\Parser\FB_DecodeZigZag64Tests.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="__TESTs\Parser\FB_ParseDoubleTests.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="__TESTs\Parser\FB_ParseFloatTests.TcPOU">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="__TESTs\Parser\FB_ParseRawInt32Tests.TcPOU">
@@ -199,6 +217,12 @@
     <Compile Include="__TESTs\RoundTripTests\FB_RoundTripBytesTests.TcPOU">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="__TESTs\RoundTripTests\FB_RoundTripFloatTests.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="__TESTs\RoundTripTests\FB_RoundTripDoubleTests.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="__TESTs\RoundTripTests\FB_RoundTripStringTests.TcPOU">
       <SubType>Code</SubType>
     </Compile>
@@ -220,7 +244,13 @@
     <Compile Include="__TESTs\Writer\FB_WriteBytesTests.TcPOU">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="__TESTs\Writer\FB_WriteDoubleTests.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="__TESTs\Writer\FB_WriteRawInt32Tests.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="__TESTs\Writer\FB_WriteFloatTests.TcPOU">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="__TESTs\Writer\FB_WriteTagTests.TcPOU">

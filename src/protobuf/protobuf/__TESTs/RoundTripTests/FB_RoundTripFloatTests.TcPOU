@@ -1,17 +1,17 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <TcPlcObject Version="1.1.0.1">
-  <POU Name="FB_RoundTripBytesTests" Id="{843ee9da-0268-4a25-ab5f-66c31e48b1c0}" SpecialFunc="None">
-    <Declaration><![CDATA[FUNCTION_BLOCK INTERNAL FINAL FB_RoundTripBytesTests EXTENDS FB_TestSuite
+  <POU Name="FB_RoundTripFloatTests" Id="{2c925fdb-d1b2-4454-938c-fb90f7c69610}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK INTERNAL FINAL FB_RoundTripFloatTests EXTENDS FB_TestSuite
 VAR CONSTANT
-    cExpectedBytes : ARRAY[0..255] OF BYTE := [128(16#99), 16#AF, 16#FE, 16#BE, 16#EF, 16#F0, 16#0D, 16#00, 16#FF, 14(16#AC)];
+    cExpected : REAL := 13.37;
 END_VAR
 VAR
-    aBuffer         : ARRAY[0..255] OF BYTE;
-    aActualBytes    : ARRAY[0..255] OF BYTE;
+    aBuffer         : ARRAY[0..15] OF BYTE;
     stWriterState   : ST_WriterInternalState;
     stParserState   : ST_ParserInternalState;
     hrWriterActual  : HRESULT;
     hrParserActual  : HRESULT;
+    fActual         : REAL;
 END_VAR
 ]]></Declaration>
     <Implementation>
@@ -22,14 +22,13 @@ stWriterState.nBufferSize := stParserState.nBufferSize := TO_UDINT(UPPER_BOUND(a
 stWriterState.nBufferPos := stParserState.nBufferPos := 2;
 
 // Act
-hrWriterActual := F_WriteBytes(aBuffer, stWriterState, cExpectedBytes, nLength:= 150);
-hrParserActual := F_ReadBytes(aBuffer,stParserState, aActualBytes);
+hrWriterActual := F_WriteFloat(aBuffer, stWriterState, cExpected);
+hrParserActual := F_ParseFloat(aBuffer,stParserState, fVAlue=> fActual);
 
 // Assert
 AssertEquals_DINT(Expected:= S_OK, Actual:= hrWriterActual, Message:= 'Expected hrWriterActual = S_OK');
 AssertEquals_DINT(Expected:= S_OK, Actual:= hrParserActual, Message:= 'Expected hrParserActual = S_OK');
-{warning disable C0041}
-AssertArrayEquals_BYTE(Expecteds:= cExpectedBytes, Actuals:= aActualBytes, Message:= 'Bytes differ');
+AssertEquals_REAL(Expected:= cExpected, Actual:= fActual, Delta:= 1.0E-44, Message:= 'Values differ');
 
 TEST_FINISHED_NAMED(__POUNAME());]]></ST>
     </Implementation>

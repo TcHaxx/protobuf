@@ -12,6 +12,8 @@ VAR
     fbReadStringTests           : FB_ReadStringTests;
     fbDecodeZigZag32Tests       : FB_DecodeZigZag32Tests;
     fbDecodeZigZag64Tests       : FB_DecodeZigZag64Tests;
+    fbParseFloatTests           : FB_ParseFloatTests;
+    fbParseDoubleTests          : FB_ParseDoubleTests;
     
     fbEncodeZigZag32Tests       : FB_EncodeZigZag32Tests;
     fbEncodeZigZag64Tests       : FB_EncodeZigZag64Tests;
@@ -25,7 +27,13 @@ VAR
     fbRoundTripTagTests         : FB_RoundTripTagTests;
     
     fbWriteBytesTests           : FB_WriteBytesTests;
-    FBRoundTripBytesTests       : FB_RoundTripBytesTests;
+    fbRoundTripBytesTests       : FB_RoundTripBytesTests;
+    
+    fbWriteFloatTests           : FB_WriteFloatTests;
+    fbRoundTripFloatTests       : FB_RoundTripFloatTests;
+        
+    fbWriteDoubleTests           : FB_WriteDoubleTests;
+    fbRoundTripDoubleTests       : FB_RoundTripDoubleTests;
 {END_IF}
 END_VAR
 ]]></Declaration>

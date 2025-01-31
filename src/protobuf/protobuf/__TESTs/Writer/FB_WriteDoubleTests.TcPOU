@@ -1,0 +1,84 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1">
+  <POU Name="FB_WriteDoubleTests" Id="{350b5729-51e6-4499-8e5f-4620d81b00dd}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK INTERNAL FB_WriteDoubleTests EXTENDS FB_TestSuite
+VAR_INPUT
+END_VAR
+VAR_OUTPUT
+END_VAR
+VAR
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[ShouldWriteDoubleTheory();]]></ST>
+    </Implementation>
+    <Method Name="ShouldWriteDouble" Id="{5d580df8-5316-4f5d-9386-0bf61f89c4e3}">
+      <Declaration><![CDATA[METHOD PRIVATE ShouldWriteDouble
+VAR_IN_OUT CONSTANT
+    aExpectedBuffer         : ARRAY[*] OF BYTE;
+END_VAR
+VAR_INPUT CONSTANT
+    fValue              : LREAL;
+    nBufferPosStart     : UDINT;
+    nExpectedBufferPos  : UDINT;
+END_VAR
+VAR
+    stState : ST_WriterInternalState;
+    hrActual : HRESULT; 
+    aActualBuffer       : ARRAY[0..15] OF BYTE;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[
+// Arrange
+stState.nBufferSize := TO_UDINT(UPPER_BOUND(aExpectedBuffer, 1) + 1);
+stState.nBufferPos := nBufferPosStart;
+
+// Act
+hrActual := F_WriteDouble(aActualBuffer, stState, fValue);
+
+// Assert
+AssertEquals_DINT(
+     Expected:= S_OK,
+     Actual:= hrActual,
+     Message:= 'Expected S_OK instead of error');
+
+{warning disable C0041}
+AssertArrayEquals_BYTE(    
+    Expecteds:= aExpectedBuffer,
+    Actuals:= aActualBuffer,
+    MEssage:= CONCAT('Expected buffers to be equal for Double ', TO_STRING(fValue)));]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="ShouldWriteDoubleTheory" Id="{c10fec0e-3167-499c-aecb-8be63ac2d540}">
+      <Declaration><![CDATA[METHOD PRIVATE ShouldWriteDoubleTheory
+VAR CONSTANT
+    cExpectedRawValue0          : ARRAY[0..15] OF BYTE := [16#0];
+    cExpectedRawValue0_1        : ARRAY[0..15] OF BYTE := [16#0, 16#9A, 16#99, 16#99, 16#99, 16#99, 16#99, 16#B9, 16#3F];
+    cExpectedRawValueNeg1       : ARRAY[0..15] OF BYTE := [16#0, 16#00, 16#00, 16#00, 16#00, 16#00, 16#00, 16#F0, 16#BF];
+    cExpectedRawValue13_37      : ARRAY[0..15] OF BYTE := [16#0, 16#0, 16#3D, 16#0A, 16#D7, 16#A3, 16#70, 16#BD, 16#2A, 16#40];
+    cExpectedRawValueNeg13_37   : ARRAY[0..15] OF BYTE := [16#0, 16#0, 16#3D, 16#0A, 16#D7, 16#A3, 16#70, 16#BD, 16#2A, 16#C0];
+    cExpectedRawValueMaxLReal    : ARRAY[0..15] OF BYTE := [16#FF, 16#FF, 16#FF, 16#FF, 16#FF, 16#FF, 16#EF, 16#7F];
+    cExpectedRawValuePosMinLReal : ARRAY[0..15] OF BYTE := [16#01, 16#00, 16#00, 16#00, 16#00, 16#00, 16#00, 16#00];
+    cExpectedRawValueNegMaxLReal : ARRAY[0..15] OF BYTE := [16#01, 16#00, 16#00, 16#00, 16#00, 16#00, 16#00, 16#80];
+    cExpectedRawValueMinLReal    : ARRAY[0..15] OF BYTE := [16#FF, 16#FF, 16#FF, 16#FF, 16#FF, 16#FF, 16#EF, 16#FF];
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST(__POUNAME());
+
+ShouldWriteDouble(cExpectedRawValue0, fValue:= 0, nBufferPosStart:= 0, nExpectedBufferPos:= 8);
+ShouldWriteDouble(cExpectedRawValue0_1, fValue:= 0.1, nBufferPosStart:= 1, nExpectedBufferPos:= 9);
+ShouldWriteDouble(cExpectedRawValueNeg1, fValue:= -1.0, nBufferPosStart:= 1, nExpectedBufferPos:= 9);
+ShouldWriteDouble(cExpectedRawValue13_37, fValue:= 13.37, nBufferPosStart:= 2, nExpectedBufferPos:= 10);
+ShouldWriteDouble(cExpectedRawValueNeg13_37, fValue:= -13.37, nBufferPosStart:= 2, nExpectedBufferPos:= 10);
+// ShouldWriteDouble(cExpectedRawValueMaxLReal, fValue:= 1.7976931348623157E+308, nBufferPosStart:= 0, nExpectedBufferPos:= 8);
+ShouldWriteDouble(cExpectedRawValuePosMinLReal, fValue:= 4.94065645841247E-324, nBufferPosStart:= 0, nExpectedBufferPos:= 8);
+ShouldWriteDouble(cExpectedRawValueNegMaxLReal, fValue:= -4.94065645841247E-324, nBufferPosStart:= 0, nExpectedBufferPos:= 8);
+// ShouldWriteDouble(cExpectedRawValueMinLReal, fValue:= -1.7976931348623157E+308, nBufferPosStart:= 0, nExpectedBufferPos:= 8);
+
+
+TEST_FINISHED_NAMED(__POUNAME());]]></ST>
+      </Implementation>
+    </Method>
+  </POU>
+</TcPlcObject>
