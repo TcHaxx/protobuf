@@ -46,7 +46,12 @@ AssertEquals_DINT(
 AssertArrayEquals_BYTE(    
     Expecteds:= aExpectedBuffer,
     Actuals:= aActualBuffer,
-    MEssage:= CONCAT('Expected buffers to be equal for Float ', TO_STRING(fValue)));]]></ST>
+    MEssage:= CONCAT('Expected buffers to be equal for Float ', TO_STRING(fValue)));
+
+AssertEquals_UDINT(
+    Expected:= nExpectedBufferPos,
+    Actual:= stState.nBufferPos,
+    Message:= CONCAT(CONCAT('Expected stState.nBufferPos to equal ', TO_STRING(nExpectedBufferPos)), CONCAT(', for Float ', TO_STRING(fValue))));]]></ST>
       </Implementation>
     </Method>
     <Method Name="ShouldWriteFloatTheory" Id="{796157cf-180d-4395-8d26-a5cf9eaf8f03}">

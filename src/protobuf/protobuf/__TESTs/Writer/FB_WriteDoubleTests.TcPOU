@@ -46,7 +46,12 @@ AssertEquals_DINT(
 AssertArrayEquals_BYTE(    
     Expecteds:= aExpectedBuffer,
     Actuals:= aActualBuffer,
-    MEssage:= CONCAT('Expected buffers to be equal for Double ', TO_STRING(fValue)));]]></ST>
+    MEssage:= CONCAT('Expected buffers to be equal for Double ', TO_STRING(fValue)));
+
+AssertEquals_UDINT(
+    Expected:= nExpectedBufferPos,
+    Actual:= stState.nBufferPos,
+    Message:= CONCAT(CONCAT('Expected stState.nBufferPos to equal ', TO_STRING(nExpectedBufferPos)), CONCAT(', for Double ', TO_STRING(fValue))));]]></ST>
       </Implementation>
     </Method>
     <Method Name="ShouldWriteDoubleTheory" Id="{c10fec0e-3167-499c-aecb-8be63ac2d540}">
@@ -71,10 +76,10 @@ ShouldWriteDouble(cExpectedRawValue0_1, fValue:= 0.1, nBufferPosStart:= 1, nExpe
 ShouldWriteDouble(cExpectedRawValueNeg1, fValue:= -1.0, nBufferPosStart:= 1, nExpectedBufferPos:= 9);
 ShouldWriteDouble(cExpectedRawValue13_37, fValue:= 13.37, nBufferPosStart:= 2, nExpectedBufferPos:= 10);
 ShouldWriteDouble(cExpectedRawValueNeg13_37, fValue:= -13.37, nBufferPosStart:= 2, nExpectedBufferPos:= 10);
-// ShouldWriteDouble(cExpectedRawValueMaxLReal, fValue:= 1.7976931348623157E+308, nBufferPosStart:= 0, nExpectedBufferPos:= 8);
+ShouldWriteDouble(cExpectedRawValueMaxLReal, fValue:= 1.7976931348623157E+308, nBufferPosStart:= 0, nExpectedBufferPos:= 8);
 ShouldWriteDouble(cExpectedRawValuePosMinLReal, fValue:= 4.94065645841247E-324, nBufferPosStart:= 0, nExpectedBufferPos:= 8);
 ShouldWriteDouble(cExpectedRawValueNegMaxLReal, fValue:= -4.94065645841247E-324, nBufferPosStart:= 0, nExpectedBufferPos:= 8);
-// ShouldWriteDouble(cExpectedRawValueMinLReal, fValue:= -1.7976931348623157E+308, nBufferPosStart:= 0, nExpectedBufferPos:= 8);
+ShouldWriteDouble(cExpectedRawValueMinLReal, fValue:= -1.7976931348623157E+308, nBufferPosStart:= 0, nExpectedBufferPos:= 8);
 
 
 TEST_FINISHED_NAMED(__POUNAME());]]></ST>

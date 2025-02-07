@@ -30,7 +30,7 @@ END_IF
 fTmp := fValue;
 
 MEMCPY(destAddr:= ADR(aBuffer[stState.nBufferPos]), srcAddr:= ADR(fTmp), n:= cLength);
-]]></ST>
+stState.nBufferPos := stState.nBufferPos + cLength;]]></ST>
     </Implementation>
   </POU>
 </TcPlcObject>
