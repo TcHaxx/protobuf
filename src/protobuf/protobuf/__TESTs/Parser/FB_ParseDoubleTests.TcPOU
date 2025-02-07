@@ -78,10 +78,10 @@ ShouldParseDouble(aBuffer:= cRawValue0_1, fExpected:= 0.1, nBufferPosStart:= 1, 
 ShouldParseDouble(aBuffer:= cRawValueNeg1, fExpected:= -1.0, nBufferPosStart:= 1, nExpectedBufferPos:= 9);
 ShouldParseDouble(aBuffer:= cRawValue13_37, fExpected:= 13.37, nBufferPosStart:= 2, nExpectedBufferPos:= 10);
 ShouldParseDouble(aBuffer:= cRawValueNeg13_37, fExpected:= -13.37, nBufferPosStart:= 2, nExpectedBufferPos:= 10);
-// ShouldParseDouble(aBuffer:= cRawValueMaxReal, fExpected:= 1.7976931348623157E+308, nBufferPosStart:= 0, nExpectedBufferPos:= 8);
+ShouldParseDouble(aBuffer:= cRawValueMaxReal, fExpected:= 1.7976931348623157E+308, nBufferPosStart:= 0, nExpectedBufferPos:= 8);
 ShouldParseDouble(aBuffer:= cRawValuePosMinReal, fExpected:= 4.94065645841247E-324, nBufferPosStart:= 0, nExpectedBufferPos:= 8);
 ShouldParseDouble(aBuffer:= cRawValueNegMaxReal, fExpected:= -4.94065645841247E-324, nBufferPosStart:= 0, nExpectedBufferPos:= 8);
-// ShouldParseDouble(aBuffer:= cRawValueMinReal, fExpected:= -1.7976931348623157E+308, nBufferPosStart:= 0, nExpectedBufferPos:= 8);
+ShouldParseDouble(aBuffer:= cRawValueMinReal, fExpected:= -1.7976931348623157E+308, nBufferPosStart:= 0, nExpectedBufferPos:= 8);
 
 TEST_FINISHED_NAMED(__POUNAME());]]></ST>
       </Implementation>
