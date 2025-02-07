@@ -1,0 +1,31 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1">
+  <POU Name="F_WriteRawLittleEndian32" Id="{929b4b9f-e676-4cd7-af70-6e4ed7a9029d}" SpecialFunc="None">
+    <Declaration><![CDATA[// Writes a 32-bit little-endian integer.
+FUNCTION F_WriteRawLittleEndian32 : HRESULT
+VAR_IN_OUT
+    aBuffer : ARRAY [*] OF BYTE;
+    stState : ST_WriterInternalState;
+END_VAR
+VAR_INPUT CONSTANT
+    nValue : UDINT;
+END_VAR
+VAR CONSTANT
+    cLength : UDINT := SIZEOF(nValue);
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[
+F_WriteRawLittleEndian32 := S_OK;
+
+IF stState.nBufferSize - stState.nBufferPos < cLength THEN
+    F_WriteRawLittleEndian32 := stState.eWriterErrorCode := E_WriterErrorCode.TruncatedMessage;
+    stState.bError := TRUE;
+    RETURN;
+END_IF
+
+MEMCPY(destAddr:= ADR(aBuffer[stState.nBufferPos]), srcAddr:= ADR(nValue), n:= cLength);
+stState.nBufferPos := stState.nBufferPos + cLength;]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>

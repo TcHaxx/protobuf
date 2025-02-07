@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <TcPlcObject Version="1.1.0.1">
-  <POU Name="FB_ParseRawInt32Tests" Id="{44811a81-32e2-4280-abe5-ae00f37e25f2}" SpecialFunc="None">
-    <Declaration><![CDATA[FUNCTION_BLOCK INTERNAL FINAL FB_ParseRawInt32Tests EXTENDS TcUnit.FB_TestSuite
+  <POU Name="FB_ParseRawVarint32Tests" Id="{44811a81-32e2-4280-abe5-ae00f37e25f2}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK INTERNAL FINAL FB_ParseRawVarint32Tests EXTENDS TcUnit.FB_TestSuite
 ]]></Declaration>
     <Implementation>
       <ST><![CDATA[

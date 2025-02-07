@@ -1,0 +1,58 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1">
+  <POU Name="F_WriteRawVarint64" Id="{529ba7fd-604b-4712-80e6-c429e7431e0d}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION F_WriteRawVarint64 : HRESULT
+VAR_IN_OUT
+    aBuffer : ARRAY [*] OF BYTE;
+    stState : ST_WriterInternalState;
+END_VAR
+VAR_INPUT
+    anyVarInt64 : ANY_INT;
+END_VAR
+VAR
+    nValue  : ULINT;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[
+IF anyVarInt64.diSize > SIZEOF(nValue) THEN
+    F_WriteRawVarint64 := stState.eWriterErrorCode := E_WriterErrorCode.InvalidDataType;     
+    stState.bError := TRUE;
+    RETURN; 
+END_IF
+
+// Enough capacity left for theoretical max Varint64?
+IF (stState.nBufferPos + SIZEOF(nValue) + 1) > stState.nBufferSize THEN
+    F_WriteRawVarint64 := stState.eWriterErrorCode := E_WriterErrorCode.TruncatedMessage;     
+    stState.bError := TRUE;
+    RETURN; 
+END_IF
+
+MEMCPY(destAddr:= ADR(nValue), srcAddr:= anyVarInt64.pValue, n:= TO_UDINT(anyVarInt64.diSize));
+
+// fastpath for a common case of single byte value
+IF nValue < 16#80 THEN
+    aBuffer[stState.nBufferPos] := TO_BYTE(nValue);
+    stState.nBufferPos := stState.nBufferPos + 1;
+    F_WriteRawVarint64 := S_OK;
+    RETURN;
+END_IF
+
+WHILE (stState.nBufferPos < stState.nBufferSize) DO
+    IF nValue > 16#7F THEN
+        aBuffer[stState.nBufferPos] := TO_BYTE((nValue AND 16#7F) OR 16#80);
+        nValue := SHR(nValue, 7);
+        stState.nBufferPos := stState.nBufferPos + 1;
+    ELSE
+        aBuffer[stState.nBufferPos] := TO_BYTE(nValue);
+        stState.nBufferPos := stState.nBufferPos + 1;
+        F_WriteRawVarint64 := S_OK;
+        RETURN;
+    END_IF
+END_WHILE
+
+// should never reach
+F_WriteRawVarint64 := E_WriterErrorCode.InternalError;]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>

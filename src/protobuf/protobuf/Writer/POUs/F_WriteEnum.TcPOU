@@ -1,0 +1,22 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1">
+  <POU Name="F_WriteEnum" Id="{9efd0922-0421-488b-8db4-fa01c76f70a4}" SpecialFunc="None">
+    <Declaration><![CDATA[// Writes an enum value, without a tag, to the stream.
+FUNCTION F_WriteEnum : HRESULT
+VAR_IN_OUT
+    aBuffer : ARRAY [*] OF BYTE;
+    stState : ST_WriterInternalState;
+END_VAR
+VAR_INPUT
+    nValue : DINT;
+END_VAR
+VAR
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[
+F_WriteEnum := F_WriteInt32(aBuffer, stState, nValue);
+]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>

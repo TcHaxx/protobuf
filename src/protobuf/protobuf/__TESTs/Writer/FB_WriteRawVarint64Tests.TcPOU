@@ -1,0 +1,97 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1">
+  <POU Name="FB_WriteRawVarint64Tests" Id="{673325ea-bfe6-4f61-8e59-f147e4d65f63}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK INTERNAL FINAL FB_WriteRawVarint64Tests EXTENDS TcUnit.FB_TestSuite
+VAR_INPUT
+END_VAR
+VAR_OUTPUT
+END_VAR
+VAR
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[ShouldWriteVarintTheory();]]></ST>
+    </Implementation>
+    <Method Name="ShouldWriteVarint" Id="{efc15938-5663-4fcc-b931-514bbea762ec}">
+      <Declaration><![CDATA[METHOD PRIVATE ShouldWriteVarint
+VAR_IN_OUT CONSTANT
+    aExpectedBuffer     : ARRAY [*] OF BYTE;    
+END_VAR
+VAR_INPUT
+    nValue              : ULINT;
+END_VAR
+VAR_INPUT CONSTANT
+    nBufferPosStart     : UDINT;
+    nExpectedBufferPos  : UDINT;
+END_VAR
+VAR_INST
+    stState : ST_WriterInternalState;
+END_VAR
+VAR
+    aActualBuffer       : ARRAY[0..15] OF BYTE; 
+    hrActual        : HRESULT;  
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[
+// Arrange
+stState.nBufferSize := SIZEOF(aActualBuffer);
+stState.nBufferPos := nBufferPosStart;
+
+// Act
+hrActual := F_WriteRawVarint64(aActualBuffer, stState, nValue);
+
+// Assert
+AssertEquals_DINT(
+     Expected:= S_OK,
+     Actual:= hrActual,
+     Message:= 'Expected S_OK instead of error');
+
+{warning disable C0041}
+AssertArrayEquals_BYTE(    
+    Expecteds:= aExpectedBuffer,
+    Actuals:= aActualBuffer,
+    MEssage:= CONCAT('Expected buffers to be equal for Varint ', TO_STRING(nValue))
+);
+
+AssertEquals_UDINT(
+    Expected:= nExpectedBufferPos,
+    Actual:= stState.nBufferPos,
+    Message:= CONCAT(CONCAT('Expected stState.nBufferPos to equal ', TO_STRING(nExpectedBufferPos)), CONCAT(', for Varint ', TO_STRING(nExpectedBufferPos))));]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="ShouldWriteVarintTheory" Id="{47b05ea3-fed3-4d82-9a7a-c663ed8c3be7}">
+      <Declaration><![CDATA[METHOD PRIVATE ShouldWriteVarintTheory : REFERENCE TO FB_Test
+VAR CONSTANT
+    cExpectedRawValue0          : ARRAY[0..15] OF BYTE := [16#0];
+    cExpectedRawValue127        : ARRAY[0..15] OF BYTE := [16#00, 16#00, 16#00, 16#7F];
+    cExpectedRawValue128        : ARRAY[0..15] OF BYTE := [16#80, 16#01];
+    cExpectedRawValue150        : ARRAY[0..15] OF BYTE := [16#96, 16#01];
+    cExpectedRawValue14882      : ARRAY[0..15] OF BYTE := [16#A2, 16#74];
+    cExpectedRawValue65535      : ARRAY[0..15] OF BYTE := [16#FF, 16#FF, 16#03];
+    cExpectedRawValue502240990  : ARRAY[0..15] OF BYTE := [16#DE, 16#AD, 16#BE, 16#EF, 16#01];
+    cExpectedRawValue11964378330978735131 : ARRAY[0..15] OF BYTE := [16#9B, 16#A8, 16#F9, 16#C2, 16#BB, 16#D6, 16#80, 16#85, 16#A6, 16#01];
+    cExpectedRawValueMaxUdint   : ARRAY[0..15] OF BYTE := [16#00, 16#00, 16#00, 16#FF, 16#FF, 16#FF, 16#FF, 16#FF, 16#FF, 16#FF, 16#FF, 16#FF, 16#01];
+END_VAR
+VAR
+    aBuffer             : ARRAY[0..15] OF BYTE;
+    stState             : ST_WriterInternalState;
+    hrActual            : HRESULT;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST(__POUNAME());
+
+ShouldWriteVarint(aExpectedBuffer:= cExpectedRawValue0, nValue:= 0, nBufferPosStart:= 0, nExpectedBufferPos:= 1);
+ShouldWriteVarint(aExpectedBuffer:= cExpectedRawValue127, nValue:= 127, nBufferPosStart:= 3, nExpectedBufferPos:= 4);
+ShouldWriteVarint(aExpectedBuffer:= cExpectedRawValue128, nValue:= 128, nBufferPosStart:= 0, nExpectedBufferPos:= 2);
+ShouldWriteVarint(aExpectedBuffer:= cExpectedRawValue150, nValue:= 150, nBufferPosStart:= 0, nExpectedBufferPos:= 2);
+ShouldWriteVarint(aExpectedBuffer:= cExpectedRawValue14882, nValue:= 14882, nBufferPosStart:= 0, nExpectedBufferPos:= 2);
+ShouldWriteVarint(aExpectedBuffer:= cExpectedRawValue65535, nValue:= 65535, nBufferPosStart:= 0, nExpectedBufferPos:= 3);
+ShouldWriteVarint(aExpectedBuffer:= cExpectedRawValue502240990, nValue:= 502240990, nBufferPosStart:= 0, nExpectedBufferPos:= 5);
+ShouldWriteVarint(aExpectedBuffer:= cExpectedRawValue11964378330978735131, nValue:= 11964378330978735131, nBufferPosStart:= 0, nExpectedBufferPos:= 10);
+ShouldWriteVarint(aExpectedBuffer:= cExpectedRawValueMaxUdint, nValue:= 16#FFFFFFFFFFFFFFFF, nBufferPosStart:= 3, nExpectedBufferPos:= 13);
+
+TEST_FINISHED_NAMED(__POUNAME());]]></ST>
+      </Implementation>
+    </Method>
+  </POU>
+</TcPlcObject>

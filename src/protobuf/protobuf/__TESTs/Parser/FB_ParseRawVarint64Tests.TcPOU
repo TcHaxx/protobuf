@@ -1,0 +1,138 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1">
+  <POU Name="FB_ParseRawVarint64Tests" Id="{e0b7a6e4-d2f1-4d4a-b98f-725bd92a27de}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK INTERNAL FINAL FB_ParseRawVarint64Tests EXTENDS TcUnit.FB_TestSuite
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[
+ShouldParseVarintTheory();
+ErrorWhenParsingInvalidDataTheory();]]></ST>
+    </Implementation>
+    <Method Name="ErrorWhenParsingInvalidData" Id="{ba767c30-753e-4896-a7a4-714ebfb5bbcf}">
+      <Declaration><![CDATA[METHOD PRIVATE ErrorWhenParsingInvalidData
+VAR_IN_OUT CONSTANT
+    aBuffer     : ARRAY [*] OF BYTE;    
+END_VAR
+VAR_INPUT CONSTANT
+    nExpectedHR         : HRESULT;
+    nBufferPosStart     : UDINT;
+    nExpectedBufferPos  : UDINT;
+END_VAR
+VAR_INST
+    stState : ST_ParserInternalState;
+END_VAR
+VAR
+    nActualHR       : DINT;
+    nActualResult   : ULINT;    
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[// Arrange
+stState.nBufferPos := nBufferPosStart;
+stState.nBufferSize := TO_UDINT(UPPER_BOUND(aBuffer, 1) + 1);
+
+// Act
+nActualHR := F_ParseRawVarint64(aBuffer, stState, anyVarInt64Result:= nActualResult);
+
+// Assert
+AssertEquals_DINT(
+    Expected:= nExpectedHR,
+    Actual := nActualHR,
+    Message:=CONCAT(__POUNAME(), CONCAT(': ', CONCAT('Expected HRESULT ', TO_STRING(nExpectedHR)))));
+ 
+AssertEquals_UDINT(
+    Expected:= nExpectedBufferPos,
+    Actual:= stState.nBufferPos,
+    Message:= CONCAT(CONCAT('Expected stState.nBufferPos to equal ', TO_STRING(nExpectedBufferPos)), CONCAT(', for Varint ', TO_STRING(nExpectedHR))));]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="ErrorWhenParsingInvalidDataTheory" Id="{f05d63e2-a38f-4922-8177-9af3b20ff74e}">
+      <Declaration><![CDATA[METHOD PRIVATE ErrorWhenParsingInvalidDataTheory : REFERENCE TO FB_Test
+VAR CONSTANT
+    cRawInvalid1       : ARRAY[0..15] OF BYTE := [16#96];
+    cRawInvalid2       : ARRAY[0..15] OF BYTE := [16#96, 16#00];
+    cRawInvalid3       : ARRAY[0..15] OF BYTE := [16#00, 16#00, 16#00, 16#FF, 16#FF, 16#FF, 16#FF, 16#FF, 16#FF, 16#FF, 16#FF, 16#FF, 16#81];
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST(__POUNAME());
+
+ErrorWhenParsingInvalidData(aBuffer:= cRawInvalid1, nExpectedHR := E_ParserErrorCode.MalformedVarInt, nBufferPosStart:= 0, nExpectedBufferPos:= 1);
+ErrorWhenParsingInvalidData(aBuffer:= cRawInvalid2, nExpectedHR := E_ParserErrorCode.MalformedVarInt, nBufferPosStart:= 0, nExpectedBufferPos:= 1);
+ErrorWhenParsingInvalidData(aBuffer:= cRawInvalid3, nExpectedHR := E_ParserErrorCode.MalformedVarInt, nBufferPosStart:= 3, nExpectedBufferPos:= 12);
+
+TEST_FINISHED_NAMED(__POUNAME());]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="ShouldParseVarint" Id="{f1a282fd-e023-49ab-81b5-c35b8d349c20}">
+      <Declaration><![CDATA[METHOD PRIVATE ShouldParseVarint
+VAR_IN_OUT CONSTANT
+    aBuffer     : ARRAY [*] OF BYTE;    
+END_VAR
+VAR_INPUT CONSTANT
+    nExpected           : ULINT;
+    nBufferPosStart     : UDINT;
+    nExpectedBufferPos  : UDINT;
+END_VAR
+VAR_INST
+    stState : ST_ParserInternalState;
+END_VAR
+VAR
+    nActual         : ULINT;  
+    hr              : HRESULT;  
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[// Arrange
+stState.nBufferPos := nBufferPosStart;
+stState.nBufferSize := TO_UDINT(UPPER_BOUND(aBuffer, 1) + 1);
+
+// Act
+hr := F_ParseRawVarint64(aBuffer, stState, anyVarInt64Result:= nActual);
+
+// Assert
+AssertEquals_DINT(
+    Expected:= S_OK,
+    Actual:= hr,
+    Message:= 'Expected S_OK instead of error');
+    
+AssertEquals_ULINT(
+    Expected:= nExpected,
+    Actual:= nActual,
+    Message:= CONCAT('Expected Varint to equal ', TO_STRING(nExpected)));
+ 
+AssertEquals_UDINT(
+    Expected:= nExpectedBufferPos,
+    Actual:= stState.nBufferPos,
+    Message:= CONCAT(CONCAT('Expected stState.nBufferPos to equal ', TO_STRING(nExpectedBufferPos)), CONCAT(', for Varint ', TO_STRING(nExpected))));]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="ShouldParseVarintTheory" Id="{14748e6a-211c-4c9e-8d61-a961e15eb906}">
+      <Declaration><![CDATA[METHOD PRIVATE ShouldParseVarintTheory : REFERENCE TO FB_Test
+VAR CONSTANT
+    cRawValue0          : ARRAY[0..15] OF BYTE := [16#0];
+    cRawValue127        : ARRAY[0..15] OF BYTE := [16#00, 16#00, 16#00, 16#7F];
+    cRawValue128        : ARRAY[0..15] OF BYTE := [16#80, 16#01];
+    cRawValue150        : ARRAY[0..15] OF BYTE := [16#96, 16#01];
+    cRawValue14882      : ARRAY[0..15] OF BYTE := [16#A2, 16#74];
+    cRawValue65535      : ARRAY[0..15] OF BYTE := [16#FF, 16#FF, 16#03];
+    cRawValue502240990  : ARRAY[0..15] OF BYTE := [16#DE, 16#AD, 16#BE, 16#EF, 16#01];
+    cRawValue11964378330978735131 : ARRAY[0..15] OF BYTE := [16#9B, 16#A8, 16#F9, 16#C2, 16#BB, 16#D6, 16#80, 16#85, 16#A6, 16#01];
+    cRawValueMaxULint   : ARRAY[0..15] OF BYTE := [16#00, 16#00, 16#00, 16#FF, 16#FF, 16#FF, 16#FF, 16#FF, 16#FF, 16#FF, 16#FF, 16#FF, 16#01];
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST(__POUNAME());
+
+ShouldParseVarint(aBuffer:= cRawValue0, nExpected:= 0, nBufferPosStart:= 0, nExpectedBufferPos:= 1);
+ShouldParseVarint(aBuffer:= cRawValue127, nExpected:= 127, nBufferPosStart:= 3, nExpectedBufferPos:= 4);
+ShouldParseVarint(aBuffer:= cRawValue128, nExpected:= 128, nBufferPosStart:= 0, nExpectedBufferPos:= 2);
+ShouldParseVarint(aBuffer:= cRawValue150, nExpected:= 150, nBufferPosStart:= 0, nExpectedBufferPos:= 2);
+ShouldParseVarint(aBuffer:= cRawValue14882, nExpected:= 14882, nBufferPosStart:= 0, nExpectedBufferPos:= 2);
+ShouldParseVarint(aBuffer:= cRawValue65535, nExpected:= 65535, nBufferPosStart:= 0, nExpectedBufferPos:= 3);
+ShouldParseVarint(aBuffer:= cRawValue502240990, nExpected:= 502240990, nBufferPosStart:= 0, nExpectedBufferPos:= 5);
+ShouldParseVarint(aBuffer:= cRawValue11964378330978735131, nExpected:= 11964378330978735131, nBufferPosStart:= 0, nExpectedBufferPos:= 10);
+ShouldParseVarint(aBuffer:= cRawValueMaxULint, nExpected:= 16#FFFFFFFFFFFFFFFF, nBufferPosStart:= 3, nExpectedBufferPos:= 13);
+
+TEST_FINISHED_NAMED(__POUNAME());
+]]></ST>
+      </Implementation>
+    </Method>
+  </POU>
+</TcPlcObject>

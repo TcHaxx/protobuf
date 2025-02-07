@@ -1,0 +1,38 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1">
+  <POU Name="FB_RoundTripRawVarint32Tests" Id="{4e22aa06-cbd8-4f40-814c-92d043b30392}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK INTERNAL FINAL FB_RoundTripRawVarint32Tests EXTENDS FB_TestSuite
+VAR CONSTANT
+    cExpected : UDINT := 2961488830;
+END_VAR
+VAR
+    aBuffer         : ARRAY[0..15] OF BYTE;
+    stWriterState   : ST_WriterInternalState;
+    stParserState   : ST_ParserInternalState;
+    hrWriterActual  : HRESULT;
+    hrParserActual  : HRESULT;
+    nActual         : UDINT;
+    nTmp            : UDINT;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[TEST(__POUNAME());
+
+// Arrange
+stWriterState.nBufferSize := stParserState.nBufferSize := TO_UDINT(UPPER_BOUND(aBuffer, 1) + 1);
+stWriterState.nBufferPos := stParserState.nBufferPos := 2;
+nTmp := cExpected;
+
+// Act
+hrWriterActual := F_WriteRawVarint32(aBuffer, stWriterState, nTmp);
+hrParserActual := F_ParseRawVarint32(aBuffer,stParserState, nActual);
+
+// Assert
+AssertEquals_DINT(Expected:= S_OK, Actual:= hrWriterActual, Message:= 'Expected hrWriterActual = S_OK');
+AssertEquals_DINT(Expected:= S_OK, Actual:= hrParserActual, Message:= 'Expected hrParserActual = S_OK');
+AssertEquals_UDINT(Expected:= cExpected, Actual:= nActual, Message:= 'Values differ');
+
+TEST_FINISHED_NAMED(__POUNAME());]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>

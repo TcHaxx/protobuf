@@ -1,0 +1,34 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1">
+  <POU Name="F_ParseRawLittleEndian64" Id="{be6bf815-3ecb-4adf-a4c6-a29e7ee5429d}" SpecialFunc="None">
+    <Declaration><![CDATA[// Parses a 64-bit little-endian integer.
+FUNCTION F_ParseRawLittleEndian64 : HRESULT
+VAR_INPUT CONSTANT
+    aBuffer : ARRAY [*] OF BYTE;   
+END_VAR
+VAR_IN_OUT
+    stState : ST_ParserInternalState;
+END_VAR
+VAR_OUTPUT
+    nValue : ULINT;
+END_VAR
+VAR CONSTANT
+    cLength : UDINT := SIZEOF(nValue);
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[
+F_ParseRawLittleEndian64 := S_OK;
+
+IF stState.nBufferSize - stState.nBufferPos < cLength THEN
+    F_ParseRawLittleEndian64 := stState.eParserErrorCode := E_ParserErrorCode.TruncatedMessage;
+    stState.bError := TRUE;
+    RETURN;
+END_IF
+
+MEMCPY(destAddr:= ADR(nValue), srcAddr:= ADR(aBuffer[stState.nBufferPos]), n:= cLength);
+stState.nBufferPos := stState.nBufferPos + cLength;
+]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>

@@ -5,8 +5,10 @@
 PROGRAM INTERNAL PRG_UnitTests
 VAR
 {IF defined (UNIT_TEST)}
-    fbParseRawInt32Tests        : FB_ParseRawInt32Tests;
-    fbWriteRawInt32Tests        : FB_WriteRawInt32Tests;
+    fbParseRawInt32Tests        : FB_ParseRawVarint32Tests;
+    fbParseRawInt64Tests        : FB_ParseRawVarint64Tests;
+    fbWriteRawInt32Tests        : FB_WriteRawVarint32Tests;
+    fbWriteRawInt64Tests        : FB_WriteRawVarint64Tests;
     fbReadRawStringStringTests  : FB_ReadRawStringTests;
     fbReadBytesTests            : FB_ReadBytesTests;
     fbReadStringTests           : FB_ReadStringTests;
@@ -15,6 +17,7 @@ VAR
     fbParseFloatTests           : FB_ParseFloatTests;
     fbParseDoubleTests          : FB_ParseDoubleTests;
     
+    fbRoundTripRawVarint32Tests : FB_RoundTripRawVarint32Tests;
     fbEncodeZigZag32Tests       : FB_EncodeZigZag32Tests;
     fbEncodeZigZag64Tests       : FB_EncodeZigZag64Tests;
     fbRoundTripZigZag32Tests    : FB_RoundTripZigZag32Tests;

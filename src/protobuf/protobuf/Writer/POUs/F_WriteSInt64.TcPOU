@@ -1,0 +1,23 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1">
+  <POU Name="F_WriteSInt64" Id="{794e3a36-5091-474d-b8d3-a6fdb267f084}" SpecialFunc="None">
+    <Declaration><![CDATA[// Writes an sint64 value, without a tag, to the stream.
+FUNCTION F_WriteSInt64 : HRESULT
+VAR_IN_OUT
+    aBuffer : ARRAY [*] OF BYTE;
+    stState : ST_WriterInternalState;
+END_VAR
+VAR_INPUT
+    nValue : LINT;
+END_VAR
+VAR
+    nTMP : ULINT;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[nTmp := F_EncodeZigZag64(nValue);
+F_WriteSInt64 := F_WriteRawVarint64(aBuffer, stState, nTmp);
+]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>

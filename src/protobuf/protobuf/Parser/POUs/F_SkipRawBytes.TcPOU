@@ -1,0 +1,27 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1">
+  <POU Name="F_SkipRawBytes" Id="{38777691-03b9-48a3-8458-b0f328e5527b}" SpecialFunc="None">
+    <Declaration><![CDATA[// Reads and discards fixed size of bytes from the input.
+FUNCTION F_SkipRawBytes : HRESULT
+VAR_IN_OUT CONSTANT
+    aBuffer : ARRAY [*] OF BYTE;       
+END_VAR
+VAR_INPUT CONSTANT
+    nLength : UDINT;
+END_VAR
+VAR_IN_OUT
+    stState : ST_ParserInternalState;
+END_VAR]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[F_SkipRawBytes := S_OK;
+
+IF nLength > stState.nBufferSize - stState.nBufferPos THEN
+    F_SkipRawBytes := stState.eParserErrorCode := E_ParserErrorCode.TruncatedMessage;
+    stState.bError := TRUE;
+    RETURN;  
+END_IF
+
+stState.nBufferPos := stState.nBufferPos + nLength;]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>

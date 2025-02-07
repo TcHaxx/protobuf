@@ -1,0 +1,25 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1">
+  <POU Name="F_WriteInt32" Id="{0a936a08-8cff-450b-a215-fe0c3a950f83}" SpecialFunc="None">
+    <Declaration><![CDATA[// Writes an int32 field value, without a tag, to the stream.
+FUNCTION F_WriteInt32 : HRESULT
+VAR_IN_OUT
+    aBuffer : ARRAY [*] OF BYTE;
+    stState : ST_WriterInternalState;
+END_VAR
+VAR_INPUT
+    nValue : DINT;
+END_VAR
+VAR
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[IF nValue >= 0 THEN
+    F_WriteInt32 := F_WriteRawVarint32(aBuffer, stState, nValue);
+ELSE
+    // Must sign-extend.
+    F_WriteInt32 := F_WriteRawVarint64(aBuffer, stState, nValue);
+END_IF]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>

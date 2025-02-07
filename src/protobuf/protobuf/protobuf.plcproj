@@ -66,9 +66,11 @@
     </Compile>
     <Compile Include="Parser\POUs\F_DecodeZigZag32.TcPOU">
       <SubType>Code</SubType>
+      <LinkAlways>true</LinkAlways>
     </Compile>
     <Compile Include="Parser\POUs\F_DecodeZigZag64.TcPOU">
       <SubType>Code</SubType>
+      <LinkAlways>true</LinkAlways>
     </Compile>
     <Compile Include="Parser\POUs\F_MaybeConsumeTag.TcPOU">
       <SubType>Code</SubType>
@@ -76,11 +78,25 @@
     </Compile>
     <Compile Include="Parser\POUs\F_ParseDouble.TcPOU">
       <SubType>Code</SubType>
+      <LinkAlways>true</LinkAlways>
     </Compile>
     <Compile Include="Parser\POUs\F_ParseFloat.TcPOU">
       <SubType>Code</SubType>
+      <LinkAlways>true</LinkAlways>
+    </Compile>
+    <Compile Include="Parser\POUs\F_ParseRawLittleEndian32.TcPOU">
+      <SubType>Code</SubType>
+      <LinkAlways>true</LinkAlways>
     </Compile>
     <Compile Include="Parser\POUs\F_ParseLength.TcPOU">
+      <SubType>Code</SubType>
+      <LinkAlways>true</LinkAlways>
+    </Compile>
+    <Compile Include="Parser\POUs\F_ParseRawLittleEndian64.TcPOU">
+      <SubType>Code</SubType>
+      <LinkAlways>true</LinkAlways>
+    </Compile>
+    <Compile Include="Parser\POUs\F_ParseRawVarint64.TcPOU">
       <SubType>Code</SubType>
       <LinkAlways>true</LinkAlways>
     </Compile>
@@ -98,9 +114,15 @@
     </Compile>
     <Compile Include="Parser\POUs\F_ReadBytes.TcPOU">
       <SubType>Code</SubType>
+      <LinkAlways>true</LinkAlways>
     </Compile>
     <Compile Include="Parser\POUs\F_ReadRawBytes.TcPOU">
       <SubType>Code</SubType>
+      <LinkAlways>true</LinkAlways>
+    </Compile>
+    <Compile Include="Parser\POUs\F_SkipRawBytes.TcPOU">
+      <SubType>Code</SubType>
+      <LinkAlways>true</LinkAlways>
     </Compile>
     <Compile Include="Parser\POUs\F_ReadRawString.TcPOU">
       <SubType>Code</SubType>
@@ -155,18 +177,59 @@
     </Compile>
     <Compile Include="Writer\POUs\F_EncodeZigZag32.TcPOU">
       <SubType>Code</SubType>
+      <LinkAlways>true</LinkAlways>
     </Compile>
     <Compile Include="Writer\POUs\F_EncodeZigZag64.TcPOU">
       <SubType>Code</SubType>
+      <LinkAlways>true</LinkAlways>
     </Compile>
     <Compile Include="Writer\POUs\F_WriteBytes.TcPOU">
       <SubType>Code</SubType>
+      <LinkAlways>true</LinkAlways>
     </Compile>
     <Compile Include="Writer\POUs\F_WriteDouble.TcPOU">
       <SubType>Code</SubType>
+      <LinkAlways>true</LinkAlways>
+    </Compile>
+    <Compile Include="Writer\POUs\F_WriteFixed32.TcPOU">
+      <SubType>Code</SubType>
+      <LinkAlways>true</LinkAlways>
+    </Compile>
+    <Compile Include="Writer\POUs\F_WriteSInt32.TcPOU">
+      <SubType>Code</SubType>
+      <LinkAlways>true</LinkAlways>
+    </Compile>
+    <Compile Include="Writer\POUs\F_WriteSFixed32.TcPOU">
+      <SubType>Code</SubType>
+      <LinkAlways>true</LinkAlways>
     </Compile>
     <Compile Include="Writer\POUs\F_WriteFloat.TcPOU">
       <SubType>Code</SubType>
+      <LinkAlways>true</LinkAlways>
+    </Compile>
+    <Compile Include="Writer\POUs\F_WriteInt32.TcPOU">
+      <SubType>Code</SubType>
+      <LinkAlways>true</LinkAlways>
+    </Compile>
+    <Compile Include="Writer\POUs\F_WriteFixed64.TcPOU">
+      <SubType>Code</SubType>
+      <LinkAlways>true</LinkAlways>
+    </Compile>
+    <Compile Include="Writer\POUs\F_WriteSFixed64.TcPOU">
+      <SubType>Code</SubType>
+      <LinkAlways>true</LinkAlways>
+    </Compile>
+    <Compile Include="Writer\POUs\F_WriteSInt64.TcPOU">
+      <SubType>Code</SubType>
+      <LinkAlways>true</LinkAlways>
+    </Compile>
+    <Compile Include="Writer\POUs\F_WriteUInt32.TcPOU">
+      <SubType>Code</SubType>
+      <LinkAlways>true</LinkAlways>
+    </Compile>
+    <Compile Include="Writer\POUs\F_WriteRawLittleEndian32.TcPOU">
+      <SubType>Code</SubType>
+      <LinkAlways>true</LinkAlways>
     </Compile>
     <Compile Include="Writer\POUs\F_WriteLength.TcPOU">
       <SubType>Code</SubType>
@@ -174,15 +237,39 @@
     </Compile>
     <Compile Include="Writer\POUs\F_WriteRawBytes.TcPOU">
       <SubType>Code</SubType>
+      <LinkAlways>true</LinkAlways>
+    </Compile>
+    <Compile Include="Writer\POUs\F_WriteRawLittleEndian64.TcPOU">
+      <SubType>Code</SubType>
+      <LinkAlways>true</LinkAlways>
     </Compile>
     <Compile Include="Writer\POUs\F_WriteRawVarint32.TcPOU">
       <SubType>Code</SubType>
+      <LinkAlways>true</LinkAlways>
+    </Compile>
+    <Compile Include="Writer\POUs\F_WriteRawVarint64.TcPOU">
+      <SubType>Code</SubType>
+      <LinkAlways>true</LinkAlways>
     </Compile>
     <Compile Include="Writer\POUs\F_WriteString.TcPOU">
       <SubType>Code</SubType>
+      <LinkAlways>true</LinkAlways>
     </Compile>
     <Compile Include="Writer\POUs\F_WriteTag.TcPOU">
       <SubType>Code</SubType>
+      <LinkAlways>true</LinkAlways>
+    </Compile>
+    <Compile Include="Writer\POUs\F_WriteEnum.TcPOU">
+      <SubType>Code</SubType>
+      <LinkAlways>true</LinkAlways>
+    </Compile>
+    <Compile Include="Writer\POUs\F_WriteUInt64.TcPOU">
+      <SubType>Code</SubType>
+      <LinkAlways>true</LinkAlways>
+    </Compile>
+    <Compile Include="Writer\POUs\F_WriteInt64.TcPOU">
+      <SubType>Code</SubType>
+      <LinkAlways>true</LinkAlways>
     </Compile>
     <Compile Include="__TESTs\Parser\FB_DecodeZigZag32Tests.TcPOU">
       <SubType>Code</SubType>
@@ -196,7 +283,10 @@
     <Compile Include="__TESTs\Parser\FB_ParseFloatTests.TcPOU">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="__TESTs\Parser\FB_ParseRawInt32Tests.TcPOU">
+    <Compile Include="__TESTs\Parser\FB_ParseRawVarint32Tests.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="__TESTs\Parser\FB_ParseRawVarint64Tests.TcPOU">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="__TESTs\Parser\FB_ReadBytesTests.TcPOU">
@@ -223,6 +313,9 @@
     <Compile Include="__TESTs\RoundTripTests\FB_RoundTripDoubleTests.TcPOU">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="__TESTs\RoundTripTests\FB_RoundTripRawVarint32Tests.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="__TESTs\RoundTripTests\FB_RoundTripStringTests.TcPOU">
       <SubType>Code</SubType>
     </Compile>
@@ -247,10 +340,13 @@
     <Compile Include="__TESTs\Writer\FB_WriteDoubleTests.TcPOU">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="__TESTs\Writer\FB_WriteRawInt32Tests.TcPOU">
+    <Compile Include="__TESTs\Writer\FB_WriteRawVarint32Tests.TcPOU">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="__TESTs\Writer\FB_WriteFloatTests.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="__TESTs\Writer\FB_WriteRawVarint64Tests.TcPOU">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="__TESTs\Writer\FB_WriteTagTests.TcPOU">

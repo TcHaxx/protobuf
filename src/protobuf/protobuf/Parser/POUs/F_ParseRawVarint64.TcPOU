@@ -1,0 +1,71 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1">
+  <POU Name="F_ParseRawVarint64" Id="{5b123e0a-5ec1-4f58-a554-657731655167}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION F_ParseRawVarint64 : HRESULT
+VAR_IN_OUT CONSTANT
+    aBuffer : ARRAY [*] OF BYTE;
+END_VAR
+VAR_IN_OUT
+    stState : ST_ParserInternalState;
+END_VAR
+VAR_INPUT
+    anyVarInt64Result : ANY_INT;
+END_VAR
+VAR 
+    bTmpByte        : BYTE;
+    nResult         : ULINT;
+    nShift          : UINT := 1;
+END_VAR]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[IF anyVarInt64Result.diSize > SIZEOF(nResult) THEN
+    F_ParseRawVarint64 := stState.eParserErrorCode := E_ParserErrorCode.InvalidDataType;     
+    RETURN; 
+END_IF
+
+IF UPPER_BOUND(aBuffer,1) > TO_DINT(stState.nBufferSize) THEN
+    F_ParseRawVarint64 := stState.eParserErrorCode := E_ParserErrorCode.TruncatedMessage;     
+    RETURN; 
+END_IF
+
+bTmpByte := aBuffer[stState.nBufferPos];
+
+stState.nBufferPos := stState.nBufferPos + 1;
+
+IF bTmpByte < 16#80 THEN
+    nResult := TO_UDINT(bTmpByte);
+    MEMMOVE(destAddr:= anyVarInt64Result.pValue, srcAddr:= ADR(nResult), SIZEOF(nResult));
+    RETURN;
+END_IF 
+
+nResult := bTmpByte AND 16#7F;
+
+{warning 'TODO: MalformedVarInt needs to be compared with C# protobuf}
+
+WHILE (bTmpByte > 16#7F AND TO_DINT(stState.nBufferPos) <= UPPER_BOUND(aBuffer, 1) AND nShift <= 9) DO
+    bTmpByte := aBuffer[stState.nBufferPos];
+    
+    // MalformedVarInt when we reach the theoretical end of Varint64 but still have MSB set.
+    IF nShift = 9 AND bTmpByte >= 16#80 THEN
+        F_ParseRawVarint64 := stState.eParserErrorCode := E_ParserErrorCode.MalformedVarInt;    
+        nResult := 0; 
+        RETURN;
+    END_IF
+    
+    // MalformedVarInt when we encounter zero value, but MSB was set last iteration.
+    IF bTmpByte = 0 THEN
+        F_ParseRawVarint64 := stState.eParserErrorCode := E_ParserErrorCode.MalformedVarInt;    
+        nResult := 0; 
+        RETURN;
+    END_IF
+    
+    nResult := nResult OR SHL(TO_ULINT(bTmpByte AND 16#7F), nShift * 7); 
+    nShift := nShift + 1; 
+    stState.nBufferPos := stState.nBufferPos + 1;
+END_WHILE 
+
+MEMMOVE(destAddr:= anyVarInt64Result.pValue, srcAddr:= ADR(nResult), SIZEOF(nResult));
+
+F_ParseRawVarint64 := S_OK;]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>
