@@ -5,43 +5,14 @@
 PROGRAM INTERNAL PRG_UnitTests
 VAR
 {IF defined (UNIT_TEST)}
-    fbParseRawInt32Tests        : FB_ParseRawVarint32Tests;
-    fbParseRawInt64Tests        : FB_ParseRawVarint64Tests;
-    fbWriteRawInt32Tests        : FB_WriteRawVarint32Tests;
-    fbWriteRawInt64Tests        : FB_WriteRawVarint64Tests;
-    fbReadRawStringStringTests  : FB_ReadRawStringTests;
-    fbReadBytesTests            : FB_ReadBytesTests;
-    fbReadStringTests           : FB_ReadStringTests;
-    fbDecodeZigZag32Tests       : FB_DecodeZigZag32Tests;
-    fbDecodeZigZag64Tests       : FB_DecodeZigZag64Tests;
-    fbParseFloatTests           : FB_ParseFloatTests;
-    fbParseDoubleTests          : FB_ParseDoubleTests;
-    
-    fbRoundTripRawVarint32Tests : FB_RoundTripRawVarint32Tests;
-    fbEncodeZigZag32Tests       : FB_EncodeZigZag32Tests;
-    fbEncodeZigZag64Tests       : FB_EncodeZigZag64Tests;
-    fbRoundTripZigZag32Tests    : FB_RoundTripZigZag32Tests;
-    fbRoundTripZigZag64Tests    : FB_RoundTripZigZag64Tests;
-    
-    fbWriteStringTests          : FB_WriteStringTests;
-    fbRoundTripStringTests      : FB_RoundTripStringTests;
-    
-    fbWriteTagTests             : FB_WriteTagTests;
-    fbRoundTripTagTests         : FB_RoundTripTagTests;
-    
-    fbWriteBytesTests           : FB_WriteBytesTests;
-    fbRoundTripBytesTests       : FB_RoundTripBytesTests;
-    
-    fbWriteFloatTests           : FB_WriteFloatTests;
-    fbRoundTripFloatTests       : FB_RoundTripFloatTests;
-        
-    fbWriteDoubleTests           : FB_WriteDoubleTests;
-    fbRoundTripDoubleTests       : FB_RoundTripDoubleTests;
 {END_IF}
 END_VAR
 ]]></Declaration>
     <Implementation>
       <ST><![CDATA[{IF defined (UNIT_TEST)}
+PRG_ParsingPrimitiveTests();
+PRG_RoundTripTests();
+PRG_WritingPrimitiveTests();
 
 TcUnit.RUN();
 

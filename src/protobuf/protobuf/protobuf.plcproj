@@ -298,6 +298,9 @@
     <Compile Include="__TESTs\ParsingPrimitivesTests\FB_ReadStringTests.TcPOU">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="__TESTs\ParsingPrimitivesTests\PRG_ParsingPrimitiveTests.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="__TESTs\PRG_UnitTests.TcPOU">
       <SubType>Code</SubType>
     </Compile>
@@ -316,6 +319,9 @@
     <Compile Include="__TESTs\RoundTripTests\FB_RoundTripRawVarint32Tests.TcPOU">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="__TESTs\RoundTripTests\FB_RoundTripRawVarint64Tests.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="__TESTs\RoundTripTests\FB_RoundTripStringTests.TcPOU">
       <SubType>Code</SubType>
     </Compile>
@@ -326,6 +332,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="__TESTs\RoundTripTests\FB_RoundTripZigZag64Tests.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="__TESTs\RoundTripTests\PRG_RoundTripTests.TcPOU">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="__TESTs\WritingPrimitiveTests\FB_EncodeZigZag64Tests.TcPOU">
@@ -353,6 +362,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="__TESTs\WritingPrimitiveTests\FB_WriteStringTests.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="__TESTs\WritingPrimitiveTests\PRG_WritingPrimitiveTests.TcPOU">
       <SubType>Code</SubType>
     </Compile>
   </ItemGroup>

@@ -1,0 +1,24 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1">
+  <POU Name="PRG_RoundTripTests" Id="{f91fee95-4234-46fc-b919-296d5d453100}" SpecialFunc="None">
+    <Declaration><![CDATA[{attribute 'analysis' := '-33'}
+PROGRAM PRG_RoundTripTests
+VAR
+    {IF defined (UNIT_TEST)}
+    fbRoundTripRawVarint32Tests : FB_RoundTripRawVarint32Tests;
+    fbRoundTripRawVarint64Tests : FB_RoundTripRawVarint64Tests;
+    fbRoundTripZigZag32Tests    : FB_RoundTripZigZag32Tests;
+    fbRoundTripZigZag64Tests    : FB_RoundTripZigZag64Tests;
+    fbRoundTripStringTests      : FB_RoundTripStringTests;
+    fbRoundTripTagTests         : FB_RoundTripTagTests;
+    fbRoundTripBytesTests       : FB_RoundTripBytesTests;
+    fbRoundTripFloatTests       : FB_RoundTripFloatTests;
+    fbRoundTripDoubleTests      : FB_RoundTripDoubleTests;
+{END_IF}
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>
