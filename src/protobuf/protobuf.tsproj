@@ -20,7 +20,7 @@
 						</Variant>
 					</ProjectVariant>
 				</Task>
-				<Task Id="4" Disabled="true" Priority="6" CycleTime="100000" AmsPort="351" AdtTasks="true">
+				<Task Id="4" Disabled="true" Priority="6" CycleTime="100000" AmsPort="351" DisableFpExceptions="true" AdtTasks="true">
 					<Name>PlcTaskUnitTests</Name>
 					<ProjectVariant PvUseDisable="true">
 						<Variant>
