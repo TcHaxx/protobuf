@@ -14,7 +14,6 @@ END_VAR
 VAR
     nStrLength : UDINT;
     pNullByte : POINTER TO BYTE;
-    refString : REFERENCE TO STRING;
 END_VAR]]></Declaration>
     <Implementation>
       <ST><![CDATA[F_ReadRawString := S_OK;

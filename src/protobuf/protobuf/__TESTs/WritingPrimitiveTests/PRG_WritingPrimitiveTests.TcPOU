@@ -2,7 +2,7 @@
 <TcPlcObject Version="1.1.0.1">
   <POU Name="PRG_WritingPrimitiveTests" Id="{50edbeac-899e-4307-aeca-b3f79972fc27}" SpecialFunc="None">
     <Declaration><![CDATA[{attribute 'analysis' := '-33'}
-PROGRAM PRG_WritingPrimitiveTests
+PROGRAM INTERNAL PRG_WritingPrimitiveTests
 {IF defined (UNIT_TEST)}
     fbEncodeZigZag32Tests       : FB_EncodeZigZag32Tests;
     fbEncodeZigZag64Tests       : FB_EncodeZigZag64Tests;

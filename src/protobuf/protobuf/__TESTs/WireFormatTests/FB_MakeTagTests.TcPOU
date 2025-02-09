@@ -1,0 +1,28 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1">
+  <POU Name="FB_MakeTagTests" Id="{3319111f-ceb6-47cb-b020-835725405e50}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK INTERNAL FINAL FB_MakeTagTests EXTENDS FB_TestSuite
+VAR_INPUT
+END_VAR
+VAR_OUTPUT
+END_VAR
+VAR
+    nActualTag : UDINT;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[TEST(__POUNAME());
+
+// Arrange
+
+// Act
+nActualTag := F_MakeTag(nFieldNumber:= 6, eWireType:= E_WireType.LengthDelimited);
+
+// Assert
+AssertEquals_UDINT(Expected:= 16#32, Actual:= nActualTag, Message:= '');
+
+
+TEST_FINISHED_NAMED(__POUNAME());]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>

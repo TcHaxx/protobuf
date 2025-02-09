@@ -126,6 +126,10 @@
       <SubType>Code</SubType>
       <LinkAlways>true</LinkAlways>
     </Compile>
+    <Compile Include="ParsingPrimitives\POUs\F_ReadStringInternal.TcPOU">
+      <SubType>Code</SubType>
+      <LinkAlways>true</LinkAlways>
+    </Compile>
     <Compile Include="ParsingPrimitives\POUs\F_SkipRawBytes.TcPOU">
       <SubType>Code</SubType>
       <LinkAlways>true</LinkAlways>
@@ -167,6 +171,9 @@
     <Compile Include="Project Information\F_GetVersion.TcPOU">
       <SubType>Code</SubType>
       <SystemCall>true</SystemCall>
+    </Compile>
+    <Compile Include="RepeatedField\F_ReadRepeatedFieldUint32.TcPOU">
+      <SubType>Code</SubType>
     </Compile>
     <Compile Include="WireFormat\DUTs\E_WireType.TcDUT">
       <SubType>Code</SubType>
@@ -286,7 +293,16 @@
       <SubType>Code</SubType>
       <LinkAlways>true</LinkAlways>
     </Compile>
-    <Compile Include="__Examples\FB_DemoMessage.TcPOU">
+    <Compile Include="__TESTs\MessagesTests\DUTs\ST_Example.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="__TESTs\MessagesTests\FB_MessageTests.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="__TESTs\MessagesTests\POUs\FB_ExampleMessage.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="__TESTs\MessagesTests\PRG_MessageTests.TcPOU">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="__TESTs\ParsingPrimitivesTests\FB_DecodeZigZag32Tests.TcPOU">
@@ -355,6 +371,12 @@
     <Compile Include="__TESTs\RoundTripTests\PRG_RoundTripTests.TcPOU">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="__TESTs\WireFormatTests\FB_MakeTagTests.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="__TESTs\WireFormatTests\PRG_WireFormatTests.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="__TESTs\WritingPrimitiveTests\FB_EncodeZigZag64Tests.TcPOU">
       <SubType>Code</SubType>
     </Compile>
@@ -393,7 +415,7 @@
     <Folder Include="Helper" />
     <Folder Include="GVLs" />
     <Folder Include="DUTs" />
-    <Folder Include="__Examples" />
+    <Folder Include="RepeatedField" />
     <Folder Include="POUs" />
     <Folder Include="WireFormat" />
     <Folder Include="ParsingPrimitives\DUTs" />
@@ -407,6 +429,10 @@
     <Folder Include="WritingPrimitive\POUs" />
     <Folder Include="__TESTs" />
     <Folder Include="Project Information" />
+    <Folder Include="__TESTs\MessagesTests" />
+    <Folder Include="__TESTs\MessagesTests\DUTs" />
+    <Folder Include="__TESTs\MessagesTests\POUs" />
+    <Folder Include="__TESTs\WireFormatTests" />
     <Folder Include="__TESTs\RoundTripTests" />
     <Folder Include="__TESTs\WritingPrimitiveTests" />
     <Folder Include="__TESTs\ParsingPrimitivesTests" />

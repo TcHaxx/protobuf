@@ -2,7 +2,7 @@
 <TcPlcObject Version="1.1.0.1">
   <POU Name="PRG_RoundTripTests" Id="{f91fee95-4234-46fc-b919-296d5d453100}" SpecialFunc="None">
     <Declaration><![CDATA[{attribute 'analysis' := '-33'}
-PROGRAM PRG_RoundTripTests
+PROGRAM INTERNAL PRG_RoundTripTests
 VAR
     {IF defined (UNIT_TEST)}
     fbRoundTripRawVarint32Tests : FB_RoundTripRawVarint32Tests;

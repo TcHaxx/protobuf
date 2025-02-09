@@ -4,9 +4,7 @@
     <Declaration><![CDATA[{attribute 'analysis' := '-33'}
 PROGRAM INTERNAL PRG_UnitTests
 VAR
-{IF defined (UNIT_TEST)}
-fbDemo : FB_DemoMessage;
-abuffer : ARRAY[0..15] OF BYTE := [16#0A, 16#96, 16#1];
+{IF defined (UNIT_TEST)} 
 {END_IF}
 END_VAR
 ]]></Declaration>
@@ -15,8 +13,9 @@ END_VAR
 PRG_ParsingPrimitiveTests();
 PRG_RoundTripTests();
 PRG_WritingPrimitiveTests();
+PRG_MessageTests();
+PRG_WireFormatTests();
 
-fbDemo.Parser.ParseFrom(aBuffer);
 
 TcUnit.RUN();
 

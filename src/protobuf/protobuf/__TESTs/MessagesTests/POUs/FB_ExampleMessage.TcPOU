@@ -1,25 +1,49 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <TcPlcObject Version="1.1.0.1">
-  <POU Name="FB_DemoMessage" Id="{59b67fc1-9300-4c2c-9272-1f73ebd3de1b}" SpecialFunc="None">
+  <POU Name="FB_ExampleMessage" Id="{50e369dd-486a-4bd8-ad20-882d7702b97e}" SpecialFunc="None">
     <Declaration><![CDATA[{attribute 'hide_all_locals'}
-FUNCTION_BLOCK PUBLIC FINAL FB_DemoMessage IMPLEMENTS I_Message
+FUNCTION_BLOCK INTERNAL FINAL FB_ExampleMessage IMPLEMENTS I_Message
 VAR_INPUT
 END_VAR
 VAR_OUTPUT
 END_VAR
 
+(*
+syntax = "proto3";
+
+package Example;
+
+message ST_Example {
+  string sName = 1 [(tchaxx.ext.v1.max_string_len) = 256];
+  repeated uint32 aUdintArray = 2 [(tchaxx.ext.v1.array_length) = 5];
+  int32 nDInt2 = 3 [
+    (tchaxx.ext.v1.integer_type) = EIT_DINT,
+    (tchaxx.ext.v1.attribute_display_mode) = EDM_BIN
+  ];
+  string sMyString = 4;
+  fixed64 nFixed64 = 5;
+  optional sfixed64 nSFixed64 = 6; 
+  repeated uint32 aByteArray = 7 [
+    (tchaxx.ext.v1.array_length) = 32,
+    (tchaxx.ext.v1.integer_type) = EIT_BYTE
+  ];
+  float fReal = 8;
+  repeated double fLReal = 9  [(tchaxx.ext.v1.array_length) = 1];
+  bytes aBytes = 10 [(tchaxx.ext.v1.array_length) = 16];
+}
+*)
+
 VAR
     fbMessageParser : FB_MessageParser(ipMessage:= THIS^);
 END_VAR
 
-// Generated *private* fields
 VAR
-    nField1 : UDINT;
+    stExample     : ST_Example;
 END_VAR]]></Declaration>
     <Implementation>
       <ST><![CDATA[]]></ST>
     </Implementation>
-    <Method Name="CalculateSize" Id="{73c8de1d-044d-491c-8913-294e6f46d399}">
+    <Method Name="CalculateSize" Id="{af151ae5-3c81-4939-a744-f3de0c3ae6c5}">
       <Declaration><![CDATA[{warning 'Add method implementation '}
 (* Calculates the size of this message in Protocol Buffer wire format, in bytes.*)
 METHOD CalculateSize : UDINT
@@ -28,7 +52,7 @@ METHOD CalculateSize : UDINT
         <ST><![CDATA[]]></ST>
       </Implementation>
     </Method>
-    <Method Name="MergeFrom" Id="{feec4044-2fb8-4aab-8599-e0d552260adc}">
+    <Method Name="MergeFrom" Id="{92e74d9d-83d8-4035-900e-95dac619ab45}">
       <Declaration><![CDATA[{warning 'Add method implementation '}
 (* Merges the data from the specified coded input stream with the current message.*)
 METHOD MergeFrom : HRESULT
@@ -53,11 +77,13 @@ IF FAILED(hr) THEN
 END_IF
 
 CASE nTag OF
-    10:         // uint32 (1)
-        MergeFrom := fbInput.ReadUint32(nValue => nField1); 
+    16#10:         // string (1)
+        MergeFrom := fbInput.ReadString(stExample.sName); 
         IF FAILED(MergeFrom) THEN
             RETURN;
         END_IF
+    16#12: // repeated uint32 (2)
+    ;
 END_CASE
 
 UNTIL (FAILED(hr) OR nTag = 0)
@@ -66,14 +92,14 @@ END_REPEAT
 MergeFrom := hr;]]></ST>
       </Implementation>
     </Method>
-    <Property Name="MessageDescriptor" Id="{931f2937-ef99-4121-85ea-aa36d71f7c06}">
+    <Property Name="MessageDescriptor" Id="{73ca8b07-2197-4edb-ba5a-68a7927b11cd}">
       <Declaration><![CDATA[{warning 'Add property implementation'}
 (* Descriptor for this message. All instances are expected to return the same descriptor,
  and for generated types this will be an explicitly-implemented member, returning the
  same value as the static property declared on the type.*)
 PROPERTY MessageDescriptor : REFERENCE TO FB_MessageDescriptor
 ]]></Declaration>
-      <Get Name="Get" Id="{dbceb9fd-ad77-4ce0-a3c1-7c4a7c0c82aa}">
+      <Get Name="Get" Id="{d00cfe7b-754b-4de3-b648-d8c535c191da}">
         <Declaration><![CDATA[VAR
 END_VAR
 ]]></Declaration>
@@ -82,9 +108,9 @@ END_VAR
         </Implementation>
       </Get>
     </Property>
-    <Property Name="Parser" Id="{16d356de-7a00-4309-8305-8bac159a9637}">
+    <Property Name="Parser" Id="{dd672f81-8e02-47ac-af92-2c9e68d5a96e}">
       <Declaration><![CDATA[PROPERTY PUBLIC Parser : REFERENCE TO FB_MessageParser]]></Declaration>
-      <Get Name="Get" Id="{209ebd3d-4531-48ec-a22f-cbc1fbeeb316}">
+      <Get Name="Get" Id="{21d29713-86c4-4cc0-8d15-cf91ebb03728}">
         <Declaration><![CDATA[VAR
 END_VAR
 ]]></Declaration>
@@ -93,7 +119,7 @@ END_VAR
         </Implementation>
       </Get>
     </Property>
-    <Method Name="WriteTo" Id="{abc4ee3f-215b-4036-bc5e-d63f00837eb9}">
+    <Method Name="WriteTo" Id="{83629895-5d90-4af0-b7ec-deda108511b0}">
       <Declaration><![CDATA[{warning 'Add method implementation '}
 (* Writes the data to the given coded output stream.*)
 METHOD WriteTo

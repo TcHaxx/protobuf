@@ -87,6 +87,16 @@ END_VAR
 PeekTag := F_PeekTag(aBuffer:= THIS^.aBuffer, THIS^.stState, nTag=>nTag);]]></ST>
       </Implementation>
     </Method>
+    <Method Name="ReadString" Id="{9f6170df-72a4-43cf-9ddd-f238139fccc9}">
+      <Declaration><![CDATA[METHOD PUBLIC ReadString : HRESULT
+VAR_INPUT
+    anyStringOut : ANY_STRING;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[ReadString := F_ReadStringInternal(aBuffer, F_ToAnyType(anyStringOut), stState);]]></ST>
+      </Implementation>
+    </Method>
     <Method Name="ReadTag" Id="{6e59f247-ef7c-45e6-b2dc-64a50e97c070}">
       <Declaration><![CDATA[// Peeks at the next field tag. this is like calling "ReadTag", but the
 // tag is not consumed. (So a subsequent call to "ReadTag" will return the same value.)

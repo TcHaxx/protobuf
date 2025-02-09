@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1">
+  <POU Name="PRG_MessageTests" Id="{3a3ee01b-b87a-426e-9253-57e7b651cd6b}" SpecialFunc="None">
+    <Declaration><![CDATA[{attribute 'analysis' := '-33'}
+PROGRAM INTERNAL PRG_MessageTests
+VAR
+    {IF defined (UNIT_TEST)}
+    fbMessageTests  : FB_MessageTests;
+    {END_IF}
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>

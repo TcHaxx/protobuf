@@ -1,0 +1,29 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1">
+  <DUT Name="ST_Example" Id="{d7e10807-d316-4a66-a899-d479e6be4880}">
+    <Declaration><![CDATA[(*******************************************************************************
+                          protoc-gen-twincat V0.0.0.0                           
+                  https://github.com/TcHaxx/protoc-gen-twincat                  
+*******************************************************************************)
+// This is a message-level comment.
+TYPE ST_Example :
+STRUCT
+	// This is a leading field-level comment,
+	// and it continues on the next line.
+	sName : STRING(256);	// Trailing comment for field1 (sName).
+	aUdintArray : ARRAY[0..4] OF UDINT;	// Trailing comment for field2 (aUdintArray).
+	nDInt2 : DINT;	// Trailing comment for field3 (nDInt2).
+	sMyString : STRING;
+	nFixed64 : ULINT;
+	nSFixed64 : LINT;	// Trailing comment for field4 (nSFixed64).
+	// Leading comment for field7 (aByteArray),
+	// also multiline...
+	aByteArray : ARRAY[0..31] OF BYTE;	// Trailing comment for field7 (aByteArray).
+	fReal : REAL;
+	fLReal : ARRAY[0..0] OF LREAL;	// Trailing comment for field9 (fLReal).
+	aBytes : ARRAY[0..15] OF BYTE;	// Fields of type 'bytes' must have a 'array_length' attribute.
+END_STRUCT
+END_TYPE
+]]></Declaration>
+  </DUT>
+</TcPlcObject>

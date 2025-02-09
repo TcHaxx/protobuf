@@ -1,0 +1,29 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1">
+  <POU Name="F_ReadStringInternal" Id="{4706b8e4-8703-4440-a040-6ca18bbb6b15}" SpecialFunc="None">
+    <Declaration><![CDATA[// Reads a string field value from the input.
+FUNCTION INTERNAL F_ReadStringInternal : HRESULT
+VAR_IN_OUT CONSTANT
+    aBuffer : ARRAY [*] OF BYTE;    
+END_VAR
+VAR_INPUT
+    stAnyStringOut : ST_AnyType;   
+END_VAR
+VAR_IN_OUT
+    stState : ST_ParserInternalState;
+END_VAR
+VAR
+    nStrLength : UDINT;
+END_VAR]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[F_ReadStringInternal := S_OK;
+
+F_ReadStringInternal := F_ParseLength(aBuffer, stState, nLength=> nStrLength);
+IF FAILED(F_ReadStringInternal) THEN
+    RETURN;
+END_IF
+
+F_ReadStringInternal := F_ReadRawString(aBuffer, nStrLength, stAnyStringOut, stState);]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>

@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1">
+  <POU Name="PRG_WireFormatTests" Id="{537d0474-5862-41e0-8dcf-ad6f9552d06b}" SpecialFunc="None">
+    <Declaration><![CDATA[{attribute 'analysis' := '-33'}
+PROGRAM INTERNAL PRG_WireFormatTests
+{IF defined (UNIT_TEST)}
+    fbMakeTagTests       : FB_MakeTagTests;
+{END_IF}]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>

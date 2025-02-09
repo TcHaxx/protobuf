@@ -2,7 +2,7 @@
 <TcPlcObject Version="1.1.0.1">
   <POU Name="PRG_ParsingPrimitiveTests" Id="{cd337349-fcc8-4ee5-b575-df5cf3b82020}" SpecialFunc="None">
     <Declaration><![CDATA[{attribute 'analysis' := '-33'}
-PROGRAM PRG_ParsingPrimitiveTests
+PROGRAM INTERNAL PRG_ParsingPrimitiveTests
 VAR
 {IF defined (UNIT_TEST)}
     fbParseRawInt32Tests        : FB_ParseRawVarint32Tests;

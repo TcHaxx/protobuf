@@ -1,0 +1,21 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1">
+  <POU Name="F_ReadRepeatedFieldUint32" Id="{72ecdfd9-650b-459f-bbd9-c93b77ab07d2}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION F_ReadRepeatedFieldUint32 : HRESULT
+VAR_INPUT CONSTANT
+    fieldInfo   : __SYSTEM.VAR_INFO;
+    aBuffer     : ARRAY [*] OF BYTE;
+END_VAR
+VAR_IN_OUT
+    stState     : ST_ParserInternalState;
+    nFieldIndex : UDINT; 
+END_VAR
+VAR
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[
+]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>
