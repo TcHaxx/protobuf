@@ -3,7 +3,8 @@
   <GVL Name="Param" Id="{dc2a5d06-2d1d-4ec1-836a-8f032cb5266f}" ParameterList="True">
     <Declaration><![CDATA[{attribute 'qualified_only'}
 VAR_GLOBAL CONSTANT
-    cMaxCharacter : UDINT(16#FF..16#FFFF) := 16#7FFF;       // Default max. character = 32767
+    cMaxCharacter           : UDINT(16#FF..16#FFFF) := 16#3FF;      // Default max. character = 1023
+    cMaxProtobufRawBuffer   : UDINT(16#FF..16#FFFF) := 16#1000;     // Default max. raw buffer size = 4096
 END_VAR]]></Declaration>
   </GVL>
 </TcPlcObject>

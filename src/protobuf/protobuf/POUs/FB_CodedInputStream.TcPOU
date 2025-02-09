@@ -2,14 +2,15 @@
 <TcPlcObject Version="1.1.0.1">
   <POU Name="FB_CodedInputStream" Id="{35b92bb0-d9a1-4930-946e-115771fdcbe2}" SpecialFunc="None">
     <Declaration><![CDATA[FUNCTION_BLOCK FINAL FB_CodedInputStream
-VAR_INPUT
+VAR_IN_OUT CONSTANT
+    aBuffer : ARRAY [*] OF BYTE;
 END_VAR
-VAR_OUTPUT
-END_VAR
-
-// Parser
 VAR
     stState : ST_ParserInternalState;
+END_VAR
+
+VAR_TEMP
+    hr : HRESULT;
 END_VAR
 ]]></Declaration>
     <Implementation>
@@ -34,5 +35,121 @@ END_VAR
         </Implementation>
       </Set>
     </Property>
+    <Method Name="FromBuffer" Id="{988952f7-44b3-4929-8d8b-6c73c13fccc8}">
+      <Declaration><![CDATA[METHOD PUBLIC FromBuffer : HRESULT
+VAR
+    hr : HRESULT;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[
+Reset();
+
+hr := ValidateBuffer(aBuffer);
+IF FAILED(hr) THEN
+    FromBuffer := hr;
+    RETURN;
+END_IF
+
+Init(aBuffer);
+]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Init" Id="{8589d263-011f-460b-87a3-c9e951361727}">
+      <Declaration><![CDATA[METHOD PRIVATE Init
+VAR_IN_OUT CONSTANT
+    aBuffer : ARRAY [*] OF BYTE;
+END_VAR
+VAR
+    nSize : DINT;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[
+stState.nBufferPos := TO_UDINT(LOWER_BOUND(aBuffer, 1));
+
+nSize := UPPER_BOUND(aBuffer, 1) - LOWER_BOUND(aBuffer, 1);
+stState.nBufferSize := TO_UDINT(nSize);
+]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="PeekTag" Id="{1d2d4b6e-b454-4c61-afb2-3f3611aef8e7}">
+      <Declaration><![CDATA[// Peeks at the next field tag. this is like calling "ReadTag", but the
+// tag is not consumed. (So a subsequent call to "ReadTag" will return the same value.)
+METHOD PUBLIC PeekTag : HRESULT
+VAR_OUTPUT
+    nTag : UDINT;
+END_VAR
+VAR
+    hr : HRESULT;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[{warning disable C0041}
+PeekTag := F_PeekTag(aBuffer:= THIS^.aBuffer, THIS^.stState, nTag=>nTag);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="ReadTag" Id="{6e59f247-ef7c-45e6-b2dc-64a50e97c070}">
+      <Declaration><![CDATA[// Peeks at the next field tag. this is like calling "ReadTag", but the
+// tag is not consumed. (So a subsequent call to "ReadTag" will return the same value.)
+METHOD PUBLIC ReadTag : HRESULT
+VAR_OUTPUT
+    nTag : UDINT;
+END_VAR
+VAR
+    hr : HRESULT;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[{warning disable C0041}
+ReadTag := F_ParseTag(aBuffer:= THIS^.aBuffer, THIS^.stState, nTag=>nTag);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="ReadUint32" Id="{0a5f59af-f75a-4d04-8959-1ec62b11e925}">
+      <Declaration><![CDATA[METHOD PUBLIC ReadUint32 : HRESULT
+VAR_OUTPUT
+    nValue : UDINT;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[
+ReadUint32 := F_ParseRawVarint32(aBuffer, stState, nValue);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Reset" Id="{fd58c7dd-7f7d-45ac-ad92-ef343a22ef8a}">
+      <Declaration><![CDATA[METHOD PRIVATE Reset
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[
+stState.bError := FALSE;
+stState.eParserErrorCode := S_OK;
+stState.nBufferPos := 0;
+stState.nBufferSize := 0;
+stState.nLastTag := 0;
+stState.nNextTag := 0;
+stState.bHasNextTag := FALSE;
+stState.bDiscardUnknownFields := FALSE;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="ValidateBuffer" Id="{99a4273f-2c0f-4e07-88a4-2ca0a48b6091}">
+      <Declaration><![CDATA[METHOD PRIVATE ValidateBuffer : HRESULT
+VAR_IN_OUT CONSTANT
+    aBuffer : ARRAY[*] OF BYTE;
+END_VAR
+VAR
+    nSize : DINT;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF LOWER_BOUND(aBuffer, 1) < 0 THEN
+    ValidateBuffer := E_CodedInputStreamErrorCode.BUFFER_LOWER_BOUND;
+    RETURN;
+END_IF
+
+nSize := UPPER_BOUND(aBuffer, 1) - LOWER_BOUND(aBuffer, 1);
+IF nSize = 0 OR TO_UDINT(nSize) >  Param.cMaxProtobufRawBuffer THEN
+    ValidateBuffer := E_CodedInputStreamErrorCode.BUFFER_SIZE;
+    RETURN;
+END_IF]]></ST>
+      </Implementation>
+    </Method>
   </POU>
 </TcPlcObject>

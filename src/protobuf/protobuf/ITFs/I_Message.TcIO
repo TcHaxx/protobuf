@@ -12,7 +12,7 @@ END_VAR
     </Method>
     <Method Name="MergeFrom" Id="{f0218577-d1f3-43ba-b044-8051c53ae231}">
       <Declaration><![CDATA[// Merges the data from the specified coded input stream with the current message.
-METHOD MergeFrom
+METHOD MergeFrom : HRESULT
 VAR_IN_OUT
     fbInput : FB_CodedInputStream;  //
 END_VAR

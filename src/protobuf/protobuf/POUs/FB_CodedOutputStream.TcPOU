@@ -1,0 +1,17 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1">
+  <POU Name="FB_CodedOutputStream" Id="{18246595-6bbb-43ef-aa75-24f9e22ace2b}" SpecialFunc="None">
+    <Declaration><![CDATA[{warning 'TODO: Implementation'}
+FUNCTION_BLOCK PUBLIC FINAL FB_CodedOutputStream
+VAR_INPUT
+END_VAR
+VAR_OUTPUT
+END_VAR
+VAR
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>

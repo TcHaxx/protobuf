@@ -1,0 +1,48 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1">
+  <POU Name="FB_MessageParser" Id="{556675f3-c8ae-4ae6-a8c4-f625632c6ee3}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK PUBLIC FINAL FB_MessageParser
+VAR_INPUT
+END_VAR
+VAR_OUTPUT
+END_VAR
+VAR
+    fbCodedInputStream : FB_CodedInputStream;
+    ipMessage   : I_Message;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[]]></ST>
+    </Implementation>
+    <Method Name="FB_Init" Id="{fbef6f6c-4f3e-4527-b2ae-b083c5d3592d}">
+      <Declaration><![CDATA[//FB_Init is always available implicitly and it is used primarily for initialization.
+//The return value is not evaluated. For a specific influence, you can also declare the
+//methods explicitly and provide additional code there with the standard initialization
+//code. You can evaluate the return value.
+METHOD FB_Init: BOOL
+VAR_INPUT
+    bInitRetains: BOOL; // TRUE: the retain variables are initialized (reset warm / reset cold)
+    bInCopyCode: BOOL;  // TRUE: the instance will be copied to the copy code afterward (online change)
+    ipMessage   : I_Message;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[THIS^.ipMessage := ipMessage;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="ParseFrom" Id="{bc50726a-bc1e-4a3a-8fa8-1f88b35a432e}">
+      <Declaration><![CDATA[METHOD PUBLIC ParseFrom : I_Message
+VAR_IN_OUT CONSTANT
+    aBuffer     : ARRAY[*] OF BYTE;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[
+IF ipMessage <> 0 THEN
+    fbCodedInputStream(aBuffer:= aBuffer);
+    fbCodedInputStream.FromBuffer();
+    ipMessage.MergeFrom(fbInput:= fbCodedInputStream);
+END_IF]]></ST>
+      </Implementation>
+    </Method>
+  </POU>
+</TcPlcObject>

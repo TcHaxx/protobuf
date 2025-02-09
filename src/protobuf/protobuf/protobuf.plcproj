@@ -42,7 +42,13 @@
     <WriteCommentsToTmc>false</WriteCommentsToTmc>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="DUTs\E_CodedInputStreamErrorCode.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="DUTs\T_ProtobufMaxString.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DUTs\T_ProtobufRawBuffer.TcDUT">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="GVLs\Param.TcGVL">
@@ -139,6 +145,15 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="POUs\FB_CodedInputStream.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\FB_CodedOutputStream.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\FB_MessageDescriptor.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\FB_MessageParser.TcPOU">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Project Information\F_GetCompany.TcPOU">
@@ -271,6 +286,9 @@
       <SubType>Code</SubType>
       <LinkAlways>true</LinkAlways>
     </Compile>
+    <Compile Include="__Examples\FB_DemoMessage.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="__TESTs\ParsingPrimitivesTests\FB_DecodeZigZag32Tests.TcPOU">
       <SubType>Code</SubType>
     </Compile>
@@ -375,6 +393,7 @@
     <Folder Include="Helper" />
     <Folder Include="GVLs" />
     <Folder Include="DUTs" />
+    <Folder Include="__Examples" />
     <Folder Include="POUs" />
     <Folder Include="WireFormat" />
     <Folder Include="ParsingPrimitives\DUTs" />

@@ -1,0 +1,17 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1">
+  <POU Name="FB_MessageDescriptor" Id="{d624980b-bcaf-4a88-87ae-f3ccdc9b8a97}" SpecialFunc="None">
+    <Declaration><![CDATA[{warning 'TODO: Implementation'}
+FUNCTION_BLOCK PUBLIC FINAL FB_MessageDescriptor
+VAR_INPUT
+END_VAR
+VAR_OUTPUT
+END_VAR
+VAR
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>

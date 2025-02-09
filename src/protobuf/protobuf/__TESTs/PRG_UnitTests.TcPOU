@@ -5,6 +5,8 @@
 PROGRAM INTERNAL PRG_UnitTests
 VAR
 {IF defined (UNIT_TEST)}
+fbDemo : FB_DemoMessage;
+abuffer : ARRAY[0..15] OF BYTE := [16#0A, 16#96, 16#1];
 {END_IF}
 END_VAR
 ]]></Declaration>
@@ -13,6 +15,8 @@ END_VAR
 PRG_ParsingPrimitiveTests();
 PRG_RoundTripTests();
 PRG_WritingPrimitiveTests();
+
+fbDemo.Parser.ParseFrom(aBuffer);
 
 TcUnit.RUN();
 
