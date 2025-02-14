@@ -1,0 +1,7 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1">
+  <DUT Name="T_AnyNum" Id="{0251880a-807f-49ff-a784-bd877de388d2}">
+    <Declaration><![CDATA[TYPE T_AnyNum : __SYSTEM.AnyType; END_TYPE
+]]></Declaration>
+  </DUT>
+</TcPlcObject>

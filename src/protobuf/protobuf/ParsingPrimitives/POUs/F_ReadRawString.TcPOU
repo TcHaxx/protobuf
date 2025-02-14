@@ -6,7 +6,7 @@ FUNCTION INTERNAL F_ReadRawString : HRESULT
 VAR_INPUT CONSTANT
     aBuffer : ARRAY [*] OF BYTE;
     nLength : UDINT;   
-    stAnyStringOut : ST_AnyType;
+    stAnyStringOut : T_Any;
 END_VAR
 VAR_IN_OUT
     stState : ST_ParserInternalState;
@@ -24,7 +24,7 @@ IF stAnyStringOut.TypeClass = __SYSTEM.TYPE_CLASS.TYPE_WSTRING THEN
     RETURN;
 END_IF
 
-IF nLength > TO_UDINT(stAnyStringOut.nSize - 1) OR 
+IF nLength > TO_UDINT(stAnyStringOut.diSize - 1) OR 
     nLength > stState.nBufferSize - stState.nBufferPos THEN
     F_ReadRawString := stState.eParserErrorCode := E_ParserErrorCode.TruncatedMessage;
     stState.bError := TRUE;

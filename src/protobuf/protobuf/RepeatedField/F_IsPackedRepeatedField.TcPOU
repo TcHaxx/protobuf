@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1">
+  <POU Name="F_IsPackedRepeatedField" Id="{9ddab4bb-5e29-4edf-8769-6b2defee71d6}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION INTERNAL F_IsPackedRepeatedField : BOOL
+VAR_INPUT
+    nTag : UDINT;
+END_VAR]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[
+F_IsPackedRepeatedField := F_GetTagWireType(nTag) = E_WireType.LengthDelimited;]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>

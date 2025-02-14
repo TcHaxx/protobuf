@@ -2,20 +2,98 @@
 <TcPlcObject Version="1.1.0.1">
   <POU Name="F_ReadRepeatedFieldUint32" Id="{72ecdfd9-650b-459f-bbd9-c93b77ab07d2}" SpecialFunc="None">
     <Declaration><![CDATA[FUNCTION F_ReadRepeatedFieldUint32 : HRESULT
-VAR_INPUT CONSTANT
-    fieldInfo   : __SYSTEM.VAR_INFO;
-    aBuffer     : ARRAY [*] OF BYTE;
+VAR_IN_OUT CONSTANT
+    aBuffer         : ARRAY [*] OF BYTE;
 END_VAR
 VAR_IN_OUT
-    stState     : ST_ParserInternalState;
+    stState         : ST_ParserInternalState;
+END_VAR
+VAR_INPUT CONSTANT
+    anyArray        : T_Any;
+    anyFirstElem    : T_AnyNum; 
+END_VAR
+
+VAR_IN_OUT   
     nFieldIndex : UDINT; 
 END_VAR
 VAR
+    nTag        : UDINT;
+    hr          : HRESULT;
+    nLength     : UDINT;
+    nArrayLength: UDINT;
+    nByteLength : UDINT;
+    nTypeSize   : UDINT;
+    bTagConsumed: BOOL;    
+    nValue      : UDINT;
+    nBufferEnd  : UDINT;  
 END_VAR
 ]]></Declaration>
     <Implementation>
       <ST><![CDATA[
-]]></ST>
+IF anyArray.TypeClass <> __SYSTEM.TYPE_CLASS.TYPE_ARRAY THEN
+    F_ReadRepeatedFieldUint32 := stState.eParserErrorCode := E_ParserErrorCode.InvalidDataType;
+    RETURN;
+END_IF
+
+nTypeSize := TO_UDINT(anyFirstElem.diSize);
+nByteLength := TO_UDINT(anyArray.diSize);
+nArrayLength := nByteLength / nTypeSize;
+
+nTag := stState.nLastTag;
+
+IF nTypeSize > SIZEOF(nValue) THEN
+    F_ReadRepeatedFieldUint32 := stState.eParserErrorCode := E_ParserErrorCode.InvalidDataType;
+    RETURN;
+END_IF
+
+IF  nFieldIndex < 0 OR nFieldIndex >= nArrayLength THEN
+    F_ReadRepeatedFieldUint32 := stState.eParserErrorCode := E_ParserErrorCode.NotEnoughMem;
+    RETURN;
+END_IF
+
+IF F_IsPackedRepeatedField(nTag) THEN
+    
+    hr := F_ParseLength(aBuffer, stState, nLength=> nLength);
+    IF FAILED(hr) OR nLength <= 0 THEN
+        // Empty packed field, valid - ignore.
+        F_ReadRepeatedFieldUint32 := hr;
+        RETURN;
+    END_IF 
+    
+    nBufferEnd := stState.nBufferPos + nLength;
+    WHILE (stState.nBufferPos < nBufferEnd) DO
+        hr := F_ParseRawVarint32(aBuffer, stState, nValue);
+        IF FAILED(hr) THEN
+            F_ReadRepeatedFieldUint32 := hr;
+            RETURN;
+        END_IF
+        
+        MEMCPY(destAddr:= anyArray.pValue + (nFieldIndex * nTypeSize), srcAddr:= ADR(nValue), nTypeSize);
+        nFieldIndex := nFieldIndex + 1;
+    END_WHILE
+
+    
+ELSE
+    // Not packed or possibly not packable...
+    REPEAT
+        hr := F_ParseRawVarint32(aBuffer, stState, nValue);
+        IF FAILED(hr) THEN
+            F_ReadRepeatedFieldUint32 := hr;
+            RETURN;
+        END_IF
+        
+        MEMCPY(destAddr:= anyArray.pValue + (nFieldIndex * nTypeSize), srcAddr:= ADR(nValue), nTypeSize);
+        nFieldIndex := nFieldIndex + 1;
+        
+        hr := F_MaybeConsumeTag(aBuffer, stState, nTag, bConsumed=> bTagConsumed);
+        IF FAILED(hr) THEN
+            F_ReadRepeatedFieldUint32 := hr;
+            RETURN;
+        END_IF
+    UNTIL
+        bTagConsumed
+    END_REPEAT
+END_IF]]></ST>
     </Implementation>
   </POU>
 </TcPlcObject>
