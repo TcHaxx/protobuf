@@ -8,9 +8,9 @@ END_VAR
 VAR_IN_OUT
     stState         : ST_ParserInternalState;
 END_VAR
-VAR_INPUT CONSTANT
+VAR_IN_OUT CONSTANT
     anyArray        : T_Any;
-    anyFirstElem    : T_AnyNum; 
+    anyFirstElem    : T_Any; 
 END_VAR
 
 VAR_IN_OUT   
@@ -26,25 +26,30 @@ VAR
     bTagConsumed: BOOL;    
     nValue      : UDINT;
     nBufferEnd  : UDINT;  
+    
 END_VAR
 ]]></Declaration>
     <Implementation>
       <ST><![CDATA[
-IF anyArray.TypeClass <> __SYSTEM.TYPE_CLASS.TYPE_ARRAY THEN
+IF anyArray.TypeClass <> __SYSTEM.TYPE_CLASS.TYPE_ARRAY
+    OR NOT (anyFirstElem.TypeClass >= __SYSTEM.TYPE_CLASS.TYPE_BYTE
+        AND anyFirstElem.TypeClass <= __SYSTEM.TYPE_CLASS.TYPE_ULINT)
+THEN
     F_ReadRepeatedFieldUint32 := stState.eParserErrorCode := E_ParserErrorCode.InvalidDataType;
     RETURN;
 END_IF
 
 nTypeSize := TO_UDINT(anyFirstElem.diSize);
+
+IF nTypeSize > SIZEOF(nValue) OR nTypeSize = 0 THEN
+    F_ReadRepeatedFieldUint32 := stState.eParserErrorCode := E_ParserErrorCode.InvalidDataType;
+    RETURN;
+END_IF
+
 nByteLength := TO_UDINT(anyArray.diSize);
 nArrayLength := nByteLength / nTypeSize;
 
 nTag := stState.nLastTag;
-
-IF nTypeSize > SIZEOF(nValue) THEN
-    F_ReadRepeatedFieldUint32 := stState.eParserErrorCode := E_ParserErrorCode.InvalidDataType;
-    RETURN;
-END_IF
 
 IF  nFieldIndex < 0 OR nFieldIndex >= nArrayLength THEN
     F_ReadRepeatedFieldUint32 := stState.eParserErrorCode := E_ParserErrorCode.NotEnoughMem;

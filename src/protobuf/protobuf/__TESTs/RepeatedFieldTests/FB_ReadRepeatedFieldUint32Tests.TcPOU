@@ -10,8 +10,75 @@ VAR
 END_VAR
 ]]></Declaration>
     <Implementation>
-      <ST><![CDATA[ShouldReadRepeatedFieldTheory();]]></ST>
+      <ST><![CDATA[ShouldReadRepeatedFieldTheory();
+ShouldReadNonConsecutiveRepeatedFields(); ]]></ST>
     </Implementation>
+    <Method Name="ShouldReadNonConsecutiveRepeatedFields" Id="{45feac8a-cc21-481b-a5cb-2c0bf34bfeb8}">
+      <Declaration><![CDATA[METHOD PRIVATE ShouldReadNonConsecutiveRepeatedFields
+VAR CONSTANT
+    (*
+        message Demo {
+            repeated uint32 a = 1;
+            fixed32 b =2;
+        }
+        JSON:
+        {
+          "a": [
+            0, 1, 2, 151
+          ],
+          "b": 321
+        }
+    *)
+    cRawMessage : ARRAY[0..15] OF BYTE := [16#0A, 16#03, 16#00, 16#01, 16#02, 16#15, 16#41, 16#01, 16#00, 16#00, 16#0A, 16#02, 16#97, 16#01];
+    cExpected   : ARRAY[0..15] OF BYTE := [0, 1, 2, 151];
+END_VAR
+VAR_INST
+    stState : ST_ParserInternalState;
+END_VAR
+VAR
+    aActual             : ARRAY [0..15] OF BYTE;
+    hr                  : HRESULT;
+    nActualFieldIndex   : UDINT;
+    nTag                : UDINT;
+    nB                  : UDINT;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST(__POUNAME());
+
+// Arrange
+stState.nBufferPos := 0;
+stState.nBufferSize := SIZEOF(cRawMessage);
+
+// Act
+// Parses a=[0,1,2]: 16#0A, 16#03, 16#00, 16#01, 16#02
+F_ParseTag(cRawMessage, stState, nTag=> );
+hr := F_ReadRepeatedFieldUint32(cRawMessage, stState, anyArray:= F_ToAnyType(aActual), anyFirstElem:= F_ToAnyType(aActual[0]), nFieldIndex:= nActualFieldIndex);
+
+// Parses b=321: 16#15, 16#41, 16#01, 16#00, 16#00
+F_ParseTag(cRawMessage, stState, nTag=> );
+F_ParseRawLittleEndian32(cRawMessage, stState, nValue=> nB);
+
+// Parses a=[151]: 16#0A, 16#02, 16#97, 16#01
+F_ParseTag(cRawMessage, stState, nTag=> );
+hr := F_ReadRepeatedFieldUint32(cRawMessage, stState, anyArray:= F_ToAnyType(aActual), anyFirstElem:= F_ToAnyType(aActual[0]), nFieldIndex:= nActualFieldIndex);
+
+// Assert
+AssertEquals_DINT(
+    Expected:= S_OK,
+    Actual:= hr,
+    Message:= 'Expected S_OK instead of error');
+    
+{warning disable C0041}
+AssertArrayEquals_BYTE(Expecteds:= cExpected, Actuals:= aActual, Message:= '');
+    
+AssertEquals_UDINT(
+    Expected:= 4,
+    Actual:= nActualFieldIndex,
+    Message:= CONCAT('Expected nActualFieldIndex to equal ', TO_STRING(4)));
+    
+TEST_FINISHED_NAMED(__POUNAME());]]></ST>
+      </Implementation>
+    </Method>
     <Method Name="ShouldReadRepeatedField" Id="{e0890fb1-e6b2-423a-a94a-be1677da6155}">
       <Declaration><![CDATA[METHOD PRIVATE ShouldReadRepeatedField
 VAR_IN_OUT CONSTANT
@@ -40,7 +107,7 @@ stState.nBufferSize := TO_UDINT(UPPER_BOUND(aBuffer, 1) + 1);
 
 // Act
 F_ParseTag(aBuffer, stState, nTag=> );
-hr := F_ReadRepeatedFieldUint32(aBuffer, stState, anyArray:= F_ToAnyType(aActual), anyFirstElem:= F_ToAnyNum(aActual[0]), nFieldIndex:= nActualFieldIndex);
+hr := F_ReadRepeatedFieldUint32(aBuffer, stState, anyArray:= F_ToAnyType(aActual), anyFirstElem:= F_ToAnyType(aActual[0]), nFieldIndex:= nActualFieldIndex);
 
 // Assert
 AssertEquals_DINT(
@@ -48,10 +115,8 @@ AssertEquals_DINT(
     Actual:= hr,
     Message:= 'Expected S_OK instead of error');
     
-AssertArrayEquals_BYTE(
-    Expecteds:= aExpected,
-    Actuals:= aActual,
-    Message:= '');
+{warning disable C0041}
+AssertArrayEquals_BYTE(Expecteds:= aExpected, Actuals:= aActual, Message:= '');
  
 AssertEquals_UDINT(
     Expected:= nExpectedBufferPos,
@@ -61,7 +126,8 @@ AssertEquals_UDINT(
 AssertEquals_UDINT(
     Expected:= nExpectedFieldIndex,
     Actual:= nActualFieldIndex,
-    Message:= CONCAT('Expected nActualFieldIndex to equal ', TO_STRING(nExpectedFieldIndex)));]]></ST>
+    Message:= CONCAT('Expected nActualFieldIndex to equal ', TO_STRING(nExpectedFieldIndex)));
+]]></ST>
       </Implementation>
     </Method>
     <Method Name="ShouldReadRepeatedFieldTheory" Id="{0d53312c-bed0-4be6-a5e4-c857a27b82d7}">
@@ -70,6 +136,7 @@ VAR CONSTANT
     cRawValueZeroLength     : ARRAY[0..15] OF BYTE := [16#0A, 16#00];
     cRawValue1              : ARRAY[0..15] OF BYTE := [16#00, 16#0A, 16#07, 16#00, 16#01, 16#FF, 16#01, 16#96, 16#01, 16#04];
     cRawBytesOverflow       : ARRAY[0..15] OF BYTE := [16#0A, 16#06, 16#80, 16#02, 16#81, 16#02, 16#82, 16#02];
+    
 END_VAR
 
 VAR CONSTANT
