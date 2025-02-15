@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1">
+  <POU Name="F_ToAnyBit" Id="{c8c93c83-3030-4fbf-9a70-9cab4e4d19a9}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION F_ToAnyBit : T_AnyBit
+VAR_INPUT
+    anyBit	: ANY_BIT;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[F_ToAnyBit := anyBit;]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>

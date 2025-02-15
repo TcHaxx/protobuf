@@ -1,0 +1,7 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1">
+  <DUT Name="T_AnyIntOrBit" Id="{e2f912fc-26e3-4cc2-87bd-76e1078e50ef}">
+    <Declaration><![CDATA[TYPE T_AnyIntOrBit : __SYSTEM.AnyType; END_TYPE
+]]></Declaration>
+  </DUT>
+</TcPlcObject>

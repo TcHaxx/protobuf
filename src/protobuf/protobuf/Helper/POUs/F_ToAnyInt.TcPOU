@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1">
+  <POU Name="F_ToAnyInt" Id="{85274dfa-47f8-4797-aeaa-1a54bdacdf07}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION F_ToAnyInt : T_AnyInt
+VAR_INPUT
+    anyInt	: ANY_INT;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[F_ToAnyInt := anyInt;]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>
