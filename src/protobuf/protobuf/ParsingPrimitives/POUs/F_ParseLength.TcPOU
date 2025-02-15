@@ -3,7 +3,7 @@
   <POU Name="F_ParseLength" Id="{93c884db-4f4d-492d-b48f-8e5fbd80cd44}" SpecialFunc="None">
     <Declaration><![CDATA[// Reads a length for length-delimited data.
 FUNCTION F_ParseLength : HRESULT
-VAR_INPUT CONSTANT
+VAR_IN_OUT CONSTANT
     aBuffer : ARRAY [*] OF BYTE;   
 END_VAR
 VAR_IN_OUT

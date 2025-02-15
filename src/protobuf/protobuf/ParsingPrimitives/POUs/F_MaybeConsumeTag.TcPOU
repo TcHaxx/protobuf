@@ -7,7 +7,7 @@
     otherwise, the stream is left in the original position and the method returns "FALSE".
 *)
 FUNCTION F_MaybeConsumeTag : HRESULT
-VAR_INPUT CONSTANT
+VAR_IN_OUT CONSTANT
     aBuffer : ARRAY [*] OF BYTE;   
 END_VAR
 VAR_IN_OUT

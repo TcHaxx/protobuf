@@ -4,7 +4,7 @@
     <Declaration><![CDATA[// Parses the next tag.
 // If the end of logical stream was reached, an invalid tag of 0 is returned.
 FUNCTION F_ParseTag : HRESULT
-VAR_INPUT CONSTANT
+VAR_IN_OUT CONSTANT
     aBuffer : ARRAY [*] OF BYTE;   
 END_VAR
 VAR_IN_OUT
