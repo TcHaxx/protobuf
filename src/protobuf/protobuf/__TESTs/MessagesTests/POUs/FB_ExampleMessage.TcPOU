@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <TcPlcObject Version="1.1.0.1">
   <POU Name="FB_ExampleMessage" Id="{50e369dd-486a-4bd8-ad20-882d7702b97e}" SpecialFunc="None">
-    <Declaration><![CDATA[{attribute 'hide_all_locals'}
+    <Declaration><![CDATA[// {attribute 'hide_all_locals'}
 FUNCTION_BLOCK INTERNAL FINAL FB_ExampleMessage IMPLEMENTS I_Message
 VAR_INPUT
 END_VAR
@@ -15,7 +15,7 @@ package Example;
 
 message ST_Example {
   string sName = 1 [(tchaxx.ext.v1.max_string_len) = 256];
-  repeated uint32 aUdintArray = 2 [(tchaxx.ext.v1.array_length) = 5];
+  repeated uint32 aUdintArray = 2 [(tchaxx.ext.v1.array_length) = 7];
   int32 nDInt2 = 3 [
     (tchaxx.ext.v1.integer_type) = EIT_DINT,
     (tchaxx.ext.v1.attribute_display_mode) = EDM_BIN
@@ -38,7 +38,9 @@ VAR
 END_VAR
 
 VAR
-    stExample     : ST_Example;
+    stExample       : ST_Example;
+    nField2Index    : UDINT;        // Array aUdintArray
+    nField7Index    : UDINT;
 END_VAR]]></Declaration>
     <Implementation>
       <ST><![CDATA[]]></ST>
@@ -77,13 +79,36 @@ IF FAILED(hr) THEN
 END_IF
 
 CASE nTag OF
-    16#10:         // string (1)
+    16#0A:         // string (1)
         MergeFrom := fbInput.ReadString(stExample.sName); 
         IF FAILED(MergeFrom) THEN
             RETURN;
         END_IF
     16#12: // repeated uint32 (2)
-    ;
+        MergeFrom := fbInput.ReadRepeatedFieldUint32(
+                        anyArray:= F_ToAnyType(stExample.aUdintArray),
+                        anyFirstElem:= F_ToAnyType(stExample.aUdintArray[0]),
+                        nFieldIndex:= THIS^.nField2Index);
+    16#18:  // int32 (3)
+        MergeFrom := fbInput.ReadInt32(nValue=> stExample.nDInt2);
+      
+    16#22:  // string (4)
+        MergeFrom := fbInput.ReadString(anyStringOut:= stExample.sMyString);
+        
+    16#29:  // fixed64 (5)
+        MergeFrom := fbInput.ReadFixed64(nValue=> stExample.nFixed64);
+        
+    16#31:  // sfixed64 (6)
+        MergeFrom := fbInput.ReadSFixed64(nValue=> stExample.nSFixed64);
+                     
+    16#3A:  // repeated uint32 (7)
+        MergeFrom := fbInput.ReadRepeatedFieldUint32(
+                    anyArray:= F_ToAnyType(stExample.aByteArray),
+                    anyFirstElem:= F_ToAnyType(stExample.aByteArray[0]),
+                    nFieldIndex:= THIS^.nField7Index);
+    16#45:  // float (8)
+        MergeFrom := fbInput.ReadFloat(fValue=> stExample.fReal);
+
 END_CASE
 
 UNTIL (FAILED(hr) OR nTag = 0)

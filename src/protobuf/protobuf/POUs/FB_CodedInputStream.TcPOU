@@ -87,6 +87,94 @@ END_VAR
 PeekTag := F_PeekTag(aBuffer:= THIS^.aBuffer, THIS^.stState, nTag=>nTag);]]></ST>
       </Implementation>
     </Method>
+    <Method Name="ReadFixed32" Id="{383a358d-6e6c-41c1-8f44-f530061b2ccb}">
+      <Declaration><![CDATA[METHOD PUBLIC ReadFixed32 : HRESULT
+VAR_OUTPUT
+    nValue : ULINT;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[
+ReadFixed32 := F_ParseRawLittleEndian64(aBuffer, stState, nValue=> nValue);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="ReadFixed64" Id="{eff161e7-d03c-4564-a7dc-112202e0eeb7}">
+      <Declaration><![CDATA[METHOD PUBLIC ReadFixed64 : HRESULT
+VAR_OUTPUT
+    nValue : ULINT;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[
+ReadFixed64 := F_ParseRawLittleEndian64(aBuffer, stState, nValue=> nValue);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="ReadFloat" Id="{43b90ccb-3033-4662-b33c-9e69187be25b}">
+      <Declaration><![CDATA[METHOD PUBLIC ReadFloat : HRESULT
+VAR_OUTPUT
+    fValue : REAL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[
+ReadFloat := F_ParseFloat(aBuffer, stState, fValue=> fValue);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="ReadInt32" Id="{12ad756a-fd0d-4e8d-a879-b918ff7cbfb0}">
+      <Declaration><![CDATA[METHOD PUBLIC ReadInt32 : HRESULT
+VAR_OUTPUT
+    nValue : DINT;
+END_VAR
+VAR
+    nTmp   : UDINT;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[
+ReadInt32 := F_ParseRawVarint32(aBuffer, stState, nTmp);
+nValue := TO_DINT(nTmp);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="ReadInt64" Id="{b24953d8-80df-4e67-8c6f-04eca4f9f69a}">
+      <Declaration><![CDATA[METHOD PUBLIC ReadInt64 : HRESULT
+VAR_OUTPUT
+    nValue : LINT;
+END_VAR
+VAR
+    nTmp   : ULINT;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[
+ReadInt64 := F_ParseRawVarint64(aBuffer, stState, nTmp);
+nValue := TO_LINT(nTmp);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="ReadRepeatedFieldUint32" Id="{6123f86b-78f5-4253-9330-10a1ff17912b}">
+      <Declaration><![CDATA[METHOD ReadRepeatedFieldUint32 : HRESULT
+VAR_INPUT CONSTANT
+    anyArray        : T_Any;
+    anyFirstElem    : T_Any; 
+END_VAR
+
+VAR_IN_OUT   
+    nFieldIndex : UDINT; 
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[
+ReadRepeatedFieldUint32 := F_ReadRepeatedFieldUint32(aBuffer, stState, anyArray, anyFirstElem, nFieldIndex); ]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="ReadSFixed64" Id="{7ccdace2-dfaf-4347-bdd1-8a51b9cb7ce5}">
+      <Declaration><![CDATA[METHOD PUBLIC ReadSFixed64 : HRESULT
+VAR_OUTPUT
+    nValue : LINT;
+END_VAR
+VAR
+    nTmp : ULINT;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[
+ReadSFixed64 := F_ParseRawLittleEndian64(aBuffer, stState, nValue=> nTmp);
+
+nValue := TO_LINT(nTmp);]]></ST>
+      </Implementation>
+    </Method>
     <Method Name="ReadString" Id="{9f6170df-72a4-43cf-9ddd-f238139fccc9}">
       <Declaration><![CDATA[METHOD PUBLIC ReadString : HRESULT
 VAR_INPUT

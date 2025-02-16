@@ -3,7 +3,7 @@
   <POU Name="F_ParseRawLittleEndian64" Id="{be6bf815-3ecb-4adf-a4c6-a29e7ee5429d}" SpecialFunc="None">
     <Declaration><![CDATA[// Parses a 64-bit little-endian integer.
 FUNCTION F_ParseRawLittleEndian64 : HRESULT
-VAR_INPUT CONSTANT
+VAR_IN_OUT CONSTANT
     aBuffer : ARRAY [*] OF BYTE;   
 END_VAR
 VAR_IN_OUT

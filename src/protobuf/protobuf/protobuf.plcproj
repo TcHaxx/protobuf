@@ -147,6 +147,9 @@
       <SubType>Code</SubType>
       <LinkAlways>true</LinkAlways>
     </Compile>
+    <Compile Include="ParsingPrimitives\POUs\F_ReadRawByte.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="ParsingPrimitives\POUs\F_ReadRawBytes.TcPOU">
       <SubType>Code</SubType>
       <LinkAlways>true</LinkAlways>

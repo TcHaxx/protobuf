@@ -46,14 +46,16 @@ WHILE (bTmpByte > 16#7F AND TO_DINT(stState.nBufferPos) <= UPPER_BOUND(aBuffer, 
     
     // MalformedVarInt when we reach the theoretical end of Varint64 but still have MSB set.
     IF nShift = 9 AND bTmpByte >= 16#80 THEN
-        F_ParseRawVarint64 := stState.eParserErrorCode := E_ParserErrorCode.MalformedVarInt;    
+        F_ParseRawVarint64 := stState.eParserErrorCode := E_ParserErrorCode.MalformedVarInt;
+        stState.bError := TRUE;    
         nResult := 0; 
         RETURN;
     END_IF
     
     // MalformedVarInt when we encounter zero value, but MSB was set last iteration.
     IF bTmpByte = 0 THEN
-        F_ParseRawVarint64 := stState.eParserErrorCode := E_ParserErrorCode.MalformedVarInt;    
+        F_ParseRawVarint64 := stState.eParserErrorCode := E_ParserErrorCode.MalformedVarInt;
+        stState.bError := TRUE;    
         nResult := 0; 
         RETURN;
     END_IF

@@ -11,7 +11,7 @@ STRUCT
 	// This is a leading field-level comment,
 	// and it continues on the next line.
 	sName : STRING(256);	// Trailing comment for field1 (sName).
-	aUdintArray : ARRAY[0..4] OF UDINT;	// Trailing comment for field2 (aUdintArray).
+	aUdintArray : ARRAY[0..6] OF UDINT;	// Trailing comment for field2 (aUdintArray).
 	nDInt2 : DINT;	// Trailing comment for field3 (nDInt2).
 	sMyString : STRING;
 	nFixed64 : ULINT;

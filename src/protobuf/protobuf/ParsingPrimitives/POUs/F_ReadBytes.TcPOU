@@ -3,7 +3,7 @@
   <POU Name="F_ReadBytes" Id="{fe8d4fa5-1dc0-4cb1-bc5f-aa95aabb97fd}" SpecialFunc="None">
     <Declaration><![CDATA[// Reads a bytes field value from the input.
 FUNCTION F_ReadBytes : HRESULT
-VAR_INPUT CONSTANT
+VAR_IN_OUT CONSTANT
     aBuffer : ARRAY [*] OF BYTE;   
 END_VAR
 VAR_IN_OUT
