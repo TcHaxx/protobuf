@@ -15,6 +15,7 @@ VAR
     bTmpByte        : BYTE;
     nResult         : UDINT;
     nShift          : UINT := 1;
+    i               : UINT;
 END_VAR]]></Declaration>
     <Implementation>
       <ST><![CDATA[IF anyVarInt32Result.diSize > SIZEOF(UDINT) THEN
@@ -44,28 +45,42 @@ nResult := bTmpByte AND 16#7F;
 WHILE (bTmpByte > 16#7F AND TO_DINT(stState.nBufferPos) <= UPPER_BOUND(aBuffer, 1) AND nShift < 5) DO
     bTmpByte := aBuffer[stState.nBufferPos];
     
-    // MalformedVarInt when we reach the theoretical end of Varint32 but still have MSB set.
-    IF nShift = 4 AND bTmpByte >= 16#80 THEN
-        F_ParseRawVarint32 := stState.eParserErrorCode := E_ParserErrorCode.MalformedVarInt;    
-        nResult := 0; 
-        RETURN;
-    END_IF
-    
     // MalformedVarInt when we encounter zero value, but MSB was set last iteration.
     IF bTmpByte = 0 THEN
-        F_ParseRawVarint32 := stState.eParserErrorCode := E_ParserErrorCode.MalformedVarInt;    
-        nResult := 0; 
-        RETURN;
+        stState.eParserErrorCode := E_ParserErrorCode.MalformedVarInt;
+        JMP _ERROR_FUNCTION;
     END_IF
     
+    IF nShift = 4 AND bTmpByte >= 16#80 THEN        
+        // Likely a negative encoded value, should have been encoded as SInt32 instead (protofile)...
+        nResult := nResult OR SHL((bTmpByte AND 16#7F), nShift * 7);
+        FOR i:= 0 TO 5 DO
+            // Discard upper 32 bits.
+            F_ParseRawVarint32 := F_ReadRawByte(aBuffer, stState, nByte=> bTmpByte);
+            IF bTmpByte < 16#80 THEN                
+                JMP _END_FUNCTION;
+            END_IF
+        END_FOR
+        stState.eParserErrorCode := E_ParserErrorCode.MalformedVarInt;
+        JMP _ERROR_FUNCTION;
+    
+    END_IF
+        
     nResult := nResult OR SHL((bTmpByte AND 16#7F), nShift * 7); 
     nShift := nShift + 1; 
     stState.nBufferPos := stState.nBufferPos + 1;
 END_WHILE 
 
+_END_FUNCTION:
 MEMMOVE(destAddr:= anyVarInt32Result.pValue, srcAddr:= ADR(nResult), SIZEOF(nResult));
+F_ParseRawVarint32 := S_OK;
+RETURN;
 
-F_ParseRawVarint32 := S_OK;]]></ST>
+_ERROR_FUNCTION:
+F_ParseRawVarint32 := stState.eParserErrorCode;
+stState.bError := TRUE;
+nResult := 0;
+RETURN;]]></ST>
     </Implementation>
   </POU>
 </TcPlcObject>

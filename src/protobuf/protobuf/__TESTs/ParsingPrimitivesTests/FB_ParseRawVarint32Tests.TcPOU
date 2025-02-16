@@ -50,14 +50,14 @@ AssertEquals_UDINT(
 VAR CONSTANT
     cRawInvalid1       : ARRAY[0..15] OF BYTE := [16#96];
     cRawInvalid2       : ARRAY[0..15] OF BYTE := [16#96, 16#00];
-    cRawInvalid3       : ARRAY[0..15] OF BYTE := [16#00, 16#00, 16#00, 16#FF, 16#FF, 16#FF, 16#FF, 16#8F, 16#08];
+    cRawInvalid3       : ARRAY[0..15] OF BYTE := [16#00, 16#00, 16#00, 16#FF, 16#FF, 16#FF, 16#FF, 16#FF, 16#FF, 16#FF, 16#FF, 16#FF, 16#FF, 16#01];
 END_VAR]]></Declaration>
       <Implementation>
         <ST><![CDATA[TEST(__POUNAME());
 
 ErrorWhenParsingInvalidData(aBuffer:= cRawInvalid1, nExpectedHR := E_ParserErrorCode.MalformedVarInt, nBufferPosStart:= 0, nExpectedBufferPos:= 1);
 ErrorWhenParsingInvalidData(aBuffer:= cRawInvalid2, nExpectedHR := E_ParserErrorCode.MalformedVarInt, nBufferPosStart:= 0, nExpectedBufferPos:= 1);
-ErrorWhenParsingInvalidData(aBuffer:= cRawInvalid3, nExpectedHR := E_ParserErrorCode.MalformedVarInt, nBufferPosStart:= 3, nExpectedBufferPos:= 7);
+ErrorWhenParsingInvalidData(aBuffer:= cRawInvalid3, nExpectedHR := E_ParserErrorCode.MalformedVarInt, nBufferPosStart:= 3, nExpectedBufferPos:= 13);
 
 TEST_FINISHED_NAMED(__POUNAME());]]></ST>
       </Implementation>
@@ -114,6 +114,10 @@ VAR CONSTANT
     cRawValue65535      : ARRAY[0..15] OF BYTE := [16#FF, 16#FF, 16#03];
     cRawValue502240990  : ARRAY[0..15] OF BYTE := [16#DE, 16#AD, 16#BE, 16#EF, 16#01];
     cRawValueMaxUdint   : ARRAY[0..15] OF BYTE := [16#00, 16#00, 16#00, 16#FF, 16#FF, 16#FF, 16#FF, 16#0F];
+    
+    // Negative values for int32 field, should have been SInt32 in protofile
+    cRawValueNeg1       : ARRAY[0..15] OF BYTE := [16#FF, 16#FF, 16#FF, 16#FF, 16#FF, 16#FF, 16#FF, 16#FF, 16#FF, 16#01];
+    cRawValueNeg1337    : ARRAY[0..15] OF BYTE := [16#C7, 16#F5, 16#FF, 16#FF, 16#FF, 16#FF, 16#FF, 16#FF, 16#FF, 16#01];
 END_VAR]]></Declaration>
       <Implementation>
         <ST><![CDATA[TEST(__POUNAME());
@@ -126,6 +130,8 @@ ShouldParseVarint(aBuffer:= cRawValue65535, nExpected:= 65535, nBufferPosStart:=
 ShouldParseVarint(aBuffer:= cRawValue502240990, nExpected:= 502240990, nBufferPosStart:= 0, nExpectedBufferPos:= 5);
 ShouldParseVarint(aBuffer:= cRawValueMaxUdint, nExpected:= 16#FFFFFFFF, nBufferPosStart:= 3, nExpectedBufferPos:= 8);
 
+ShouldParseVarint(aBuffer:= cRawValueNeg1, nExpected:= TO_UDINT(-1), nBufferPosStart:= 0, nExpectedBufferPos:= 10);
+ShouldParseVarint(aBuffer:= cRawValueNeg1337, nExpected:= TO_UDINT(-1337), nBufferPosStart:= 0, nExpectedBufferPos:= 10);
 TEST_FINISHED_NAMED(__POUNAME());]]></ST>
       </Implementation>
     </Method>
