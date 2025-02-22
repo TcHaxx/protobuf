@@ -87,6 +87,17 @@ END_VAR
 PeekTag := F_PeekTag(aBuffer:= THIS^.aBuffer, THIS^.stState, nTag=>nTag);]]></ST>
       </Implementation>
     </Method>
+    <Method Name="ReadBytes" Id="{c3a41bee-7273-4f77-ab25-cf5e354ee01c}">
+      <Declaration><![CDATA[METHOD ReadBytes : HRESULT
+VAR_IN_OUT
+    aBytes : ARRAY [*] OF BYTE;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[
+ReadBytes := F_ReadBytes(aBuffer, stState, aBytes); ]]></ST>
+      </Implementation>
+    </Method>
     <Method Name="ReadFixed32" Id="{383a358d-6e6c-41c1-8f44-f530061b2ccb}">
       <Declaration><![CDATA[METHOD PUBLIC ReadFixed32 : HRESULT
 VAR_OUTPUT
@@ -226,6 +237,16 @@ stState.nLastTag := 0;
 stState.nNextTag := 0;
 stState.bHasNextTag := FALSE;
 stState.bDiscardUnknownFields := FALSE;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="SkipLastField" Id="{55cedb3e-db2f-4d80-9b5d-1d05f6d106d8}">
+      <Declaration><![CDATA[METHOD SkipLastField : HRESULT
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[
+SkipLastField := F_SkipLastField(aBuffer, stState);]]></ST>
       </Implementation>
     </Method>
     <Method Name="ValidateBuffer" Id="{99a4273f-2c0f-4e07-88a4-2ca0a48b6091}">
