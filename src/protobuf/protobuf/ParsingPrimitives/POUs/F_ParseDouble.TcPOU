@@ -3,7 +3,7 @@
   <POU Name="F_ParseDouble" Id="{24606ab3-3eb3-493e-9ecb-d98469f178b3}" SpecialFunc="None">
     <Declaration><![CDATA[// Parses a double value.
 FUNCTION F_ParseDouble : HRESULT
-VAR_INPUT CONSTANT
+VAR_IN_OUT CONSTANT
     aBuffer : ARRAY [*] OF BYTE;   
 END_VAR
 VAR_IN_OUT

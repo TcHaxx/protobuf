@@ -3,7 +3,7 @@
   <POU Name="F_ParseFloat" Id="{1d40ac6c-43db-4054-963c-67b66f65dca7}" SpecialFunc="None">
     <Declaration><![CDATA[// Parses a float value.
 FUNCTION F_ParseFloat : HRESULT
-VAR_INPUT CONSTANT
+VAR_IN_OUT CONSTANT
     aBuffer : ARRAY [*] OF BYTE;   
 END_VAR
 VAR_IN_OUT
