@@ -20,7 +20,7 @@ STRUCT
 	// also multiline...
 	aByteArray : ARRAY[0..31] OF BYTE;	// Trailing comment for field7 (aByteArray).
 	fReal : REAL;
-	fLReal : ARRAY[0..0] OF LREAL;	// Trailing comment for field9 (fLReal).
+	fLReal : ARRAY[0..7] OF LREAL;	// Trailing comment for field9 (fLReal).
 	aBytes : ARRAY[0..15] OF BYTE;	// Fields of type 'bytes' must have a 'array_length' attribute.
 END_STRUCT
 END_TYPE

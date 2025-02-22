@@ -63,18 +63,17 @@ VAR_IN_OUT
 END_VAR
 VAR
     nTag    : UDINT;
-    hr      : HRESULT;
 END_VAR]]></Declaration>
       <Implementation>
         <ST><![CDATA[
 REPEAT   
-hr := fbInput.ReadTag(nTag=>nTag);
-IF SUCCEEDED(hr) AND nTag = 0 THEN
+MergeFrom := fbInput.ReadTag(nTag=>nTag);
+IF SUCCEEDED(MergeFrom) AND nTag = 0 THEN
     EXIT;
 END_IF;
 
-IF FAILED(hr) THEN
-    MergeFrom := hr;
+IF FAILED(MergeFrom) THEN
+    MergeFrom := MergeFrom;
     RETURN;
 END_IF
 
@@ -108,13 +107,18 @@ CASE nTag OF
                     nFieldIndex:= THIS^.nField7Index);
     16#45:  // float (8)
         MergeFrom := fbInput.ReadFloat(fValue=> stExample.fReal);
-
+    16#4A:  // aLReal (9)
+        {warning 'TODO: Implement ReadRepeatedFieldDouble'}
+        MergeFrom := fBInput.SkipLastField();    
+    16#52:  // aBytes (10)
+        MergeFrom := fbInput.ReadBytes(stExample.aBytes);
+ELSE
+    MergeFrom := fBInput.SkipLastField();
 END_CASE
 
-UNTIL (FAILED(hr) OR nTag = 0)
+UNTIL (FAILED(MergeFrom) OR nTag = 0)
 END_REPEAT
-
-MergeFrom := hr;]]></ST>
+]]></ST>
       </Implementation>
     </Method>
     <Property Name="MessageDescriptor" Id="{73ca8b07-2197-4edb-ba5a-68a7927b11cd}">
