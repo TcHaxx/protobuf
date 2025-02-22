@@ -16,7 +16,7 @@ END_VAR]]></Declaration>
     <Implementation>
       <ST><![CDATA[F_ReadRawBytes := S_OK;
 
-IF nLength > stState.nBufferSize - stState.nBufferPos THEN
+IF nLength > (stState.nBufferSize - stState.nBufferPos) + 1 THEN
     F_ReadRawBytes := stState.eParserErrorCode := E_ParserErrorCode.TruncatedMessage;
     stState.bError := TRUE;
     RETURN;  
