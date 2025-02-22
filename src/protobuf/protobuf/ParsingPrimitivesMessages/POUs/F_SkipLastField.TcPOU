@@ -1,0 +1,51 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1">
+  <POU Name="F_SkipLastField" Id="{1b7929cf-3775-43d5-ada9-c6ec50538adc}" SpecialFunc="None">
+    <Declaration><![CDATA[// Reading and skippig messages / groups
+FUNCTION INTERNAL F_SkipLastField : HRESULT
+VAR_IN_OUT CONSTANT
+    aBuffer : ARRAY [*] OF BYTE;   
+END_VAR
+VAR_IN_OUT
+    stState : ST_ParserInternalState;
+END_VAR
+VAR
+    nLength : UDINT;
+    nDummy  : UDINT;
+END_VAR]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[
+IF stState.nLastTag = 0 THEN
+    F_SkipLastField := stState.eParserErrorCode := E_ParserErrorCode.EndOfStream;
+    stState.bError := TRUE;
+    RETURN;
+END_IF
+
+CASE F_GetTagWireType(stState.nLastTag) OF
+    E_WireType.StartGroup,
+    E_WireType.EndGroup:
+        F_SkipLastField := stState.eParserErrorCode := E_ParserErrorCode.NotImplemented;
+        stState.bError := TRUE;
+
+    E_WireType.Fixed32:
+        F_SkipLastField := F_ParseRawLittleEndian32(aBuffer, stState, nValue=> );
+       
+    E_WireType.Fixed64:
+        F_SkipLastField := F_ParseRawLittleEndian64(aBuffer, stState, nValue=> );
+       
+    E_WireType.LengthDelimited:
+        F_SkipLastField := F_ParseLength(aBuffer, stState, nLength=> nLength);
+        IF SUCCEEDED(F_SkipLastField) THEN
+            F_SkipLastField := F_SkipRawBytes(aBuffer, nLength, stState);
+        END_IF
+    
+    E_WireType.Varint:
+        F_SkipLastField := F_ParseRawVarint32(aBuffer, stState, nDummy);
+ELSE
+    F_SkipLastField := stState.eParserErrorCode := E_ParserErrorCode.InternalError;
+    stState.bError := TRUE;
+    RETURN;
+END_CASE]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>

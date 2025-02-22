@@ -9,7 +9,7 @@
     <WriteProductVersion>false</WriteProductVersion>
     <GenerateTpy>false</GenerateTpy>
     <Name>protobuf</Name>
-    <ProgramVersion>3.1.4026.13</ProgramVersion>
+    <ProgramVersion>3.1.4026.14</ProgramVersion>
     <Application>{aab3386f-1433-4e51-aee9-b496d522750f}</Application>
     <TypeSystem>{aa3fbe6c-8030-475f-a685-e873b003fd01}</TypeSystem>
     <Implicit_Task_Info>{4c235652-0fed-4dea-be12-419d132604dd}</Implicit_Task_Info>
@@ -87,6 +87,9 @@
       <LinkAlways>true</LinkAlways>
     </Compile>
     <Compile Include="ITFs\I_Message.TcIO">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ParsingPrimitivesMessages\POUs\F_SkipLastField.TcPOU">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="ParsingPrimitives\DUTs\E_ParserErrorCode.TcDUT">
@@ -452,6 +455,8 @@
     <Folder Include="Helper" />
     <Folder Include="GVLs" />
     <Folder Include="DUTs" />
+    <Folder Include="ParsingPrimitivesMessages" />
+    <Folder Include="ParsingPrimitivesMessages\POUs" />
     <Folder Include="RepeatedField" />
     <Folder Include="POUs" />
     <Folder Include="WireFormat" />
@@ -519,8 +524,8 @@
   <ProjectExtensions>
     <PlcProjectOptions>
       <XmlArchive>
-  <Data>
-    <o xml:space="preserve" t="OptionKey">
+        <Data>
+          <o xml:space="preserve" t="OptionKey">
       <v n="Name">"&lt;ProjectRoot&gt;"</v>
       <d n="SubKeys" t="Hashtable" ckt="String" cvt="OptionKey">
         <v>{192FAD59-8248-4824-A8DE-9177C94C195A}</v>
@@ -596,14 +601,14 @@
       </d>
       <d n="Values" t="Hashtable" />
     </o>
-  </Data>
-  <TypeList>
-    <Type n="Boolean">System.Boolean</Type>
-    <Type n="Hashtable">System.Collections.Hashtable</Type>
-    <Type n="OptionKey">{54dd0eac-a6d8-46f2-8c27-2f43c7e49861}</Type>
-    <Type n="String">System.String</Type>
-  </TypeList>
-</XmlArchive>
+        </Data>
+        <TypeList>
+          <Type n="Boolean">System.Boolean</Type>
+          <Type n="Hashtable">System.Collections.Hashtable</Type>
+          <Type n="OptionKey">{54dd0eac-a6d8-46f2-8c27-2f43c7e49861}</Type>
+          <Type n="String">System.String</Type>
+        </TypeList>
+      </XmlArchive>
     </PlcProjectOptions>
   </ProjectExtensions>
 </Project>
