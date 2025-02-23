@@ -1,0 +1,52 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1">
+  <POU Name="FB_FieldCodecSInt64" Id="{902249f5-4d9a-47d4-8234-bdaacdc871d7}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK FB_FieldCodecSInt64 IMPLEMENTS I_FieldCodec
+VAR_INPUT
+END_VAR
+VAR_OUTPUT
+END_VAR
+VAR
+    nValue : LINT;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[]]></ST>
+    </Implementation>
+    <Method Name="IsPackedRepeatedField" Id="{e7cdeb88-7593-46d4-b96d-f18f55af396f}">
+      <Declaration><![CDATA[METHOD IsPackedRepeatedField : BOOL
+VAR_INPUT
+	nTag	: UDINT;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IsPackedRepeatedField := F_IsPackedRepeatedField(nTag);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="ValueReader" Id="{b9d1dab2-9dd2-430c-aed8-bbcf1dbe77f8}">
+      <Declaration><![CDATA[
+METHOD ValueReader : HRESULT
+VAR_IN_OUT CONSTANT
+	aBuffer	: ARRAY [*] OF BYTE;
+END_VAR
+VAR_IN_OUT
+	stState	: ST_ParserInternalState;
+END_VAR
+VAR_OUTPUT
+	anyOut	: T_Any;
+END_VAR
+VAR 
+    nTmp : ULINT;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[
+ValueReader := F_ParseRawVarint64(aBuffer, stState, nTmp);
+IF FAILED(ValueReader) THEN
+    RETURN;
+END_IF
+nValue := F_DecodeZigZag64(nTmp);
+anyOut := F_ToAnyType(anyArg:= nValue);]]></ST>
+      </Implementation>
+    </Method>
+  </POU>
+</TcPlcObject>

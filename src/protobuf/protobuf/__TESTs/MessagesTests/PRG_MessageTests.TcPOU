@@ -6,6 +6,7 @@ PROGRAM INTERNAL PRG_MessageTests
 VAR
     {IF defined (UNIT_TEST)}
     fbMessageTests  : FB_MessageTests;
+//     fbRepeatedStringMessageTests : FB_RepeatedStringMessageTests;
     {END_IF}
 END_VAR
 ]]></Declaration>

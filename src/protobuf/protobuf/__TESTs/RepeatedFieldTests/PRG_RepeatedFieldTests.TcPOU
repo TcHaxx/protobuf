@@ -4,7 +4,8 @@
     <Declaration><![CDATA[{attribute 'analysis' := '-33'}
 PROGRAM INTERNAL PRG_RepeatedFieldTests
 {IF defined (UNIT_TEST)}
-    fbReadRepeatedFieldUint32Tests       : FB_ReadRepeatedFieldUint32Tests;
+    fbReadRepeatedFieldUint32Tests  : FB_ReadRepeatedFieldUint32Tests;
+    fbReadRepeatedFieldStringTests  : FB_ReadRepeatedFieldStringTests;
 {END_IF}]]></Declaration>
     <Implementation>
       <ST><![CDATA[]]></ST>

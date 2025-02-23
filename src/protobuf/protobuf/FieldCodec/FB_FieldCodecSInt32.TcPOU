@@ -1,0 +1,52 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1">
+  <POU Name="FB_FieldCodecSInt32" Id="{5872bbd0-7f0f-48ad-9c30-e5bb23d85c6b}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK FB_FieldCodecSInt32 IMPLEMENTS I_FieldCodec
+VAR_INPUT
+END_VAR
+VAR_OUTPUT
+END_VAR
+VAR
+    nValue : DINT;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[]]></ST>
+    </Implementation>
+    <Method Name="IsPackedRepeatedField" Id="{495b96ec-f670-4571-942b-2d9493d39e45}">
+      <Declaration><![CDATA[METHOD IsPackedRepeatedField : BOOL
+VAR_INPUT
+	nTag	: UDINT;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IsPackedRepeatedField := F_IsPackedRepeatedField(nTag);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="ValueReader" Id="{0fb52bb4-2627-4e4a-8cf4-f8046717ea94}">
+      <Declaration><![CDATA[
+METHOD ValueReader : HRESULT
+VAR_IN_OUT CONSTANT
+	aBuffer	: ARRAY [*] OF BYTE;
+END_VAR
+VAR_IN_OUT
+	stState	: ST_ParserInternalState;
+END_VAR
+VAR_OUTPUT
+	anyOut	: T_Any;
+END_VAR
+VAR
+    nTmp : UDINT;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[
+ValueReader := F_ParseRawVarint32(aBuffer, stState, nTmp);
+IF FAILED(ValueReader) THEN
+    RETURN;
+END_IF
+nValue := F_DecodeZigZag32(nTmp);
+anyOut := F_ToAnyType(anyArg:= nValue);]]></ST>
+      </Implementation>
+    </Method>
+  </POU>
+</TcPlcObject>

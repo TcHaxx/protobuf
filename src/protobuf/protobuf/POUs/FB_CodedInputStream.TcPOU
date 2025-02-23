@@ -12,7 +12,16 @@ END_VAR
 VAR_TEMP
     hr : HRESULT;
 END_VAR
-]]></Declaration>
+
+VAR
+    fbFieldCodecInt32   : FB_FieldCodecInt32;
+    fbFieldCodecInt64   : FB_FieldCodecInt64;
+    fbFieldCodecSInt32  : FB_FieldCodecSInt32;
+    fbFieldCodecSInt64  : FB_FieldCodecSInt64;
+    fbFieldCodecFloat   : FB_FieldCodecFloat;
+    fbFieldCodecDouble  : FB_FieldCodecDouble;
+    fbFieldCodecString  : FB_FieldCodecString;
+END_VAR]]></Declaration>
     <Implementation>
       <ST><![CDATA[]]></ST>
     </Implementation>
@@ -156,6 +165,37 @@ ReadInt64 := F_ParseRawVarint64(aBuffer, stState, nTmp);
 nValue := TO_LINT(nTmp);]]></ST>
       </Implementation>
     </Method>
+    <Method Name="ReadRepeatedFieldDouble" Id="{7bdafe38-de8d-4316-9cff-685770e12e00}">
+      <Declaration><![CDATA[METHOD ReadRepeatedFieldDouble : HRESULT
+VAR_INPUT CONSTANT
+    anyArray        : T_Any;
+    anyFirstElem    : T_Any; 
+END_VAR
+
+VAR_IN_OUT   
+    nFieldIndex : UDINT; 
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[
+ReadRepeatedFieldDouble := F_ReadRepeatedField(aBuffer, stState, anyArray, anyFirstElem, ipFieldCodec:= THIS^.fbFieldCodecDouble, nFieldIndex); ]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="ReadRepeatedFieldString" Id="{4251bc82-5932-4b83-a093-f3a37451383b}">
+      <Declaration><![CDATA[METHOD ReadRepeatedFieldString : HRESULT
+VAR_INPUT CONSTANT
+    anyArray        : T_Any;
+    anyFirstElem    : T_Any;
+    anyStringBuffer : T_AnyString;
+END_VAR
+
+VAR_IN_OUT   
+    nFieldIndex : UDINT; 
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[THIS^.fbFieldCodecString.SetAnyString(anyString:= anyStringBuffer);
+ReadRepeatedFieldString := F_ReadRepeatedField(aBuffer, stState, anyArray, anyFirstElem, ipFieldCodec:= THIS^.fbFieldCodecString, nFieldIndex); ]]></ST>
+      </Implementation>
+    </Method>
     <Method Name="ReadRepeatedFieldUint32" Id="{6123f86b-78f5-4253-9330-10a1ff17912b}">
       <Declaration><![CDATA[METHOD ReadRepeatedFieldUint32 : HRESULT
 VAR_INPUT CONSTANT
@@ -168,7 +208,9 @@ VAR_IN_OUT
 END_VAR]]></Declaration>
       <Implementation>
         <ST><![CDATA[
-ReadRepeatedFieldUint32 := F_ReadRepeatedFieldUint32(aBuffer, stState, anyArray, anyFirstElem, nFieldIndex); ]]></ST>
+// ReadRepeatedFieldUint32 := F_ReadRepeatedFieldUint32(aBuffer, stState, anyArray, anyFirstElem, nFieldIndex); 
+
+ReadRepeatedFieldUint32 := F_ReadRepeatedField(aBuffer, stState, anyArray, anyFirstElem, ipFieldCodec:= THIS^.fbFieldCodecInt32, nFieldIndex); ]]></ST>
       </Implementation>
     </Method>
     <Method Name="ReadSFixed64" Id="{7ccdace2-dfaf-4347-bdd1-8a51b9cb7ce5}">

@@ -1,0 +1,45 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1">
+  <POU Name="FB_FieldCodecDouble" Id="{086b033e-f90b-4cf0-935e-e2251e8fef7d}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK FB_FieldCodecDouble IMPLEMENTS I_FieldCodec
+VAR_INPUT
+END_VAR
+VAR_OUTPUT
+END_VAR
+VAR
+    fValue : LREAL;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[]]></ST>
+    </Implementation>
+    <Method Name="IsPackedRepeatedField" Id="{d316ae37-9759-4159-a424-cee7603dc9cc}">
+      <Declaration><![CDATA[METHOD IsPackedRepeatedField : BOOL
+VAR_INPUT
+	nTag	: UDINT;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IsPackedRepeatedField := F_IsPackedRepeatedField(nTag);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="ValueReader" Id="{923042e9-5c57-462b-bdba-e0406db2867b}">
+      <Declaration><![CDATA[
+METHOD ValueReader : HRESULT
+VAR_IN_OUT CONSTANT
+	aBuffer	: ARRAY [*] OF BYTE;
+END_VAR
+VAR_IN_OUT
+	stState	: ST_ParserInternalState;
+END_VAR
+VAR_OUTPUT
+	anyOut	: T_Any;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[
+ValueReader := F_ParseDouble(aBuffer, stState, fValue=> fValue);
+anyOut := F_ToAnyType(anyArg:= fValue);]]></ST>
+      </Implementation>
+    </Method>
+  </POU>
+</TcPlcObject>

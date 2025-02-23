@@ -51,6 +51,27 @@
     <Compile Include="DUTs\T_ProtobufRawBuffer.TcDUT">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="FieldCodec\FB_FieldCodecString.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="FieldCodec\FB_FieldCodecFloat.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="FieldCodec\FB_FieldCodecInt32.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="FieldCodec\FB_FieldCodecDouble.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="FieldCodec\FB_FieldCodecSInt32.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="FieldCodec\FB_FieldCodecInt64.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="FieldCodec\FB_FieldCodecSInt64.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="GVLs\Param.TcGVL">
       <SubType>Code</SubType>
       <LinkAlways>true</LinkAlways>
@@ -59,6 +80,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Helper\DUTs\T_AnyIntOrBit.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Helper\DUTs\T_AnyString.TcDUT">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Helper\DUTs\T_AnyNum.TcDUT">
@@ -86,8 +110,16 @@
       <SubType>Code</SubType>
       <LinkAlways>true</LinkAlways>
     </Compile>
+    <Compile Include="Helper\POUs\F_ToAnyString.TcPOU">
+      <SubType>Code</SubType>
+      <LinkAlways>true</LinkAlways>
+    </Compile>
     <Compile Include="ITFs\I_Message.TcIO">
       <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ITFs\I_FieldCodec.TcIO">
+      <SubType>Code</SubType>
+      <LinkAlways>true</LinkAlways>
     </Compile>
     <Compile Include="ParsingPrimitivesMessages\POUs\F_SkipLastField.TcPOU">
       <SubType>Code</SubType>
@@ -206,8 +238,9 @@
     <Compile Include="RepeatedField\F_IsPackedRepeatedField.TcPOU">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="RepeatedField\F_ReadRepeatedFieldUint32.TcPOU">
+    <Compile Include="RepeatedField\F_ReadRepeatedField.TcPOU">
       <SubType>Code</SubType>
+      <LinkAlways>true</LinkAlways>
     </Compile>
     <Compile Include="WireFormat\DUTs\E_WireType.TcDUT">
       <SubType>Code</SubType>
@@ -336,6 +369,9 @@
     <Compile Include="__TESTs\MessagesTests\POUs\FB_ExampleMessage.TcPOU">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="__TESTs\MessagesTests\POUs\FB_RepeatedStringMessageTests.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="__TESTs\MessagesTests\PRG_MessageTests.TcPOU">
       <SubType>Code</SubType>
     </Compile>
@@ -376,6 +412,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="__TESTs\RepeatedFieldTests\FB_ReadRepeatedFieldUint32Tests.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="__TESTs\RepeatedFieldTests\FB_ReadRepeatedFieldStringTests.TcPOU">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="__TESTs\RepeatedFieldTests\PRG_RepeatedFieldTests.TcPOU">
@@ -455,6 +494,7 @@
     <Folder Include="Helper" />
     <Folder Include="GVLs" />
     <Folder Include="DUTs" />
+    <Folder Include="FieldCodec" />
     <Folder Include="ParsingPrimitivesMessages" />
     <Folder Include="ParsingPrimitivesMessages\POUs" />
     <Folder Include="RepeatedField" />
@@ -524,8 +564,8 @@
   <ProjectExtensions>
     <PlcProjectOptions>
       <XmlArchive>
-        <Data>
-          <o xml:space="preserve" t="OptionKey">
+  <Data>
+    <o xml:space="preserve" t="OptionKey">
       <v n="Name">"&lt;ProjectRoot&gt;"</v>
       <d n="SubKeys" t="Hashtable" ckt="String" cvt="OptionKey">
         <v>{192FAD59-8248-4824-A8DE-9177C94C195A}</v>
@@ -544,6 +584,12 @@
         <o>
           <v n="Name">"{29BD8D0C-3586-4548-BB48-497B9A01693F}"</v>
           <d n="SubKeys" t="Hashtable" ckt="String" cvt="OptionKey">
+            <v>NamingConventions</v>
+            <o>
+              <v n="Name">"NamingConventions"</v>
+              <d n="SubKeys" t="Hashtable" />
+              <d n="Values" t="Hashtable" />
+            </o>
             <v>Rules</v>
             <o>
               <v n="Name">"Rules"</v>
@@ -601,14 +647,14 @@
       </d>
       <d n="Values" t="Hashtable" />
     </o>
-        </Data>
-        <TypeList>
-          <Type n="Boolean">System.Boolean</Type>
-          <Type n="Hashtable">System.Collections.Hashtable</Type>
-          <Type n="OptionKey">{54dd0eac-a6d8-46f2-8c27-2f43c7e49861}</Type>
-          <Type n="String">System.String</Type>
-        </TypeList>
-      </XmlArchive>
+  </Data>
+  <TypeList>
+    <Type n="Boolean">System.Boolean</Type>
+    <Type n="Hashtable">System.Collections.Hashtable</Type>
+    <Type n="OptionKey">{54dd0eac-a6d8-46f2-8c27-2f43c7e49861}</Type>
+    <Type n="String">System.String</Type>
+  </TypeList>
+</XmlArchive>
     </PlcProjectOptions>
   </ProjectExtensions>
 </Project>

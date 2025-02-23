@@ -10,7 +10,7 @@ VAR_IN_OUT
     stState : ST_ParserInternalState;
 END_VAR
 VAR_INPUT
-    anyStringOut : ANY_STRING;
+    anyStringOut : T_AnyString;
 END_VAR
 VAR
     nStrLength : UDINT;
@@ -23,7 +23,7 @@ IF FAILED(F_ReadString) THEN
     RETURN;
 END_IF
 
-F_ReadString := F_ReadRawString(aBuffer, nStrLength, F_ToAnyType(anyStringOut), stState);]]></ST>
+F_ReadString := F_ReadRawString(aBuffer, nStrLength, anyStringOut, stState);]]></ST>
     </Implementation>
   </POU>
 </TcPlcObject>
