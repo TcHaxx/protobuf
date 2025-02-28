@@ -1,0 +1,74 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1">
+  <POU Name="FB_F_ToAnyBytesTests" Id="{3cf63a64-eda8-4aeb-8f3f-fa4a9c8fb48c}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK INTERNAL FINAL FB_F_ToAnyBytesTests EXTENDS FB_TestSuite
+VAR_INPUT
+END_VAR
+VAR_OUTPUT
+END_VAR
+VAR
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[ShouldConvertTheory();]]></ST>
+    </Implementation>
+    <Method Name="ShouldConvert" Id="{5d6ec773-1cc7-4ae3-912c-9c85b3c5744f}">
+      <Declaration><![CDATA[METHOD PRIVATE ShouldConvert
+VAR_IN_OUT CONSTANT
+    aBytes : ARRAY [*] OF BYTE; 
+END_VAR
+VAR_INPUT
+    anyBytesExpected : ANY;   
+END_VAR
+
+VAR
+    
+    anyBytesActual  : T_AnyBytes;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[
+// Arrange
+
+// Act
+
+anyBytesActual := F_ToAnyBytes(aBytes);
+
+// Assert
+
+AssertEquals_DINT(
+    Expected:= anyBytesExpected.diSize,
+    Actual:= anyBytesActual.diSize,
+    Message:= 'Sizes differ');
+    
+AssertTrue(
+    Condition:= anyBytesExpected.TypeClass = anyBytesActual.TypeClass AND anyBytesExpected.TypeClass = __SYSTEM.TYPE_CLASS.TYPE_ARRAY,
+    Message:= 'Expected TypeClass to equal TYPE_ARRAY');
+
+AssertTrue(
+    Condition:= anyBytesExpected.pValue = anyBytesActual.pValue,
+    Message:= 'Pointer differ');]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="ShouldConvertTheory" Id="{1f51e810-b6c8-4354-9a3a-066a20cecf42}">
+      <Declaration><![CDATA[METHOD PRIVATE ShouldConvertTheory
+VAR_INPUT
+END_VAR
+VAR
+    aBytes0 : ARRAY[0..0] OF BYTE := [];
+    aBytes1 : ARRAY[0..42] OF BYTE := [];
+    aBytes2 : ARRAY[-42..0] OF BYTE := [];
+    aBytes3 : ARRAY[-42..42] OF BYTE := [];
+    aBytes4 : ARRAY[-8..-1] OF BYTE := [];
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST(__POUNAME());
+ShouldConvert(aBytes:= aBytes0, anyBytesExpected:= aBytes0);
+ShouldConvert(aBytes:= aBytes1, anyBytesExpected:= aBytes1);
+ShouldConvert(aBytes:= aBytes2, anyBytesExpected:= aBytes2);
+ShouldConvert(aBytes:= aBytes3, anyBytesExpected:= aBytes3);
+ShouldConvert(aBytes:= aBytes4, anyBytesExpected:= aBytes4);
+TEST_FINISHED_NAMED(__POUNAME());]]></ST>
+      </Implementation>
+    </Method>
+  </POU>
+</TcPlcObject>

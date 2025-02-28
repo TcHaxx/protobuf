@@ -94,11 +94,18 @@
     <Compile Include="Helper\DUTs\T_AnyBit.TcDUT">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Helper\DUTs\T_AnyBytes.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Helper\POUs\F_ToAnyBit.TcPOU">
       <SubType>Code</SubType>
       <LinkAlways>true</LinkAlways>
     </Compile>
     <Compile Include="Helper\POUs\F_ToAnyInt.TcPOU">
+      <SubType>Code</SubType>
+      <LinkAlways>true</LinkAlways>
+    </Compile>
+    <Compile Include="Helper\POUs\F_ToAnyBytes.TcPOU">
       <SubType>Code</SubType>
       <LinkAlways>true</LinkAlways>
     </Compile>
@@ -360,6 +367,12 @@
       <SubType>Code</SubType>
       <LinkAlways>true</LinkAlways>
     </Compile>
+    <Compile Include="__TESTs\HelperTests\FB_F_ToAnyBytesTests.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="__TESTs\HelperTests\PRG_HelperTests.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="__TESTs\MessagesTests\DUTs\ST_Example.TcDUT">
       <SubType>Code</SubType>
     </Compile>
@@ -514,6 +527,7 @@
     <Folder Include="__TESTs\MessagesTests" />
     <Folder Include="__TESTs\MessagesTests\DUTs" />
     <Folder Include="__TESTs\MessagesTests\POUs" />
+    <Folder Include="__TESTs\HelperTests" />
     <Folder Include="__TESTs\RepeatedFieldTests" />
     <Folder Include="__TESTs\WireFormatTests" />
     <Folder Include="__TESTs\RoundTripTests" />

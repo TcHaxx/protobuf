@@ -1,0 +1,27 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1">
+  <POU Name="F_ToAnyBytes" Id="{9066e03e-1c70-483b-9832-afc0d9a20e00}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION F_ToAnyBytes : T_AnyBytes
+VAR_IN_OUT CONSTANT
+    aBytes : ARRAY [*] OF BYTE;
+END_VAR
+
+VAR 
+    pUB : POINTER TO BYTE;
+    nLB : DINT;
+    nUB : DINT;
+END_VAR]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[F_ToAnyBytes.TypeClass := __SYSTEM.TYPE_CLASS.TYPE_ARRAY;
+
+nLB := LOWER_BOUND(aBytes, 1);
+nUB := UPPER_BOUND(aBytes, 1);
+
+F_ToAnyBytes.pValue := ADR(aBytes[nLB]);
+pUB := ADR(aBytes[nUB]);
+
+F_ToAnyBytes.diSize := TO_DINT(pUB - F_ToAnyBytes.pValue) + 1;
+]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>
