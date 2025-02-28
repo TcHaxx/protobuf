@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <TcPlcObject Version="1.1.0.1">
-  <POU Name="FB_FieldCodecSInt32" Id="{5872bbd0-7f0f-48ad-9c30-e5bb23d85c6b}" SpecialFunc="None">
-    <Declaration><![CDATA[FUNCTION_BLOCK FB_FieldCodecSInt32 IMPLEMENTS I_FieldCodec
+  <POU Name="FB_FieldCodecSint32" Id="{5872bbd0-7f0f-48ad-9c30-e5bb23d85c6b}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK FB_FieldCodecSint32 IMPLEMENTS I_FieldCodec
 VAR_INPUT
 END_VAR
 VAR_OUTPUT

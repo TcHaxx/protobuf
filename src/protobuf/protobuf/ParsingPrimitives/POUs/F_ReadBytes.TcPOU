@@ -21,7 +21,7 @@ IF FAILED(F_ReadBytes) THEN
     RETURN;
 END_IF
 
-F_ReadBytes := F_ReadRawBytes(aBuffer, nLength, stState, aBytes);]]></ST>
+F_ReadBytes := F_ReadRawBytes(aBuffer, stState, nLength, F_ToAnyBytes(aBytes));]]></ST>
     </Implementation>
   </POU>
 </TcPlcObject>

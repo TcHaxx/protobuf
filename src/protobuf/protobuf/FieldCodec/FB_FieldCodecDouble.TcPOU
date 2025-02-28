@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <TcPlcObject Version="1.1.0.1">
-  <POU Name="FB_FieldCodecDouble" Id="{086b033e-f90b-4cf0-935e-e2251e8fef7d}" SpecialFunc="None">
+  <POU Name="FB_FieldCodecDouble" Id="{f6635256-2255-4dad-ac3d-fde3245c6d0d}" SpecialFunc="None">
     <Declaration><![CDATA[FUNCTION_BLOCK FB_FieldCodecDouble IMPLEMENTS I_FieldCodec
 VAR_INPUT
 END_VAR
@@ -13,7 +13,7 @@ END_VAR
     <Implementation>
       <ST><![CDATA[]]></ST>
     </Implementation>
-    <Method Name="IsPackedRepeatedField" Id="{d316ae37-9759-4159-a424-cee7603dc9cc}">
+    <Method Name="IsPackedRepeatedField" Id="{d9206b81-f1d0-4f9c-8b27-a7557037cb20}">
       <Declaration><![CDATA[METHOD IsPackedRepeatedField : BOOL
 VAR_INPUT
 	nTag	: UDINT;
@@ -23,7 +23,7 @@ END_VAR
         <ST><![CDATA[IsPackedRepeatedField := F_IsPackedRepeatedField(nTag);]]></ST>
       </Implementation>
     </Method>
-    <Method Name="ValueReader" Id="{923042e9-5c57-462b-bdba-e0406db2867b}">
+    <Method Name="ValueReader" Id="{47db2cd1-e3bd-4ae3-8d15-00da42a68236}">
       <Declaration><![CDATA[
 METHOD ValueReader : HRESULT
 VAR_IN_OUT CONSTANT

@@ -37,7 +37,7 @@ VAR_OUTPUT
 END_VAR]]></Declaration>
       <Implementation>
         <ST><![CDATA[
-ValueReader := F_ParseDouble(aBuffer, stState, fValue=> fValue);
+ValueReader := F_ParseFloat(aBuffer, stState, fValue=> fValue);
 anyOut := F_ToAnyType(anyArg:= fValue);]]></ST>
       </Implementation>
     </Method>

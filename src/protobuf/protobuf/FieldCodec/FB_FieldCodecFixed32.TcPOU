@@ -1,19 +1,19 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <TcPlcObject Version="1.1.0.1">
-  <POU Name="FB_FieldCodecSint64" Id="{902249f5-4d9a-47d4-8234-bdaacdc871d7}" SpecialFunc="None">
-    <Declaration><![CDATA[FUNCTION_BLOCK FB_FieldCodecSint64 IMPLEMENTS I_FieldCodec
+  <POU Name="FB_FieldCodecFixed32" Id="{38901a8e-394b-4d55-8a74-7207a14e063d}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK FB_FieldCodecFixed32 IMPLEMENTS I_FieldCodec
 VAR_INPUT
 END_VAR
 VAR_OUTPUT
 END_VAR
 VAR
-    nValue : LINT;
+    nValue : UDINT;
 END_VAR
 ]]></Declaration>
     <Implementation>
       <ST><![CDATA[]]></ST>
     </Implementation>
-    <Method Name="IsPackedRepeatedField" Id="{e7cdeb88-7593-46d4-b96d-f18f55af396f}">
+    <Method Name="IsPackedRepeatedField" Id="{a1f6734c-c045-4396-8001-d851a3e88625}">
       <Declaration><![CDATA[METHOD IsPackedRepeatedField : BOOL
 VAR_INPUT
 	nTag	: UDINT;
@@ -23,7 +23,7 @@ END_VAR
         <ST><![CDATA[IsPackedRepeatedField := F_IsPackedRepeatedField(nTag);]]></ST>
       </Implementation>
     </Method>
-    <Method Name="ValueReader" Id="{b9d1dab2-9dd2-430c-aed8-bbcf1dbe77f8}">
+    <Method Name="ValueReader" Id="{c1844dc8-2aa4-44a1-8a79-d239b818953a}">
       <Declaration><![CDATA[
 METHOD ValueReader : HRESULT
 VAR_IN_OUT CONSTANT
@@ -34,17 +34,10 @@ VAR_IN_OUT
 END_VAR
 VAR_OUTPUT
 	anyOut	: T_Any;
-END_VAR
-VAR 
-    nTmp : ULINT;
 END_VAR]]></Declaration>
       <Implementation>
         <ST><![CDATA[
-ValueReader := F_ParseRawVarint64(aBuffer, stState, nTmp);
-IF FAILED(ValueReader) THEN
-    RETURN;
-END_IF
-nValue := F_DecodeZigZag64(nTmp);
+ValueReader := F_ParseRawLittleEndian32(aBuffer, stState, nValue=> nValue);
 anyOut := F_ToAnyType(anyArg:= nValue);]]></ST>
       </Implementation>
     </Method>

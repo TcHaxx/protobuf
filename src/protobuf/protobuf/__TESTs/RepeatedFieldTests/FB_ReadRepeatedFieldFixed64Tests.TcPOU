@@ -1,0 +1,170 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1">
+  <POU Name="FB_ReadRepeatedFieldFixed64Tests" Id="{2f2a1335-1f41-4851-a210-cf1bdd05c323}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK INTERNAL FINAL FB_ReadRepeatedFieldFixed64Tests EXTENDS FB_TestSuite
+VAR_INPUT
+END_VAR
+VAR_OUTPUT
+END_VAR
+VAR
+    fbFieldCodec : FB_FieldCodecFixed64;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[ShouldReadRepeatedFieldTheory();
+ShouldReadNonConsecutiveRepeatedFields(); ]]></ST>
+    </Implementation>
+    <Method Name="ShouldReadNonConsecutiveRepeatedFields" Id="{5f753e19-baeb-47a5-87d3-cbc4b3532715}">
+      <Declaration><![CDATA[METHOD PRIVATE ShouldReadNonConsecutiveRepeatedFields
+VAR CONSTANT
+    (*
+        message Demo {
+            repeated uint32 a = 1;
+            fixed32 b =2;
+        }
+        JSON:
+        {
+          "a": [
+            0, 1, 2, 151
+          ],
+          "b": 321
+        }
+    *)
+    cRawMessage : ARRAY[0..15] OF BYTE := [16#0A, 16#03, 16#00, 16#01, 16#02, 16#15, 16#41, 16#01, 16#00, 16#00, 16#0A, 16#02, 16#97, 16#01];
+    cExpected   : ARRAY[0..15] OF BYTE := [0, 1, 2, 151];
+END_VAR
+VAR_INST
+    stState : ST_ParserInternalState;
+    fbFieldCodecInt32 : FB_FieldCodecInt32;
+END_VAR
+VAR
+    aActual             : ARRAY [0..15] OF BYTE;
+    hr                  : HRESULT;
+    nActualFieldIndex   : UDINT;
+    nTag                : UDINT;
+    nB                  : UDINT;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST(__POUNAME());
+
+// Arrange
+stState.nBufferPos := 0;
+stState.nBufferSize := SIZEOF(cRawMessage);
+
+// Act
+// Parses a=[0,1,2]: 16#0A, 16#03, 16#00, 16#01, 16#02
+F_ParseTag(cRawMessage, stState, nTag=> );
+hr := F_ReadRepeatedField(cRawMessage, stState, anyArray:= F_ToAnyType(aActual), anyFirstElem:= F_ToAnyType(aActual[0]), ipFieldCodec:= fbFieldCodecInt32,  nFieldIndex:= nActualFieldIndex);
+
+// Parses b=321: 16#15, 16#41, 16#01, 16#00, 16#00
+F_ParseTag(cRawMessage, stState, nTag=> );
+F_ParseRawLittleEndian32(cRawMessage, stState, nValue=> nB);
+
+// Parses a=[151]: 16#0A, 16#02, 16#97, 16#01
+F_ParseTag(cRawMessage, stState, nTag=> );
+hr := F_ReadRepeatedField(cRawMessage, stState, anyArray:= F_ToAnyType(aActual), anyFirstElem:= F_ToAnyType(aActual[0]), ipFieldCodec:= fbFieldCodecInt32, nFieldIndex:= nActualFieldIndex);
+
+// Assert
+AssertEquals_DINT(
+    Expected:= S_OK,
+    Actual:= hr,
+    Message:= 'Expected S_OK instead of error');
+    
+{warning disable C0041}
+AssertArrayEquals_BYTE(Expecteds:= cExpected, Actuals:= aActual, Message:= '');
+    
+AssertEquals_UDINT(
+    Expected:= 4,
+    Actual:= nActualFieldIndex,
+    Message:= CONCAT('Expected nActualFieldIndex to equal ', TO_STRING(4)));
+    
+TEST_FINISHED_NAMED(__POUNAME());]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="ShouldReadRepeatedField" Id="{e5bc7800-7458-4f36-ba28-c5a97662bd36}">
+      <Declaration><![CDATA[METHOD PRIVATE ShouldReadRepeatedField
+VAR_IN_OUT CONSTANT
+    aBuffer     : ARRAY [*] OF BYTE;
+    aExpected   : ARRAY [*] OF LINT;
+END_VAR
+VAR_INPUT CONSTANT
+    nBufferPosStart     : UDINT;
+    nExpectedBufferPos  : UDINT;
+    nExpectedFieldIndex : UDINT;
+    ipFieldCodec        : I_FieldCodec;
+END_VAR
+VAR_INST
+    stState : ST_ParserInternalState;
+END_VAR
+VAR
+    aActual             : ARRAY [0..7] OF LINT;
+    hr                  : HRESULT;
+    nActualFieldIndex   : UDINT;
+    nTag                : UDINT;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[// Arrange
+stState.nBufferPos := nBufferPosStart;
+stState.nBufferSize := TO_UDINT(UPPER_BOUND(aBuffer, 1) + 1);
+
+// Act
+F_ParseTag(aBuffer, stState, nTag=> nTag);
+hr := F_ReadRepeatedField(aBuffer, stState, anyArray:= F_ToAnyType(aActual), anyFirstElem:= F_ToAnyType(aActual[0]), ipFieldCodec, nFieldIndex:= nActualFieldIndex);
+
+// Assert
+AssertEquals_DINT(
+    Expected:= S_OK,
+    Actual:= hr,
+    Message:= 'Expected S_OK instead of error');
+    
+{warning disable C0041}
+AssertArrayEquals_LINT(Expecteds:= aExpected, Actuals:= aActual, Message:= '');
+ 
+AssertEquals_UDINT(
+    Expected:= nExpectedBufferPos,
+    Actual:= stState.nBufferPos,
+    Message:= CONCAT('Expected stState.nBufferPos to equal ', TO_STRING(nExpectedBufferPos)));
+    
+AssertEquals_UDINT(
+    Expected:= nExpectedFieldIndex,
+    Actual:= nActualFieldIndex,
+    Message:= CONCAT('Expected nActualFieldIndex to equal ', TO_STRING(nExpectedFieldIndex)));
+]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="ShouldReadRepeatedFieldTheory" Id="{cc58d154-3c36-4882-9cd2-1709d6eeb781}">
+      <Declaration><![CDATA[METHOD PRIVATE ShouldReadRepeatedFieldTheory : REFERENCE TO FB_Test
+(*
+    syntax = "proto3";
+    
+    message exampleMessage
+    {
+      repeated fixed32 repeatedFixed32 = 4;
+    }
+*)
+VAR CONSTANT
+    cRawValueZeroLength     : ARRAY[0..31] OF BYTE := [16#22, 16#00];       // field #4
+    cRawValue1              : ARRAY[0..100] OF BYTE := [16#22, 16#30, 16#00, 16#00, 16#00, 16#00, 16#00, 16#00, 16#00, 16#00, 16#d2, 16#04, 16#00, 16#00, 16#00, 16#00, 16#00, 16#00, 16#39, 16#05, 16#00, 16#00, 16#00, 16#00, 16#00, 16#00, 16#ff, 16#ff, 16#ff, 16#ff, 16#ff, 16#ff, 16#ff, 16#ff, 16#c7, 16#fa, 16#ff, 16#ff, 16#ff, 16#ff, 16#ff, 16#ff, 16#4e, 16#61, 16#bc, 16#00, 16#00, 16#00, 16#00, 16#00];
+    
+END_VAR
+
+VAR CONSTANT
+    aExpectedZeroLength     : ARRAY [0..7] OF LINT := [0, 0, 0, 0, 0, 0, 0, 0];
+    aExpected1              : ARRAY [0..7] OF LINT := [0, 1234, 1337, -1, -1337, 12345678, 0, 0];
+END_VAR
+
+VAR
+    viExpected : __SYSTEM.VAR_INFO;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST(__POUNAME());
+
+ShouldReadRepeatedField(aBuffer:= cRawValueZeroLength, aExpected:= aExpectedZeroLength, nBufferPosStart:= 0, nExpectedBufferPos:= 2, nExpectedFieldIndex:= 0, ipFieldCodec:= THIS^.fbFieldCodec);
+ShouldReadRepeatedField(aBuffer:= cRawValue1, aExpected:= aExpected1, nBufferPosStart:= 0, nExpectedBufferPos:= 50, nExpectedFieldIndex:= 6, ipFieldCodec:= THIS^.fbFieldCodec);
+
+TEST_FINISHED_NAMED(__POUNAME());]]></ST>
+      </Implementation>
+    </Method>
+  </POU>
+</TcPlcObject>

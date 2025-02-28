@@ -51,6 +51,15 @@
     <Compile Include="DUTs\T_ProtobufRawBuffer.TcDUT">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="FieldCodec\FB_FieldCodecFixed32.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="FieldCodec\FB_FieldCodecFixed64.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="FieldCodec\FB_FieldCodecDouble.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="FieldCodec\FB_FieldCodecString.TcPOU">
       <SubType>Code</SubType>
     </Compile>
@@ -60,16 +69,16 @@
     <Compile Include="FieldCodec\FB_FieldCodecInt32.TcPOU">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="FieldCodec\FB_FieldCodecDouble.TcPOU">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="FieldCodec\FB_FieldCodecSInt32.TcPOU">
+    <Compile Include="FieldCodec\FB_FieldCodecSint32.TcPOU">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="FieldCodec\FB_FieldCodecInt64.TcPOU">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="FieldCodec\FB_FieldCodecSInt64.TcPOU">
+    <Compile Include="FieldCodec\FB_FieldCodecSint64.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="FieldCodec\FB_FieldCodecBytes.TcPOU">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="GVLs\Param.TcGVL">
@@ -424,10 +433,16 @@
     <Compile Include="Version\Global_Version.TcGVL">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="__TESTs\RepeatedFieldTests\FB_ReadRepeatedFieldFixed64Tests.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="__TESTs\RepeatedFieldTests\FB_ReadRepeatedFieldUint32Tests.TcPOU">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="__TESTs\RepeatedFieldTests\FB_ReadRepeatedFieldStringTests.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="__TESTs\RepeatedFieldTests\FB_ReadRepeatedFieldFixed32Tests.TcPOU">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="__TESTs\RepeatedFieldTests\PRG_RepeatedFieldTests.TcPOU">
@@ -575,11 +590,19 @@
       <SubType>Content</SubType>
     </None>
   </ItemGroup>
+  <ItemGroup>
+    <SubObject Include="FB_FieldCodecFixed64.IsPackedRepeatedField">
+      <LinkAlways>true</LinkAlways>
+    </SubObject>
+    <SubObject Include="FB_FieldCodecFixed64.ValueReader">
+      <LinkAlways>true</LinkAlways>
+    </SubObject>
+  </ItemGroup>
   <ProjectExtensions>
     <PlcProjectOptions>
       <XmlArchive>
-  <Data>
-    <o xml:space="preserve" t="OptionKey">
+        <Data>
+          <o xml:space="preserve" t="OptionKey">
       <v n="Name">"&lt;ProjectRoot&gt;"</v>
       <d n="SubKeys" t="Hashtable" ckt="String" cvt="OptionKey">
         <v>{192FAD59-8248-4824-A8DE-9177C94C195A}</v>
@@ -661,14 +684,14 @@
       </d>
       <d n="Values" t="Hashtable" />
     </o>
-  </Data>
-  <TypeList>
-    <Type n="Boolean">System.Boolean</Type>
-    <Type n="Hashtable">System.Collections.Hashtable</Type>
-    <Type n="OptionKey">{54dd0eac-a6d8-46f2-8c27-2f43c7e49861}</Type>
-    <Type n="String">System.String</Type>
-  </TypeList>
-</XmlArchive>
+        </Data>
+        <TypeList>
+          <Type n="Boolean">System.Boolean</Type>
+          <Type n="Hashtable">System.Collections.Hashtable</Type>
+          <Type n="OptionKey">{54dd0eac-a6d8-46f2-8c27-2f43c7e49861}</Type>
+          <Type n="String">System.String</Type>
+        </TypeList>
+      </XmlArchive>
     </PlcProjectOptions>
   </ProjectExtensions>
 </Project>

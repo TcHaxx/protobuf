@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
-<TcSmProject xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.beckhoff.com/schemas/2012/07/TcSmProject" TcSmVersion="1.0" TcVersion="3.1.4026.13" TcProjectVariant="LIB">
+<TcSmProject xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.beckhoff.com/schemas/2012/07/TcSmProject" TcSmVersion="1.0" TcVersion="3.1.4026.14" TcProjectVariant="LIB">
 	<Project ProjectGUID="{ACDC466E-3EC2-4D50-A4E9-DF92A9E0AC96}" TargetNetId="199.4.42.250.1.1" Target64Bit="true" ShowHideConfigurations="#x3c7">
 		<System>
-			<Settings MaxCpus="2" NonWinCpus="1">
+			<Settings MaxCpus="2">
 				<Cpu CpuId="1"/>
 				<IoIdleTask Priority="4"/>
 			</Settings>
@@ -40,14 +40,11 @@
 				<ProjectVariant PvUseDefine="true">
 					<Variant>
 						<Name>LIB</Name>
-						<Defines/>
-					</Variant>
-					<Variant>
 						<Name>UNIT_TEST</Name>
 						<Defines></Defines>
 					</Variant>
 				</ProjectVariant>
-				<Instance Id="#x08502000" TcSmClass="TComPlcObjDef" KeepUnrestoredLinks="2" TmcHash="{4E7A6353-4240-4473-B5B3-25154C481124}" TmcPath="protobuf\protobuf.tmc">
+				<Instance Id="#x08502000" TcSmClass="TComPlcObjDef" KeepUnrestoredLinks="2" TmcHash="{F59C3383-6E15-49F9-5805-4898B10E64C4}" TmcPath="protobuf\protobuf.tmc">
 					<Name>protobuf Instance</Name>
 					<CLSID ClassFactory="TcPlc30">{08500001-0000-0000-F000-000000000064}</CLSID>
 					<Contexts>

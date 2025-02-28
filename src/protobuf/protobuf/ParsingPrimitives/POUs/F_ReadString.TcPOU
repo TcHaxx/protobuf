@@ -3,7 +3,7 @@
   <POU Name="F_ReadString" Id="{d90e99f7-a7ef-43ab-94c0-307afbb7fd5d}" SpecialFunc="None">
     <Declaration><![CDATA[// Reads a string field value from the input.
 FUNCTION F_ReadString : HRESULT
-VAR_INPUT CONSTANT
+VAR_IN_OUT CONSTANT
     aBuffer : ARRAY [*] OF BYTE;   
 END_VAR
 VAR_IN_OUT

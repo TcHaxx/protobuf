@@ -37,7 +37,7 @@ VAR_OUTPUT
 END_VAR]]></Declaration>
       <Implementation>
         <ST><![CDATA[
-ValueReader := F_ParseRawVarint32(aBuffer, stState, nValue);
+ValueReader := F_ParseRawVarint64(aBuffer, stState, nValue);
 anyOut := F_ToAnyType(anyArg:= nValue);]]></ST>
       </Implementation>
     </Method>

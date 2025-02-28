@@ -1,0 +1,64 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1">
+  <POU Name="FB_FieldCodecBytes" Id="{6f2521e3-84e2-4b07-9088-733e03d8d8ec}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK FB_FieldCodecBytes IMPLEMENTS I_FieldCodec
+VAR_INPUT
+END_VAR
+VAR_OUTPUT
+END_VAR
+VAR
+    anyBytes : T_Any;
+END_VAR]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[]]></ST>
+    </Implementation>
+    <Method Name="IsPackedRepeatedField" Id="{f55e498c-009e-42d9-a3d4-1aee876f4b68}">
+      <Declaration><![CDATA[METHOD IsPackedRepeatedField : BOOL
+VAR_INPUT
+	nTag	: UDINT;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[
+// Strings do not support packing...
+IsPackedRepeatedField := FALSE;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="SetAnyBytes" Id="{e8632774-c3c7-4625-b58b-3da822eb9cf0}">
+      <Declaration><![CDATA[// Map ARRAY [*] OF BYTE for field repeated bytes
+METHOD INTERNAL SetAnyBytes
+VAR_INPUT
+    anyBytes : T_Any;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[THIS^.anyBytes := anyBytes;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="ValueReader" Id="{51284e44-3de6-4991-93bd-086796106a10}">
+      <Declaration><![CDATA[
+METHOD ValueReader : HRESULT
+VAR_IN_OUT CONSTANT
+	aBuffer	: ARRAY [*] OF BYTE;
+END_VAR
+VAR_IN_OUT
+	stState	: ST_ParserInternalState;
+END_VAR
+VAR_OUTPUT
+	anyOut	: T_Any;
+END_VAR
+VAR
+    nLength : UDINT;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[
+ValueReader := F_ParseLength(aBuffer, stState, nLength=> nLength);
+IF FAILED(ValueReader) THEN
+    RETURN;
+END_IF
+ValueReader := F_ReadRawBytes(aBuffer, stState, nLength, anyOut);]]></ST>
+      </Implementation>
+    </Method>
+  </POU>
+</TcPlcObject>
