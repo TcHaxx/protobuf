@@ -8,7 +8,7 @@ PROGRAM INTERNAL PRG_RepeatedFieldTests
     fbReadRepeatedFieldFixed32Tests : FB_ReadRepeatedFieldFixed32Tests;
     fbReadRepeatedFieldFixed64Tests : FB_ReadRepeatedFieldFixed64Tests;
     fbReadRepeatedFieldStringTests  : FB_ReadRepeatedFieldStringTests;
-//     fbReadRepeatedFieldBytesTests   : FB_ReadRepeatedFieldBytesTests;
+    fbReadRepeatedFieldBytesTests   : FB_ReadRepeatedFieldBytesTests;
 {END_IF}]]></Declaration>
     <Implementation>
       <ST><![CDATA[]]></ST>
