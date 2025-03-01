@@ -7,7 +7,7 @@ END_VAR
 VAR_OUTPUT
 END_VAR
 VAR
-    aValue      : ARRAY[0..255] OF BYTE;        // default buffer size, if more bytes are needed, set size with "SetAnyBytes" method.
+    aValue      : ARRAY[0..Param_PB.cFieldCodecBytesDefaultSize - 1] OF BYTE;        // default buffer size, if more bytes are needed, set size with "SetAnyBytes" method.
     tAnyBytes : T_AnyBytes;
 END_VAR]]></Declaration>
     <Implementation>
