@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <TcPlcObject Version="1.1.0.1">
   <DUT Name="T_ProtobufMaxString" Id="{4ace9a96-660f-4e10-8cd0-e7fb19d4fc95}">
-    <Declaration><![CDATA[TYPE T_ProtobufMaxString : STRING(Param.cMaxCharacter + 1); END_TYPE
+    <Declaration><![CDATA[TYPE T_ProtobufMaxString : STRING(Param_PB.cMaxCharacter + 1); END_TYPE
 ]]></Declaration>
   </DUT>
 </TcPlcObject>

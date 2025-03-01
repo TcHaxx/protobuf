@@ -41,7 +41,6 @@ VAR
     aActual             : ARRAY [0..15] OF BYTE;
     hr                  : HRESULT;
     nActualFieldIndex   : UDINT;
-    nTag                : UDINT;
     nB                  : UDINT;
 END_VAR]]></Declaration>
       <Implementation>
@@ -147,10 +146,7 @@ VAR CONSTANT
     aExpected1              : ARRAY [0..15] OF BYTE := [0, 1, 255, 150, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
     aExpectedBytesOverflow  : ARRAY [0..15] OF BYTE := [0, 1, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
 END_VAR
-
-VAR
-    viExpected : __SYSTEM.VAR_INFO;
-END_VAR]]></Declaration>
+]]></Declaration>
       <Implementation>
         <ST><![CDATA[TEST(__POUNAME());
 

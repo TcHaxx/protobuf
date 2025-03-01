@@ -41,7 +41,6 @@ VAR
     aActual             : ARRAY [0..15] OF BYTE;
     hr                  : HRESULT;
     nActualFieldIndex   : UDINT;
-    nTag                : UDINT;
     nB                  : UDINT;
 END_VAR]]></Declaration>
       <Implementation>
@@ -149,7 +148,6 @@ VAR CONSTANT
 END_VAR
 
 VAR
-    viExpected : __SYSTEM.VAR_INFO;
     sAnyDummy   : T_MAXSTRING;
 END_VAR]]></Declaration>
       <Implementation>

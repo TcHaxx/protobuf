@@ -46,7 +46,12 @@ AssertEquals_DINT(
 AssertArrayEquals_BYTE(    
     Expecteds:= aExpectedBuffer,
     Actuals:= aActualBuffer,
-    MEssage:= CONCAT('Expected buffers to be equal for String ', LEFT(sStringToWrite, 32)));]]></ST>
+    MEssage:= CONCAT('Expected buffers to be equal for String ', LEFT(sStringToWrite, 32)));
+    
+AssertEquals_UDINT(
+    Expected:= nExpectedBufferPos,
+    Actual:= stState.nBufferPos,
+    Message:= CONCAT('Expected stState.nBufferPos to equal ', TO_STRING(nExpectedBufferPos)));    ]]></ST>
       </Implementation>
     </Method>
     <Method Name="ShouldWriteStringTheory" Id="{290a0cb0-019d-4a3b-b1cd-c43e3e0e850b}">

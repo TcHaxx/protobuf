@@ -41,7 +41,6 @@ VAR
     aActual             : ARRAY [0..15] OF BYTE;
     hr                  : HRESULT;
     nActualFieldIndex   : UDINT;
-    nTag                : UDINT;
     nB                  : UDINT;
 END_VAR]]></Declaration>
       <Implementation>
@@ -153,10 +152,7 @@ VAR CONSTANT
     aExpectedZeroLength     : ARRAY [0..7] OF LINT := [0, 0, 0, 0, 0, 0, 0, 0];
     aExpected1              : ARRAY [0..7] OF LINT := [0, 1234, 1337, -1, -1337, 12345678, 0, 0];
 END_VAR
-
-VAR
-    viExpected : __SYSTEM.VAR_INFO;
-END_VAR]]></Declaration>
+]]></Declaration>
       <Implementation>
         <ST><![CDATA[TEST(__POUNAME());
 

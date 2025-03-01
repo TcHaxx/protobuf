@@ -14,7 +14,6 @@ VAR_IN_OUT
     stState : ST_ParserInternalState;
 END_VAR
 VAR
-    nStrLength : UDINT;
     pNullByte : POINTER TO BYTE;
 END_VAR]]></Declaration>
     <Implementation>

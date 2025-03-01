@@ -36,7 +36,7 @@ CASE F_GetTagWireType(stState.nLastTag) OF
     E_WireType.LengthDelimited:
         F_SkipLastField := F_ParseLength(aBuffer, stState, nLength=> nLength);
         IF SUCCEEDED(F_SkipLastField) THEN
-            F_SkipLastField := F_SkipRawBytes(aBuffer, nLength, stState);
+            F_SkipLastField := F_SkipRawBytes(nLength, stState);
         END_IF
     
     E_WireType.Varint:

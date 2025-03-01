@@ -34,7 +34,6 @@ VAR
     hr                  : HRESULT;
     nActualFieldIndex   : UDINT;
     nTag                : UDINT;
-    i                   : DINT;
 END_VAR
 ]]></Declaration>
       <Implementation>

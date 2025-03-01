@@ -9,10 +9,6 @@ VAR
     stState : ST_ParserInternalState;
 END_VAR
 
-VAR_TEMP
-    hr : HRESULT;
-END_VAR
-
 VAR
     fbFieldCodecInt32       : FB_FieldCodecInt32;
     fbFieldCodecInt64       : FB_FieldCodecInt64;
@@ -89,9 +85,6 @@ stState.nBufferSize := TO_UDINT(nSize);
 METHOD PUBLIC PeekTag : HRESULT
 VAR_OUTPUT
     nTag : UDINT;
-END_VAR
-VAR
-    hr : HRESULT;
 END_VAR
 ]]></Declaration>
       <Implementation>
@@ -351,9 +344,6 @@ METHOD PUBLIC ReadTag : HRESULT
 VAR_OUTPUT
     nTag : UDINT;
 END_VAR
-VAR
-    hr : HRESULT;
-END_VAR
 ]]></Declaration>
       <Implementation>
         <ST><![CDATA[{warning disable C0041}
@@ -412,7 +402,7 @@ END_VAR]]></Declaration>
 END_IF
 
 nSize := UPPER_BOUND(aBuffer, 1) - LOWER_BOUND(aBuffer, 1);
-IF nSize = 0 OR TO_UDINT(nSize) >  Param.cMaxProtobufRawBuffer THEN
+IF nSize = 0 OR TO_UDINT(nSize) >  Param_PB.cMaxProtobufRawBuffer THEN
     ValidateBuffer := E_CodedInputStreamErrorCode.BUFFER_SIZE;
     RETURN;
 END_IF]]></ST>

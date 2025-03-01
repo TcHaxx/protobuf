@@ -72,11 +72,7 @@ VAR CONSTANT
     cExpectedRawValue11964378330978735131 : ARRAY[0..15] OF BYTE := [16#9B, 16#A8, 16#F9, 16#C2, 16#BB, 16#D6, 16#80, 16#85, 16#A6, 16#01];
     cExpectedRawValueMaxUdint   : ARRAY[0..15] OF BYTE := [16#00, 16#00, 16#00, 16#FF, 16#FF, 16#FF, 16#FF, 16#FF, 16#FF, 16#FF, 16#FF, 16#FF, 16#01];
 END_VAR
-VAR
-    aBuffer             : ARRAY[0..15] OF BYTE;
-    stState             : ST_WriterInternalState;
-    hrActual            : HRESULT;
-END_VAR]]></Declaration>
+]]></Declaration>
       <Implementation>
         <ST><![CDATA[TEST(__POUNAME());
 

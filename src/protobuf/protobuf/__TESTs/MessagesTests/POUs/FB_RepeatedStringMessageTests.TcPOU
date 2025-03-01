@@ -108,6 +108,7 @@ END_VAR
     </Property>
     <Method Name="WriteTo" Id="{312eaa5a-dd8d-4886-9dde-bce1bb39e67b}">
       <Declaration><![CDATA[{warning 'Add method implementation '}
+{attribute 'analysis' := '-33'}
 (* Writes the data to the given coded output stream.*)
 METHOD WriteTo
 VAR_IN_OUT

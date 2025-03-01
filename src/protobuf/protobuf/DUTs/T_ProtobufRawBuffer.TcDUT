@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <TcPlcObject Version="1.1.0.1">
   <DUT Name="T_ProtobufRawBuffer" Id="{7dd154eb-fee9-4a02-a774-75ce0c6f4cd2}">
-    <Declaration><![CDATA[TYPE T_ProtobufRawBuffer : ARRAY[0..Param.cMaxProtobufRawBuffer] OF BYTE; END_TYPE
+    <Declaration><![CDATA[TYPE T_ProtobufRawBuffer : ARRAY[0..Param_PB.cMaxProtobufRawBuffer] OF BYTE; END_TYPE
 ]]></Declaration>
   </DUT>
 </TcPlcObject>

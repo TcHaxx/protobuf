@@ -17,12 +17,12 @@ END_VAR
     <Method Name="IsPackedRepeatedField" Id="{eabe9cc3-e78f-42f1-b498-34540e7e1164}">
       <Declaration><![CDATA[METHOD IsPackedRepeatedField : BOOL
 VAR_INPUT
+    {attribute 'analysis' := '-33' } 
 	nTag	: UDINT;
 END_VAR
 ]]></Declaration>
       <Implementation>
         <ST><![CDATA[
-// Strings do not support packing...
 IsPackedRepeatedField := FALSE;]]></ST>
       </Implementation>
     </Method>
