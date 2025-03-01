@@ -140,6 +140,12 @@
       <SubType>Code</SubType>
       <LinkAlways>true</LinkAlways>
     </Compile>
+    <Compile Include="ITFs\I_ValueReader.TcIO">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ITFs\I_ValueWriter.TcIO">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="ParsingPrimitivesMessages\POUs\F_SkipLastField.TcPOU">
       <SubType>Code</SubType>
     </Compile>
@@ -598,14 +604,6 @@
     <None Include="protobuf.tmc">
       <SubType>Content</SubType>
     </None>
-  </ItemGroup>
-  <ItemGroup>
-    <SubObject Include="FB_FieldCodecFixed64.IsPackedRepeatedField">
-      <LinkAlways>true</LinkAlways>
-    </SubObject>
-    <SubObject Include="FB_FieldCodecFixed64.ValueReader">
-      <LinkAlways>true</LinkAlways>
-    </SubObject>
   </ItemGroup>
   <ProjectExtensions>
     <PlcProjectOptions>

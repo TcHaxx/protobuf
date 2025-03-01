@@ -1,0 +1,19 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1">
+  <Itf Name="I_ValueWriter" Id="{cb53fd15-1bee-4271-bef3-792cb4a22e72}">
+    <Declaration><![CDATA[INTERFACE I_ValueWriter
+]]></Declaration>
+    <Method Name="ValueWriter" Id="{79795000-1c35-41ae-8483-d11fc25b9e78}">
+      <Declaration><![CDATA[METHOD ValueWriter : HRESULT
+VAR_IN_OUT
+    aBuffer : ARRAY [*] OF BYTE;   
+END_VAR
+VAR_IN_OUT
+    stState : ST_WriterInternalState;
+END_VAR
+VAR_INPUT
+    anyIn : ANY;
+END_VAR]]></Declaration>
+    </Method>
+  </Itf>
+</TcPlcObject>

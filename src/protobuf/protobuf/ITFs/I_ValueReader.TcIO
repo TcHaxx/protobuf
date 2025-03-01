@@ -1,0 +1,19 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1">
+  <Itf Name="I_ValueReader" Id="{37fdf320-e2a9-4052-bfd4-6be9bb2582e7}">
+    <Declaration><![CDATA[INTERFACE I_ValueReader
+]]></Declaration>
+    <Method Name="ValueReader" Id="{3b7eefb9-456c-4f6e-87f8-51b5178c58ba}">
+      <Declaration><![CDATA[METHOD ValueReader : HRESULT
+VAR_IN_OUT CONSTANT
+    aBuffer : ARRAY [*] OF BYTE;   
+END_VAR
+VAR_IN_OUT
+    stState : ST_ParserInternalState;
+END_VAR
+VAR_OUTPUT
+    anyOut : T_Any;
+END_VAR]]></Declaration>
+    </Method>
+  </Itf>
+</TcPlcObject>

@@ -41,5 +41,23 @@ ValueReader := F_ParseFloat(aBuffer, stState, fValue=> fValue);
 anyOut := F_ToAnyType(anyArg:= fValue);]]></ST>
       </Implementation>
     </Method>
+    <Method Name="ValueWriter" Id="{82739368-41e6-4d6c-82cd-f15dee5abfbd}">
+      <Declaration><![CDATA[{warning 'Add method implementation '}
+{attribute 'analysis' := '-33'}
+METHOD ValueWriter : HRESULT
+VAR_IN_OUT
+	aBuffer	: ARRAY [*] OF BYTE;
+END_VAR
+VAR_IN_OUT
+	stState	: ST_WriterInternalState;
+END_VAR
+VAR_INPUT
+	anyIn	: ANY;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[]]></ST>
+      </Implementation>
+    </Method>
   </POU>
 </TcPlcObject>
