@@ -19,7 +19,8 @@ END_VAR
 
 {warning 'TODO: Field codecs for FB_CodedOutputStream'}
 VAR
-//     fbFieldCodecInt32       : FB_FieldCodecInt32;
+//     fbFieldCodecInt32           : FB_FieldCodecInt32;
+    fbFieldCodecUInt32          : FB_FieldCodecUInt32;
 //     fbFieldCodecInt64       : FB_FieldCodecInt64;
 //     fbFieldCodecSInt32      : FB_FieldCodecSInt32;
 //     fbFieldCodecSInt64      : FB_FieldCodecSInt64;
@@ -475,6 +476,21 @@ END_VAR
       <Implementation>
         <ST><![CDATA[
 WriteLength := F_WriteLength(aBuffer, stState, nLength);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="WriteRepeatedFieldUInt32" Id="{7d0ba148-7c14-4624-856c-284819f70ded}">
+      <Declaration><![CDATA[METHOD WriteRepeatedFieldUInt32 : HRESULT
+VAR_INPUT CONSTANT
+    anyArray        : T_Any;
+    anyFirstElem    : T_Any; 
+    nLength         : UDINT;
+    nTag            : UDINT;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[
+
+WriteRepeatedFieldUInt32 := F_WriteRepeatedField(aBuffer, stState, anyArray, anyFirstElem, nLength, nTag, THIS^.fbFieldCodecUInt32);]]></ST>
       </Implementation>
     </Method>
     <Method Name="WriteSFixed32" Id="{c5db7557-6b1a-4521-ab52-97e9e0d0670f}">

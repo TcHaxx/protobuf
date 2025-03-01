@@ -1,0 +1,23 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1">
+  <POU Name="F_ComputeRawVarint32Size" Id="{57596d0e-64a9-4d90-9368-4e0606fc753f}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION F_ComputeRawVarint32Size : UDINT
+VAR_INPUT
+    nValue : UDINT;
+END_VAR
+VAR
+    i       : UDINT;
+END_VAR]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[
+FOR i := 1 TO 4 DO    
+    IF (nValue AND SHL(16#FFFFFFFF, 7 * i)) = 0 THEN
+        F_ComputeRawVarint32Size := i;
+        RETURN;
+    END_IF
+END_FOR
+
+F_ComputeRawVarint32Size := 5;]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>

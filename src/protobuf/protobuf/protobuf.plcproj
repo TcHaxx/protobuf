@@ -66,6 +66,9 @@
     <Compile Include="FieldCodec\FB_FieldCodecBool.TcPOU">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="FieldCodec\FB_FieldCodecUInt32.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="FieldCodec\FB_FieldCodecString.TcPOU">
       <SubType>Code</SubType>
     </Compile>
@@ -237,6 +240,12 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="PlcTaskUnitTests.TcTTO">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\ComputeSize\F_ComputeUInt32Size.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\ComputeSize\F_ComputeRawVarint32Size.TcPOU">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="POUs\FB_CodedInputStream.TcPOU">
@@ -471,6 +480,9 @@
     <Compile Include="__TESTs\RepeatedFieldTests\FB_ReadRepeatedFieldBoolTests.TcPOU">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="__TESTs\RepeatedFieldTests\FB_WriteRepeatedFieldUint32Tests.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="__TESTs\RepeatedFieldTests\PRG_RepeatedFieldTests.TcPOU">
       <SubType>Code</SubType>
     </Compile>
@@ -551,6 +563,7 @@
     <Folder Include="FieldCodec" />
     <Folder Include="ParsingPrimitivesMessages" />
     <Folder Include="ParsingPrimitivesMessages\POUs" />
+    <Folder Include="POUs\ComputeSize" />
     <Folder Include="RepeatedField" />
     <Folder Include="POUs" />
     <Folder Include="WireFormat" />

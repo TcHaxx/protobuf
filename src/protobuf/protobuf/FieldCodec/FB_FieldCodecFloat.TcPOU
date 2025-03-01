@@ -13,6 +13,21 @@ END_VAR
     <Implementation>
       <ST><![CDATA[]]></ST>
     </Implementation>
+    <Method Name="CalculatePackedDataSize" Id="{b1448257-0eb4-4d38-9454-f8efab3d64b3}">
+      <Declaration><![CDATA[{warning 'TODO: Implement CalculatePackedDataSize'}
+{attribute 'analysis' := '-33'}
+METHOD CalculatePackedDataSize : HRESULT
+VAR_INPUT CONSTANT
+	anyFirstElem	: T_Any;
+	nLength	        : UDINT;        // items to write
+END_VAR
+VAR_OUTPUT
+    nPackedDataSize : UDINT;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[]]></ST>
+      </Implementation>
+    </Method>
     <Method Name="IsPackedRepeatedField" Id="{67837a61-ee94-486b-b084-c1e5db16fd13}">
       <Declaration><![CDATA[METHOD IsPackedRepeatedField : BOOL
 VAR_INPUT
@@ -52,7 +67,7 @@ VAR_IN_OUT
 	stState	: ST_WriterInternalState;
 END_VAR
 VAR_INPUT
-	anyIn	: ANY;
+    anyIn : T_ANY;
 END_VAR
 ]]></Declaration>
       <Implementation>

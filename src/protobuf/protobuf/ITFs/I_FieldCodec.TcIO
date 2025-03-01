@@ -3,6 +3,16 @@
   <Itf Name="I_FieldCodec" Id="{efc0c207-4188-492e-bbf4-676d0a4c0d3b}">
     <Declaration><![CDATA[INTERFACE I_FieldCodec EXTENDS I_ValueReader, I_ValueWriter
 ]]></Declaration>
+    <Method Name="CalculatePackedDataSize" Id="{92c3e01b-391d-449c-b60a-083bcf2cfd51}">
+      <Declaration><![CDATA[METHOD CalculatePackedDataSize : HRESULT
+VAR_INPUT CONSTANT
+    anyFirstElem    : T_Any;
+    nLength         : UDINT;    // items to write
+END_VAR
+VAR_OUTPUT
+    nPackedDataSize : UDINT;
+END_VAR]]></Declaration>
+    </Method>
     <Method Name="IsPackedRepeatedField" Id="{d897caca-16d3-4594-8894-ca03ec47971f}">
       <Declaration><![CDATA[METHOD IsPackedRepeatedField : BOOL
 VAR_INPUT
