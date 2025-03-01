@@ -9,6 +9,14 @@ VAR
     stState : ST_WriterInternalState;
 END_VAR
 
+VAR CONSTANT
+    cLittleEndian64Size : UDINT := 8;
+    cLittleEndian32Size : UDINT := 4;
+    cDoubleSize         : UDINT := cLittleEndian64Size;
+    cFloatSize          : UDINT := cLittleEndian32Size;
+    cBoolSize           : UDINT := 1;
+END_VAR
+
 {warning 'TODO: Field codecs for FB_CodedOutputStream'}
 VAR
 //     fbFieldCodecInt32       : FB_FieldCodecInt32;
@@ -26,6 +34,260 @@ END_VAR]]></Declaration>
     <Implementation>
       <ST><![CDATA[]]></ST>
     </Implementation>
+    <Folder Name="ComputeSize" Id="{4e9f7ede-e7b6-4a62-9929-7082611795f0}" />
+    <Method Name="ComputeBoolSize" Id="{66234014-812e-4459-b620-7c2c0ee16b44}" FolderPath="ComputeSize\">
+      <Declaration><![CDATA[METHOD ComputeBoolSize : UDINT
+VAR_INPUT
+    {attribute 'analysis' := '-33' }
+    bValue : BOOL;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[ComputeBoolSize := THIS^.cBoolSize;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="ComputeBytesSize" Id="{6f77766b-0838-4de7-843a-2e9d1d0fc330}" FolderPath="ComputeSize\">
+      <Declaration><![CDATA[METHOD ComputeBytesSize : UDINT
+VAR_IN_OUT CONSTANT
+    aBytes  : ARRAY [*] OF BYTE;
+END_VAR
+VAR 
+    tAnyBytes   : T_AnyBytes;
+    nLength     : UDINT;  
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[
+tAnyBytes := F_ToAnyBytes(aBytes);
+nLength := TO_UDINT(tAnyBytes.diSize);
+ComputeBytesSize := ComputeLengthSize(nLength) + nLength;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="ComputeDoubleSize" Id="{6a60acb1-dcc0-4224-baf0-82ca2c1b10b6}" FolderPath="ComputeSize\">
+      <Declaration><![CDATA[METHOD ComputeDoubleSize : UDINT
+VAR_INPUT
+    {attribute 'analysis' := '-33' }
+    fValue : LREAL;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[ComputeDoubleSize := THIS^.cDoubleSize;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="ComputeEnumSize" Id="{5aea663c-620e-47b6-900e-1193542c28b4}" FolderPath="ComputeSize\">
+      <Declaration><![CDATA[METHOD ComputeEnumSize : UDINT
+VAR_INPUT
+    nValue  : DINT;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[ComputeEnumSize := ComputeInt32Size(nValue);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="ComputeFixed32Size" Id="{64a73994-48e6-47cd-bb3a-f8ff2e63385a}" FolderPath="ComputeSize\">
+      <Declaration><![CDATA[METHOD ComputeFixed32Size : UDINT
+VAR_INPUT
+    {attribute 'analysis' := '-33' }
+    nValue : UDINT;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[ComputeFixed32Size := THIS^.cLittleEndian32Size;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="ComputeFixed64Size" Id="{aea936cc-6cfb-468f-9be6-f9bf18197ece}" FolderPath="ComputeSize\">
+      <Declaration><![CDATA[METHOD ComputeFixed64Size : UDINT
+VAR_INPUT
+    {attribute 'analysis' := '-33' }
+    nValue : ULINT;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[ComputeFixed64Size := THIS^.cLittleEndian64Size;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="ComputeFloatSize" Id="{6f0fa854-fcdf-4032-a1f2-76337d2bd1f5}" FolderPath="ComputeSize\">
+      <Declaration><![CDATA[METHOD ComputeFloatSize : UDINT
+VAR_INPUT
+    {attribute 'analysis' := '-33' }
+    fValue : REAL;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[ComputeFloatSize := THIS^.cFloatSize;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="ComputeInt32Size" Id="{fda5e797-60d1-43a2-a765-b8eac6793d34}" FolderPath="ComputeSize\">
+      <Declaration><![CDATA[METHOD ComputeInt32Size : UDINT
+VAR_INPUT
+    nValue  : DINT;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[
+IF nValue >= 0 THEN
+    ComputeInt32Size := ComputeRawVarint32Size(nValue);
+ELSE
+    // Must sign-extend.
+    ComputeInt32Size := 10;    
+END_IF]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="ComputeInt64Size" Id="{28ae16c9-fe3f-45fb-9524-bac9c6d4025c}" FolderPath="ComputeSize\">
+      <Declaration><![CDATA[METHOD ComputeInt64Size : UDINT
+VAR_INPUT
+    nValue : LINT;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[
+ComputeInt64Size := ComputeRawVarint64Size(TO_ULINT(nValue));]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="ComputeLengthSize" Id="{8bbccdef-f864-46b6-ac14-6b2ccf7c6347}" FolderPath="ComputeSize\">
+      <Declaration><![CDATA[METHOD ComputeLengthSize : UDINT
+VAR_INPUT
+    nLength : UDINT;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[
+ComputeLengthSize := ComputeRawVarint32Size(nLength);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="ComputeRawVarint32Size" Id="{4efa50f2-0412-414c-befb-6b62475400c8}" FolderPath="ComputeSize\">
+      <Declaration><![CDATA[METHOD ComputeRawVarint32Size : UDINT
+VAR_INPUT
+    nValue : UDINT;
+END_VAR
+VAR
+    i       : UDINT;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[
+FOR i := 1 TO 4 DO    
+    IF (nValue AND SHL(16#FFFFFFFF, 7 * i)) = 0 THEN
+        ComputeRawVarint32Size := i;
+        RETURN;
+    END_IF
+END_FOR
+
+ComputeRawVarint32Size := 5;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="ComputeRawVarint64Size" Id="{9bbd7cc3-d272-4d2a-b3fa-18b2cacaa1cb}" FolderPath="ComputeSize\">
+      <Declaration><![CDATA[METHOD ComputeRawVarint64Size : UDINT
+VAR_INPUT
+    nValue  : ULINT;
+END_VAR
+
+VAR
+    i       : UDINT;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[
+FOR i := 1 TO 9 DO    
+    IF (nValue AND SHL(16#FFFFFFFFFFFFFFFF, 7 * i)) = 0 THEN
+        ComputeRawVarint64Size := i;
+        RETURN;
+    END_IF
+END_FOR
+
+ComputeRawVarint64Size := 10;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="ComputeSFixed32Size" Id="{b32719bd-ea62-4fc5-a859-acbcb1c98bb0}" FolderPath="ComputeSize\">
+      <Declaration><![CDATA[METHOD ComputeSFixed32Size : UDINT
+VAR_INPUT
+    {attribute 'analysis' := '-33' }
+    nValue  : DINT;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[
+ComputeSFixed32Size := THIS^.cLittleEndian32Size;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="ComputeSFixed64Size" Id="{de3e3c5f-a31b-46fa-a19e-d07f07e70d01}" FolderPath="ComputeSize\">
+      <Declaration><![CDATA[METHOD ComputeSFixed64Size : UDINT
+VAR_INPUT
+    {attribute 'analysis' := '-33' }
+    nValue  : LINT;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[
+ComputeSFixed64Size := THIS^.cLittleEndian64Size;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="ComputeSInt32Size" Id="{66828ab1-52b6-4089-9c7d-72d89174e3ad}" FolderPath="ComputeSize\">
+      <Declaration><![CDATA[METHOD ComputeSInt32Size : UDINT
+VAR_INPUT
+    nValue  : DINT;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[
+ComputeSInt32Size := ComputeRawVarint32Size(nValue:= F_EncodeZigZag32(nValue));]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="ComputeSInt64Size" Id="{9a98ee23-c764-4e28-b09c-367250474a5b}" FolderPath="ComputeSize\">
+      <Declaration><![CDATA[METHOD ComputeSInt64Size : UDINT
+VAR_INPUT
+    nValue  : LINT;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[
+ComputeSInt64Size := ComputeRawVarint64Size(nValue:= F_EncodeZigZag64(nValue));]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="ComputeStringSize" Id="{ade6f284-2c1f-4eab-ab9c-fc9bb081492d}" FolderPath="ComputeSize\">
+      <Declaration><![CDATA[METHOD ComputeStringSize : UDINT
+VAR_INPUT
+    anyString   : ANY_STRING;
+END_VAR
+VAR 
+    nStrLen : UDINT;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[
+nStrLen := LEN2(pString:= anyString.pValue);
+ComputeStringSize := ComputeLengthSize(nStrLen) + nStrLen;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="ComputeTagSize" Id="{3c3d67d7-62cc-4ff0-b8a8-6966840a5e64}" FolderPath="ComputeSize\">
+      <Declaration><![CDATA[METHOD ComputeTagSize : UDINT
+VAR_INPUT
+    nFieldnumber    : UDINT;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[
+ComputeTagSize := ComputeRawVarint32Size(nValue:= F_MakeTag(nFieldNumber, 0));]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="ComputeUInt32Size" Id="{ec332575-383f-4c3f-a21e-57fe19d907a9}" FolderPath="ComputeSize\">
+      <Declaration><![CDATA[METHOD ComputeUInt32Size : UDINT
+VAR_INPUT
+    nValue  : UDINT;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[
+ComputeUInt32Size := ComputeRawVarint32Size(nValue);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="ComputeUInt64Size" Id="{37b2db93-7342-4580-9613-5592d6a408f2}" FolderPath="ComputeSize\">
+      <Declaration><![CDATA[METHOD ComputeUInt64Size : UDINT
+VAR_INPUT
+    nValue : ULINT;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[
+ComputeUInt64Size := ComputeRawVarint64Size(nValue);]]></ST>
+      </Implementation>
+    </Method>
     <Method Name="FromBuffer" Id="{c2539802-bec0-4365-8257-fc8ef3ad282b}">
       <Declaration><![CDATA[METHOD PUBLIC FromBuffer : HRESULT
 VAR
