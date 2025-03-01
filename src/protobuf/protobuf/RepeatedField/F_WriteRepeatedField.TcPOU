@@ -1,0 +1,48 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1">
+  <POU Name="F_WriteRepeatedField" Id="{5403c111-7c0c-4ce8-8ebe-b563f0195a9e}" SpecialFunc="None">
+    <Declaration><![CDATA[{warning 'TODO: F_WriteRepeatedField - Calculate size, write size and actual data; write tag?'}
+{attribute 'analysis' := '-33'}
+FUNCTION INTERNAL F_WriteRepeatedField : HRESULT
+VAR_IN_OUT CONSTANT
+    aBuffer         : ARRAY [*] OF BYTE;
+END_VAR
+VAR_IN_OUT
+    stState         : ST_WriterInternalState;
+END_VAR
+VAR_INPUT CONSTANT
+    anyArray        : T_Any;
+    anyFirstElem    : T_Any;
+    nLength         : UDINT;    // items to writes
+END_VAR
+
+VAR
+    nArrayLength: UDINT;
+    nByteLength : UDINT;
+    nTypeSize   : UDINT;
+    nTotalBytesToWrite : UDINT;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[
+IF anyArray.TypeClass <> __SYSTEM.TYPE_CLASS.TYPE_ARRAY THEN
+    F_WriteRepeatedField := stState.eWriterErrorCode := E_WriterErrorCode.InvalidDataType;
+    stState.bError := TRUE;
+    RETURN;
+END_IF
+
+nTypeSize := TO_UDINT(anyFirstElem.diSize);
+
+IF nTypeSize = 0 THEN
+    F_WriteRepeatedField := stState.eWriterErrorCode := E_WriterErrorCode.InvalidDataType;
+    stState.bError := TRUE;
+    RETURN;
+END_IF
+
+nByteLength := TO_UDINT(anyArray.diSize);
+nArrayLength := nByteLength / nTypeSize;
+
+// TODO]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>

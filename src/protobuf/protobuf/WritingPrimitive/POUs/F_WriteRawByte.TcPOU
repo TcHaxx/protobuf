@@ -1,0 +1,31 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1">
+  <POU Name="F_WriteRawByte" Id="{b076660d-c3ec-4678-82dc-e1aecd7132d4}" SpecialFunc="None">
+    <Declaration><![CDATA[// Writes out part of an array of bytes.
+FUNCTION F_WriteRawByte : HRESULT
+VAR_IN_OUT
+    aBuffer : ARRAY [*] OF BYTE;
+    stState : ST_WriterInternalState;
+END_VAR
+VAR_INPUT CONSTANT
+    nValue  : BYTE;
+END_VAR
+
+VAR CONSTANT
+    cLength : UDINT := SIZEOF(nValue);
+END_VAR]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[
+F_WriteRawByte := S_OK;
+
+IF cLength > stState.nBufferSize - stState.nBufferPos THEN
+    F_WriteRawByte := stState.eWriterErrorCode := E_WriterErrorCode.TruncatedMessage;
+    stState.bError := TRUE;
+    RETURN;
+END_IF
+
+aBuffer[stState.nBufferPos] := nValue;
+stState.nBufferPos := stState.nBufferPos + cLength;]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>

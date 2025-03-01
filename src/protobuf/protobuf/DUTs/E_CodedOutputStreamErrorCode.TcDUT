@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1">
+  <DUT Name="E_CodedOutputStreamErrorCode" Id="{bd305757-6b63-41fa-8c48-770e142d5752}">
+    <Declaration><![CDATA[{attribute 'qualified_only'}
+{attribute 'strict'}
+{attribute 'to_string'}
+TYPE E_CodedOutputStreamErrorCode :
+(
+	NoError := S_OK,            // No Error.
+    BUFFER_LOWER_BOUND := -1,   // Invalid lower bound for buffer.
+    BUFFER_SIZE := -2           // Invalid size of buffer (0 >= size > Param.cMaxProtobufRawBuffer).
+) DINT;
+END_TYPE
+]]></Declaration>
+  </DUT>
+</TcPlcObject>

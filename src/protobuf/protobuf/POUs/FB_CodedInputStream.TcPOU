@@ -20,7 +20,7 @@ VAR
     fbFieldCodecDouble      : FB_FieldCodecDouble;
     fbFieldCodecString      : FB_FieldCodecString;
     fbFieldCodecBytes       : FB_FieldCodecBytes;
-    fbFieldCodecBool       : FB_FieldCodecBool;
+    fbFieldCodecBool        : FB_FieldCodecBool;
 END_VAR]]></Declaration>
     <Implementation>
       <ST><![CDATA[]]></ST>

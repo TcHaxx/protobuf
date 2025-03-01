@@ -1,17 +1,306 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <TcPlcObject Version="1.1.0.1">
   <POU Name="FB_CodedOutputStream" Id="{18246595-6bbb-43ef-aa75-24f9e22ace2b}" SpecialFunc="None">
-    <Declaration><![CDATA[{warning 'TODO: Implementation'}
-FUNCTION_BLOCK PUBLIC FINAL FB_CodedOutputStream
-VAR_INPUT
-END_VAR
-VAR_OUTPUT
+    <Declaration><![CDATA[FUNCTION_BLOCK PUBLIC FINAL FB_CodedOutputStream
+VAR_IN_OUT
+    aBuffer : ARRAY [*] OF BYTE;
 END_VAR
 VAR
+    stState : ST_WriterInternalState;
 END_VAR
-]]></Declaration>
+
+{warning 'TODO: Field codecs for FB_CodedOutputStream'}
+VAR
+//     fbFieldCodecInt32       : FB_FieldCodecInt32;
+//     fbFieldCodecInt64       : FB_FieldCodecInt64;
+//     fbFieldCodecSInt32      : FB_FieldCodecSInt32;
+//     fbFieldCodecSInt64      : FB_FieldCodecSInt64;
+//     fbFieldCodecFixed32     : FB_FieldCodecFixed32;
+//     fbFieldCodecFixed64     : FB_FieldCodecFixed64;    
+//     fbFieldCodecFloat       : FB_FieldCodecFloat;
+//     fbFieldCodecDouble      : FB_FieldCodecDouble;
+//     fbFieldCodecString      : FB_FieldCodecString;
+//     fbFieldCodecBytes       : FB_FieldCodecBytes;
+//     fbFieldCodecBool        : FB_FieldCodecBool;
+END_VAR]]></Declaration>
     <Implementation>
       <ST><![CDATA[]]></ST>
     </Implementation>
+    <Method Name="FromBuffer" Id="{c2539802-bec0-4365-8257-fc8ef3ad282b}">
+      <Declaration><![CDATA[METHOD PUBLIC FromBuffer : HRESULT
+VAR
+    hr : HRESULT;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[
+Reset();
+
+hr := ValidateBuffer(aBuffer);
+IF FAILED(hr) THEN
+    FromBuffer := hr;
+    RETURN;
+END_IF
+
+Init(aBuffer);
+]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Init" Id="{a9471daf-b84d-4c35-956f-348eed5a15a5}">
+      <Declaration><![CDATA[METHOD PRIVATE Init
+VAR_IN_OUT CONSTANT
+    aBuffer : ARRAY [*] OF BYTE;
+END_VAR
+VAR
+    nSize : DINT;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[
+stState.nBufferPos := TO_UDINT(LOWER_BOUND(aBuffer, 1));
+
+nSize := UPPER_BOUND(aBuffer, 1) - LOWER_BOUND(aBuffer, 1);
+stState.nBufferSize := TO_UDINT(nSize);
+]]></ST>
+      </Implementation>
+    </Method>
+    <Property Name="nSpaceLeft" Id="{81be7da9-2e5d-48e4-88e3-0f185cdb7127}">
+      <Declaration><![CDATA[PROPERTY nSpaceLeft : UDINT]]></Declaration>
+      <Get Name="Get" Id="{060dd1c8-d1ad-424e-8a91-006db807548b}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[nSpaceLeft := stState.nBufferSize - stState.nBufferPos;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Method Name="Reset" Id="{7023c71a-5838-4abb-a6b6-612b36e632a1}">
+      <Declaration><![CDATA[METHOD PRIVATE Reset
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[
+stState.bError := FALSE;
+stState.eWriterErrorCode := S_OK;
+stState.nBufferPos := 0;
+stState.nBufferSize := 0;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="ValidateBuffer" Id="{64be83e4-6577-460a-b1a5-dcd5db2f4e92}">
+      <Declaration><![CDATA[METHOD PRIVATE ValidateBuffer : HRESULT
+VAR_IN_OUT CONSTANT
+    aBuffer : ARRAY[*] OF BYTE;
+END_VAR
+VAR
+    nSize : DINT;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF LOWER_BOUND(aBuffer, 1) < 0 THEN
+    ValidateBuffer := E_CodedOutputStreamErrorCode.BUFFER_LOWER_BOUND;
+    RETURN;
+END_IF
+
+nSize := UPPER_BOUND(aBuffer, 1) - LOWER_BOUND(aBuffer, 1);
+IF nSize = 0 OR TO_UDINT(nSize) >  Param_PB.cMaxProtobufRawBuffer THEN
+    ValidateBuffer := E_CodedOutputStreamErrorCode.BUFFER_SIZE;
+    RETURN;
+END_IF]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="WriteBool" Id="{959509b8-b6ba-41cc-a129-8f0ea33bc2ff}">
+      <Declaration><![CDATA[METHOD WriteBool : HRESULT
+VAR_INPUT
+    bValue : BOOL;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[
+WriteBool := F_WriteRawByte(aBuffer, stState, TO_BYTE(bValue));]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="WriteBytes" Id="{02b8f0af-661f-4944-85ff-f76fd4cec3ea}">
+      <Declaration><![CDATA[METHOD WriteBytes : HRESULT
+VAR_IN_OUT CONSTANT
+    aBytes  : ARRAY [*] OF BYTE;
+END_VAR
+VAR_INPUT
+    nLength : UDINT;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[
+WriteBytes := F_WriteBytes(aBuffer, stState, aBytes, nLength);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="WriteDouble" Id="{3b86ec3f-2cad-45c5-9a6f-d56de79d1415}">
+      <Declaration><![CDATA[METHOD WriteDouble : HRESULT
+VAR_INPUT
+    fValue : LREAL;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[WriteDouble := F_WriteDouble(aBuffer, stState, fValue);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="WriteEnum" Id="{4fb9d4ab-4be6-42ee-a3bb-3f86dbf2061c}">
+      <Declaration><![CDATA[METHOD WriteEnum : HRESULT
+VAR_INPUT
+    nValue : DINT;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[
+WriteEnum := F_WriteEnum(aBuffer, stState, nValue);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="WriteFixed32" Id="{75c23fcd-723d-4cbc-9e77-8e2301b57ac1}">
+      <Declaration><![CDATA[METHOD WriteFixed32 : HRESULT
+VAR_INPUT
+    nValue : UDINT;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[
+WriteFixed32 := F_WriteFixed32(aBuffer, stState, nValue);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="WriteFixed64" Id="{ac5b07e1-2d27-4aea-84db-e2a22552a9fb}">
+      <Declaration><![CDATA[METHOD WriteFixed64 : HRESULT
+VAR_INPUT
+    nValue : ULINT;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[
+WriteFixed64 := F_WriteFixed64(aBuffer, stState, nValue);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="WriteFloat" Id="{ec5060f6-e490-4798-a185-1d013ad3518c}">
+      <Declaration><![CDATA[METHOD WriteFloat : HRESULT
+VAR_INPUT
+    fValue : REAL;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[WriteFloat := F_WriteFloat(aBuffer, stState, fValue);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="WriteInt32" Id="{cb424f8c-2286-402b-adff-21634a582503}">
+      <Declaration><![CDATA[METHOD WriteInt32 : HRESULT
+VAR_INPUT
+    nValue : DINT;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[WriteInt32 := F_WriteInt32(aBuffer, stState, nValue);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="WriteInt64" Id="{470d349f-a883-451f-86ff-5add09c6bbc1}">
+      <Declaration><![CDATA[METHOD WriteInt64 : HRESULT
+VAR_INPUT
+    nValue : LINT;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[WriteInt64 := F_WriteInt64(aBuffer, stState, nValue);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="WriteLength" Id="{aefabf76-233a-48e5-bd46-c3bd214198fb}">
+      <Declaration><![CDATA[METHOD WriteLength : HRESULT
+VAR_INPUT
+    nLength : UDINT;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[
+WriteLength := F_WriteLength(aBuffer, stState, nLength);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="WriteSFixed32" Id="{c5db7557-6b1a-4521-ab52-97e9e0d0670f}">
+      <Declaration><![CDATA[METHOD WriteSFixed32 : HRESULT
+VAR_INPUT
+    nValue : DINT;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[
+WriteSFixed32 := F_WriteSFixed32(aBuffer, stState, nValue);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="WriteSFixed64" Id="{1d1909aa-43d1-452a-93e7-9bb5567d60cd}">
+      <Declaration><![CDATA[METHOD WriteSFixed64 : HRESULT
+VAR_INPUT
+    nValue : LINT;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[
+WriteSFixed64 := F_WriteSFixed64(aBuffer, stState, nValue);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="WriteSint32" Id="{9b3c1ae8-a598-4a54-9dcf-fc39ef583879}">
+      <Declaration><![CDATA[METHOD WriteSint32 : HRESULT
+VAR_INPUT
+    nValue : DINT;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[WriteSint32 := F_WriteSInt32(aBuffer, stState, nValue);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="WriteSint64" Id="{b35dcafc-ac19-4012-a560-388617eee3d1}">
+      <Declaration><![CDATA[METHOD WriteSint64 : HRESULT
+VAR_INPUT
+    nValue : LINT;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[WriteSint64 := F_WriteSInt64(aBuffer, stState, nValue);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="WriteString" Id="{e0704046-198b-43d6-993d-44c5595830da}">
+      <Declaration><![CDATA[METHOD WriteString : HRESULT
+VAR_IN_OUT CONSTANT
+    sStringToWrite          : T_ProtobufMaxString;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[
+WriteString := F_WriteString(aBuffer, stState, sStringToWrite);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="WriteTag" Id="{7d0d5de0-234e-4fd9-b783-7b62ad087c0a}">
+      <Declaration><![CDATA[METHOD WriteTag : HRESULT
+VAR_INPUT
+    nFieldNumber    : UDINT;
+    eWireType       : E_WireType;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[
+WriteTag := F_WriteTag(aBuffer, stState, nFieldNumber, eWireType);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="WriteUint32" Id="{5d55f154-a20b-441b-9140-093b322d95f5}">
+      <Declaration><![CDATA[METHOD WriteUint32 : HRESULT
+VAR_INPUT
+    nValue : UDINT;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[
+
+WriteUint32 := F_WriteUInt32(aBuffer, stState, nValue);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="WriteUint64" Id="{340b2f1b-3da7-48bf-82ca-67d4a8315258}">
+      <Declaration><![CDATA[METHOD WriteUint64 : HRESULT
+VAR_INPUT
+    nValue : ULINT;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[WriteUint64 := F_WriteUInt64(aBuffer, stState, nValue);]]></ST>
+      </Implementation>
+    </Method>
   </POU>
 </TcPlcObject>
