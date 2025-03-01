@@ -60,6 +60,9 @@
     <Compile Include="FieldCodec\FB_FieldCodecDouble.TcPOU">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="FieldCodec\FB_FieldCodecBool.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="FieldCodec\FB_FieldCodecString.TcPOU">
       <SubType>Code</SubType>
     </Compile>
@@ -446,6 +449,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="__TESTs\RepeatedFieldTests\FB_ReadRepeatedFieldFixed32Tests.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="__TESTs\RepeatedFieldTests\FB_ReadRepeatedFieldBoolTests.TcPOU">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="__TESTs\RepeatedFieldTests\PRG_RepeatedFieldTests.TcPOU">

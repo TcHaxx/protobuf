@@ -1,0 +1,45 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1">
+  <POU Name="FB_FieldCodecBool" Id="{3214d183-fb88-47d2-976d-5db1da0bbb6f}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK FB_FieldCodecBool IMPLEMENTS I_FieldCodec
+VAR_INPUT
+END_VAR
+VAR_OUTPUT
+END_VAR
+VAR
+    bValue : BOOL;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[]]></ST>
+    </Implementation>
+    <Method Name="IsPackedRepeatedField" Id="{126ed474-6ba0-475d-a48c-511e198d9b17}">
+      <Declaration><![CDATA[METHOD IsPackedRepeatedField : BOOL
+VAR_INPUT
+	nTag	: UDINT;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IsPackedRepeatedField := F_IsPackedRepeatedField(nTag);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="ValueReader" Id="{6e4d75e5-f6e6-42d1-8e60-72d496f7021f}">
+      <Declaration><![CDATA[
+METHOD ValueReader : HRESULT
+VAR_IN_OUT CONSTANT
+	aBuffer	: ARRAY [*] OF BYTE;
+END_VAR
+VAR_IN_OUT
+	stState	: ST_ParserInternalState;
+END_VAR
+VAR_OUTPUT
+	anyOut	: T_Any;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[
+ValueReader := F_ParseRawVarint32(aBuffer, stState, bValue);
+anyOut := F_ToAnyType(anyArg:= bValue);]]></ST>
+      </Implementation>
+    </Method>
+  </POU>
+</TcPlcObject>

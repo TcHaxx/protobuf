@@ -20,6 +20,7 @@ VAR
     fbFieldCodecDouble      : FB_FieldCodecDouble;
     fbFieldCodecString      : FB_FieldCodecString;
     fbFieldCodecBytes       : FB_FieldCodecBytes;
+    fbFieldCodecBool       : FB_FieldCodecBool;
 END_VAR]]></Declaration>
     <Implementation>
       <ST><![CDATA[]]></ST>
@@ -92,6 +93,20 @@ END_VAR
 PeekTag := F_PeekTag(aBuffer:= THIS^.aBuffer, THIS^.stState, nTag=>nTag);]]></ST>
       </Implementation>
     </Method>
+    <Method Name="ReadBool" Id="{2476259d-ff18-4cf8-8d14-831545e85e8c}">
+      <Declaration><![CDATA[METHOD ReadBool : HRESULT
+VAR_OUTPUT
+    bValue : BOOL;
+END_VAR
+VAR
+    nTmp : BYTE;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[
+ReadBool := F_ParseRawVarint32(aBuffer, stState, nTmp);
+bValue := nTmp <> 0;]]></ST>
+      </Implementation>
+    </Method>
     <Method Name="ReadBytes" Id="{c3a41bee-7273-4f77-ab25-cf5e354ee01c}">
       <Declaration><![CDATA[METHOD ReadBytes : HRESULT
 VAR_IN_OUT
@@ -159,6 +174,21 @@ END_VAR]]></Declaration>
         <ST><![CDATA[
 ReadInt64 := F_ParseRawVarint64(aBuffer, stState, nTmp);
 nValue := TO_LINT(nTmp);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="ReadRepeatedFieldBool" Id="{75c50ea8-8826-409c-bb4e-2e1a78d69e13}">
+      <Declaration><![CDATA[METHOD ReadRepeatedFieldBool : HRESULT
+VAR_INPUT CONSTANT
+    anyArray        : T_Any;
+    anyFirstElem    : T_Any; 
+END_VAR
+
+VAR_IN_OUT   
+    nFieldIndex : UDINT; 
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[
+ReadRepeatedFieldBool := F_ReadRepeatedField(aBuffer, stState, anyArray, anyFirstElem, ipFieldCodec:= THIS^.fbFieldCodecBool, nFieldIndex); ]]></ST>
       </Implementation>
     </Method>
     <Method Name="ReadRepeatedFieldBytes" Id="{427f0425-be10-4f88-a51d-0a7461d5d457}">
