@@ -68,7 +68,7 @@ VAR CONSTANT
 END_VAR
 
 VAR CONSTANT
-    aValueZeroLen           : ARRAY[0..15] OF T_MAXSTRING;
+    aValueZeroLen           : ARRAY[0..15] OF T_MAXSTRING := [];
     aValue1                 : ARRAY[0..15] OF T_MAXSTRING := ['TestString0', 'TestString1', 'TestString2', 'TestString3'];
     aValue2                 : ARRAY[0..15] OF T_MAXSTRING := ['utf-8: a-z, A-Z, 0-9, äÄöÖüÜß🚀', '012345'];
 END_VAR
