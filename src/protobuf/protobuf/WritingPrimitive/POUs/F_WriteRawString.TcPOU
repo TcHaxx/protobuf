@@ -1,0 +1,41 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1">
+  <POU Name="F_WriteRawString" Id="{6e76feb0-8bc9-457c-a81a-c3ae6a77cf29}" SpecialFunc="None">
+    <Declaration><![CDATA[// Writes a string field value, without a tag, to the stream. The data is length-prefixed.
+FUNCTION F_WriteRawString : HRESULT
+VAR_IN_OUT
+    aBuffer : ARRAY [*] OF BYTE;
+    stState : ST_WriterInternalState;
+END_VAR
+VAR_IN_OUT CONSTANT
+    tAnyString  : T_AnyString;
+END_VAR
+VAR
+    nStrLength : UDINT;
+END_VAR]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[F_WriteRawString := S_OK;
+
+IF tAnyString.TypeClass <> __SYSTEM.TYPE_CLASS.TYPE_STRING THEN
+    F_WriteRawString := stState.eWriterErrorCode := E_WriterErrorCode.InvalidDataType;
+    stState.bError := TRUE;
+    RETURN;  
+END_IF
+
+UTF8Len(tAnyString.pValue, nSize=> nStrLength);
+F_WriteRawString := F_WriteRawVarint32(aBuffer, stState, nStrLength);
+IF FAILED(F_WriteRawString) THEN
+    RETURN;
+END_IF
+
+IF nStrLength > stState.nBufferSize - stState.nBufferPos THEN
+    F_WriteRawString := stState.eWriterErrorCode := E_WriterErrorCode.TruncatedMessage;
+    stState.bError := TRUE;
+    RETURN;  
+END_IF
+
+MEMCPY(destAddr:= ADR(aBuffer[stState.nBufferPos]), srcAddr:= tAnyString.pValue, n:=  nStrLength);
+stState.nBufferPos := stState.nBufferPos + nStrLength;]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>

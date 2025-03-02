@@ -1,20 +1,19 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <TcPlcObject Version="1.1.0.1">
-  <POU Name="FB_FieldCodecString" Id="{15d0b902-f3bf-497f-af92-b61f3894a3cd}" SpecialFunc="None">
-    <Declaration><![CDATA[FUNCTION_BLOCK FB_FieldCodecString IMPLEMENTS I_FieldCodec
+  <POU Name="FB_FieldCodecUInt64" Id="{5ba0711f-ebaa-4edb-91c7-be0d3c09365f}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK FB_FieldCodecUInt64 IMPLEMENTS I_FieldCodec
 VAR_INPUT
 END_VAR
 VAR_OUTPUT
 END_VAR
 VAR
-    sValue      : T_MAXSTRING;
-    tAnyString  : T_AnyString;
+    nValue : ULINT;
 END_VAR
 ]]></Declaration>
     <Implementation>
       <ST><![CDATA[]]></ST>
     </Implementation>
-    <Method Name="CalculatePackedDataSize" Id="{42c73b18-08c1-405a-b45d-edb5b8446815}">
+    <Method Name="CalculatePackedDataSize" Id="{f2ecccaf-ba10-4463-aa5f-4d335a019192}">
       <Declaration><![CDATA[{warning 'TODO: Implement CalculatePackedDataSize'}
 {attribute 'analysis' := '-33'}
 METHOD CalculatePackedDataSize : HRESULT
@@ -29,30 +28,17 @@ END_VAR]]></Declaration>
         <ST><![CDATA[]]></ST>
       </Implementation>
     </Method>
-    <Method Name="IsPackedRepeatedField" Id="{eabe9cc3-e78f-42f1-b498-34540e7e1164}">
+    <Method Name="IsPackedRepeatedField" Id="{d6789674-9631-49a0-be2a-53423994d02e}">
       <Declaration><![CDATA[METHOD IsPackedRepeatedField : BOOL
 VAR_INPUT
-    {attribute 'analysis' := '-33' } 
 	nTag	: UDINT;
 END_VAR
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[
-IsPackedRepeatedField := FALSE;]]></ST>
+        <ST><![CDATA[IsPackedRepeatedField := F_IsPackedRepeatedField(nTag);]]></ST>
       </Implementation>
     </Method>
-    <Method Name="SetAnyString" Id="{63850f38-d71f-4abc-b609-7a4032dbd758}">
-      <Declaration><![CDATA[// Needs to be called, if destination string is larger then T_MAXSTRING.
-METHOD INTERNAL SetAnyString
-VAR_INPUT
-    anyString : T_AnyString;
-END_VAR
-]]></Declaration>
-      <Implementation>
-        <ST><![CDATA[tAnyString := anyString;]]></ST>
-      </Implementation>
-    </Method>
-    <Method Name="ValueReader" Id="{0b25c717-69b6-4051-b2bf-19d82a7ef48c}">
+    <Method Name="ValueReader" Id="{913656d6-706a-424e-b1c5-2846f84f7f1b}">
       <Declaration><![CDATA[
 METHOD ValueReader : HRESULT
 VAR_IN_OUT CONSTANT
@@ -65,16 +51,12 @@ VAR_OUTPUT
 	anyOut	: T_Any;
 END_VAR]]></Declaration>
       <Implementation>
-        <ST><![CDATA[IF tAnyString.pValue <> NULL THEN
-    anyOut := tAnyString;
-ELSE
-    anyOut := F_ToAnyString(sValue);
-END_IF
-ValueReader := F_ReadString(aBuffer, stState, anyOut);
-]]></ST>
+        <ST><![CDATA[
+ValueReader := F_ParseRawVarint64(aBuffer, stState, nValue);
+anyOut := F_ToAnyType(anyArg:= nValue);]]></ST>
       </Implementation>
     </Method>
-    <Method Name="ValueWriter" Id="{abfdac70-fd08-4671-ada6-743506bccff6}">
+    <Method Name="ValueWriter" Id="{f7da272c-0468-4337-a640-77d2a8d5739b}">
       <Declaration><![CDATA[{warning 'Add method implementation '}
 {attribute 'analysis' := '-33'}
 METHOD ValueWriter : HRESULT
@@ -89,9 +71,7 @@ VAR_INPUT
 END_VAR
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[
-
-ValueWriter := F_WriteRawString(aBuffer, stState, anyIn);]]></ST>
+        <ST><![CDATA[]]></ST>
       </Implementation>
     </Method>
   </POU>

@@ -47,7 +47,7 @@
 						<Defines></Defines>
 					</Variant>
 				</ProjectVariant>
-				<Instance Id="#x08502000" TcSmClass="TComPlcObjDef" KeepUnrestoredLinks="2" TmcHash="{50C62A58-7847-6A13-6929-25D3004ECE53}" TmcPath="protobuf\protobuf.tmc">
+				<Instance Id="#x08502000" TcSmClass="TComPlcObjDef" KeepUnrestoredLinks="2" TmcHash="{E22A68A1-B8A1-F47E-39B2-D66A2B9DD3E4}" TmcPath="protobuf\protobuf.tmc">
 					<Name>protobuf Instance</Name>
 					<CLSID ClassFactory="TcPlc30">{08500001-0000-0000-F000-000000000064}</CLSID>
 					<Contexts>

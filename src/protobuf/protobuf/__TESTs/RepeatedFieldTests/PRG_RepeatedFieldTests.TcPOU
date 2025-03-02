@@ -12,6 +12,7 @@ PROGRAM INTERNAL PRG_RepeatedFieldTests
     fbReadRepeatedFieldBoolTests    : FB_ReadRepeatedFieldBoolTests;
     
     fbWriteRepeatedFieldUint32Tests : FB_WriteRepeatedFieldUint32Tests;
+    fbWriteRepeatedFieldStringTests : FB_WriteRepeatedFieldStringTests;
 {END_IF}]]></Declaration>
     <Implementation>
       <ST><![CDATA[]]></ST>

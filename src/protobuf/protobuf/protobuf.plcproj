@@ -66,6 +66,9 @@
     <Compile Include="FieldCodec\FB_FieldCodecBool.TcPOU">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="FieldCodec\FB_FieldCodecUInt64.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="FieldCodec\FB_FieldCodecUInt32.TcPOU">
       <SubType>Code</SubType>
     </Compile>
@@ -357,6 +360,10 @@
       <SubType>Code</SubType>
       <LinkAlways>true</LinkAlways>
     </Compile>
+    <Compile Include="WritingPrimitive\POUs\F_WriteRawString.TcPOU">
+      <SubType>Code</SubType>
+      <LinkAlways>true</LinkAlways>
+    </Compile>
     <Compile Include="WritingPrimitive\POUs\F_WriteUInt32.TcPOU">
       <SubType>Code</SubType>
       <LinkAlways>true</LinkAlways>
@@ -481,6 +488,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="__TESTs\RepeatedFieldTests\FB_WriteRepeatedFieldUint32Tests.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="__TESTs\RepeatedFieldTests\FB_WriteRepeatedFieldStringTests.TcPOU">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="__TESTs\RepeatedFieldTests\PRG_RepeatedFieldTests.TcPOU">

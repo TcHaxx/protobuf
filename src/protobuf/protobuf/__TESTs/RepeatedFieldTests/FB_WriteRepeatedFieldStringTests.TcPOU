@@ -1,0 +1,85 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1">
+  <POU Name="FB_WriteRepeatedFieldStringTests" Id="{45b40e85-89ca-415a-b44a-785b3ac9f2c9}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK INTERNAL FINAL FB_WriteRepeatedFieldStringTests EXTENDS FB_TestSuite
+VAR_INPUT
+END_VAR
+VAR_OUTPUT
+END_VAR
+VAR
+    fbFieldCodec : FB_FieldCodecString;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[ShouldWriteRepeatedFieldTheory();]]></ST>
+    </Implementation>
+    <Method Name="ShouldWriteRepeatedField" Id="{c7dbe434-faab-421d-b63e-e07f0abceeeb}">
+      <Declaration><![CDATA[METHOD PRIVATE ShouldWriteRepeatedField
+VAR_IN_OUT CONSTANT
+    aExpected   : ARRAY [*] OF BYTE;
+END_VAR
+VAR_INPUT
+    aValues     : ARRAY [0..15] OF T_MAXSTRING;
+    nLength     : UDINT;
+    nTag        : UDINT;
+    nBufferPosStart     : UDINT;
+    nExpectedBufferPos  : UDINT;
+    ipFieldCodec        : I_FieldCodec;
+END_VAR
+VAR_INST
+    stState : ST_WriterInternalState;
+END_VAR
+VAR
+    aActualBuffer       : ARRAY [0..255] OF BYTE;
+    hr                  : HRESULT;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[// Arrange
+stState.nBufferPos := nBufferPosStart;
+stState.nBufferSize := SIZEOF(aActualBuffer);
+
+// Act
+hr := F_WriteRepeatedField(aActualBuffer, stState, anyArray:= F_ToAnyType(aValues), anyFirstElem:= F_ToAnyType(aValues[0]), nLength, F_MakeTag(nTag, E_WireType.LengthDelimited), ipFieldCodec);
+
+// Assert
+AssertEquals_DINT(
+    Expected:= S_OK,
+    Actual:= hr,
+    Message:= 'Expected S_OK instead of error');
+    
+{warning disable C0041}
+AssertArrayEquals_BYTE(Expecteds:= aExpected, Actuals:= aActualBuffer, Message:= '');
+ 
+AssertEquals_UDINT(
+    Expected:= nExpectedBufferPos,
+    Actual:= stState.nBufferPos,
+    Message:= CONCAT('Expected stState.nBufferPos to equal ', TO_STRING(nExpectedBufferPos)));
+
+]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="ShouldWriteRepeatedFieldTheory" Id="{fb7e2e5f-4cfe-446b-ad5c-0c81271ae956}">
+      <Declaration><![CDATA[METHOD PRIVATE ShouldWriteRepeatedFieldTheory : REFERENCE TO FB_Test
+VAR CONSTANT
+    aExpectedBufferZeroLen  : ARRAY[0..255] OF BYTE := [16#0A, 16#00];
+    aExpectedBuffer1        : ARRAY[0..255] OF BYTE := [16#0A, 16#0B, 16#54, 16#65, 16#73, 16#74, 16#53, 16#74, 16#72, 16#69, 16#6E, 16#67, 16#30, 16#0A, 16#0B, 16#54, 16#65, 16#73, 16#74, 16#53, 16#74, 16#72, 16#69, 16#6E, 16#67, 16#31, 16#0A, 16#0B, 16#54, 16#65, 16#73, 16#74, 16#53, 16#74, 16#72, 16#69, 16#6E, 16#67, 16#32, 16#0A, 16#0B, 16#54, 16#65, 16#73, 16#74, 16#53, 16#74, 16#72, 16#69, 16#6E, 16#67, 16#33];
+    aExpectedBuffer2        : ARRAY[0..255] OF BYTE := [16#00, 16#0A, 16#28, 16#75, 16#74, 16#66, 16#2D, 16#38, 16#3A, 16#20, 16#61, 16#2D, 16#7A, 16#2C, 16#20, 16#41, 16#2D, 16#5A, 16#2C, 16#20, 16#30, 16#2D, 16#39, 16#2C, 16#20, 16#C3, 16#A4, 16#C3, 16#84, 16#C3, 16#B6, 16#C3, 16#96, 16#C3, 16#BC, 16#C3, 16#9C, 16#C3, 16#9F, 16#F0, 16#9F, 16#9A, 16#80, 16#0A, 16#06, 16#30, 16#31, 16#32, 16#33, 16#34, 16#35];
+END_VAR
+
+VAR CONSTANT
+    aValueZeroLen           : ARRAY[0..15] OF T_MAXSTRING;
+    aValue1                 : ARRAY[0..15] OF T_MAXSTRING := ['TestString0', 'TestString1', 'TestString2', 'TestString3'];
+    aValue2                 : ARRAY[0..15] OF T_MAXSTRING := ['utf-8: a-z, A-Z, 0-9, äÄöÖüÜß🚀', '012345'];
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST(__POUNAME());
+ShouldWriteRepeatedField(aExpected:= aExpectedBufferZeroLen, aValues:= aValueZeroLen, nLength:= 0, nTag:= 1, nBufferPosStart:= 0, nExpectedBufferPos:= 2, ipFieldCodec:= THIS^.fbFieldCodec);
+ShouldWriteRepeatedField(aExpected:= aExpectedBuffer1, aValues:= aValue1, nLength:= 4, nTag:= 1, nBufferPosStart:= 0, nExpectedBufferPos:= 52, ipFieldCodec:= THIS^.fbFieldCodec);
+ShouldWriteRepeatedField(aExpected:= aExpectedBuffer2, aValues:= aValue2, nLength:= 2, nTag:= 1, nBufferPosStart:= 1, nExpectedBufferPos:= 51, ipFieldCodec:= THIS^.fbFieldCodec);
+TEST_FINISHED_NAMED(__POUNAME());]]></ST>
+      </Implementation>
+    </Method>
+  </POU>
+</TcPlcObject>

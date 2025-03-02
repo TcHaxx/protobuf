@@ -11,25 +11,16 @@ VAR_IN_OUT CONSTANT
     sValue  : T_ProtobufMaxString;
 END_VAR
 VAR
-    nStrLength : UDINT;
+    tAnyString : T_AnyString;
 END_VAR]]></Declaration>
     <Implementation>
       <ST><![CDATA[F_WriteString := S_OK;
 
-UTF8Len(ADR(sValue), nSize=> nStrLength);
-F_WriteString := F_WriteRawVarint32(aBuffer, stState, nStrLength);
-IF FAILED(F_WriteString) THEN
-    RETURN;
-END_IF
+tAnyString.pValue := ADR(sValue[0]);
+tAnyString.TypeClass := __SYSTEM.TYPE_CLASS.TYPE_STRING;
+tAnyString.diSize := SIZEOF(T_ProtobufMaxString);
 
-IF nStrLength > stState.nBufferSize - stState.nBufferPos THEN
-    F_WriteString := stState.eWriterErrorCode := E_WriterErrorCode.TruncatedMessage;
-    stState.bError := TRUE;
-    RETURN;  
-END_IF
-
-MEMCPY(destAddr:= ADR(aBuffer[stState.nBufferPos]), srcAddr:= ADR(sValue), n:=  nStrLength);
-stState.nBufferPos := stState.nBufferPos + nStrLength;]]></ST>
+F_WriteString := F_WriteRawString(aBuffer, stState, tAnyString);]]></ST>
     </Implementation>
   </POU>
 </TcPlcObject>
