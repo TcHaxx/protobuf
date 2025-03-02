@@ -68,6 +68,7 @@
     </Compile>
     <Compile Include="FieldCodec\FB_FieldCodecUInt64.TcPOU">
       <SubType>Code</SubType>
+      <LinkAlways>true</LinkAlways>
     </Compile>
     <Compile Include="FieldCodec\FB_FieldCodecUInt32.TcPOU">
       <SubType>Code</SubType>
@@ -245,10 +246,16 @@
     <Compile Include="PlcTaskUnitTests.TcTTO">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="POUs\ComputeSize\F_ComputeRawVarint64Size.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="POUs\ComputeSize\F_ComputeUInt32Size.TcPOU">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="POUs\ComputeSize\F_ComputeRawVarint32Size.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\ComputeSize\F_ComputeUInt64Size.TcPOU">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="POUs\FB_CodedInputStream.TcPOU">

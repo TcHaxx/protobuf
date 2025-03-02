@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1">
+  <POU Name="F_ComputeUInt64Size" Id="{bb4b8e0f-6024-456c-8b41-ca1717cde303}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION F_ComputeUInt64Size : UDINT
+VAR_INPUT
+    nValue  : ULINT;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[F_ComputeUInt64Size := F_ComputeRawVarint64Size(nValue);]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>

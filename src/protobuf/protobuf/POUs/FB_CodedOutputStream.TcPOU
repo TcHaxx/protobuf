@@ -28,7 +28,7 @@ VAR
 //     fbFieldCodecFixed64     : FB_FieldCodecFixed64;    
 //     fbFieldCodecFloat       : FB_FieldCodecFloat;
 //     fbFieldCodecDouble      : FB_FieldCodecDouble;
-//     fbFieldCodecString      : FB_FieldCodecString;
+    fbFieldCodecString      : FB_FieldCodecString;
 //     fbFieldCodecBytes       : FB_FieldCodecBytes;
 //     fbFieldCodecBool        : FB_FieldCodecBool;
 END_VAR]]></Declaration>
@@ -126,7 +126,7 @@ END_VAR
       <Implementation>
         <ST><![CDATA[
 IF nValue >= 0 THEN
-    ComputeInt32Size := ComputeRawVarint32Size(nValue);
+    ComputeInt32Size := ComputeRawVarint32Size(TO_UDINT(nValue));
 ELSE
     // Must sign-extend.
     ComputeInt32Size := 10;    
@@ -265,28 +265,6 @@ END_VAR
       <Implementation>
         <ST><![CDATA[
 ComputeTagSize := ComputeRawVarint32Size(nValue:= F_MakeTag(nFieldNumber, 0));]]></ST>
-      </Implementation>
-    </Method>
-    <Method Name="ComputeUInt32Size" Id="{ec332575-383f-4c3f-a21e-57fe19d907a9}" FolderPath="ComputeSize\">
-      <Declaration><![CDATA[METHOD ComputeUInt32Size : UDINT
-VAR_INPUT
-    nValue  : UDINT;
-END_VAR
-]]></Declaration>
-      <Implementation>
-        <ST><![CDATA[
-ComputeUInt32Size := ComputeRawVarint32Size(nValue);]]></ST>
-      </Implementation>
-    </Method>
-    <Method Name="ComputeUInt64Size" Id="{37b2db93-7342-4580-9613-5592d6a408f2}" FolderPath="ComputeSize\">
-      <Declaration><![CDATA[METHOD ComputeUInt64Size : UDINT
-VAR_INPUT
-    nValue : ULINT;
-END_VAR
-]]></Declaration>
-      <Implementation>
-        <ST><![CDATA[
-ComputeUInt64Size := ComputeRawVarint64Size(nValue);]]></ST>
       </Implementation>
     </Method>
     <Method Name="FromBuffer" Id="{c2539802-bec0-4365-8257-fc8ef3ad282b}">
@@ -476,6 +454,20 @@ END_VAR
       <Implementation>
         <ST><![CDATA[
 WriteLength := F_WriteLength(aBuffer, stState, nLength);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="WriteRepeatedFieldString" Id="{3c1dcc4b-c34b-4c95-a10d-fb1de4f1751e}">
+      <Declaration><![CDATA[METHOD WriteRepeatedFieldString : HRESULT
+VAR_INPUT CONSTANT
+    anyArray        : T_Any;
+    anyFirstElem    : T_Any; 
+    nLength         : UDINT;
+    nTag            : UDINT;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[
+WriteRepeatedFieldString := F_WriteRepeatedField(aBuffer, stState, anyArray, anyFirstElem, nLength, nTag, THIS^.fbFieldCodecString);
+]]></ST>
       </Implementation>
     </Method>
     <Method Name="WriteRepeatedFieldUInt32" Id="{7d0ba148-7c14-4624-856c-284819f70ded}">
