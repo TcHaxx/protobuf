@@ -14,18 +14,32 @@ END_VAR
       <ST><![CDATA[]]></ST>
     </Implementation>
     <Method Name="CalculatePackedDataSize" Id="{8777af10-9403-4c27-bac0-2ce5213d416d}">
-      <Declaration><![CDATA[{warning 'TODO: Implement CalculatePackedDataSize'}
-{attribute 'analysis' := '-33'}
-METHOD CalculatePackedDataSize : HRESULT
+      <Declaration><![CDATA[METHOD CalculatePackedDataSize : HRESULT
 VAR_INPUT CONSTANT
 	anyFirstElem	: T_Any;
 	nLength	        : UDINT;        // items to write
 END_VAR
 VAR_OUTPUT
     nPackedDataSize : UDINT;
+END_VAR
+VAR
+    anyItem         : T_ANY;
+    i               : UDINT;
+    nValue          : DINT;
 END_VAR]]></Declaration>
       <Implementation>
-        <ST><![CDATA[]]></ST>
+        <ST><![CDATA[anyItem := anyFirstElem;
+
+IF nLength < 1 THEN
+    nPackedDataSize := 0;
+    RETURN;
+END_IF
+
+FOR i := 0  TO nLength - 1 DO
+    anyItem.pValue := anyFirstElem.pValue + (i * TO_UDINT(anyFirstElem.diSize)); 
+    nValue := PDINT_TO_DINT(anyItem.pValue);
+    nPackedDataSize := nPackedDataSize + F_ComputeInt32Size(nValue);
+END_FOR]]></ST>
       </Implementation>
     </Method>
     <Method Name="IsPackedRepeatedField" Id="{99247b5c-9995-4689-95f2-8e7ca845c7ef}">
