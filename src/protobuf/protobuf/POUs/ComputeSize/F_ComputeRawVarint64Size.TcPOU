@@ -7,11 +7,13 @@ VAR_INPUT
 END_VAR
 VAR
     i       : UDINT;
+    nMask   : ULINT;
 END_VAR]]></Declaration>
     <Implementation>
       <ST><![CDATA[
 FOR i := 1 TO 9 DO    
-    IF (nValue AND SHL(16#FFFFFFFFFFFFFFFF, 7 * i)) = 0 THEN
+    nMask := SHL(16#FFFFFFFFFFFFFFFF, 7 * i);
+    IF (nValue AND nMask) = 0 THEN
         F_ComputeRawVarint64Size := i;
         RETURN;
     END_IF
