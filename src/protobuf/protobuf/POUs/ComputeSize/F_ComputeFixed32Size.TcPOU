@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1">
+  <POU Name="F_ComputeFixed32Size" Id="{766ea878-df40-4de8-81d4-27ffd1dd4c9d}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION F_ComputeFixed32Size : UDINT
+VAR_INPUT
+    {attribute 'analysis' := '-33' }
+    nValue : UDINT;
+END_VAR]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[
+F_ComputeFixed32Size := GCL_PB.cLittleEndian32Size;]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>

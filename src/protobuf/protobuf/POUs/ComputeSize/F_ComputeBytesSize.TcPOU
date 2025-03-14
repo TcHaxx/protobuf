@@ -1,0 +1,19 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1">
+  <POU Name="F_ComputeBytesSize" Id="{dc09a416-4aa6-40b7-9458-5d9f115e3e2f}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION F_ComputeBytesSize : UDINT
+VAR_IN_OUT CONSTANT
+    aBytes  : ARRAY [*] OF BYTE;
+END_VAR
+VAR 
+    tAnyBytes   : T_AnyBytes;
+    nLength     : UDINT;  
+END_VAR]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[
+tAnyBytes := F_ToAnyBytes(aBytes);
+nLength := TO_UDINT(tAnyBytes.diSize);
+F_ComputeBytesSize := F_ComputeLengthSize(nLength) + nLength;]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>

@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1">
+  <POU Name="F_ComputeTagSize" Id="{66d0678b-c751-4a1c-904a-a7ec1e3eed3b}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION F_ComputeTagSize : UDINT
+VAR_INPUT
+    nFieldnumber    : UDINT;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[
+F_ComputeTagSize := F_ComputeRawVarint32Size(nValue:= F_MakeTag(nFieldNumber, 0));]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>

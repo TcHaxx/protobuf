@@ -94,6 +94,10 @@
     <Compile Include="FieldCodec\FB_FieldCodecBytes.TcPOU">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="GVLs\GCL_PB.TcGVL">
+      <SubType>Code</SubType>
+      <LinkAlways>true</LinkAlways>
+    </Compile>
     <Compile Include="GVLs\Param_PB.TcGVL">
       <SubType>Code</SubType>
       <LinkAlways>true</LinkAlways>
@@ -246,17 +250,85 @@
     <Compile Include="PlcTaskUnitTests.TcTTO">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="POUs\ComputeSize\F_ComputeBoolSize.TcPOU">
+      <SubType>Code</SubType>
+      <LinkAlways>true</LinkAlways>
+    </Compile>
+    <Compile Include="POUs\ComputeSize\F_ComputeTagSize.TcPOU">
+      <SubType>Code</SubType>
+      <LinkAlways>true</LinkAlways>
+    </Compile>
+    <Compile Include="POUs\ComputeSize\F_ComputeStringSize.TcPOU">
+      <SubType>Code</SubType>
+      <LinkAlways>true</LinkAlways>
+    </Compile>
+    <Compile Include="POUs\ComputeSize\F_ComputeFixed32Size.TcPOU">
+      <SubType>Code</SubType>
+      <LinkAlways>true</LinkAlways>
+    </Compile>
+    <Compile Include="POUs\ComputeSize\F_ComputeSFixed32Size.TcPOU">
+      <SubType>Code</SubType>
+      <LinkAlways>true</LinkAlways>
+    </Compile>
+    <Compile Include="POUs\ComputeSize\F_ComputeFixed64Size.TcPOU">
+      <SubType>Code</SubType>
+      <LinkAlways>true</LinkAlways>
+    </Compile>
+    <Compile Include="POUs\ComputeSize\F_ComputeSFixed64Size.TcPOU">
+      <SubType>Code</SubType>
+      <LinkAlways>true</LinkAlways>
+    </Compile>
+    <Compile Include="POUs\ComputeSize\F_ComputeInt32Size.TcPOU">
+      <SubType>Code</SubType>
+      <LinkAlways>true</LinkAlways>
+    </Compile>
+    <Compile Include="POUs\ComputeSize\F_ComputeEnumSize.TcPOU">
+      <SubType>Code</SubType>
+      <LinkAlways>true</LinkAlways>
+    </Compile>
+    <Compile Include="POUs\ComputeSize\F_ComputeFloatSize.TcPOU">
+      <SubType>Code</SubType>
+      <LinkAlways>true</LinkAlways>
+    </Compile>
+    <Compile Include="POUs\ComputeSize\F_ComputeDoubleSize.TcPOU">
+      <SubType>Code</SubType>
+      <LinkAlways>true</LinkAlways>
+    </Compile>
+    <Compile Include="POUs\ComputeSize\F_ComputeInt64Size.TcPOU">
+      <SubType>Code</SubType>
+      <LinkAlways>true</LinkAlways>
+    </Compile>
+    <Compile Include="POUs\ComputeSize\F_ComputeLengthSize.TcPOU">
+      <SubType>Code</SubType>
+      <LinkAlways>true</LinkAlways>
+    </Compile>
+    <Compile Include="POUs\ComputeSize\F_ComputeBytesSize.TcPOU">
+      <SubType>Code</SubType>
+      <LinkAlways>true</LinkAlways>
+    </Compile>
     <Compile Include="POUs\ComputeSize\F_ComputeRawVarint64Size.TcPOU">
       <SubType>Code</SubType>
+      <LinkAlways>true</LinkAlways>
+    </Compile>
+    <Compile Include="POUs\ComputeSize\F_ComputeSInt64Size.TcPOU">
+      <SubType>Code</SubType>
+      <LinkAlways>true</LinkAlways>
     </Compile>
     <Compile Include="POUs\ComputeSize\F_ComputeUInt32Size.TcPOU">
       <SubType>Code</SubType>
+      <LinkAlways>true</LinkAlways>
     </Compile>
     <Compile Include="POUs\ComputeSize\F_ComputeRawVarint32Size.TcPOU">
       <SubType>Code</SubType>
+      <LinkAlways>true</LinkAlways>
+    </Compile>
+    <Compile Include="POUs\ComputeSize\F_ComputeSInt32Size.TcPOU">
+      <SubType>Code</SubType>
+      <LinkAlways>true</LinkAlways>
     </Compile>
     <Compile Include="POUs\ComputeSize\F_ComputeUInt64Size.TcPOU">
       <SubType>Code</SubType>
+      <LinkAlways>true</LinkAlways>
     </Compile>
     <Compile Include="POUs\FB_CodedInputStream.TcPOU">
       <SubType>Code</SubType>

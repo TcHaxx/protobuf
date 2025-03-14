@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1">
+  <POU Name="F_ComputeDoubleSize" Id="{c376c301-c279-4a20-9def-68581bb27b67}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION F_ComputeDoubleSize : UDINT
+VAR_INPUT
+    {attribute 'analysis' := '-33' }
+    fValue : LREAL;
+END_VAR]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[
+F_ComputeDoubleSize := GCL_PB.cDoubleSize;]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>

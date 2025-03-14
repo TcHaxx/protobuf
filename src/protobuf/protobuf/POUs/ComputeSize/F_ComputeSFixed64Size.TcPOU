@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1">
+  <POU Name="F_ComputeSFixed64Size" Id="{7d038b2c-f444-43e3-ab21-65e7a2ac8052}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION F_ComputeSFixed64Size : UDINT
+VAR_INPUT
+    {attribute 'analysis' := '-33' }
+    nValue : LINT;
+END_VAR]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[
+F_ComputeSFixed64Size := GCL_PB.cLittleEndian64Size;]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>

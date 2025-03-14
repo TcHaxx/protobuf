@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1">
+  <POU Name="F_ComputeSInt32Size" Id="{d2cfb765-286e-450e-89e8-1f039ec738be}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION F_ComputeSInt32Size : UDINT
+VAR_INPUT
+    nValue  : DINT;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[
+F_ComputeSInt32Size := F_ComputeRawVarint32Size(F_EncodeZigZag32(nValue));]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>

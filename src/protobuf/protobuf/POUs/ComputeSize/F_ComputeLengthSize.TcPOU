@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1">
+  <POU Name="F_ComputeLengthSize" Id="{c5dda08b-777e-49c6-908f-0d57124e6764}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION F_ComputeLengthSize : UDINT
+VAR_INPUT
+    nLength : UDINT;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[
+F_ComputeLengthSize := F_ComputeRawVarint32Size(nLength);]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>

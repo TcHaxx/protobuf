@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1">
+  <POU Name="F_ComputeFloatSize" Id="{a1759402-98e2-4ebb-be15-bdbbb9451038}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION F_ComputeFloatSize : UDINT
+VAR_INPUT
+    {attribute 'analysis' := '-33' }
+    fValue : REAL;
+END_VAR]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[
+F_ComputeFloatSize := GCL_PB.cFloatSize;]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>

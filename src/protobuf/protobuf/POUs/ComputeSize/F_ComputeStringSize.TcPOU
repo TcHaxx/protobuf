@@ -1,0 +1,17 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1">
+  <POU Name="F_ComputeStringSize" Id="{4c350631-d3e5-4511-87db-1c3d68f24411}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION F_ComputeStringSize : UDINT
+VAR_INPUT
+    anyString   : ANY_STRING;
+END_VAR
+VAR 
+    nStrLen : UDINT;
+END_VAR]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[
+nStrLen := LEN2(pString:= anyString.pValue);
+F_ComputeStringSize := F_ComputeLengthSize(nStrLen) + nStrLen;]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>

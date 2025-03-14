@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1">
+  <GVL Name="GCL_PB" Id="{38f84b45-02e4-455a-9353-867f4eecb3a0}">
+    <Declaration><![CDATA[{attribute 'qualified_only'}
+{attribute 'no-analysis'}
+VAR_GLOBAL
+    cLittleEndian64Size : UDINT := 8;
+    cLittleEndian32Size : UDINT := 4;
+    cDoubleSize         : UDINT := cLittleEndian64Size;
+    cFloatSize          : UDINT := cLittleEndian32Size;
+    cBoolSize           : UDINT := 1;
+END_VAR]]></Declaration>
+  </GVL>
+</TcPlcObject>

@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1">
+  <POU Name="F_ComputeBoolSize" Id="{147bcd4c-9238-47d3-a897-e3b625829b50}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION F_ComputeBoolSize : UDINT
+VAR_INPUT
+    {attribute 'analysis' := '-33' }
+    bValue : BOOL;
+END_VAR]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[
+F_ComputeBoolSize := GCL_PB.cBoolSize;]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>

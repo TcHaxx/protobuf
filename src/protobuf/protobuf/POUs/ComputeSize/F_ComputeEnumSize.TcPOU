@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1">
+  <POU Name="F_ComputeEnumSize" Id="{fed8b217-7dd0-4101-8158-a06e03aee7a9}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION F_ComputeEnumSize : UDINT
+VAR_INPUT
+    nValue  : DINT;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[
+F_ComputeEnumSize := F_ComputeInt32Size(nValue);]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>
