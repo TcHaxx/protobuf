@@ -14,9 +14,7 @@ END_VAR
       <ST><![CDATA[]]></ST>
     </Implementation>
     <Method Name="CalculatePackedDataSize" Id="{f2ecccaf-ba10-4463-aa5f-4d335a019192}">
-      <Declaration><![CDATA[{warning 'TODO: Implement CalculatePackedDataSize'}
-{attribute 'analysis' := '-33'}
-METHOD CalculatePackedDataSize : HRESULT
+      <Declaration><![CDATA[METHOD CalculatePackedDataSize : HRESULT
 VAR_INPUT CONSTANT
 	anyFirstElem	: T_Any;
 	nLength	        : UDINT;        // items to write
@@ -73,9 +71,7 @@ anyOut := F_ToAnyType(anyArg:= nValue);]]></ST>
       </Implementation>
     </Method>
     <Method Name="ValueWriter" Id="{f7da272c-0468-4337-a640-77d2a8d5739b}">
-      <Declaration><![CDATA[{warning 'Add method implementation '}
-{attribute 'analysis' := '-33'}
-METHOD ValueWriter : HRESULT
+      <Declaration><![CDATA[METHOD ValueWriter : HRESULT
 VAR_IN_OUT
 	aBuffer	: ARRAY [*] OF BYTE;
 END_VAR
@@ -85,9 +81,13 @@ END_VAR
 VAR_INPUT
     anyIn : T_ANY;
 END_VAR
-]]></Declaration>
+VAR
+    nValue  : ULINT;
+END_VAR]]></Declaration>
       <Implementation>
-        <ST><![CDATA[]]></ST>
+        <ST><![CDATA[
+nValue := PULINT_TO_ULINT(anyIn.pValue);
+ValueWriter := F_WriteUInt64(aBuffer, stState, nValue);]]></ST>
       </Implementation>
     </Method>
   </POU>

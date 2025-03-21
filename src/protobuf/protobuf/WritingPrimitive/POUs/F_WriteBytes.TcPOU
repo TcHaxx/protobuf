@@ -21,7 +21,7 @@ IF FAILED(F_WriteBytes) THEN
     RETURN;
 END_IF
 
-F_WriteBytes := F_WriteRawBytes(aBuffer, stState, aBytes, nLength);]]></ST>
+F_WriteBytes := F_WriteRawBytes(aBuffer, stState, F_ToAnyBytes(aBytes), nLength);]]></ST>
     </Implementation>
   </POU>
 </TcPlcObject>

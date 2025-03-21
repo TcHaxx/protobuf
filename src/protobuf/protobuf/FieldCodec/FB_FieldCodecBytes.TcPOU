@@ -14,8 +14,7 @@ END_VAR]]></Declaration>
       <ST><![CDATA[]]></ST>
     </Implementation>
     <Method Name="CalculatePackedDataSize" Id="{145dc631-a514-4dad-b121-dbf5b139ddf2}">
-      <Declaration><![CDATA[{warning 'TODO: Implement CalculatePackedDataSize'}
-{attribute 'analysis' := '-33'}
+      <Declaration><![CDATA[{attribute 'analysis' := '-33'}
 METHOD CalculatePackedDataSize : HRESULT
 VAR_INPUT CONSTANT
 	anyFirstElem	: T_Any;
@@ -25,7 +24,8 @@ VAR_OUTPUT
     nPackedDataSize : UDINT;
 END_VAR]]></Declaration>
       <Implementation>
-        <ST><![CDATA[]]></ST>
+        <ST><![CDATA[
+CalculatePackedDataSize := 0;]]></ST>
       </Implementation>
     </Method>
     <Method Name="IsPackedRepeatedField" Id="{f55e498c-009e-42d9-a3d4-1aee876f4b68}">
@@ -84,9 +84,7 @@ ValueReader := F_ReadRawBytes(aBuffer, stState, nLength, anyOut);]]></ST>
       </Implementation>
     </Method>
     <Method Name="ValueWriter" Id="{44ad94e9-25af-4045-92d0-4895405d85b6}">
-      <Declaration><![CDATA[{warning 'Add method implementation '}
-{attribute 'analysis' := '-33'}
-METHOD ValueWriter : HRESULT
+      <Declaration><![CDATA[METHOD ValueWriter : HRESULT
 VAR_IN_OUT
 	aBuffer	: ARRAY [*] OF BYTE;
 END_VAR
@@ -98,7 +96,11 @@ VAR_INPUT
 END_VAR
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[]]></ST>
+        <ST><![CDATA[{warning 'FIXME: This should write the actual number of bytes, otherwise we waste space on the wire...'}
+ValueWriter := F_WriteLength(aBuffer, stState, TO_UDINT(anyin.diSize));
+IF SUCCEEDED(ValueWriter) THEN
+	ValueWriter := F_WriteRawBytes(aBuffer, stState, anyIn, TO_UDINT(anyin.diSize));
+END_IF]]></ST>
       </Implementation>
     </Method>
   </POU>

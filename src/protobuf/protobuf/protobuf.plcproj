@@ -569,6 +569,12 @@
     <Compile Include="__TESTs\RepeatedFieldTests\FB_WriteRepeatedFieldFixed32Tests.TcPOU">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="__TESTs\RepeatedFieldTests\FB_WriteRepeatedFieldFloatTests.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="__TESTs\RepeatedFieldTests\FB_WriteRepeatedFieldDoubleTests.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="__TESTs\RepeatedFieldTests\FB_WriteRepeatedFieldInt32Tests.TcPOU">
       <SubType>Code</SubType>
     </Compile>
@@ -581,6 +587,9 @@
     <Compile Include="__TESTs\RepeatedFieldTests\FB_WriteRepeatedFieldInt64Tests.TcPOU">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="__TESTs\RepeatedFieldTests\FB_WriteRepeatedFieldBytesTests.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="__TESTs\RepeatedFieldTests\FB_WriteRepeatedFieldUint32Tests.TcPOU">
       <SubType>Code</SubType>
     </Compile>
@@ -588,6 +597,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="__TESTs\RepeatedFieldTests\FB_WriteRepeatedFieldSInt32Tests.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="__TESTs\RepeatedFieldTests\FB_WriteRepeatedFieldUint64Tests.TcPOU">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="__TESTs\RepeatedFieldTests\PRG_RepeatedFieldTests.TcPOU">

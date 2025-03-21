@@ -7,10 +7,8 @@ VAR_IN_OUT
     aBuffer : ARRAY [*] OF BYTE;
     stState : ST_WriterInternalState;
 END_VAR
-VAR_IN_OUT CONSTANT
-    aBytes  : ARRAY [*] OF BYTE;
-END_VAR
 VAR_INPUT CONSTANT
+    tBytes  : T_AnyBytes;
     nLength : UDINT;
 END_VAR
 ]]></Declaration>
@@ -24,13 +22,13 @@ IF nLength > stState.nBufferSize - stState.nBufferPos THEN
     RETURN;
 END_IF
 
-IF nLength > TO_UDINT(UPPER_BOUND(aBytes, 1) + 1) THEN
+IF nLength > TO_UDINT(tBytes.diSize) + 1 THEN
     F_WriteRawBytes := stState.eWriterErrorCode := E_WriterErrorCode.NotEnoughMem;
     stState.bError := TRUE;
     RETURN;
 END_IF
 
-MEMCPY(destAddr:= ADR(aBuffer[stState.nBufferPos]), srcAddr:= ADR(aBytes[LOWER_BOUND(aBytes,1)]), n:=  nLength);
+MEMCPY(destAddr:= ADR(aBuffer[stState.nBufferPos]), srcAddr:= tBytes.pValue, n:=  nLength);
 stState.nBufferPos := stState.nBufferPos + nLength;]]></ST>
     </Implementation>
   </POU>

@@ -14,18 +14,32 @@ END_VAR
       <ST><![CDATA[]]></ST>
     </Implementation>
     <Method Name="CalculatePackedDataSize" Id="{ef2a42bf-2f87-4692-a9f3-567b05e779b1}">
-      <Declaration><![CDATA[{warning 'TODO: Implement CalculatePackedDataSize'}
-{attribute 'analysis' := '-33'}
-METHOD CalculatePackedDataSize : HRESULT
+      <Declaration><![CDATA[METHOD CalculatePackedDataSize : HRESULT
 VAR_INPUT CONSTANT
 	anyFirstElem	: T_Any;
 	nLength	        : UDINT;        // items to write
 END_VAR
 VAR_OUTPUT
     nPackedDataSize : UDINT;
+END_VAR
+VAR
+    anyItem         : T_ANY;
+    i               : UDINT;
+    fValue          : LREAL;
 END_VAR]]></Declaration>
       <Implementation>
-        <ST><![CDATA[]]></ST>
+        <ST><![CDATA[anyItem := anyFirstElem;
+
+IF nLength < 1 THEN
+    nPackedDataSize := 0;
+    RETURN;
+END_IF
+
+FOR i := 0  TO nLength - 1 DO
+    anyItem.pValue := anyFirstElem.pValue + (i * TO_UDINT(anyFirstElem.diSize)); 
+    fValue := PLREAL_TO_LREAL(anyItem.pValue);
+    nPackedDataSize := nPackedDataSize + F_ComputeDoubleSize(fValue);
+END_FOR]]></ST>
       </Implementation>
     </Method>
     <Method Name="IsPackedRepeatedField" Id="{d9206b81-f1d0-4f9c-8b27-a7557037cb20}">
@@ -57,9 +71,7 @@ anyOut := F_ToAnyType(anyArg:= fValue);]]></ST>
       </Implementation>
     </Method>
     <Method Name="ValueWriter" Id="{4ed72eef-3be8-496d-a27c-b8015cf6d975}">
-      <Declaration><![CDATA[{warning 'Add method implementation '}
-{attribute 'analysis' := '-33'}
-METHOD ValueWriter : HRESULT
+      <Declaration><![CDATA[METHOD ValueWriter : HRESULT
 VAR_IN_OUT
 	aBuffer	: ARRAY [*] OF BYTE;
 END_VAR
@@ -69,9 +81,13 @@ END_VAR
 VAR_INPUT
     anyIn : T_ANY;
 END_VAR
-]]></Declaration>
+VAR
+    fValue  : LREAL;
+END_VAR]]></Declaration>
       <Implementation>
-        <ST><![CDATA[]]></ST>
+        <ST><![CDATA[
+fValue := PLREAL_TO_LREAL(anyIn.pValue);
+ValueWriter := F_WriteDouble(aBuffer, stState, fValue);]]></ST>
       </Implementation>
     </Method>
   </POU>
