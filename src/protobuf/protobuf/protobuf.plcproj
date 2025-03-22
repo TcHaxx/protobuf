@@ -575,6 +575,9 @@
     <Compile Include="__TESTs\RepeatedFieldTests\RoundTrip\FB_RoundTripRepeatedFieldUInt32Tests.TcPOU">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="__TESTs\RepeatedFieldTests\RoundTrip\FB_RoundTripRepeatedFieldUInt64Tests.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="__TESTs\RepeatedFieldTests\RoundTrip\PRG_RoundTripRepeatedFieldTests.TcPOU">
       <SubType>Code</SubType>
     </Compile>

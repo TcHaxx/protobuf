@@ -6,6 +6,7 @@ PROGRAM INTERNAL PRG_RoundTripRepeatedFieldTests
 VAR
 {IF defined (UNIT_TEST)}
 	fbRoundTripRepeatedFieldUInt32Tests		: FB_RoundTripRepeatedFieldUInt32Tests;
+	fbRoundTripRepeatedFieldUInt64Tests		: FB_RoundTripRepeatedFieldUInt64Tests;
 {END_IF}
 END_VAR
 ]]></Declaration>
