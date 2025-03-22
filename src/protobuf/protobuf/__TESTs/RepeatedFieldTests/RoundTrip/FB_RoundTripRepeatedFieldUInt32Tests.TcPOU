@@ -7,7 +7,7 @@ VAR CONSTANT
 	cExpectedFieldIndex : UDINT := 5;
 END_VAR
 VAR
-    aBuffer         	: ARRAY[0..63] OF BYTE;
+    aBuffer         	: ARRAY[0..255] OF BYTE;
     hrWriterActual  	: HRESULT;
     hrParserActual  	: HRESULT;
     aActuals, aValues	: ARRAY[0..7] OF UDINT ;
