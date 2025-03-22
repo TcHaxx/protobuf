@@ -11,6 +11,7 @@ PROGRAM INTERNAL PRG_RepeatedFieldTests
     fbReadRepeatedFieldFixed64Tests : FB_ReadRepeatedFieldFixed64Tests;
     fbReadRepeatedFieldStringTests  : FB_ReadRepeatedFieldStringTests;
     
+	fbWriteRepeatedFieldBoolTests : FB_WriteRepeatedFieldBoolTests;
 	fbWriteRepeatedFieldBytesTests : FB_WriteRepeatedFieldBytesTests;
     fbWriteRepeatedFieldDoubleTests : FB_WriteRepeatedFieldDoubleTests;
 	fbWriteRepeatedFieldFixed32Tests : FB_WriteRepeatedFieldFixed32Tests;
