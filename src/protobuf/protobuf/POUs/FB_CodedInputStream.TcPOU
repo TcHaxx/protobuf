@@ -282,6 +282,21 @@ END_VAR]]></Declaration>
 ReadRepeatedFieldInt32 := F_ReadRepeatedField(aBuffer, stState, anyArray, anyFirstElem, ipFieldCodec:= THIS^.fbFieldCodecInt32, nFieldIndex); ]]></ST>
       </Implementation>
     </Method>
+    <Method Name="ReadRepeatedFieldInt64" Id="{b4e1ec7b-1d67-4298-a8bc-b359b0c32a99}">
+      <Declaration><![CDATA[METHOD ReadRepeatedFieldInt64 : HRESULT
+VAR_INPUT CONSTANT
+    anyArray        : T_Any;
+    anyFirstElem    : T_Any; 
+END_VAR
+
+VAR_IN_OUT   
+    nFieldIndex : UDINT; 
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[
+ReadRepeatedFieldInt64 := F_ReadRepeatedField(aBuffer, stState, anyArray, anyFirstElem, ipFieldCodec:= THIS^.fbFieldCodecInt64, nFieldIndex); ]]></ST>
+      </Implementation>
+    </Method>
     <Method Name="ReadRepeatedFieldSint32" Id="{ca300938-2a6d-4d4a-b6ea-108d5525ff80}">
       <Declaration><![CDATA[METHOD ReadRepeatedFieldSint32 : HRESULT
 VAR_INPUT CONSTANT

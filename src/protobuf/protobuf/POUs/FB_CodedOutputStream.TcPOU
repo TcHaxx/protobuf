@@ -9,20 +9,20 @@ VAR
     stState : ST_WriterInternalState;
 END_VAR
 
-{warning 'TODO: Field codecs for FB_CodedOutputStream'}
 VAR
-//     fbFieldCodecInt32           : FB_FieldCodecInt32;
-    fbFieldCodecUInt32          : FB_FieldCodecUInt32;
-//     fbFieldCodecInt64       : FB_FieldCodecInt64;
-//     fbFieldCodecSInt32      : FB_FieldCodecSInt32;
-//     fbFieldCodecSInt64      : FB_FieldCodecSInt64;
-//     fbFieldCodecFixed32     : FB_FieldCodecFixed32;
-//     fbFieldCodecFixed64     : FB_FieldCodecFixed64;    
-//     fbFieldCodecFloat       : FB_FieldCodecFloat;
-//     fbFieldCodecDouble      : FB_FieldCodecDouble;
+    fbFieldCodecInt32       : FB_FieldCodecInt32;
+    fbFieldCodecUInt32      : FB_FieldCodecUInt32;
+    fbFieldCodecInt64       : FB_FieldCodecInt64;
+	fbFieldCodecUInt64      : FB_FieldCodecUInt64;
+    fbFieldCodecSInt32      : FB_FieldCodecSInt32;
+    fbFieldCodecSInt64      : FB_FieldCodecSInt64;
+    fbFieldCodecFixed32     : FB_FieldCodecFixed32;
+    fbFieldCodecFixed64     : FB_FieldCodecFixed64;    
+    fbFieldCodecFloat       : FB_FieldCodecFloat;
+    fbFieldCodecDouble      : FB_FieldCodecDouble;
     fbFieldCodecString      : FB_FieldCodecString;
-//     fbFieldCodecBytes       : FB_FieldCodecBytes;
-//     fbFieldCodecBool        : FB_FieldCodecBool;
+    fbFieldCodecBytes       : FB_FieldCodecBytes;
+    fbFieldCodecBool        : FB_FieldCodecBool;
 END_VAR]]></Declaration>
     <Implementation>
       <ST><![CDATA[]]></ST>
@@ -216,6 +216,150 @@ END_VAR
 WriteLength := F_WriteLength(aBuffer, stState, nLength);]]></ST>
       </Implementation>
     </Method>
+    <Method Name="WriteRepeatedFieldBool" Id="{5021b455-644d-4e5d-8e2d-3fb2c93ed3cf}">
+      <Declaration><![CDATA[METHOD WriteRepeatedFieldBool : HRESULT
+VAR_INPUT CONSTANT
+    anyArray        : T_Any;
+    anyFirstElem    : T_Any; 
+    nLength         : UDINT;
+    nTag            : UDINT;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[
+WriteRepeatedFieldBool := F_WriteRepeatedField(aBuffer, stState, anyArray, anyFirstElem, nLength, nTag, THIS^.fbFieldCodecBool);
+]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="WriteRepeatedFieldBytes" Id="{337c267b-e188-4058-8027-fa668d6d7c25}">
+      <Declaration><![CDATA[METHOD WriteRepeatedFieldBytes : HRESULT
+VAR_INPUT CONSTANT
+    anyArray        : T_Any;
+    anyFirstElem    : T_Any; 
+    nLength         : UDINT;
+    nTag            : UDINT;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[
+WriteRepeatedFieldBytes := F_WriteRepeatedField(aBuffer, stState, anyArray, anyFirstElem, nLength, nTag, THIS^.fbFieldCodecBytes);
+]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="WriteRepeatedFieldDouble" Id="{3f25cd8b-044f-47aa-b4e8-955b98cd0383}">
+      <Declaration><![CDATA[METHOD WriteRepeatedFieldDouble : HRESULT
+VAR_INPUT CONSTANT
+    anyArray        : T_Any;
+    anyFirstElem    : T_Any; 
+    nLength         : UDINT;
+    nTag            : UDINT;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[
+WriteRepeatedFieldDouble := F_WriteRepeatedField(aBuffer, stState, anyArray, anyFirstElem, nLength, nTag, THIS^.fbFieldCodecDouble);
+]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="WriteRepeatedFieldFixed32" Id="{868055e3-d386-4bef-8ee7-78ade375d836}">
+      <Declaration><![CDATA[METHOD WriteRepeatedFieldFixed32 : HRESULT
+VAR_INPUT CONSTANT
+    anyArray        : T_Any;
+    anyFirstElem    : T_Any; 
+    nLength         : UDINT;
+    nTag            : UDINT;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[
+WriteRepeatedFieldFixed32 := F_WriteRepeatedField(aBuffer, stState, anyArray, anyFirstElem, nLength, nTag, THIS^.fbFieldCodecFixed32);
+]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="WriteRepeatedFieldFixed64" Id="{eb9f22d5-5838-44af-9c05-f6bd6adb781f}">
+      <Declaration><![CDATA[METHOD WriteRepeatedFieldFixed64 : HRESULT
+VAR_INPUT CONSTANT
+    anyArray        : T_Any;
+    anyFirstElem    : T_Any; 
+    nLength         : UDINT;
+    nTag            : UDINT;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[
+WriteRepeatedFieldFixed64 := F_WriteRepeatedField(aBuffer, stState, anyArray, anyFirstElem, nLength, nTag, THIS^.fbFieldCodecFixed64);
+]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="WriteRepeatedFieldFloat" Id="{c29c6135-b60d-4204-be1d-f7ab8475f918}">
+      <Declaration><![CDATA[METHOD WriteRepeatedFieldFloat : HRESULT
+VAR_INPUT CONSTANT
+    anyArray        : T_Any;
+    anyFirstElem    : T_Any; 
+    nLength         : UDINT;
+    nTag            : UDINT;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[
+WriteRepeatedFieldFloat := F_WriteRepeatedField(aBuffer, stState, anyArray, anyFirstElem, nLength, nTag, THIS^.fbFieldCodecFloat);
+]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="WriteRepeatedFieldInt32" Id="{ff0355bc-0290-4eb4-a20c-bbb27bd5dbe2}">
+      <Declaration><![CDATA[METHOD WriteRepeatedFieldInt32 : HRESULT
+VAR_INPUT CONSTANT
+    anyArray        : T_Any;
+    anyFirstElem    : T_Any; 
+    nLength         : UDINT;
+    nTag            : UDINT;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[
+
+WriteRepeatedFieldInt32 := F_WriteRepeatedField(aBuffer, stState, anyArray, anyFirstElem, nLength, nTag, THIS^.fbFieldCodecInt32);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="WriteRepeatedFieldInt64" Id="{63cbfa1a-e523-490e-9547-e7d56f25fce8}">
+      <Declaration><![CDATA[METHOD WriteRepeatedFieldInt64 : HRESULT
+VAR_INPUT CONSTANT
+    anyArray        : T_Any;
+    anyFirstElem    : T_Any; 
+    nLength         : UDINT;
+    nTag            : UDINT;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[
+
+WriteRepeatedFieldInt64 := F_WriteRepeatedField(aBuffer, stState, anyArray, anyFirstElem, nLength, nTag, THIS^.fbFieldCodecInt64);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="WriteRepeatedFieldSInt32" Id="{666d5292-259a-4c9d-92fc-58f17d5b5cc2}">
+      <Declaration><![CDATA[METHOD WriteRepeatedFieldSInt32 : HRESULT
+VAR_INPUT CONSTANT
+    anyArray        : T_Any;
+    anyFirstElem    : T_Any; 
+    nLength         : UDINT;
+    nTag            : UDINT;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[
+
+WriteRepeatedFieldSInt32 := F_WriteRepeatedField(aBuffer, stState, anyArray, anyFirstElem, nLength, nTag, THIS^.fbFieldCodecSInt32);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="WriteRepeatedFieldSInt64" Id="{d799e33e-86e9-4fa5-8d4b-6fb02ca3b8f2}">
+      <Declaration><![CDATA[METHOD WriteRepeatedFieldSInt64 : HRESULT
+VAR_INPUT CONSTANT
+    anyArray        : T_Any;
+    anyFirstElem    : T_Any; 
+    nLength         : UDINT;
+    nTag            : UDINT;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[
+
+WriteRepeatedFieldSInt64 := F_WriteRepeatedField(aBuffer, stState, anyArray, anyFirstElem, nLength, nTag, THIS^.fbFieldCodecSInt64);]]></ST>
+      </Implementation>
+    </Method>
     <Method Name="WriteRepeatedFieldString" Id="{3c1dcc4b-c34b-4c95-a10d-fb1de4f1751e}">
       <Declaration><![CDATA[METHOD WriteRepeatedFieldString : HRESULT
 VAR_INPUT CONSTANT
@@ -243,6 +387,21 @@ END_VAR
         <ST><![CDATA[
 
 WriteRepeatedFieldUInt32 := F_WriteRepeatedField(aBuffer, stState, anyArray, anyFirstElem, nLength, nTag, THIS^.fbFieldCodecUInt32);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="WriteRepeatedFieldUInt64" Id="{77aa14f0-634c-46e1-8ac2-c033181caece}">
+      <Declaration><![CDATA[METHOD WriteRepeatedFieldUInt64 : HRESULT
+VAR_INPUT CONSTANT
+    anyArray        : T_Any;
+    anyFirstElem    : T_Any; 
+    nLength         : UDINT;
+    nTag            : UDINT;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[
+
+WriteRepeatedFieldUInt64 := F_WriteRepeatedField(aBuffer, stState, anyArray, anyFirstElem, nLength, nTag, THIS^.fbFieldCodecUInt64);]]></ST>
       </Implementation>
     </Method>
     <Method Name="WriteSFixed32" Id="{c5db7557-6b1a-4521-ab52-97e9e0d0670f}">

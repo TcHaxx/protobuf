@@ -1,0 +1,57 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1">
+  <POU Name="FB_RoundTripRepeatedFieldUInt32Tests" Id="{311ad9af-30db-499d-9fec-14da0d451eeb}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK INTERNAL FINAL FB_RoundTripRepeatedFieldUInt32Tests EXTENDS FB_TestSuite
+VAR CONSTANT
+    cExpected 			: ARRAY[0..7] OF UDINT := [0, 42, 6969, 1337, 123456789];
+	cExpectedFieldIndex : UDINT := 5;
+END_VAR
+VAR
+    aBuffer         	: ARRAY[0..63] OF BYTE;
+    hrWriterActual  	: HRESULT;
+    hrParserActual  	: HRESULT;
+    aActuals, aValues	: ARRAY[0..7] OF UDINT ;
+	nFieldIndex			: UDINT;
+	nActualTag			: UDINT;
+	nExpectedTag	    : UDINT;
+	fbInputSUT			: FB_CodedInputStream;
+	fbOutputSUT			: FB_CodedOutputStream;
+END_VAR]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[TEST(__POUNAME());
+
+// Arrange
+nExpectedTag := F_MakeTag(nFieldNumber:= 3, eWireType:= E_WireType.LengthDelimited);
+aValues := cExpected;
+
+fbOutputSUT(aBuffer:= aBuffer);
+fbOutputSUT.FromBuffer();
+fbInputSUT(aBuffer:= aBuffer);
+fbInputSUT.FromBuffer();
+
+// Act
+
+hrWriterActual := fbOutputSUT.WriteRepeatedFieldUInt32(
+					anyArray:= F_ToAnyType(aValues),
+					anyFirstElem:= F_ToAnyType(aValues[0]), 
+					nLength:= 5,
+					nTag:= nExpectedTag);
+
+fbInputSUT.ReadTag(nTag=> nActualTag);
+hrParserActual := fbInputSUT.ReadRepeatedFieldUint32(
+					anyArray:= F_ToAnyType(aActuals),
+					anyFirstElem:= F_ToAnyType(aActuals[0]),
+					nFieldIndex:= nFieldIndex);
+// Assert
+
+AssertEquals_DINT(Expected:= S_OK, Actual:= hrWriterActual, Message:= 'Expected hrWriterActual = S_OK');
+AssertEquals_DINT(Expected:= S_OK, Actual:= hrParserActual, Message:= 'Expected hrParserActual = S_OK');
+AssertEquals_UDINT(Expected:= nExpectedTag, Actual:= nActualTag, Message:= 'Expeced nActualTag to equal nExpectedTag.');
+AssertEquals_UDINT(Expected:= cExpectedFieldIndex, Actual:= nFieldIndex, Message:= 'Expeced nFieldIndex to equal cExpectedFieldIndex.');
+{warning disable C0041}
+AssertArrayEquals_UDINT(Expecteds:= cExpected, Actuals:= aActuals, Message:= '');
+
+TEST_FINISHED_NAMED(__POUNAME());]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>

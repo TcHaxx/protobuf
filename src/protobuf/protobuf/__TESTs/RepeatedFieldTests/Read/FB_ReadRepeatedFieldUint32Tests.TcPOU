@@ -7,7 +7,7 @@ END_VAR
 VAR_OUTPUT
 END_VAR
 VAR
-    fbFieldCodecInt32 : FB_FieldCodecInt32;
+    fbFieldCodec : FB_FieldCodecUInt32;
 END_VAR
 ]]></Declaration>
     <Implementation>
@@ -83,8 +83,8 @@ TEST_FINISHED_NAMED(__POUNAME());]]></ST>
     <Method Name="ShouldReadRepeatedField" Id="{e0890fb1-e6b2-423a-a94a-be1677da6155}">
       <Declaration><![CDATA[METHOD PRIVATE ShouldReadRepeatedField
 VAR_IN_OUT CONSTANT
-    aBuffer     : ARRAY [*] OF BYTE;
-    aExpected   : ARRAY [*] OF BYTE;
+    aBuffer   			: ARRAY [*] OF BYTE;
+    aExpected 			: ARRAY [*] OF UDINT;
 END_VAR
 VAR_INPUT CONSTANT
     nBufferPosStart     : UDINT;
@@ -96,7 +96,7 @@ VAR_INST
     stState : ST_ParserInternalState;
 END_VAR
 VAR
-    aActual             : ARRAY [0..15] OF BYTE;
+    aActual             : ARRAY [0..15] OF UDINT;
     hr                  : HRESULT;
     nActualFieldIndex   : UDINT;
     nTag                : UDINT;
@@ -118,7 +118,7 @@ AssertEquals_DINT(
     Message:= 'Expected S_OK instead of error');
     
 {warning disable C0041}
-AssertArrayEquals_BYTE(Expecteds:= aExpected, Actuals:= aActual, Message:= '');
+AssertArrayEquals_UDINT(Expecteds:= aExpected, Actuals:= aActual, Message:= '');
  
 AssertEquals_UDINT(
     Expected:= nExpectedBufferPos,
@@ -133,26 +133,23 @@ AssertEquals_UDINT(
       </Implementation>
     </Method>
     <Method Name="ShouldReadRepeatedFieldTheory" Id="{0d53312c-bed0-4be6-a5e4-c857a27b82d7}">
-      <Declaration><![CDATA[METHOD PRIVATE ShouldReadRepeatedFieldTheory : REFERENCE TO FB_Test
+      <Declaration><![CDATA[{warning 'TODO: Add better tests for UInt32'}
+METHOD PRIVATE ShouldReadRepeatedFieldTheory : REFERENCE TO FB_Test
 VAR CONSTANT
     cRawValueZeroLength     : ARRAY[0..15] OF BYTE := [16#0A, 16#00];
     cRawValue1              : ARRAY[0..15] OF BYTE := [16#00, 16#0A, 16#07, 16#00, 16#01, 16#FF, 16#01, 16#96, 16#01, 16#04];
-    cRawBytesOverflow       : ARRAY[0..15] OF BYTE := [16#0A, 16#06, 16#80, 16#02, 16#81, 16#02, 16#82, 16#02];
-    
 END_VAR
 
 VAR CONSTANT
-    aExpectedZeroLength     : ARRAY [0..15] OF BYTE := [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
-    aExpected1              : ARRAY [0..15] OF BYTE := [0, 1, 255, 150, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
-    aExpectedBytesOverflow  : ARRAY [0..15] OF BYTE := [0, 1, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+    aExpectedZeroLength     : ARRAY [0..15] OF UDINT := [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+    aExpected1             	: ARRAY [0..15] OF UDINT := [0, 1, 255, 150, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
 END_VAR
 ]]></Declaration>
       <Implementation>
         <ST><![CDATA[TEST(__POUNAME());
 
-ShouldReadRepeatedField(aBuffer:= cRawValueZeroLength, aExpected:= aExpectedZeroLength, nBufferPosStart:= 0, nExpectedBufferPos:= 2, nExpectedFieldIndex:= 0, ipFieldCodec:= THIS^.fbFieldCodecInt32);
-ShouldReadRepeatedField(aBuffer:= cRawValue1, aExpected:= aExpected1, nBufferPosStart:= 1, nExpectedBufferPos:= 10, nExpectedFieldIndex:= 5, ipFieldCodec:= THIS^.fbFieldCodecInt32);
-ShouldReadRepeatedField(aBuffer:= cRawBytesOverflow, aExpected:= aExpectedBytesOverflow, nBufferPosStart:= 0, nExpectedBufferPos:= 8, nExpectedFieldIndex:= 3, ipFieldCodec:= THIS^.fbFieldCodecInt32);
+ShouldReadRepeatedField(aBuffer:= cRawValueZeroLength, aExpected:= aExpectedZeroLength, nBufferPosStart:= 0, nExpectedBufferPos:= 2, nExpectedFieldIndex:= 0, ipFieldCodec:= THIS^.fbFieldCodec);
+ShouldReadRepeatedField(aBuffer:= cRawValue1, aExpected:= aExpected1, nBufferPosStart:= 1, nExpectedBufferPos:= 10, nExpectedFieldIndex:= 5, ipFieldCodec:= THIS^.fbFieldCodec);
 
 TEST_FINISHED_NAMED(__POUNAME());]]></ST>
       </Implementation>

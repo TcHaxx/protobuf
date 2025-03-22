@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1">
+  <POU Name="PRG_RoundTripRepeatedFieldTests" Id="{20818748-fb2b-49f4-acb2-2e9fa6fc3cf8}" SpecialFunc="None">
+    <Declaration><![CDATA[{attribute 'analysis' := '-33'}
+PROGRAM INTERNAL PRG_RoundTripRepeatedFieldTests
+VAR
+{IF defined (UNIT_TEST)}
+	fbRoundTripRepeatedFieldUInt32Tests		: FB_RoundTripRepeatedFieldUInt32Tests;
+{END_IF}
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>
