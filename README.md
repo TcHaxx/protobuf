@@ -22,6 +22,9 @@ See following limitations (for now):
 [Unknown Fields](https://protobuf.dev/programming-guides/proto3/#unknowns) are currently not preserved to avoid dynamic allocations. 
 They are just skipped, for now.
 
+### Groups
+[Groups](https://protobuf.dev/programming-guides/encoding/#groups) are a deprecated feature and are therefore not implemented in this library.  
+
 # Acknowledgments
 
 * [TcUnit](https://github.com/tcunit/TcUnit) - A unit testing framework for Beckhoff's TwinCAT 3
