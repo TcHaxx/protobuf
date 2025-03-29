@@ -25,6 +25,12 @@ IF stAnyStringOut.TypeClass = __SYSTEM.TYPE_CLASS.TYPE_WSTRING THEN
     RETURN;
 END_IF
 
+IF stAnyStringOut.pValue = NULL THEN 
+	F_ReadRawString := stState.eParserErrorCode := E_ParserErrorCode.InternalError;
+    stState.bError := TRUE;
+    RETURN;
+END_IF
+
 IF nLength > TO_UDINT(stAnyStringOut.diSize - 1) OR 
     nLength > stState.nBufferSize - stState.nBufferPos THEN
     F_ReadRawString := stState.eParserErrorCode := E_ParserErrorCode.TruncatedMessage;

@@ -101,12 +101,15 @@ VAR
     nActualFieldIndex   : UDINT;
     nTag                : UDINT;
     i                   : DINT;
+    aTmpBuffer          : ARRAY[0..1023] OF BYTE := [SIZEOF(aTmpBuffer)(16#FF)];
 END_VAR
 ]]></Declaration>
       <Implementation>
         <ST><![CDATA[// Arrange
 stState.nBufferPos := nBufferPosStart;
 stState.nBufferSize := TO_UDINT(UPPER_BOUND(aBuffer, 1) + 1);
+
+THIS^.fbFieldCodecString.SetTmpBuffer(anyString:= F_ToAnyBytes(aTmpBuffer));
 
 // Act
 F_ParseTag(aBuffer, stState, nTag=> nTag);
@@ -145,15 +148,10 @@ END_VAR
 
 VAR CONSTANT
     aExpectedString1        : ARRAY[0..15] OF T_MAXSTRING := ['TestString0', 'TestString1', 'TestString2', 'TestString3'];
-END_VAR
-
-VAR
-    sAnyDummy   : T_MAXSTRING;
 END_VAR]]></Declaration>
       <Implementation>
         <ST><![CDATA[TEST(__POUNAME());
 
-THIS^.fbFieldCodecString.SetAnyString(F_ToAnyString(sAnyDummy));
 ShouldReadRepeatedField(aBuffer:= cRawValueString1, aExpected:= aExpectedString1, nBufferPosStart:= 0, nExpectedBufferPos:= 53, nExpectedFieldIndex:= 4, THIS^.fbFieldCodecString);
 
 TEST_FINISHED_NAMED(__POUNAME());]]></ST>

@@ -332,14 +332,13 @@ ReadRepeatedFieldSint64 := F_ReadRepeatedField(aBuffer, stState, anyArray, anyFi
 VAR_INPUT CONSTANT
     anyArray        : T_Any;
     anyFirstElem    : T_Any;
-    anyStringBuffer : T_AnyString;
 END_VAR
 
 VAR_IN_OUT   
     nFieldIndex : UDINT; 
 END_VAR]]></Declaration>
       <Implementation>
-        <ST><![CDATA[THIS^.fbFieldCodecString.SetAnyString(anyString:= anyStringBuffer);
+        <ST><![CDATA[
 ReadRepeatedFieldString := F_ReadRepeatedField(aBuffer, stState, anyArray, anyFirstElem, ipFieldCodec:= THIS^.fbFieldCodecString, nFieldIndex); ]]></ST>
       </Implementation>
     </Method>
@@ -436,6 +435,19 @@ stState.nLastTag := 0;
 stState.nNextTag := 0;
 stState.bHasNextTag := FALSE;
 stState.bDiscardUnknownFields := FALSE;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="SetTempBuffer" Id="{3117f644-538d-47be-87c2-4e2b358529e1}">
+      <Declaration><![CDATA[// Temp. buffer for repeated fields, e.g. string or bytes, if larger then default.
+METHOD SetTempBuffer
+VAR_INPUT
+	anyBuffer : ANY;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[
+THIS^.fbFieldCodecBytes.SetTmpBuffer(anyBytes:= anyBuffer);
+
+THIS^.fbFieldCodecString.SetTmpBuffer(anyString:= anyBuffer);]]></ST>
       </Implementation>
     </Method>
     <Method Name="SkipLastField" Id="{55cedb3e-db2f-4d80-9b5d-1d05f6d106d8}">

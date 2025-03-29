@@ -40,9 +40,9 @@ END_VAR
 IsPackedRepeatedField := FALSE;]]></ST>
       </Implementation>
     </Method>
-    <Method Name="SetAnyBytes" Id="{e8632774-c3c7-4625-b58b-3da822eb9cf0}">
+    <Method Name="SetTmpBuffer" Id="{e8632774-c3c7-4625-b58b-3da822eb9cf0}">
       <Declaration><![CDATA[// Map ARRAY [*] OF BYTE for field repeated bytes
-METHOD INTERNAL SetAnyBytes
+METHOD INTERNAL SetTmpBuffer
 VAR_INPUT
     anyBytes : T_AnyBytes;
 END_VAR
@@ -80,7 +80,8 @@ ELSE
     anyOut := F_ToAnyBytes(aValue);
 END_IF
 
-ValueReader := F_ReadRawBytes(aBuffer, stState, nLength, anyOut);]]></ST>
+ValueReader := F_ReadRawBytes(aBuffer, stState, nLength, anyOut);
+anyOut.diSize := TO_DINT(nLength);]]></ST>
       </Implementation>
     </Method>
     <Method Name="ValueWriter" Id="{44ad94e9-25af-4045-92d0-4895405d85b6}">

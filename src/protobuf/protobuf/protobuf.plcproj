@@ -9,7 +9,7 @@
     <WriteProductVersion>false</WriteProductVersion>
     <GenerateTpy>false</GenerateTpy>
     <Name>protobuf</Name>
-    <ProgramVersion>3.1.4026.14</ProgramVersion>
+    <ProgramVersion>3.1.4026.15</ProgramVersion>
     <Application>{aab3386f-1433-4e51-aee9-b496d522750f}</Application>
     <TypeSystem>{aa3fbe6c-8030-475f-a685-e873b003fd01}</TypeSystem>
     <Implicit_Task_Info>{4c235652-0fed-4dea-be12-419d132604dd}</Implicit_Task_Info>
@@ -575,6 +575,9 @@
     <Compile Include="__TESTs\RepeatedFieldTests\RoundTrip\FB_RoundTripRepeatedFieldUInt32Tests.TcPOU">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="__TESTs\RepeatedFieldTests\RoundTrip\FB_RoundTripRepeatedFieldStringTests.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="__TESTs\RepeatedFieldTests\RoundTrip\FB_RoundTripRepeatedFieldUInt64Tests.TcPOU">
       <SubType>Code</SubType>
     </Compile>
@@ -749,19 +752,19 @@
     </PlaceholderReference>
     <PlaceholderReference Include="TcUnit">
       <DefaultResolution>TcUnit, * (www.tcunit.org)</DefaultResolution>
-      <Namespace>TcUnit</Namespace>
-      <Optional>true</Optional>
-      <Condition>UNIT_TEST</Condition>
       <Parameters>
-        <Parameter ListName="GVL_PARAM_TCUNIT">
+        <Parameter ListName="GVL_PARAM_TCUNIT" xmlns="">
           <Key>MAXNUMBEROFASSERTSFOREACHTESTSUITE</Key>
           <Value>100</Value>
         </Parameter>
-        <Parameter ListName="GVL_PARAM_TCUNIT">
+        <Parameter ListName="GVL_PARAM_TCUNIT" xmlns="">
           <Key>MAXNUMBEROFTESTSUITES</Key>
           <Value>100</Value>
         </Parameter>
       </Parameters>
+      <Namespace>TcUnit</Namespace>
+      <Condition>
+      </Condition>
     </PlaceholderReference>
   </ItemGroup>
   <ItemGroup>

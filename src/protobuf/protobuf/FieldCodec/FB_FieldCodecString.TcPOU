@@ -7,8 +7,8 @@ END_VAR
 VAR_OUTPUT
 END_VAR
 VAR
-    sValue      : T_MAXSTRING;
-    tAnyString  : T_AnyString;
+    sValue      	: T_MAXSTRING;
+    anyStringTmp : T_AnyString;
 END_VAR
 ]]></Declaration>
     <Implementation>
@@ -41,15 +41,15 @@ END_VAR
 IsPackedRepeatedField := FALSE;]]></ST>
       </Implementation>
     </Method>
-    <Method Name="SetAnyString" Id="{63850f38-d71f-4abc-b609-7a4032dbd758}">
+    <Method Name="SetTmpBuffer" Id="{63850f38-d71f-4abc-b609-7a4032dbd758}">
       <Declaration><![CDATA[// Needs to be called, if destination string is larger then T_MAXSTRING.
-METHOD INTERNAL SetAnyString
+METHOD INTERNAL SetTmpBuffer
 VAR_INPUT
     anyString : T_AnyString;
 END_VAR
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[tAnyString := anyString;]]></ST>
+        <ST><![CDATA[anyStringTmp := anyString;]]></ST>
       </Implementation>
     </Method>
     <Method Name="ValueReader" Id="{0b25c717-69b6-4051-b2bf-19d82a7ef48c}">
@@ -65,8 +65,8 @@ VAR_OUTPUT
 	anyOut	: T_Any;
 END_VAR]]></Declaration>
       <Implementation>
-        <ST><![CDATA[IF tAnyString.pValue <> NULL THEN
-    anyOut := tAnyString;
+        <ST><![CDATA[IF anyStringTmp.pValue <> NULL THEN
+    anyOut := anyStringTmp;
 ELSE
     anyOut := F_ToAnyString(sValue);
 END_IF

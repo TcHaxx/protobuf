@@ -78,7 +78,7 @@ IF ipFieldCodec.IsPackedRepeatedField(nTag) THEN
             RETURN;
         END_IF
         
-        MEMCPY(destAddr:= anyArray.pValue + (nFieldIndex * nTypeSize), srcAddr:= anyValue.pValue, nTypeSize);
+        MEMCPY(destAddr:= anyArray.pValue + (nFieldIndex * nTypeSize), srcAddr:= anyValue.pValue, MIN(TO_UDINT(anyValue.diSize), nTypeSize));
         nFieldIndex := nFieldIndex + 1;
     END_WHILE
 
@@ -92,7 +92,7 @@ ELSE
             RETURN;
         END_IF
         
-        MEMCPY(destAddr:= anyArray.pValue + (nFieldIndex * nTypeSize), srcAddr:= anyValue.pValue, nTypeSize);
+        MEMCPY(destAddr:= anyArray.pValue + (nFieldIndex * nTypeSize), srcAddr:= anyValue.pValue, MIN(TO_UDINT(anyValue.diSize), nTypeSize));
         nFieldIndex := nFieldIndex + 1;
         
         hr := F_MaybeConsumeTag(aBuffer, stState, nTag, bConsumed=> bTagConsumed);

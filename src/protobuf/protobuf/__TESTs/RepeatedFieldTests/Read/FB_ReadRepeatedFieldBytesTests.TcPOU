@@ -34,13 +34,15 @@ VAR
     hr                  : HRESULT;
     nActualFieldIndex   : UDINT;
     nTag                : UDINT;
+    i                   : UDINT;
+    aTmpBuffer          : ARRAY[0..1023] OF BYTE := [SIZEOF(aTmpBuffer)(16#FF)];
 END_VAR
 ]]></Declaration>
       <Implementation>
         <ST><![CDATA[// Arrange
 stState.nBufferPos := nBufferPosStart;
 stState.nBufferSize := TO_UDINT(UPPER_BOUND(aBuffer, 1) + 1);
-
+THIS^.fbFieldCodec.SetTmpBuffer(anyBytes:= F_ToAnyBytes(aTmpBuffer));
 
 // Act
 F_ParseTag(aBuffer, stState, nTag=> nTag);
@@ -53,7 +55,9 @@ AssertEquals_DINT(
     Message:= 'Expected S_OK instead of error');
     
 {warning disable C0041}
-
+FOR i:= 0 TO 3 DO
+    AssertArrayEquals_BYTE(Expecteds:= aExpected[i], Actuals:= aActual[i], Message:= CONCAT('Array differs at index ', TO_STRING(i)));
+END_FOR
 
 AssertEquals_UDINT(
     Expected:= nExpectedBufferPos,
