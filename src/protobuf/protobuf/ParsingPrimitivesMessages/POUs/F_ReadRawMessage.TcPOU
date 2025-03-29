@@ -1,0 +1,39 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1">
+  <POU Name="F_ReadRawMessage" Id="{c47d844f-4687-416d-9a60-b87fd3566db4}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION F_ReadRawMessage : HRESULT
+VAR_IN_OUT CONSTANT
+    aBuffer : ARRAY [*] OF BYTE;       
+END_VAR
+VAR_IN_OUT
+    stState : ST_ParserInternalState;
+END_VAR
+VAR_INPUT
+    iMessage : I_Message;
+END_VAR
+VAR
+    nLength : UDINT;
+    iBufferMessage : I_BufferMessage;
+END_VAR]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[
+
+IF __QUERYINTERFACE(iMessage, iBufferMessage) THEN
+    
+    {warning 'TODO: Implement'}
+
+ELSE
+    IF stState.pCodedInputStream = null THEN
+        F_ReadRawMessage := stState.eParserErrorCode := E_ParserErrorCode.InternalError;
+        stState.bError := TRUE;
+        RETURN;
+    END_IF
+    
+    iMessage.MergeFrom(fbInput:= stState.pCodedInputStream^);
+END_IF
+
+
+]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>

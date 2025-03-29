@@ -1,0 +1,42 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1">
+  <POU Name="F_ReadMessage" Id="{f756dacf-686e-48da-9404-f5c6d7862557}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION F_ReadMessage : HRESULT
+VAR_IN_OUT CONSTANT
+    aBuffer : ARRAY [*] OF BYTE;       
+END_VAR
+VAR_IN_OUT
+    stState : ST_ParserInternalState;
+END_VAR
+VAR_INPUT
+    iMessage : I_Message;
+END_VAR
+VAR
+    nLength : UDINT;
+END_VAR]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[
+F_ReadMessage := F_ParseLength(aBuffer, stState, nLength=> nLength);
+IF FAILED(F_ReadMessage) THEN
+    RETURN;
+END_IF
+
+IF stState.nRecursionDepth >= stState.nRecursionLimit THEN
+    F_ReadMessage := stState.eParserErrorCode := E_ParserErrorCode.RecursionLimitExceeded;
+    stState.bError := TRUE;
+    RETURN;
+END_IF
+
+stState.nRecursionDepth := stState.nRecursionDepth + 1;
+
+
+
+F_ReadMessage := F_ReadRawMessage(aBuffer, stState, iMessage);
+
+
+
+
+stState.nRecursionDepth := stState.nRecursionDepth - 1;]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>

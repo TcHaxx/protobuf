@@ -1,0 +1,114 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1">
+  <POU Name="FB_FooBarBazMessage" Id="{cf2e5f3a-ec46-4558-9f26-acb076490d6c}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK INTERNAL FINAL FB_FooBarBazMessage IMPLEMENTS I_Message
+
+(*
+syntax = "proto3";
+
+import "tchaxx-extensions.proto";
+
+message Foo
+{
+  Bar bar = 1;
+  repeated Baz baz = 2 [(tchaxx.ext.v1.array_length) = 3];
+}
+
+message Bar
+{
+  string name = 1;
+  uint32 age = 2;
+  optional string email = 3;
+}
+
+message Baz
+{
+  fixed32 value = 1;
+  string name = 2;
+}
+*)
+
+VAR
+	fbMessageParser : FB_MessageParser(ipMessage:= THIS^);
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[]]></ST>
+    </Implementation>
+    <Method Name="CalculateSize" Id="{ce3905cf-bfcb-4319-9024-c4cd79291450}">
+      <Declaration><![CDATA[{warning 'Add method implementation '}
+(* Calculates the size of this message in Protocol Buffer wire format, in bytes.*)
+METHOD CalculateSize : UDINT
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="MergeFrom" Id="{314e9c79-e00c-4e2b-9692-cca9b4200ec9}">
+      <Declaration><![CDATA[{warning 'Add method implementation '}
+(* Merges the data from the specified coded input stream with the current message.*)
+METHOD MergeFrom : HRESULT
+VAR_IN_OUT
+	fbInput	: FB_CodedInputStream;
+END_VAR
+VAR
+    nTag : UDINT;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[
+REPEAT   
+MergeFrom := fbInput.ReadTag(nTag=>nTag);
+IF SUCCEEDED(MergeFrom) AND nTag = 0 THEN
+    EXIT;
+END_IF;
+
+IF FAILED(MergeFrom) THEN
+    MergeFrom := MergeFrom;
+    RETURN;
+END_IF
+
+CASE nTag OF
+    16#0A:         // Bar bar = 1;
+        ;
+           
+ 
+ELSE
+    MergeFrom := fBInput.SkipLastField();
+END_CASE
+
+UNTIL (FAILED(MergeFrom) OR nTag = 0)
+END_REPEAT
+]]></ST>
+      </Implementation>
+    </Method>
+    <Property Name="MessageDescriptor" Id="{b0dc2b91-ccda-4320-85ab-374db1543a47}">
+      <Declaration><![CDATA[{warning 'Add property implementation'}
+(* Descriptor for this message. All instances are expected to return the same descriptor,
+ and for generated types this will be an explicitly-implemented member, returning the
+ same value as the static property declared on the type.*)
+PROPERTY MessageDescriptor : REFERENCE TO FB_MessageDescriptor
+]]></Declaration>
+      <Get Name="Get" Id="{1cdea5fa-77b9-4f87-bc84-b6513d3323ee}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Method Name="WriteTo" Id="{43cf5782-5084-41c2-8543-7116a19d9763}">
+      <Declaration><![CDATA[{warning 'Add method implementation '}
+(* Writes the data to the given coded output stream.*)
+METHOD WriteTo
+VAR_IN_OUT
+	(* Coded output stream to write the data to. *)
+	fbOutput	: FB_CodedOutputStream;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[]]></ST>
+      </Implementation>
+    </Method>
+  </POU>
+</TcPlcObject>

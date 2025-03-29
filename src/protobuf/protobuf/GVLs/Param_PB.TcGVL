@@ -6,6 +6,7 @@ VAR_GLOBAL CONSTANT
     cMaxCharacter                   : UDINT(16#FF..16#FFFF) := 16#3FF;          // Default max. character = 1023.
     cMaxProtobufRawBuffer           : UDINT(16#FF..16#FFFF) := 16#1000;         // Default max. raw buffer size = 4096.
     cFieldCodecBytesDefaultSize     : UDINT(16#20..cMaxCharacter) := 16#100;    // Default tmp. buffer size for field codec Bytes.
+    cRecursionLimit                 : UDINT(16#1..16#FF) := 16#64;              // Default recursion limit.
 END_VAR]]></Declaration>
   </GVL>
 </TcPlcObject>

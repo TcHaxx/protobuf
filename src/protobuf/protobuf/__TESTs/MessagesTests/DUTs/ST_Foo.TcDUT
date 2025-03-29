@@ -1,0 +1,15 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1">
+  <DUT Name="ST_Foo" Id="{ffbe97eb-dbd5-4a84-b119-d5bc0ea43dcd}">
+    <Declaration><![CDATA[(*******************************************************************************
+                          protoc-gen-twincat V0.0.0.0                           
+                  https://github.com/TcHaxx/protoc-gen-twincat                  
+*******************************************************************************)
+TYPE ST_Foo :
+STRUCT
+	bar : ST_Bar;
+	baz : ARRAY[0..2] OF ST_Baz;
+END_STRUCT
+END_TYPE]]></Declaration>
+  </DUT>
+</TcPlcObject>

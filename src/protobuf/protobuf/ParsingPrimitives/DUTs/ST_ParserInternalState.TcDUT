@@ -6,11 +6,14 @@ STRUCT
     nBufferSize             : UDINT;                // Size of the current buffer
     nBufferPos              : UDINT;                // The position within the current buffer (i.e. the next byte to read)
     nLastTag                : UDINT;                // The last tag we read. 0 indicates we've read to the end of the stream (or haven't read anything yet).
-    nNextTag                : UDINT;                // 
+    nNextTag                : UDINT;                //
+    nRecursionDepth         : UDINT;                // Current recursion depth
+    nRecursionLimit         : UDINT := Param_PB.cRecursionLimit; 
     bError                  : BOOL;                 // True if error occured.
     bDiscardUnknownFields   : BOOL;                 // When set to true, unknown fields will be discarded while parsing.
     bHasNextTag             : BOOL; 
     
+    pCodedInputStream       : POINTER TO FB_CodedInputStream;
     eParserErrorCode        : E_ParserErrorCode;    // 0 = no error, <> 0 = error
 END_STRUCT
 END_TYPE

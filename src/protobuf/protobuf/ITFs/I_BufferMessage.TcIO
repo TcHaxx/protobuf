@@ -1,0 +1,23 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1">
+  <Itf Name="I_BufferMessage" Id="{f56f1e78-191a-4f3f-a73b-845a03427efc}">
+    <Declaration><![CDATA[// Interface for a Protocol Buffers message, supporting parsing from ST_ParserInternalState
+// and writing to ST_WriterInternalState 
+INTERFACE I_BufferMessage EXTENDS I_Message
+]]></Declaration>
+    <Method Name="InternalMergeFrom" Id="{df371adf-7072-49a2-bfce-dcd90b23f2cc}">
+      <Declaration><![CDATA[METHOD InternalMergeFrom : HRESULT
+VAR_IN_OUT
+    stState : ST_ParserInternalState;
+END_VAR
+]]></Declaration>
+    </Method>
+    <Method Name="InternalWriteTo" Id="{4cb8226f-7662-47a8-94db-f4100d4b36d0}">
+      <Declaration><![CDATA[METHOD InternalWriteTo : HRESULT
+VAR_IN_OUT
+    stState : ST_WriterInternalState;
+END_VAR
+]]></Declaration>
+    </Method>
+  </Itf>
+</TcPlcObject>

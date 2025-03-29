@@ -147,6 +147,9 @@
       <SubType>Code</SubType>
       <LinkAlways>true</LinkAlways>
     </Compile>
+    <Compile Include="ITFs\I_BufferMessage.TcIO">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="ITFs\I_Message.TcIO">
       <SubType>Code</SubType>
     </Compile>
@@ -158,6 +161,12 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="ITFs\I_ValueWriter.TcIO">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ParsingPrimitivesMessages\POUs\F_ReadMessage.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ParsingPrimitivesMessages\POUs\F_ReadRawMessage.TcPOU">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="ParsingPrimitivesMessages\POUs\F_SkipLastField.TcPOU">
@@ -497,6 +506,15 @@
     <Compile Include="__TESTs\HelperTests\PRG_HelperTests.TcPOU">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="__TESTs\MessagesTests\DUTs\ST_Bar.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="__TESTs\MessagesTests\DUTs\ST_Baz.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="__TESTs\MessagesTests\DUTs\ST_Foo.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="__TESTs\MessagesTests\DUTs\ST_Example.TcDUT">
       <SubType>Code</SubType>
     </Compile>
@@ -504,6 +522,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="__TESTs\MessagesTests\POUs\FB_ExampleMessage.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="__TESTs\MessagesTests\POUs\FB_FooBarBazMessage.TcPOU">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="__TESTs\MessagesTests\POUs\FB_RepeatedStringMessageTests.TcPOU">
