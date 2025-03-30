@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <TcPlcObject Version="1.1.0.1">
   <Itf Name="I_Message" Id="{661c5d63-aac8-4fbe-8595-833042ab407b}">
-    <Declaration><![CDATA[INTERFACE I_Message
+    <Declaration><![CDATA[INTERFACE I_Message EXTENDS __System.IQueryInterface
 ]]></Declaration>
     <Method Name="CalculateSize" Id="{9db2928f-9677-4919-b193-b2e353fc53fc}">
       <Declaration><![CDATA[// Calculates the size of this message in Protocol Buffer wire format, in bytes.

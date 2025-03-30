@@ -7,11 +7,20 @@ VAR
     {IF defined (UNIT_TEST)}
     fbMessageTests  : FB_MessageTests;
 //     fbRepeatedStringMessageTests : FB_RepeatedStringMessageTests;
+    fbfbb : FB_FooBarBazMessage;
+    fbExam : FB_ExampleMessage;
+    stState : ST_ParserInternalState;
+    aBuffer : ARRAY [0..15] OF BYTE;
     {END_IF}
 END_VAR
 ]]></Declaration>
     <Implementation>
-      <ST><![CDATA[]]></ST>
+      <ST><![CDATA[
+IF NOT stState.bHasNextTag THEN
+    stState.bHasNextTag := TRUE;
+    F_ReadRawMessage(aBuffer, stState, fbfbb);
+    F_ReadRawMessage(aBuffer, stState, fbExam);
+END_IF;]]></ST>
     </Implementation>
   </POU>
 </TcPlcObject>

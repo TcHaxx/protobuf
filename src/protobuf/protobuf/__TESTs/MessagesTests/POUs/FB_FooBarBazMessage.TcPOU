@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <TcPlcObject Version="1.1.0.1">
   <POU Name="FB_FooBarBazMessage" Id="{cf2e5f3a-ec46-4558-9f26-acb076490d6c}" SpecialFunc="None">
-    <Declaration><![CDATA[FUNCTION_BLOCK INTERNAL FINAL FB_FooBarBazMessage IMPLEMENTS I_Message
+    <Declaration><![CDATA[FUNCTION_BLOCK INTERNAL FINAL FB_FooBarBazMessage IMPLEMENTS I_BufferMessage
 
 (*
 syntax = "proto3";
@@ -39,6 +39,28 @@ END_VAR
       <Declaration><![CDATA[{warning 'Add method implementation '}
 (* Calculates the size of this message in Protocol Buffer wire format, in bytes.*)
 METHOD CalculateSize : UDINT
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="InternalMergeFrom" Id="{2d90d5a3-60a9-484a-8204-c8513ae8a6e5}">
+      <Declaration><![CDATA[{warning 'Add method implementation '}
+METHOD InternalMergeFrom : HRESULT
+VAR_IN_OUT
+	stState	: ST_ParserInternalState;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="InternalWriteTo" Id="{e33703cb-b48e-4ae7-87a1-9e5e71586db7}">
+      <Declaration><![CDATA[{warning 'Add method implementation '}
+METHOD InternalWriteTo : HRESULT
+VAR_IN_OUT
+	stState	: ST_WriterInternalState;
+END_VAR
 ]]></Declaration>
       <Implementation>
         <ST><![CDATA[]]></ST>

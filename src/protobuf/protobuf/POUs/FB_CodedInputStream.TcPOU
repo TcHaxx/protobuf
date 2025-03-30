@@ -78,9 +78,21 @@ stState.nBufferPos := TO_UDINT(LOWER_BOUND(aBuffer, 1));
 
 nSize := UPPER_BOUND(aBuffer, 1) - LOWER_BOUND(aBuffer, 1);
 stState.nBufferSize := TO_UDINT(nSize);
-]]></ST>
+
+stState.pCodedInputStream := THIS;]]></ST>
       </Implementation>
     </Method>
+    <Property Name="InternalState" Id="{8023d3b9-5b97-41c7-9109-8d7d8d931248}">
+      <Declaration><![CDATA[PROPERTY INTERNAL InternalState : REFERENCE TO ST_ParserInternalState]]></Declaration>
+      <Get Name="Get" Id="{1ba358ea-7232-4041-82c8-ddafcd72e62f}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[InternalState REF= THIS^.stState;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
     <Method Name="PeekTag" Id="{1d2d4b6e-b454-4c61-afb2-3f3611aef8e7}">
       <Declaration><![CDATA[// Peeks at the next field tag. this is like calling "ReadTag", but the
 // tag is not consumed. (So a subsequent call to "ReadTag" will return the same value.)
@@ -175,6 +187,22 @@ END_VAR]]></Declaration>
         <ST><![CDATA[
 ReadInt64 := F_ParseRawVarint64(aBuffer, stState, nTmp);
 nValue := TO_LINT(nTmp);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="ReadRawMessage" Id="{db244a98-0a9a-45c0-b4b8-152bcbb4a14b}">
+      <Declaration><![CDATA[// Reads a top-level message or a nested message
+METHOD ReadRawMessage : HRESULT
+VAR_INPUT
+    iMessage : I_Message;
+END_VAR
+VAR
+    stStateLocal    : ST_ParserInternalState;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[
+ReadRawMessage := F_ReadRawMessage(aBuffer, stStateLocal, iMessage);
+
+stState := stStateLocal;]]></ST>
       </Implementation>
     </Method>
     <Method Name="ReadRepeatedFieldBool" Id="{75c50ea8-8826-409c-bb4e-2e1a78d69e13}">
@@ -434,7 +462,8 @@ stState.nBufferSize := 0;
 stState.nLastTag := 0;
 stState.nNextTag := 0;
 stState.bHasNextTag := FALSE;
-stState.bDiscardUnknownFields := FALSE;]]></ST>
+stState.bDiscardUnknownFields := FALSE;
+stState.nRecursionDepth := 0;]]></ST>
       </Implementation>
     </Method>
     <Method Name="SetTempBuffer" Id="{3117f644-538d-47be-87c2-4e2b358529e1}">

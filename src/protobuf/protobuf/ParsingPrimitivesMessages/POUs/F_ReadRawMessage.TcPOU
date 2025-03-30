@@ -12,23 +12,28 @@ VAR_INPUT
     iMessage : I_Message;
 END_VAR
 VAR
-    nLength : UDINT;
     iBufferMessage : I_BufferMessage;
 END_VAR]]></Declaration>
     <Implementation>
       <ST><![CDATA[
+IF iMessage = 0 THEN
+    F_ReadRawMessage := stState.eParserErrorCode := E_ParserErrorCode.InternalError;
+    stState.bError := TRUE;
+    RETURN;
+END_IF
 
 IF __QUERYINTERFACE(iMessage, iBufferMessage) THEN
-    
-    {warning 'TODO: Implement'}
 
+    F_ReadRawMessage := iBufferMessage.InternalMergeFrom(stState);
+    RETURN;
+  
 ELSE
     IF stState.pCodedInputStream = null THEN
         F_ReadRawMessage := stState.eParserErrorCode := E_ParserErrorCode.InternalError;
         stState.bError := TRUE;
         RETURN;
     END_IF
-    
+    stState.pCodedInputStream^.InternalState := stState;
     iMessage.MergeFrom(fbInput:= stState.pCodedInputStream^);
 END_IF
 
