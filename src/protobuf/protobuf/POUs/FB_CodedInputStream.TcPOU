@@ -70,14 +70,14 @@ VAR_IN_OUT CONSTANT
     aBuffer : ARRAY [*] OF BYTE;
 END_VAR
 VAR
-    nSize : DINT;
+    stBufferInfo : ST_VariableLengthArrayInfo;
 END_VAR]]></Declaration>
       <Implementation>
         <ST><![CDATA[
 stState.nBufferPos := TO_UDINT(LOWER_BOUND(aBuffer, 1));
 
-nSize := UPPER_BOUND(aBuffer, 1) - LOWER_BOUND(aBuffer, 1);
-stState.nBufferSize := TO_UDINT(nSize);
+stBufferInfo := F_BufferInfo(aBuffer);
+stState.nBufferSize := stBufferInfo.nSize;
 
 stState.pCodedInputStream := THIS;]]></ST>
       </Implementation>

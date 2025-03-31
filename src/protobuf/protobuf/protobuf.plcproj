@@ -102,6 +102,9 @@
       <SubType>Code</SubType>
       <LinkAlways>true</LinkAlways>
     </Compile>
+    <Compile Include="Helper\DUTs\ST_VariableLengthArrayInfo.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Helper\DUTs\T_AnyInt.TcDUT">
       <SubType>Code</SubType>
     </Compile>
@@ -146,6 +149,9 @@
     <Compile Include="Helper\POUs\F_ToAnyString.TcPOU">
       <SubType>Code</SubType>
       <LinkAlways>true</LinkAlways>
+    </Compile>
+    <Compile Include="Helper\POUs\F_BufferInfo.TcPOU">
+      <SubType>Code</SubType>
     </Compile>
     <Compile Include="ITFs\I_BufferMessage.TcIO">
       <SubType>Code</SubType>

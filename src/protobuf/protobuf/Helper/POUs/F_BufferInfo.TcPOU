@@ -1,0 +1,28 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1">
+  <POU Name="F_BufferInfo" Id="{e50c8c6f-26bb-44d6-8120-035507643ba3}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION F_BufferInfo : ST_VariableLengthArrayInfo
+VAR_IN_OUT CONSTANT
+    aBuffer : ARRAY[*] OF BYTE;
+END_VAR
+VAR
+    pLB : POINTER TO BYTE;
+    pUB : POINTER TO BYTE;
+    nLB : DINT;
+    nUB : DINT;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[
+nLB := LOWER_BOUND(aBuffer, 1);
+nUB := UPPER_BOUND(aBuffer, 1);
+
+pLB := ADR(aBuffer[nLB]);
+pUB := ADR(aBuffer[nUB]);
+
+F_BufferInfo.nLowerBound    := nLB;
+F_BufferInfo.nUpperBound    := nUB;
+F_BufferInfo.nSize          := pUB - pLB + 1;]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>
