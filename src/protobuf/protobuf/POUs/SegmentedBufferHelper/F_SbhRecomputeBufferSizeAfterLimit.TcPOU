@@ -1,0 +1,25 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1">
+  <POU Name="F_SbhRecomputeBufferSizeAfterLimit" Id="{15ebdb48-aded-44d6-a039-ca8ad43032c4}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION INTERNAL F_SbhRecomputeBufferSizeAfterLimit : HRESULT
+VAR_IN_OUT
+    stState     : ST_ParserInternalState;
+END_VAR
+VAR
+    nBufferEnd  : UDINT;
+END_VAR]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[
+stState.nBufferSize := stState.nBufferSize + stState.nBufferSizeAfterLimit;
+
+nBufferEnd := stState.nTotalBytesRetired + stState.nBufferSize;
+
+IF nBufferEnd > stState.nCurrentLimit THEN
+    stState.nBufferSizeAfterLimit := nBufferEnd - stState.nCurrentLimit;
+    stState.nBufferSize := stState.nBufferSize - stState.nBufferSizeAfterLimit;
+ELSE
+    stState.nBufferSizeAfterLimit := 0;
+END_IF]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>

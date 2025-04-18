@@ -373,6 +373,18 @@
       <SubType>Code</SubType>
       <LinkAlways>true</LinkAlways>
     </Compile>
+    <Compile Include="POUs\SegmentedBufferHelper\F_SbhIsReachedLimit.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\SegmentedBufferHelper\F_SbhPushLimit.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\SegmentedBufferHelper\F_SbhPopLimit.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\SegmentedBufferHelper\F_SbhRecomputeBufferSizeAfterLimit.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="POUs\Span\F_SpanFromArray.TcPOU">
       <SubType>Code</SubType>
     </Compile>

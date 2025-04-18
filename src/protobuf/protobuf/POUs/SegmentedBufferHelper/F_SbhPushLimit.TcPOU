@@ -1,0 +1,32 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1">
+  <POU Name="F_SbhPushLimit" Id="{8cea7c7c-7bfa-48e0-8baf-555c45c3fa31}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION INTERNAL F_SbhPushLimit : HRESULT
+VAR_IN_OUT
+    stState     : ST_ParserInternalState;
+END_VAR
+VAR_INPUT
+    nByteLimit  : UDINT;
+END_VAR
+VAR_OUTPUT
+    nCurrentLimit   : UDINT;
+END_VAR]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[
+nByteLimit := nByteLimit + stState.nTotalBytesRetired + stState.nBufferPos;
+
+nCurrentLimit := stState.nCurrentLimit;
+
+IF nByteLimit > nCurrentLimit THEN
+    F_SbhPushLimit := stState.eParserErrorCode := E_ParserErrorCode.TruncatedMessage;
+    stState.bError := TRUE;
+    RETURN;
+END_IF
+
+stState.nCurrentLimit := nByteLimit;
+F_SbhPushLimit := F_SbhRecomputeBufferSizeAfterLimit(stState);
+
+stState.nCurrentLimit := nByteLimit;]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>
