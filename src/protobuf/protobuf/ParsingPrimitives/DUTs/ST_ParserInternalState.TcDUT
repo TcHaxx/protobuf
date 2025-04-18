@@ -9,10 +9,13 @@ STRUCT
     nNextTag                : UDINT;                //
     nRecursionDepth         : UDINT;                // Current recursion depth
     nRecursionLimit         : UDINT := Param_PB.cRecursionLimit; 
+    nSizeLimit              : UDINT := Param_PB.cMaxProtobufRawBuffer;
+    nBufferSizeAfterLimit   : UDINT;                // If we are currently inside a length-delimited block, this is the number of bytes in the buffer that are still available once we leave the delimited block.
+    nCurrentLimit           : UDINT;                // The absolute position of the end of the current length-delimited block (including totalBytesRetired).
+    nTotalBytesRetired      : UDINT;                // The total number of consumed before the start of the current buffer.
     bError                  : BOOL;                 // True if error occured.
     bDiscardUnknownFields   : BOOL;                 // When set to true, unknown fields will be discarded while parsing.
     bHasNextTag             : BOOL; 
-    
     pCodedInputStream       : POINTER TO FB_CodedInputStream;
     eParserErrorCode        : E_ParserErrorCode;    // 0 = no error, <> 0 = error
 END_STRUCT

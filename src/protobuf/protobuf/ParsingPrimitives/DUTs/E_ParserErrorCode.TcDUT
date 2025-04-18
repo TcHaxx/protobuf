@@ -12,11 +12,15 @@ TYPE E_ParserErrorCode :
     InternalError := -1,            // Internal parser error.
     MalformedVarInt := -2,          // Encountered a malformed Varint.
     InvalidDataType := -3,          // Datatype not supported, e.g. F_ParseRawInt32 -> LINT
-    TruncatedMessage := -4,         // 
+    TruncatedMessage := -4,         // While parsing a protocol message, the input ended unexpectedly in the middle of a field.  This could mean either that the input has been truncated or that an embedded message misreported its own length.
     InvalidUtf8 := -5,              //
     NotEnoughMem := -6,             // e.g. Array [0..15] OF BYTES but F_ReadRawBytes length is 32.
     EndOfStream := -7,              //
-    RecursionLimitExceeded := -8,   // 
+    MoreDataAvailable := -8,        // Completed reading a message while more data was available in the stream.
+    RecursionLimitExceeded := -9,   // 
+    NegativeSize := -10,            // Encountered an embedded string or message which claimed to have negative size.
+    InvalidTag := -11,              // Protocol message contained an invalid tag (zero).
+    InvalidWireType := -12,         // Protocol message contained a tag with an invalid wire type.
     NotImplemented := -999          // Not implemented yet.
 ) DINT := NoError;
 END_TYPE
