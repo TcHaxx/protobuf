@@ -1,0 +1,18 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1">
+  <POU Name="F_ParseContextInitializeFromState" Id="{75cd27fb-64c6-4493-9ee6-91cc0b12abeb}" SpecialFunc="None">
+    <Declaration><![CDATA[// Initialize a ST_ParseContext, building all ST_ParserInternalState from defaults and the given buffer.
+FUNCTION F_ParseContextInitializeFromState : ST_ParseContext
+VAR_IN_OUT CONSTANT
+    stState : ST_ParserInternalState;
+END_VAR
+VAR_INPUT
+    stBuffer : ST_Span;    
+END_VAR]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[
+F_ParseContextInitializeFromState.stBuffer := stBuffer;
+F_ParseContextInitializeFromState.stState  := stState;]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>

@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1">
+  <DUT Name="ST_ParseContext" Id="{95883e15-46b0-4bcb-bbdc-d8888725c7a3}">
+    <Declaration><![CDATA[TYPE ST_ParseContext :
+STRUCT
+    stBuffer    : ST_Span;
+    stState     : ST_ParserInternalState;
+END_STRUCT
+END_TYPE
+]]></Declaration>
+  </DUT>
+</TcPlcObject>
