@@ -1,0 +1,20 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1">
+  <POU Name="F_CheckReadEndOfStreamTag" Id="{a771decb-a4a0-4f64-89f9-523fb6ace07a}" SpecialFunc="None">
+    <Declaration><![CDATA[// Verifies that the last call to ReadTag() returned tag 0
+FUNCTION INTERNAL F_CheckReadEndOfStreamTag : HRESULT
+VAR_IN_OUT
+    stState : ST_ParserInternalState;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[
+IF stState.nLastTag <> 0 THEN
+    F_CheckReadEndOfStreamTag := stState.eParserErrorCode := E_ParserErrorCode.MoreDataAvailable;
+    stState.bError := TRUE;
+    RETURN;
+END_IF
+]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>

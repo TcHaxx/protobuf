@@ -184,6 +184,9 @@
     <Compile Include="ParsingPrimitivesMessages\POUs\F_SkipLastField.TcPOU">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="ParsingPrimitivesMessages\POUs\F_CheckReadEndOfStreamTag.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="ParsingPrimitives\DUTs\E_ParserErrorCode.TcDUT">
       <SubType>Code</SubType>
     </Compile>
