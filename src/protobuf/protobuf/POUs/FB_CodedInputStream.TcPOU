@@ -22,6 +22,8 @@ VAR
     fbFieldCodecString      : FB_FieldCodecString;
     fbFieldCodecBytes       : FB_FieldCodecBytes;
     fbFieldCodecBool        : FB_FieldCodecBool;
+    
+    fbFieldCodecMessage     : FB_FieldCodecMessage;
 END_VAR]]></Declaration>
     <Implementation>
       <ST><![CDATA[]]></ST>
@@ -189,20 +191,51 @@ ReadInt64 := F_ParseRawVarint64(aBuffer, stState, nTmp);
 nValue := TO_LINT(nTmp);]]></ST>
       </Implementation>
     </Method>
+    <Method Name="ReadMessage" Id="{b8d1bf14-f102-4873-acc9-258462895d53}">
+      <Declaration><![CDATA[METHOD ReadMessage : HRESULT
+VAR_INPUT
+    iMessage : I_Message;
+END_VAR
+
+VAR
+    nLength : UDINT;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[
+ReadMessage := F_ParseLength(aBuffer, stState, nLength=> nLength);
+IF FAILED(ReadMessage) THEN
+    RETURN;
+END_IF
+
+IF stState.nRecursionDepth >= stState.nRecursionLimit THEN
+    ReadMessage := stState.eParserErrorCode := E_ParserErrorCode.RecursionLimitExceeded;
+    stState.bError := TRUE;
+    RETURN;
+END_IF
+
+stState.nRecursionDepth := stState.nRecursionDepth + 1;
+
+ReadMessage := ReadRawMessage(iMessage);
+
+ReadMessage := F_CheckReadEndOfStreamTag(stState);
+IF FAILED(ReadMessage) THEN
+    RETURN;
+END_IF
+
+
+stState.nRecursionDepth := stState.nRecursionDepth - 1;]]></ST>
+      </Implementation>
+    </Method>
     <Method Name="ReadRawMessage" Id="{db244a98-0a9a-45c0-b4b8-152bcbb4a14b}">
       <Declaration><![CDATA[// Reads a top-level message or a nested message
 METHOD ReadRawMessage : HRESULT
 VAR_INPUT
     iMessage : I_Message;
 END_VAR
-VAR
-    stStateLocal    : ST_ParserInternalState;
-END_VAR]]></Declaration>
+]]></Declaration>
       <Implementation>
         <ST><![CDATA[
-ReadRawMessage := F_ReadRawMessage(aBuffer, stStateLocal, iMessage);
-
-stState := stStateLocal;]]></ST>
+ReadRawMessage := F_ReadRawMessage(aBuffer, stState, iMessage);]]></ST>
       </Implementation>
     </Method>
     <Method Name="ReadRepeatedFieldBool" Id="{75c50ea8-8826-409c-bb4e-2e1a78d69e13}">
@@ -323,6 +356,21 @@ END_VAR]]></Declaration>
       <Implementation>
         <ST><![CDATA[
 ReadRepeatedFieldInt64 := F_ReadRepeatedField(aBuffer, stState, anyArray, anyFirstElem, ipFieldCodec:= THIS^.fbFieldCodecInt64, nFieldIndex); ]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="ReadRepeatedFieldMessage" Id="{08228038-dc2f-46a3-a9d1-13ce10b5f4fb}">
+      <Declaration><![CDATA[METHOD ReadRepeatedFieldMessage : HRESULT
+VAR_INPUT CONSTANT
+    anyArray        : T_Any;
+    anyFirstElem    : T_Any;
+END_VAR
+
+VAR_IN_OUT   
+    nFieldIndex : UDINT; 
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[
+ReadRepeatedFieldMessage := F_ReadRepeatedField(aBuffer, stState, anyArray, anyFirstElem, ipFieldCodec:= THIS^.fbFieldCodecMessage, nFieldIndex); ]]></ST>
       </Implementation>
     </Method>
     <Method Name="ReadRepeatedFieldSint32" Id="{ca300938-2a6d-4d4a-b6ea-108d5525ff80}">
@@ -489,6 +537,17 @@ END_VAR
 SkipLastField := F_SkipLastField(aBuffer, stState);]]></ST>
       </Implementation>
     </Method>
+    <Property Name="stBuffer" Id="{592d0499-1e45-4385-ba00-3610f607a0c5}">
+      <Declaration><![CDATA[PROPERTY stBuffer : ST_Span]]></Declaration>
+      <Get Name="Get" Id="{c5356b33-f354-49e9-a10f-ad46064c766d}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[stBuffer := F_SpanFromArray(aBuffer);]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
     <Method Name="ValidateBuffer" Id="{99a4273f-2c0f-4e07-88a4-2ca0a48b6091}">
       <Declaration><![CDATA[METHOD PRIVATE ValidateBuffer : HRESULT
 VAR_IN_OUT CONSTANT

@@ -1,0 +1,83 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1">
+  <POU Name="FB_FieldCodecMessage" Id="{2b6842e3-d7c2-44a7-bf52-c88156fac8f3}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK FB_FieldCodecMessage IMPLEMENTS I_FieldCodec
+VAR_INPUT
+END_VAR
+VAR_OUTPUT
+END_VAR
+VAR
+
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[]]></ST>
+    </Implementation>
+    <Method Name="CalculatePackedDataSize" Id="{b3546115-ec22-4875-8d6e-4449327f1c2c}">
+      <Declaration><![CDATA[{attribute 'analysis' := '-33'}
+METHOD CalculatePackedDataSize : HRESULT
+VAR_INPUT CONSTANT
+	anyFirstElem	: T_Any;
+	nLength	        : UDINT;        // items to write
+END_VAR
+VAR_OUTPUT
+    nPackedDataSize : UDINT;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[
+CalculatePackedDataSize := 0;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="IsPackedRepeatedField" Id="{695c89eb-30cc-4511-b56e-38db99a5dc46}">
+      <Declaration><![CDATA[METHOD IsPackedRepeatedField : BOOL
+VAR_INPUT
+    {attribute 'analysis' := '-33' } 
+	nTag	: UDINT;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[
+IsPackedRepeatedField := FALSE;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="ValueReader" Id="{e4223324-5674-4c82-b149-f3471b33ed03}">
+      <Declaration><![CDATA[
+METHOD ValueReader : HRESULT
+VAR_IN_OUT CONSTANT
+	aBuffer	: ARRAY [*] OF BYTE;
+END_VAR
+VAR_IN_OUT
+	stState	: ST_ParserInternalState;
+END_VAR
+VAR_OUTPUT
+	anyOut	: T_Any;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[// IF anyStringTmp.pValue <> NULL THEN
+//     anyOut := anyStringTmp;
+// ELSE
+//     anyOut := F_ToAnyString(sValue);
+// END_IF
+// ValueReader := F_ReadString(aBuffer, stState, anyOut);
+]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="ValueWriter" Id="{fdb65b05-c4a7-47c5-9055-cbbc790d5d7d}">
+      <Declaration><![CDATA[METHOD ValueWriter : HRESULT
+VAR_IN_OUT
+	aBuffer	: ARRAY [*] OF BYTE;
+END_VAR
+VAR_IN_OUT
+	stState	: ST_WriterInternalState;
+END_VAR
+VAR_INPUT
+    anyIn : T_ANY;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[
+// ValueWriter := F_WriteRawString(aBuffer, stState, anyIn);]]></ST>
+      </Implementation>
+    </Method>
+  </POU>
+</TcPlcObject>

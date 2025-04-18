@@ -72,6 +72,9 @@
     <Compile Include="FieldCodec\FB_FieldCodecBool.TcPOU">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="FieldCodec\FB_FieldCodecMessage.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="FieldCodec\FB_FieldCodecUInt64.TcPOU">
       <SubType>Code</SubType>
       <LinkAlways>true</LinkAlways>
