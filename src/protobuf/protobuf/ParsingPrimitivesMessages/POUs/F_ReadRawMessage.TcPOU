@@ -2,39 +2,40 @@
 <TcPlcObject Version="1.1.0.1">
   <POU Name="F_ReadRawMessage" Id="{c47d844f-4687-416d-9a60-b87fd3566db4}" SpecialFunc="None">
     <Declaration><![CDATA[FUNCTION F_ReadRawMessage : HRESULT
-VAR_IN_OUT CONSTANT
-    aBuffer : ARRAY [*] OF BYTE;       
-END_VAR
 VAR_IN_OUT
-    stState : ST_ParserInternalState;
+    fbCtx   : FB_ParseContext;     
 END_VAR
 VAR_INPUT
     iMessage : I_Message;
 END_VAR
 VAR
     iBufferMessage : I_BufferMessage;
+    refState : REFERENCE TO ST_ParserInternalState;
 END_VAR]]></Declaration>
     <Implementation>
       <ST><![CDATA[
+refState REF= fbCtx.stState;
+
 IF iMessage = 0 THEN
-    F_ReadRawMessage := stState.eParserErrorCode := E_ParserErrorCode.InternalError;
-    stState.bError := TRUE;
+    F_ReadRawMessage := refState.eParserErrorCode := E_ParserErrorCode.InternalError;
+    refState.bError := TRUE;
     RETURN;
 END_IF
 
 IF __QUERYINTERFACE(iMessage, iBufferMessage) THEN
 
-    F_ReadRawMessage := iBufferMessage.InternalMergeFrom(stState);
+    F_ReadRawMessage := iBufferMessage.InternalMergeFrom(fbCtx);
     RETURN;
   
 ELSE
-    IF stState.pCodedInputStream = null THEN
-        F_ReadRawMessage := stState.eParserErrorCode := E_ParserErrorCode.InternalError;
-        stState.bError := TRUE;
+    IF refState.pCodedInputStream = NULL THEN
+        F_ReadRawMessage := refState.eParserErrorCode := E_ParserErrorCode.InternalError;
+        refState.bError := TRUE;
         RETURN;
     END_IF
-    stState.pCodedInputStream^.InternalState := stState;
-    iMessage.MergeFrom(fbInput:= stState.pCodedInputStream^);
+    fbCtx.CopyStateToInputStream(fbInputStream:= refState.pCodedInputStream^);
+    iMessage.MergeFrom(fbInput:= refState.pCodedInputStream^);
+    fbCtx.LoadStateFromInputStream(fbInputStream:= refState.pCodedInputStream^);
 END_IF
 
 

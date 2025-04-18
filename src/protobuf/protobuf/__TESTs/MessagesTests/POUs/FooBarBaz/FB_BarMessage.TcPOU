@@ -50,9 +50,8 @@ METHOD CalculateSize : UDINT
       <Declaration><![CDATA[{warning 'Add method implementation '}
 METHOD InternalMergeFrom : HRESULT
 VAR_IN_OUT
-	stState	: ST_ParserInternalState;
-END_VAR
-]]></Declaration>
+    fbCtx : FB_ParseContext;
+END_VAR]]></Declaration>
       <Implementation>
         <ST><![CDATA[]]></ST>
       </Implementation>

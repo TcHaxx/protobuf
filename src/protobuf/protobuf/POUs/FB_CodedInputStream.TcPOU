@@ -94,6 +94,15 @@ END_VAR
           <ST><![CDATA[InternalState REF= THIS^.stState;]]></ST>
         </Implementation>
       </Get>
+      <Set Name="Set" Id="{5753ad60-2ff9-4760-9f72-a56344f2a98b}">
+        <Declaration><![CDATA[
+VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[THIS^.stState := InternalState;]]></ST>
+        </Implementation>
+      </Set>
     </Property>
     <Method Name="PeekTag" Id="{1d2d4b6e-b454-4c61-afb2-3f3611aef8e7}">
       <Declaration><![CDATA[// Peeks at the next field tag. this is like calling "ReadTag", but the
@@ -232,10 +241,15 @@ METHOD ReadRawMessage : HRESULT
 VAR_INPUT
     iMessage : I_Message;
 END_VAR
-]]></Declaration>
+
+VAR_INST
+    fbCtx   : FB_ParseContext;
+END_VAR]]></Declaration>
       <Implementation>
         <ST><![CDATA[
-ReadRawMessage := F_ReadRawMessage(aBuffer, stState, iMessage);]]></ST>
+fbCtx.InitializeFromInputStream(THIS^);
+ReadRawMessage := F_ReadRawMessage(fbCtx, iMessage);
+fbCtx.CopyStateToInputStream(THIS^);]]></ST>
       </Implementation>
     </Method>
     <Method Name="ReadRepeatedFieldBool" Id="{75c50ea8-8826-409c-bb4e-2e1a78d69e13}">
@@ -448,6 +462,21 @@ END_VAR]]></Declaration>
 ReadRepeatedFieldUint64 := F_ReadRepeatedField(F_SpanFromArray(aBuffer), stState, anyArray, anyFirstElem, ipFieldCodec:= THIS^.fbFieldCodecInt64, nFieldIndex); ]]></ST>
       </Implementation>
     </Method>
+    <Method Name="ReadSFixed32" Id="{a097664c-28fc-4f08-ad00-5d4e07f9a8a4}">
+      <Declaration><![CDATA[METHOD PUBLIC ReadSFixed32 : HRESULT
+VAR_OUTPUT
+    nValue : DINT;
+END_VAR
+VAR
+    nTmp : UDINT;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[
+ReadSFixed32 := F_ParseRawLittleEndian32(F_SpanFromArray(aBuffer), stState, nValue=> nTmp);
+
+nValue := TO_DINT(nTmp);]]></ST>
+      </Implementation>
+    </Method>
     <Method Name="ReadSFixed64" Id="{7ccdace2-dfaf-4347-bdd1-8a51b9cb7ce5}">
       <Declaration><![CDATA[METHOD PUBLIC ReadSFixed64 : HRESULT
 VAR_OUTPUT
@@ -473,7 +502,7 @@ END_VAR
         <ST><![CDATA[ReadString := F_ReadStringInternal(aBuffer, F_ToAnyType(anyStringOut), stState);]]></ST>
       </Implementation>
     </Method>
-    <Method Name="ReadTag" Id="{6e59f247-ef7c-45e6-b2dc-64a50e97c070}">
+    <Method Name="ReadTag" Id="{3064c376-dbde-4e29-8814-f1cdf6682eee}">
       <Declaration><![CDATA[// Peeks at the next field tag. this is like calling "ReadTag", but the
 // tag is not consumed. (So a subsequent call to "ReadTag" will return the same value.)
 METHOD PUBLIC ReadTag : HRESULT
@@ -482,8 +511,7 @@ VAR_OUTPUT
 END_VAR
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[{warning disable C0041}
-ReadTag := F_ParseTag(stBuffer:= THIS^.stBuffer, THIS^.stState, nTag=>nTag);]]></ST>
+        <ST><![CDATA[ReadTag := F_ParseTag(stBuffer:= THIS^.stBuffer, THIS^.stState, nTag=>nTag);]]></ST>
       </Implementation>
     </Method>
     <Method Name="ReadUint32" Id="{0a5f59af-f75a-4d04-8959-1ec62b11e925}">

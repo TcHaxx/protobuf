@@ -8,7 +8,7 @@ INTERFACE I_BufferMessage EXTENDS I_Message
     <Method Name="InternalMergeFrom" Id="{df371adf-7072-49a2-bfce-dcd90b23f2cc}">
       <Declaration><![CDATA[METHOD InternalMergeFrom : HRESULT
 VAR_IN_OUT
-    stState : ST_ParserInternalState;
+    fbCtx   : FB_ParseContext;
 END_VAR
 ]]></Declaration>
     </Method>

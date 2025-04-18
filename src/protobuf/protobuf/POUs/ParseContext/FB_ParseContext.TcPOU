@@ -1,0 +1,216 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1">
+  <POU Name="FB_ParseContext" Id="{33cf395e-4bc8-49aa-8a39-65170818d8f4}" SpecialFunc="None">
+    <Declaration><![CDATA[{attribute 'no_explicit_call' := 'do not call this POU directly'} 
+FUNCTION_BLOCK FINAL FB_ParseContext
+VAR_INPUT
+END_VAR
+VAR_OUTPUT
+END_VAR
+VAR
+    stCtx   : ST_ParseContext;
+    stState : ST_ParserInternalState;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[]]></ST>
+    </Implementation>
+    <Method Name="CopyStateToInputStream" Id="{affc5e96-c102-46f1-97e2-16701abb4cc5}">
+      <Declaration><![CDATA[METHOD INTERNAL CopyStateToInputStream
+VAR_IN_OUT
+    fbInputStream : FB_CodedInputStream;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[
+fbInputStream.InternalState := stCtx.stState;
+]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Initialize" Id="{8119bb60-2785-42c8-b5db-cc0a8f260d85}">
+      <Declaration><![CDATA[METHOD INTERNAL Initialize
+VAR_INPUT
+    stBuffer    : ST_Span;    
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[stCtx.stBuffer := stBuffer;
+
+stState.nBufferSize        := stBuffer.nSize;
+stState.nSizeLimit         := Param_PB.cMaxProtobufRawBuffer;
+stState.nRecursionLimit    := Param_PB.cRecursionLimit; 
+stState.nCurrentLimit      := TO_UDINT(-1);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="InitializeFromInputStream" Id="{7f0a753d-87d8-4597-a04d-40e3a1ec6c70}">
+      <Declaration><![CDATA[// Initialize a ST_ParseContext, building all ST_ParserInternalState from defaults and the given buffer.
+METHOD INTERNAL InitializeFromInputStream
+VAR_IN_OUT CONSTANT
+    fbInputStream : FB_CodedInputStream;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[stCtx.stBuffer := fbInputStream.stBuffer;
+stState  := fbInputStream.InternalState;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="InitializeFromState" Id="{49b2fb6e-7981-495b-912c-6024e1028cf7}">
+      <Declaration><![CDATA[// Initialize a ST_ParseContext using existing ST_ParserInternalState,
+METHOD INTERNAL InitializeFromState
+VAR_IN_OUT CONSTANT
+    stState : ST_ParserInternalState;
+END_VAR
+VAR_INPUT
+    stBuffer : ST_Span;    
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[stCtx.stBuffer  := stBuffer;
+THIS^.stState   := stState;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="LoadStateFromInputStream" Id="{9a98476f-a916-47f4-ae28-9a337a191a56}">
+      <Declaration><![CDATA[METHOD INTERNAL LoadStateFromInputStream
+VAR_IN_OUT    
+    fbInputStream : FB_CodedInputStream;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[
+stCtx.stState := fbInputStream.InternalState;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="ReadBool" Id="{89c29bb6-d513-4d2b-aacf-0b905a1ea349}">
+      <Declaration><![CDATA[METHOD ReadBool : HRESULT
+VAR_OUTPUT
+    bValue : BOOL;
+END_VAR
+VAR
+    nTmp : BYTE;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[
+ReadBool := F_ParseRawVarint32(stCtx.stBuffer, stState, nTmp);
+bValue := nTmp <> 0;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="ReadBytes" Id="{c954d0b9-35f8-44a1-a5f6-e08a7c90b59b}">
+      <Declaration><![CDATA[METHOD ReadBytes : HRESULT
+VAR_IN_OUT
+    aBytes : ARRAY [*] OF BYTE;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[
+ReadBytes := F_ReadBytes(stCtx.stBuffer, stState, aBytes); ]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="ReadFixed32" Id="{8472785f-a763-4cc4-aa20-d1a39159ff5f}">
+      <Declaration><![CDATA[METHOD PUBLIC ReadFixed32 : HRESULT
+VAR_OUTPUT
+    nValue : UDINT;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[
+ReadFixed32 := F_ParseRawLittleEndian32(stCtx.stBuffer, stState, nValue=> nValue);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="ReadFixed64" Id="{343a76a1-067d-48aa-84aa-d005060019f6}">
+      <Declaration><![CDATA[METHOD PUBLIC ReadFixed64 : HRESULT
+VAR_OUTPUT
+    nValue : ULINT;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[
+ReadFixed64 := F_ParseRawLittleEndian64(stCtx.stBuffer, stState, nValue=> nValue);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="ReadFloat" Id="{ae5be64d-ac38-4693-99a6-f461c30093eb}">
+      <Declaration><![CDATA[METHOD PUBLIC ReadFloat : HRESULT
+VAR_OUTPUT
+    fValue : REAL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[
+ReadFloat := F_ParseFloat(stCtx.stBuffer, stState, fValue=> fValue);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="ReadInt32" Id="{98149cf0-c874-466c-84a8-ded7ed12b5d2}">
+      <Declaration><![CDATA[METHOD PUBLIC ReadInt32 : HRESULT
+VAR_OUTPUT
+    nValue : DINT;
+END_VAR
+VAR
+    nTmp   : UDINT;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[
+ReadInt32 := F_ParseRawVarint32(stCtx.stBuffer, stState, nTmp);
+nValue := TO_DINT(nTmp);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="ReadInt64" Id="{71d759ea-e908-4166-9283-378861c10204}">
+      <Declaration><![CDATA[METHOD PUBLIC ReadInt64 : HRESULT
+VAR_OUTPUT
+    nValue : LINT;
+END_VAR
+VAR
+    nTmp   : ULINT;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[
+ReadInt64 := F_ParseRawVarint64(stCtx.stBuffer, stState, nTmp);
+nValue := TO_LINT(nTmp);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="ReadSFixed32" Id="{9f45ed62-393c-45d5-9752-212dd3ee0e22}">
+      <Declaration><![CDATA[METHOD PUBLIC ReadSFixed32 : HRESULT
+VAR_OUTPUT
+    nValue : DINT;
+END_VAR
+VAR
+    nTmp : UDINT;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[
+ReadSFixed32 := F_ParseRawLittleEndian32(stCtx.stBuffer, stState, nValue=> nTmp);
+
+nValue := TO_DINT(nTmp);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="ReadSFixed64" Id="{73371c15-afa3-4f4d-84fd-bc8a39a6bb3d}">
+      <Declaration><![CDATA[METHOD PUBLIC ReadSFixed64 : HRESULT
+VAR_OUTPUT
+    nValue : LINT;
+END_VAR
+VAR
+    nTmp : ULINT;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[
+ReadSFixed64 := F_ParseRawLittleEndian64(stCtx.stBuffer, stState, nValue=> nTmp);
+
+nValue := TO_LINT(nTmp);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="ReadString" Id="{246de880-705a-44ea-a922-9753670627e5}">
+      <Declaration><![CDATA[METHOD PUBLIC ReadString : HRESULT
+VAR_INPUT
+    anyStringOut : ANY_STRING;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[ReadString := F_ReadString(stCtx.stBuffer, stState, F_ToAnyType(anyStringOut));]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="ReadTag" Id="{6e59f247-ef7c-45e6-b2dc-64a50e97c070}">
+      <Declaration><![CDATA[// Peeks at the next field tag. this is like calling "ReadTag", but the
+// tag is not consumed. (So a subsequent call to "ReadTag" will return the same value.)
+METHOD PUBLIC ReadTag : HRESULT
+VAR_OUTPUT
+    nTag : UDINT;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[ReadTag := F_ParseTag(stBuffer:= stCtx.stBuffer, THIS^.stState, nTag=>nTag);]]></ST>
+      </Implementation>
+    </Method>
+  </POU>
+</TcPlcObject>

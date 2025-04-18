@@ -369,15 +369,7 @@
     <Compile Include="POUs\FB_MessageParser.TcPOU">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="POUs\ParseContext\F_ParseContextInitialize.TcPOU">
-      <SubType>Code</SubType>
-      <LinkAlways>true</LinkAlways>
-    </Compile>
-    <Compile Include="POUs\ParseContext\F_ParseContextInitializeFromState.TcPOU">
-      <SubType>Code</SubType>
-      <LinkAlways>true</LinkAlways>
-    </Compile>
-    <Compile Include="POUs\ParseContext\F_ParseContextInitializeFromInputStream.TcPOU">
+    <Compile Include="POUs\ParseContext\FB_ParseContext.TcPOU">
       <SubType>Code</SubType>
       <LinkAlways>true</LinkAlways>
     </Compile>
