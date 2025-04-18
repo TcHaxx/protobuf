@@ -1,0 +1,19 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1">
+  <POU Name="F_SpanFromArray" Id="{636211ac-b6e7-4d71-b75c-b45453b84f6e}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION F_SpanFromArray : ST_Span
+VAR_IN_OUT CONSTANT
+    aBuffer : ARRAY [*] OF BYTE;
+END_VAR
+VAR
+    stArrayInfo : ST_VariableLengthArrayInfo;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[
+F_SpanFromArray.pBuffer := ADR(aBuffer[LOWER_BOUND(aBuffer, 1)]);
+stArrayInfo := F_BufferInfo(aBuffer);
+F_SpanFromArray.nSize   := stArrayInfo.nSize; ]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>

@@ -1,0 +1,51 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1">
+  <POU Name="FB_F_SpanSliceTests" Id="{cc7b5f0c-cc0a-4e31-b27f-63c698eadf6c}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK FB_F_SpanSliceTests EXTENDS FB_TestSuite
+VAR_INPUT
+END_VAR
+VAR_OUTPUT
+END_VAR
+VAR
+    stFromSpan  : ST_Span;
+    stActual    : ST_Span;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[TEST(__POUNAME());
+
+stFromSpan.pBuffer := 123;
+stFromSpan.nSize   := 32;
+
+stActual := F_SpanSlice(stSpan:= stFromSpan, nStart:= 6, nLength:= 24);
+AssertEquals_ULINT(Expected:= 129, Actual:= stActual.pBuffer, Message:= 'Valid Slice /w start 6');
+AssertEquals_UDINT(Expected:= 24, Actual:= stActual.nSize, Message:= 'Valid Slice /w length 24');
+
+stActual := F_SpanSlice(stSpan:= stFromSpan, nStart:= 0, nLength:= 32);
+AssertEquals_ULINT(Expected:= 123, Actual:= stActual.pBuffer, Message:= 'Valid Slice /w start 0');
+AssertEquals_UDINT(Expected:= 32, Actual:= stActual.nSize, Message:= 'Valid Slice /w length 32');
+
+stActual := F_SpanSlice(stSpan:= stFromSpan, nStart:= 31, nLength:= 1);
+AssertEquals_ULINT(Expected:= 154, Actual:= stActual.pBuffer, Message:= 'Valid Slice /w start 31');
+AssertEquals_UDINT(Expected:= 1, Actual:= stActual.nSize, Message:= 'Vakud Slice /w length 1');
+
+stActual := F_SpanSlice(stSpan:= stFromSpan, nStart:= 0, nLength:= 33);
+AssertEquals_ULINT(Expected:= 123, Actual:= stActual.pBuffer, Message:= 'Invalid Slice /w start 0 - returns original');
+AssertEquals_UDINT(Expected:= 32, Actual:= stActual.nSize, Message:= 'Invalid Slice /w length 33 - returns original');
+
+stActual := F_SpanSlice(stSpan:= stFromSpan, nStart:= TO_UDINT(-1), nLength:= 32);
+AssertEquals_ULINT(Expected:= 123, Actual:= stActual.pBuffer, Message:= 'Invalid Slice /w start -1 - returns original');
+AssertEquals_UDINT(Expected:= 32, Actual:= stActual.nSize, Message:= 'Invalid Slice /w length 32 - returns original');
+
+stActual := F_SpanSlice(stSpan:= stFromSpan, nStart:= 0, nLength:= TO_UDINT(-1));
+AssertEquals_ULINT(Expected:= 123, Actual:= stActual.pBuffer, Message:= 'Invalid Slice /w start 0 - returns original');
+AssertEquals_UDINT(Expected:= 32, Actual:= stActual.nSize, Message:= 'Invalid Slice /w length -1 - returns original');
+
+stActual := F_SpanSlice(stSpan:= stFromSpan, nStart:= 32, nLength:= 1);
+AssertEquals_ULINT(Expected:= 123, Actual:= stActual.pBuffer, Message:= 'Invalid Slice /w start 32 - returns original');
+AssertEquals_UDINT(Expected:= 32, Actual:= stActual.nSize, Message:= 'Invalid Slice /w length 1 - returns original');
+
+TEST_FINISHED_NAMED(__POUNAME());]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>

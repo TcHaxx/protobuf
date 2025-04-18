@@ -18,6 +18,7 @@ PRG_MessageTests();
 PRG_WireFormatTests();
 PRG_RepeatedFieldTests();
 PRG_HelperTests();
+PRG_SpanTests();
 TcUnit.RUN();
 
 {END_IF}]]></ST>

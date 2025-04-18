@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1">
+  <DUT Name="ST_Span" Id="{019f839a-34d2-43af-9ae7-314d42e495ae}">
+    <Declaration><![CDATA[TYPE ST_Span :
+STRUCT
+    pBuffer     : POINTER TO BYTE;
+    nSize       : UDINT;
+END_STRUCT
+END_TYPE
+]]></Declaration>
+  </DUT>
+</TcPlcObject>

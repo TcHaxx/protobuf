@@ -48,6 +48,9 @@
     <Compile Include="DUTs\E_CodedOutputStreamErrorCode.TcDUT">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="DUTs\ST_Span.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="DUTs\T_ProtobufMaxString.TcDUT">
       <SubType>Code</SubType>
     </Compile>
@@ -355,6 +358,12 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="POUs\FB_MessageParser.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\Span\F_SpanFromArray.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\Span\F_SpanSlice.TcPOU">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Project Information\F_GetCompany.TcPOU">
@@ -683,6 +692,15 @@
     <Compile Include="__TESTs\RoundTripTests\PRG_RoundTripTests.TcPOU">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="__TESTs\SpanTests\FB_F_SpanFromArrayTests.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="__TESTs\SpanTests\FB_F_SpanSliceTests.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="__TESTs\SpanTests\PRG_SpanTests.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="__TESTs\WireFormatTests\FB_MakeTagTests.TcPOU">
       <SubType>Code</SubType>
     </Compile>
@@ -731,6 +749,7 @@
     <Folder Include="ParsingPrimitivesMessages" />
     <Folder Include="ParsingPrimitivesMessages\POUs" />
     <Folder Include="POUs\ComputeSize" />
+    <Folder Include="POUs\Span" />
     <Folder Include="RepeatedField" />
     <Folder Include="POUs" />
     <Folder Include="WireFormat" />
@@ -749,6 +768,7 @@
     <Folder Include="__TESTs\MessagesTests\DUTs" />
     <Folder Include="__TESTs\MessagesTests\POUs" />
     <Folder Include="__TESTs\HelperTests" />
+    <Folder Include="__TESTs\SpanTests" />
     <Folder Include="__TESTs\RepeatedFieldTests" />
     <Folder Include="__TESTs\RepeatedFieldTests\RoundTrip" />
     <Folder Include="__TESTs\RepeatedFieldTests\Write" />

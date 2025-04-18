@@ -1,0 +1,29 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1">
+  <POU Name="F_SpanSlice" Id="{5bdc7354-ee1c-4fe8-896c-d218bab808f9}" SpecialFunc="None">
+    <Declaration><![CDATA[// Forms a slice out of the current read-only span starting at a specified index for a specified length.
+FUNCTION F_SpanSlice : ST_Span
+VAR_IN_OUT CONSTANT
+    stSpan  : ST_SPAN;
+END_VAR
+VAR_INPUT
+    nStart  : UDINT;        // The zero-based index at which to begin this slice.
+    nLength : UDINT;        // The desired length for the slice.
+END_VAR]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[
+F_SpanSlice := stSpan;
+
+IF nStart > stSpan.nSize THEN
+    RETURN;
+END_IF
+
+IF (nLength + nStart) > stSpan.nSize THEN
+    RETURN;
+END_IF
+
+F_SpanSlice.pBuffer := stSpan.pBuffer + nStart;
+F_SpanSlice.nSize := nLength;]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>

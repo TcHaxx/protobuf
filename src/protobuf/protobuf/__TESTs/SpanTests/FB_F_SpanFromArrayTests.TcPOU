@@ -1,0 +1,29 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1">
+  <POU Name="FB_F_SpanFromArrayTests" Id="{b361bfd4-e68e-4a15-bd9d-a58fee329a09}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK FB_F_SpanFromArrayTests EXTENDS FB_TestSuite
+VAR_INPUT
+END_VAR
+VAR_OUTPUT
+END_VAR
+VAR
+    aBuffer1    : ARRAY[-3..3] OF BYTE;
+    stActual    : ST_Span;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[TEST(__POUNAME());
+
+//Arrange
+
+// Act
+stActual := F_SpanFromArray(aBuffer:= aBuffer1);
+
+//Assert
+AssertEquals_ULINT(Expected:= ADR(aBuffer1), Actual:= stActual.pBuffer, Message:= '');
+AssertEquals_UDINT(Expected:= 7, Actual:= stActual.nSize, Message:= '');
+
+TEST_FINISHED_NAMED(__POUNAME());]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>

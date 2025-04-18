@@ -1,0 +1,17 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1">
+  <POU Name="PRG_SpanTests" Id="{bab6405b-534a-4e1c-8c80-a32644e9ba9d}" SpecialFunc="None">
+    <Declaration><![CDATA[{attribute 'analysis' := '-33'}
+PROGRAM PRG_SpanTests
+VAR
+{IF defined (UNIT_TEST)}
+    fbF_SpanFromArrayTests    : FB_F_SpanFromArrayTests;
+    fbF_SpanSliceTests        : FB_F_SpanSliceTests;
+{END_IF}
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>
