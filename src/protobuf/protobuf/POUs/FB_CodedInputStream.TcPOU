@@ -80,7 +80,9 @@ stState.nBufferPos := TO_UDINT(LOWER_BOUND(aBuffer, 1));
 
 stBufferInfo := F_BufferInfo(aBuffer);
 stState.nBufferSize := stBufferInfo.nSize;
-
+stState.nSizeLimit := Param_PB.cMaxProtobufRawBuffer;
+stState.nRecursionLimit := Param_PB.cRecursionLimit;
+stState.nCurrentLimit := TO_UDINT(-1);
 stState.pCodedInputStream := THIS;]]></ST>
       </Implementation>
     </Method>
@@ -140,6 +142,20 @@ END_VAR
       <Implementation>
         <ST><![CDATA[
 ReadBytes := F_ReadBytes(F_SpanFromArray(aBuffer), stState, aBytes); ]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="ReadEnum" Id="{541da04c-f010-4340-af58-21772f9c4c53}">
+      <Declaration><![CDATA[METHOD PUBLIC ReadEnum : HRESULT
+VAR_OUTPUT
+    nValue : DINT;
+END_VAR
+VAR
+    nTmp   : UDINT;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[
+ReadEnum := F_ParseRawVarint32(F_SpanFromArray(aBuffer), stState, nTmp);
+nValue := TO_DINT(nTmp);]]></ST>
       </Implementation>
     </Method>
     <Method Name="ReadFixed32" Id="{383a358d-6e6c-41c1-8f44-f530061b2ccb}">
@@ -492,6 +508,34 @@ ReadSFixed64 := F_ParseRawLittleEndian64(F_SpanFromArray(aBuffer), stState, nVal
 nValue := TO_LINT(nTmp);]]></ST>
       </Implementation>
     </Method>
+    <Method Name="ReadSInt32" Id="{d46189ca-2a8e-4357-a5c8-629bfc71a41a}">
+      <Declaration><![CDATA[METHOD PUBLIC ReadSInt32 : HRESULT
+VAR_OUTPUT
+    nValue : DINT;
+END_VAR
+VAR
+    nTmp   : UDINT;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[
+ReadSInt32 := F_ParseRawVarint32(F_SpanFromArray(aBuffer), stState, nTmp);
+nValue := F_DecodeZigZag32(nTmp);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="ReadSInt64" Id="{b87a2767-4bf6-48ab-a9dd-4f2da6937fe0}">
+      <Declaration><![CDATA[METHOD PUBLIC ReadSInt64 : HRESULT
+VAR_OUTPUT
+    nValue : LINT;
+END_VAR
+VAR
+    nTmp   : ULINT;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[
+ReadSInt64 := F_ParseRawVarint32(F_SpanFromArray(aBuffer), stState, nTmp);
+nValue := F_DecodeZigZag64(nTmp);]]></ST>
+      </Implementation>
+    </Method>
     <Method Name="ReadString" Id="{9f6170df-72a4-43cf-9ddd-f238139fccc9}">
       <Declaration><![CDATA[METHOD PUBLIC ReadString : HRESULT
 VAR_INPUT
@@ -514,7 +558,7 @@ END_VAR
         <ST><![CDATA[ReadTag := F_ParseTag(stBuffer:= THIS^.stBuffer, THIS^.stState, nTag=>nTag);]]></ST>
       </Implementation>
     </Method>
-    <Method Name="ReadUint32" Id="{0a5f59af-f75a-4d04-8959-1ec62b11e925}">
+    <Method Name="ReadUint32" Id="{f805b4db-dc70-4022-8fd3-33b963d9912a}">
       <Declaration><![CDATA[METHOD PUBLIC ReadUint32 : HRESULT
 VAR_OUTPUT
     nValue : UDINT;
@@ -522,6 +566,16 @@ END_VAR]]></Declaration>
       <Implementation>
         <ST><![CDATA[
 ReadUint32 := F_ParseRawVarint32(F_SpanFromArray(aBuffer), stState, nValue);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="ReadUint64" Id="{a49c19ea-03b7-442a-adf2-3b75476ce388}">
+      <Declaration><![CDATA[METHOD PUBLIC ReadUint64 : HRESULT
+VAR_OUTPUT
+    nValue : ULINT;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[
+ReadUint64 := F_ParseRawVarint64(F_SpanFromArray(aBuffer), stState, nValue);]]></ST>
       </Implementation>
     </Method>
     <Method Name="Reset" Id="{fd58c7dd-7f7d-45ac-ad92-ef343a22ef8a}">

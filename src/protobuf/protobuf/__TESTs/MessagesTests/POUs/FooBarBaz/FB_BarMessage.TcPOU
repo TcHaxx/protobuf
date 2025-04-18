@@ -47,13 +47,39 @@ METHOD CalculateSize : UDINT
       </Implementation>
     </Method>
     <Method Name="InternalMergeFrom" Id="{0b2e6b93-1295-487c-9145-cd072e930234}">
-      <Declaration><![CDATA[{warning 'Add method implementation '}
-METHOD InternalMergeFrom : HRESULT
+      <Declaration><![CDATA[METHOD InternalMergeFrom : HRESULT
 VAR_IN_OUT
     fbCtx : FB_ParseContext;
+END_VAR
+VAR
+        nTag : UDINT;
 END_VAR]]></Declaration>
       <Implementation>
-        <ST><![CDATA[]]></ST>
+        <ST><![CDATA[
+REPEAT   
+InternalMergeFrom := fbCtx.ReadTag(nTag=>nTag);
+IF SUCCEEDED(InternalMergeFrom) AND nTag = 0 THEN
+    EXIT;
+END_IF;
+
+IF FAILED(InternalMergeFrom) THEN
+    RETURN;
+END_IF
+
+CASE nTag OF
+    16#0A:         // string name = 1;
+        fbCtx.ReadString(anyStringOut:= stBar.name);
+    16#10:         //uint32 age = 2;
+        fbCtx.ReadUint32(nValue=> stBar.age);        
+    16#1A:         // optional string email = 3; 
+        fbCtx.ReadString(anyStringOut:= stBar.email);
+ELSE
+    InternalMergeFrom := fbCtx.SkipLastField();
+END_CASE
+
+UNTIL (FAILED(InternalMergeFrom) OR nTag = 0)
+END_REPEAT
+]]></ST>
       </Implementation>
     </Method>
     <Method Name="InternalWriteTo" Id="{89fe8644-bd0e-46d5-a962-31f6fcbef28f}">

@@ -390,6 +390,7 @@
     </Compile>
     <Compile Include="POUs\Span\F_SpanSlice.TcPOU">
       <SubType>Code</SubType>
+      <LinkAlways>true</LinkAlways>
     </Compile>
     <Compile Include="Project Information\F_GetCompany.TcPOU">
       <SubType>Code</SubType>
@@ -780,6 +781,7 @@
     <Folder Include="ParsingPrimitivesMessages" />
     <Folder Include="ParsingPrimitivesMessages\POUs" />
     <Folder Include="POUs\ComputeSize" />
+    <Folder Include="POUs\SegmentedBufferHelper" />
     <Folder Include="POUs\ParseContext" />
     <Folder Include="POUs\Span" />
     <Folder Include="RepeatedField" />

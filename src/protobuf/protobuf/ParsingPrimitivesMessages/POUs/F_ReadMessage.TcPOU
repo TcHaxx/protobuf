@@ -2,41 +2,50 @@
 <TcPlcObject Version="1.1.0.1">
   <POU Name="F_ReadMessage" Id="{f756dacf-686e-48da-9404-f5c6d7862557}" SpecialFunc="None">
     <Declaration><![CDATA[FUNCTION F_ReadMessage : HRESULT
-VAR_IN_OUT CONSTANT
-    aBuffer : ARRAY [*] OF BYTE;       
-END_VAR
 VAR_IN_OUT
-    stState : ST_ParserInternalState;
+    fbCtx   : FB_ParseContext;     
 END_VAR
 VAR_INPUT
     iMessage : I_Message;
 END_VAR
 VAR
-    nLength : UDINT;
+    nLength, nOldLength : UDINT;
 END_VAR]]></Declaration>
     <Implementation>
       <ST><![CDATA[
-F_ReadMessage := F_ParseLength(F_SpanFromArray(aBuffer), stState, nLength=> nLength);
+F_ReadMessage := F_ParseLength(fbCtx.refCtx.stBuffer, fbCtx.refCtx.stState, nLength=> nLength);
 IF FAILED(F_ReadMessage) THEN
     RETURN;
 END_IF
 
-IF stState.nRecursionDepth >= stState.nRecursionLimit THEN
-    F_ReadMessage := stState.eParserErrorCode := E_ParserErrorCode.RecursionLimitExceeded;
-    stState.bError := TRUE;
+IF fbCtx.refCtx.stState.nRecursionDepth >= fbCtx.refCtx.stState.nRecursionLimit THEN
+    F_ReadMessage := fbCtx.refCtx.stState.eParserErrorCode := E_ParserErrorCode.RecursionLimitExceeded;
+    fbCtx.refCtx.stState.bError := TRUE;
     RETURN;
 END_IF
 
-stState.nRecursionDepth := stState.nRecursionDepth + 1;
 
+F_ReadMessage := F_SbhPushLimit(fbCtx.refCtx.stState, nLength, nCurrentLimit=> nOldLength);
+IF FAILED(F_ReadMessage) THEN
+    RETURN;
+END_IF
 
+fbCtx.refCtx.stState.nRecursionDepth := fbCtx.refCtx.stState.nRecursionDepth + 1;
+F_ReadMessage := F_ReadRawMessage(fbCtx, iMessage);
 
-F_ReadMessage := F_ReadRawMessage(aBuffer, stState, iMessage);
+F_ReadMessage := F_CheckReadEndOfStreamTag(fbCtx.refCtx.stState);
+IF FAILED(F_ReadMessage) THEN
+    RETURN;
+END_IF
 
+IF NOT F_SbhIsReachedLimit(fbCtx.refCtx.stState) THEN
+    F_ReadMessage := fbCtx.refCtx.stState.eParserErrorCode := E_ParserErrorCode.TruncatedMessage;
+    fbCtx.refCtx.stState.bError := TRUE;
+    RETURN;
+END_IF
 
-
-
-stState.nRecursionDepth := stState.nRecursionDepth - 1;]]></ST>
+fbCtx.refCtx.stState.nRecursionDepth := fbCtx.refCtx.stState.nRecursionDepth - 1;
+F_ReadMessage := F_SbhPopLimit(fbCtx.refCtx.stState, nOldLength);]]></ST>
     </Implementation>
   </POU>
 </TcPlcObject>

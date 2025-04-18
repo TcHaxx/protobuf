@@ -71,7 +71,7 @@ END_IF
 CASE nTag OF
     16#0A:         // Bar bar = 1;
     ;
-//         InternalMergeFrom := fbInput.ReadMessage(iMessage:= fbBar);
+         InternalMergeFrom := fbCtx.ReadMessage(iMessage:= fbBar);
 //      
     16#12:         // repeated Baz baz = 2 ;
     ;
@@ -80,8 +80,7 @@ CASE nTag OF
 //                     anyFirstElem:= F_ToAnyType(THIS^.aBaz[0]),
 //                     nFieldIndex:= THIS^.nField2Index);
 ELSE
-//     InternalMergeFrom := fBInput.SkipLastField();
-;
+    InternalMergeFrom := fBCtx.SkipLastField();
 END_CASE
 
 UNTIL (FAILED(InternalMergeFrom) OR nTag = 0)
@@ -111,32 +110,33 @@ VAR
 END_VAR]]></Declaration>
       <Implementation>
         <ST><![CDATA[
-REPEAT   
-MergeFrom := fbInput.ReadTag(nTag=>nTag);
-IF SUCCEEDED(MergeFrom) AND nTag = 0 THEN
-    EXIT;
-END_IF;
-
-IF FAILED(MergeFrom) THEN
-    MergeFrom := MergeFrom;
-    RETURN;
-END_IF
-
-CASE nTag OF
-    16#0A:         // Bar bar = 1;
-        MergeFrom := fbInput.ReadMessage(iMessage:= fbBar);
-     
-    16#12:         // repeated Baz baz = 2 ;
-       MergeFrom := fbInput.ReadRepeatedFieldMessage(
-                    anyArray:= F_ToAnyType(THIS^.aBaz),
-                    anyFirstElem:= F_ToAnyType(THIS^.aBaz[0]),
-                    nFieldIndex:= THIS^.nField2Index);
-ELSE
-    MergeFrom := fBInput.SkipLastField();
-END_CASE
-
-UNTIL (FAILED(MergeFrom) OR nTag = 0)
-END_REPEAT
+MergeFrom := fbInput.ReadRawMessage(THIS^);
+// REPEAT   
+// MergeFrom := fbInput.ReadTag(nTag=>nTag);
+// IF SUCCEEDED(MergeFrom) AND nTag = 0 THEN
+//     EXIT;
+// END_IF;
+// 
+// IF FAILED(MergeFrom) THEN
+//     MergeFrom := MergeFrom;
+//     RETURN;
+// END_IF
+// 
+// CASE nTag OF
+//     16#0A:         // Bar bar = 1;
+//         MergeFrom := fbInput.ReadMessage(iMessage:= fbBar);
+//      
+//     16#12:         // repeated Baz baz = 2 ;
+//        MergeFrom := fbInput.ReadRepeatedFieldMessage(
+//                     anyArray:= F_ToAnyType(THIS^.aBaz),
+//                     anyFirstElem:= F_ToAnyType(THIS^.aBaz[0]),
+//                     nFieldIndex:= THIS^.nField2Index);
+// ELSE
+//     MergeFrom := fBInput.SkipLastField();
+// END_CASE
+// 
+// UNTIL (FAILED(MergeFrom) OR nTag = 0)
+// END_REPEAT
 ]]></ST>
       </Implementation>
     </Method>
