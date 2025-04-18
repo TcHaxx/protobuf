@@ -3,8 +3,8 @@
   <POU Name="F_ReadRawString" Id="{e87fdb38-99fb-4e2f-b3dc-522d23307b10}" SpecialFunc="None">
     <Declaration><![CDATA[// Reads a UTF-8 string from the next "length" bytes.
 FUNCTION INTERNAL F_ReadRawString : HRESULT
-VAR_IN_OUT CONSTANT
-    aBuffer : ARRAY [*] OF BYTE;
+VAR_INPUT
+    stBuffer : ST_Span;      
 END_VAR
 VAR_INPUT CONSTANT
     nLength : UDINT;   
@@ -45,7 +45,7 @@ IF nLength = 0 THEN
 END_IF
 
 
-MEMCPY(destAddr:= stAnyStringOut.pValue, srcAddr:= ADR(aBuffer[stState.nBufferPos]), n:=  nLength);
+MEMCPY(destAddr:= stAnyStringOut.pValue, srcAddr:= stBuffer.pBuffer + stState.nBufferPos, n:=  nLength);
 pNullByte := stAnyStringOut.pValue + nLength;
 pNullByte^ := 16#0;
 

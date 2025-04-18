@@ -4,8 +4,8 @@
     <Declaration><![CDATA[// Parses the next tag.
 // If the end of logical stream was reached, an invalid tag of 0 is returned.
 FUNCTION F_ParseTag : HRESULT
-VAR_IN_OUT CONSTANT
-    aBuffer : ARRAY [*] OF BYTE;   
+VAR_INPUT
+    stBuffer : ST_Span;      
 END_VAR
 VAR_IN_OUT
     stState : ST_ParserInternalState;
@@ -33,12 +33,12 @@ END_IF
 // Optimize for the incredibly common case of having at least two bytes left in the buffer,
 // and those two bytes being enough to get the tag. This will be true for fields up to 4095.
 IF stState.nBufferPos + 2 <= stState.nBufferSize THEN
-    nTmp := aBuffer[stState.nBufferPos];    
+    nTmp := TO_UDINT(PBYTE_TO_BYTE(stBuffer.pBuffer + stState.nBufferPos));    
     IF nTmp < 16#80 THEN
         stState.nLastTag := nTmp;
         stState.nBufferPos := stState.nBufferPos + 1;
     ELSE
-        F_ParseTag := F_ParseRawVarint32(aBuffer, stState, nTmp);
+        F_ParseTag := F_ParseRawVarint32(stBuffer, stState, nTmp);
         IF FAILED(F_ParseTag) THEN            
             RETURN;
         END_IF
@@ -50,7 +50,7 @@ ELSE
         RETURN;
     END_IF;
     
-    F_ParseTag := F_ParseRawVarint32(aBuffer, stState, nTmp);
+    F_ParseTag := F_ParseRawVarint32(stBuffer, stState, nTmp);
 END_IF
 
 nTag := stState.nLastTag := nTmp;]]></ST>

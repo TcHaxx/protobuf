@@ -3,8 +3,8 @@
   <POU Name="F_ReadBytes" Id="{fe8d4fa5-1dc0-4cb1-bc5f-aa95aabb97fd}" SpecialFunc="None">
     <Declaration><![CDATA[// Reads a bytes field value from the input.
 FUNCTION F_ReadBytes : HRESULT
-VAR_IN_OUT CONSTANT
-    aBuffer : ARRAY [*] OF BYTE;   
+VAR_INPUT
+    stBuffer : ST_Span;      
 END_VAR
 VAR_IN_OUT
     stState : ST_ParserInternalState;
@@ -16,12 +16,12 @@ END_VAR]]></Declaration>
     <Implementation>
       <ST><![CDATA[F_ReadBytes := S_OK;
 
-F_ReadBytes := F_ParseLength(aBuffer, stState, nLength=> nLength);
+F_ReadBytes := F_ParseLength(stBuffer, stState, nLength=> nLength);
 IF FAILED(F_ReadBytes) THEN
     RETURN;
 END_IF
 
-F_ReadBytes := F_ReadRawBytes(aBuffer, stState, nLength, F_ToAnyBytes(aBytes));]]></ST>
+F_ReadBytes := F_ReadRawBytes(stBuffer, stState, nLength, F_ToAnyBytes(aBytes));]]></ST>
     </Implementation>
   </POU>
 </TcPlcObject>

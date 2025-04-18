@@ -41,8 +41,8 @@ stState.nBufferPos := nBufferPosStart;
 stState.nBufferSize := TO_UDINT(UPPER_BOUND(aBuffer, 1) + 1);
 
 // Act
-F_ParseTag(aBuffer, stState, nTag=> nTag);
-hr := F_ReadRepeatedField(aBuffer, stState, anyArray:= F_ToAnyType(aActual), anyFirstElem:= F_ToAnyType(aActual[0]), ipFieldCodec, nFieldIndex:= nActualFieldIndex);
+F_ParseTag(F_SpanFromArray(aBuffer), stState, nTag=> nTag);
+hr := F_ReadRepeatedField(F_SpanFromArray(aBuffer), stState, anyArray:= F_ToAnyType(aActual), anyFirstElem:= F_ToAnyType(aActual[0]), ipFieldCodec, nFieldIndex:= nActualFieldIndex);
 
 // Assert
 AssertEquals_DINT(

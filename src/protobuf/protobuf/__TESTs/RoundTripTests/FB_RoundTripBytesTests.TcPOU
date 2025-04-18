@@ -23,7 +23,7 @@ stWriterState.nBufferPos := stParserState.nBufferPos := 2;
 
 // Act
 hrWriterActual := F_WriteBytes(aBuffer, stWriterState, cExpectedBytes, nLength:= 150);
-hrParserActual := F_ReadBytes(aBuffer,stParserState, aActualBytes);
+hrParserActual := F_ReadBytes(F_SpanFromArray(aBuffer),stParserState, aActualBytes);
 
 // Assert
 AssertEquals_DINT(Expected:= S_OK, Actual:= hrWriterActual, Message:= 'Expected hrWriterActual = S_OK');

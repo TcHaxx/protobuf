@@ -33,14 +33,14 @@ stWriterState.nBufferPos := stParserState.nBufferPos := cStartBufferPos;
 hrWriterActual := F_WriteTag(aBuffer, stWriterState, cExpectedFieldNumber, cEcpectedWireType);
 AssertEquals_DINT(Expected:= S_OK, Actual:= hrWriterActual, Message:= 'Expected hrWriterActual = S_OK');
 
-hrPeekActual := F_PeekTag(aBuffer, stParserState, nTag=> nActualTag);
+hrPeekActual := F_PeekTag(F_SpanFromArray(aBuffer), stParserState, nTag=> nActualTag);
 AssertEquals_DINT(Expected:= S_OK, Actual:= hrPeekActual, Message:= 'Expected hrPeekActual = S_OK');
 AssertEquals_UDINT(Expected:= 5, Actual:= stParserState.nBufferPos, Message:= 'F_PeekTag must advance stParserState.nBufferPos');
 AssertEquals_UDINT(Expected:= cEcpectedTagRawValue, Actual:= stParserState.nNextTag, Message:= CONCAT('F_PeekTag: stParserState.nNextTag ', TO_STRING(cEcpectedTagRawValue)));
 AssertEquals_Bool(Expected:= TRUE, Actual:= stParserState.bHasNextTag, Message:= CONCAT('F_PeekTag: stParserState.bHasNextTag ', TO_STRING(TRUE)));
 AssertEquals_UDINT(Expected:= cEcpectedTagRawValue, Actual:= nActualTag, Message:= CONCAT('F_PeekTag: Expected value ', TO_STRING(cEcpectedTagRawValue)));
 
-hrParserActual := F_ParseTag(aBuffer, stParserState, nTag=> nActualTag);
+hrParserActual := F_ParseTag(F_SpanFromArray(aBuffer), stParserState, nTag=> nActualTag);
 AssertEquals_DINT(Expected:= S_OK, Actual:= hrPeekActual, Message:= 'Expected hrParserActual = S_OK');
 AssertEquals_UDINT(Expected:= 5, Actual:= stParserState.nBufferPos, Message:= 'F_ParseTag must not advance stParserState.nBufferPos');
 AssertEquals_UDINT(Expected:= cEcpectedTagRawValue, Actual:= nActualTag, Message:= CONCAT('F_PeekTag: Expected value ', TO_STRING(cEcpectedTagRawValue)));

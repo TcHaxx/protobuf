@@ -18,12 +18,12 @@ END_VAR]]></Declaration>
     <Implementation>
       <ST><![CDATA[F_ReadStringInternal := S_OK;
 
-F_ReadStringInternal := F_ParseLength(aBuffer, stState, nLength=> nStrLength);
+F_ReadStringInternal := F_ParseLength(F_SpanFromArray(aBuffer), stState, nLength=> nStrLength);
 IF FAILED(F_ReadStringInternal) THEN
     RETURN;
 END_IF
 
-F_ReadStringInternal := F_ReadRawString(aBuffer, nStrLength, stAnyStringOut, stState);]]></ST>
+F_ReadStringInternal := F_ReadRawString(F_SpanFromArray(aBuffer), nStrLength, stAnyStringOut, stState);]]></ST>
     </Implementation>
   </POU>
 </TcPlcObject>

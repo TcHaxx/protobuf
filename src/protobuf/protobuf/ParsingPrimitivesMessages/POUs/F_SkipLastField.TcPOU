@@ -3,8 +3,8 @@
   <POU Name="F_SkipLastField" Id="{1b7929cf-3775-43d5-ada9-c6ec50538adc}" SpecialFunc="None">
     <Declaration><![CDATA[// Reading and skippig messages / groups
 FUNCTION INTERNAL F_SkipLastField : HRESULT
-VAR_IN_OUT CONSTANT
-    aBuffer : ARRAY [*] OF BYTE;   
+VAR_INPUT
+    stBuffer    : ST_Span;  
 END_VAR
 VAR_IN_OUT
     stState : ST_ParserInternalState;
@@ -28,19 +28,19 @@ CASE F_GetTagWireType(stState.nLastTag) OF
         stState.bError := TRUE;
 
     E_WireType.Fixed32:
-        F_SkipLastField := F_ParseRawLittleEndian32(aBuffer, stState, nValue=> );
+        F_SkipLastField := F_ParseRawLittleEndian32(stBuffer, stState, nValue=> );
        
     E_WireType.Fixed64:
-        F_SkipLastField := F_ParseRawLittleEndian64(aBuffer, stState, nValue=> );
+        F_SkipLastField := F_ParseRawLittleEndian64(stBuffer, stState, nValue=> );
        
     E_WireType.LengthDelimited:
-        F_SkipLastField := F_ParseLength(aBuffer, stState, nLength=> nLength);
+        F_SkipLastField := F_ParseLength(stBuffer, stState, nLength=> nLength);
         IF SUCCEEDED(F_SkipLastField) THEN
             F_SkipLastField := F_SkipRawBytes(nLength, stState);
         END_IF
     
     E_WireType.Varint:
-        F_SkipLastField := F_ParseRawVarint32(aBuffer, stState, nDummy);
+        F_SkipLastField := F_ParseRawVarint32(stBuffer, stState, nDummy);
 ELSE
     F_SkipLastField := stState.eParserErrorCode := E_ParserErrorCode.InternalError;
     stState.bError := TRUE;

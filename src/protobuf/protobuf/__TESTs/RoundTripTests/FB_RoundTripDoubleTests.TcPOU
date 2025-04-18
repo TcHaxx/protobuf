@@ -23,7 +23,7 @@ stWriterState.nBufferPos := stParserState.nBufferPos := 2;
 
 // Act
 hrWriterActual := F_WriteDouble(aBuffer, stWriterState, cExpected);
-hrParserActual := F_ParseDouble(aBuffer,stParserState, fVAlue=> fActual);
+hrParserActual := F_ParseDouble(F_SpanFromArray(aBuffer),stParserState, fVAlue=> fActual);
 
 // Assert
 AssertEquals_DINT(Expected:= S_OK, Actual:= hrWriterActual, Message:= 'Expected hrWriterActual = S_OK');

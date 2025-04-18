@@ -36,7 +36,7 @@ stState.nBufferPos := nBufferPosStart;
 
 // Act
 {warning disable C0041}
-hrActual := F_ReadRawString(aBuffer, LEN2(ADR(sExpectedString)), F_ToAnyType(sActual), stState);
+hrActual := F_ReadRawString(F_SpanFromArray(aBuffer), LEN2(ADR(sExpectedString)), F_ToAnyType(sActual), stState);
 
 // Assert
 AssertEquals_DINT(

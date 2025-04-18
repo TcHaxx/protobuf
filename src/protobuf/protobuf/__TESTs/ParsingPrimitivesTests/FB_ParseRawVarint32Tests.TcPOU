@@ -31,7 +31,7 @@ stState.nBufferPos := nBufferPosStart;
 stState.nBufferSize := TO_UDINT(UPPER_BOUND(aBuffer, 1) + 1);
 
 // Act
-nActualHR := F_ParseRawVarint32(aBuffer, stState, anyVarInt32Result:= nActualResult);
+nActualHR := F_ParseRawVarint32(F_SpanFromArray(aBuffer), stState, anyVarInt32Result:= nActualResult);
 
 // Assert
 AssertEquals_DINT(
@@ -85,7 +85,7 @@ stState.nBufferPos := nBufferPosStart;
 stState.nBufferSize := TO_UDINT(UPPER_BOUND(aBuffer, 1) + 1);
 
 // Act
-hr := F_ParseRawVarint32(aBuffer, stState, anyVarInt32Result:= nActual);
+hr := F_ParseRawVarint32(F_SpanFromArray(aBuffer), stState, anyVarInt32Result:= nActual);
 
 // Assert
 AssertEquals_DINT(

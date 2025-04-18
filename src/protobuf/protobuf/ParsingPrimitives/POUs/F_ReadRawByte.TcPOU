@@ -3,7 +3,7 @@
   <POU Name="F_ReadRawByte" Id="{3b4ebf60-f147-42c7-b6d8-bc6dfd761b40}" SpecialFunc="None">
     <Declaration><![CDATA[FUNCTION INTERNAL F_ReadRawByte : HRESULT
 VAR_IN_OUT CONSTANT
-    aBuffer : ARRAY [*] OF BYTE;   
+    stBuffer : ST_Span;    
 END_VAR
 VAR_IN_OUT
     stState : ST_ParserInternalState;
@@ -19,7 +19,7 @@ IF stState.nBufferPos >= stState.nBufferSize THEN
     RETURN;
 END_IF
 
-nByte := aBuffer[stState.nBufferPos];
+nByte := PBYTE_TO_BYTE(stBuffer.pBuffer + stState.nBufferPos);
 stState.nBufferPos := stState.nBufferPos + 1;]]></ST>
     </Implementation>
   </POU>

@@ -55,8 +55,8 @@ END_VAR
     <Method Name="ValueReader" Id="{fb5d9211-3c3e-44d6-bdfb-b82f24425a6a}">
       <Declaration><![CDATA[
 METHOD ValueReader : HRESULT
-VAR_IN_OUT CONSTANT
-	aBuffer	: ARRAY [*] OF BYTE;
+VAR_INPUT
+    stBuffer : ST_Span;
 END_VAR
 VAR_IN_OUT
 	stState	: ST_ParserInternalState;
@@ -66,7 +66,7 @@ VAR_OUTPUT
 END_VAR]]></Declaration>
       <Implementation>
         <ST><![CDATA[
-ValueReader := F_ParseRawLittleEndian64(aBuffer, stState, nValue=> nValue);
+ValueReader := F_ParseRawLittleEndian64(stBuffer, stState, nValue=> nValue);
 anyOut := F_ToAnyType(anyArg:= nValue);]]></ST>
       </Implementation>
     </Method>

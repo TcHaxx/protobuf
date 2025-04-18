@@ -55,8 +55,8 @@ END_VAR
     <Method Name="ValueReader" Id="{0fb52bb4-2627-4e4a-8cf4-f8046717ea94}">
       <Declaration><![CDATA[
 METHOD ValueReader : HRESULT
-VAR_IN_OUT CONSTANT
-	aBuffer	: ARRAY [*] OF BYTE;
+VAR_INPUT
+    stBuffer : ST_Span;
 END_VAR
 VAR_IN_OUT
 	stState	: ST_ParserInternalState;
@@ -69,7 +69,7 @@ VAR
 END_VAR]]></Declaration>
       <Implementation>
         <ST><![CDATA[
-ValueReader := F_ParseRawVarint32(aBuffer, stState, nTmp);
+ValueReader := F_ParseRawVarint32(stBuffer, stState, nTmp);
 IF FAILED(ValueReader) THEN
     RETURN;
 END_IF

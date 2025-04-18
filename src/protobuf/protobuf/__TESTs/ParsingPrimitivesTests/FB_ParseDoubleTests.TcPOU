@@ -36,7 +36,7 @@ stState.nBufferSize := TO_UDINT(UPPER_BOUND(aBuffer, 1) + 1);
 
 // Act
 {warning disable C0041}
-hr := F_ParseDouble(aBuffer, stState, fValue=> fActual);
+hr := F_ParseDouble(F_SpanFromArray(aBuffer), stState, fValue=> fActual);
 
 // Assert
 AssertEquals_DINT(

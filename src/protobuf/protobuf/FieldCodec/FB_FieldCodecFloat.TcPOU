@@ -55,8 +55,8 @@ END_VAR
     <Method Name="ValueReader" Id="{fd6da9dd-5a95-4a2b-9b04-99f6349f20b2}">
       <Declaration><![CDATA[
 METHOD ValueReader : HRESULT
-VAR_IN_OUT CONSTANT
-	aBuffer	: ARRAY [*] OF BYTE;
+VAR_INPUT
+    stBuffer : ST_Span;
 END_VAR
 VAR_IN_OUT
 	stState	: ST_ParserInternalState;
@@ -66,7 +66,7 @@ VAR_OUTPUT
 END_VAR]]></Declaration>
       <Implementation>
         <ST><![CDATA[
-ValueReader := F_ParseFloat(aBuffer, stState, fValue=> fValue);
+ValueReader := F_ParseFloat(stBuffer, stState, fValue=> fValue);
 anyOut := F_ToAnyType(anyArg:= fValue);]]></ST>
       </Implementation>
     </Method>

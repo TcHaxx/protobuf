@@ -3,8 +3,8 @@
   <POU Name="F_ParseDouble" Id="{24606ab3-3eb3-493e-9ecb-d98469f178b3}" SpecialFunc="None">
     <Declaration><![CDATA[// Parses a double value.
 FUNCTION F_ParseDouble : HRESULT
-VAR_IN_OUT CONSTANT
-    aBuffer : ARRAY [*] OF BYTE;   
+VAR_INPUT
+    stBuffer : ST_Span;      
 END_VAR
 VAR_IN_OUT
     stState : ST_ParserInternalState;
@@ -29,7 +29,7 @@ IF stState.nBufferSize - stState.nBufferPos < cLength THEN
     RETURN;
 END_IF
 
-MEMCPY(destAddr:= ADR(fTmp), srcAddr:= ADR(aBuffer[stState.nBufferPos]), n:= cLength);
+MEMCPY(destAddr:= ADR(fTmp), srcAddr:= stBuffer.pBuffer + stState.nBufferPos, n:= cLength);
 stState.nBufferPos := stState.nBufferPos + cLength;
 
 {warning 'TODO: Check for endianess?'}

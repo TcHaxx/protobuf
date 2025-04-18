@@ -52,16 +52,16 @@ stState.nBufferSize := SIZEOF(cRawMessage);
 
 // Act
 // Parses a=[0,1,2]: 16#0A, 16#03, 16#00, 16#01, 16#02
-F_ParseTag(cRawMessage, stState, nTag=> );
-hr := F_ReadRepeatedField(cRawMessage, stState, anyArray:= F_ToAnyType(aActual), anyFirstElem:= F_ToAnyType(aActual[0]), ipFieldCodec:= fbFieldCodecInt32, nFieldIndex:= nActualFieldIndex);
+F_ParseTag(F_SpanFromArray(cRawMessage), stState, nTag=> );
+hr := F_ReadRepeatedField(F_SpanFromArray(cRawMessage), stState, anyArray:= F_ToAnyType(aActual), anyFirstElem:= F_ToAnyType(aActual[0]), ipFieldCodec:= fbFieldCodecInt32, nFieldIndex:= nActualFieldIndex);
 
 // Parses b=321: 16#15, 16#41, 16#01, 16#00, 16#00
-F_ParseTag(cRawMessage, stState, nTag=> );
-F_ParseRawLittleEndian32(cRawMessage, stState, nValue=> nB);
+F_ParseTag(F_SpanFromArray(cRawMessage), stState, nTag=> );
+F_ParseRawLittleEndian32(F_SpanFromArray(cRawMessage), stState, nValue=> nB);
 
 // Parses a=[151]: 16#0A, 16#02, 16#97, 16#01
-F_ParseTag(cRawMessage, stState, nTag=> );
-hr := F_ReadRepeatedField(cRawMessage, stState, anyArray:= F_ToAnyType(aActual), anyFirstElem:= F_ToAnyType(aActual[0]), ipFieldCodec:= fbFieldCodecInt32, nFieldIndex:= nActualFieldIndex);
+F_ParseTag(F_SpanFromArray(cRawMessage), stState, nTag=> );
+hr := F_ReadRepeatedField(F_SpanFromArray(cRawMessage), stState, anyArray:= F_ToAnyType(aActual), anyFirstElem:= F_ToAnyType(aActual[0]), ipFieldCodec:= fbFieldCodecInt32, nFieldIndex:= nActualFieldIndex);
 
 // Assert
 AssertEquals_DINT(
@@ -112,8 +112,8 @@ stState.nBufferSize := TO_UDINT(UPPER_BOUND(aBuffer, 1) + 1);
 THIS^.fbFieldCodecString.SetTmpBuffer(anyString:= F_ToAnyBytes(aTmpBuffer));
 
 // Act
-F_ParseTag(aBuffer, stState, nTag=> nTag);
-hr := F_ReadRepeatedField(aBuffer, stState, anyArray:= F_ToAnyType(aActual), anyFirstElem:= F_ToAnyType(aActual[0]), ipFieldCodec, nFieldIndex:= nActualFieldIndex);
+F_ParseTag(F_SpanFromArray(aBuffer), stState, nTag=> nTag);
+hr := F_ReadRepeatedField(F_SpanFromArray(aBuffer), stState, anyArray:= F_ToAnyType(aActual), anyFirstElem:= F_ToAnyType(aActual[0]), ipFieldCodec, nFieldIndex:= nActualFieldIndex);
 
 // Assert
 AssertEquals_DINT(

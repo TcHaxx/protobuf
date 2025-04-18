@@ -2,8 +2,8 @@
 <TcPlcObject Version="1.1.0.1">
   <POU Name="F_ReadRepeatedField" Id="{3275937c-bc24-42b8-bf5d-84307b144b13}" SpecialFunc="None">
     <Declaration><![CDATA[FUNCTION INTERNAL F_ReadRepeatedField : HRESULT
-VAR_IN_OUT CONSTANT
-    aBuffer         : ARRAY [*] OF BYTE;
+VAR_INPUT
+    stBuffer : ST_Span;
 END_VAR
 VAR_IN_OUT
     stState         : ST_ParserInternalState;
@@ -63,7 +63,7 @@ END_IF
 
 IF ipFieldCodec.IsPackedRepeatedField(nTag) THEN
     
-    hr := F_ParseLength(aBuffer, stState, nLength=> nLength);
+    hr := F_ParseLength(stBuffer, stState, nLength=> nLength);
     IF FAILED(hr) OR nLength <= 0 THEN
         // Empty packed field, valid - ignore.
         F_ReadRepeatedField := hr;
@@ -72,7 +72,7 @@ IF ipFieldCodec.IsPackedRepeatedField(nTag) THEN
     
     nBufferEnd := stState.nBufferPos + nLength;
     WHILE (stState.nBufferPos < nBufferEnd) DO
-        hr := ipFieldCodec.ValueReader(aBuffer, stState, anyOut=> anyValue);
+        hr := ipFieldCodec.ValueReader(stBuffer, stState, anyOut=> anyValue);
         IF FAILED(hr) THEN
             F_ReadRepeatedField := hr;
             RETURN;
@@ -86,7 +86,7 @@ IF ipFieldCodec.IsPackedRepeatedField(nTag) THEN
 ELSE
     // Not packed or possibly not packable...
     REPEAT
-        hr := ipFieldCodec.ValueReader(aBuffer, stState, anyOut=> anyValue);
+        hr := ipFieldCodec.ValueReader(stBuffer, stState, anyOut=> anyValue);
         IF FAILED(hr) THEN
             F_ReadRepeatedField := hr;
             RETURN;
@@ -95,7 +95,7 @@ ELSE
         MEMCPY(destAddr:= anyArray.pValue + (nFieldIndex * nTypeSize), srcAddr:= anyValue.pValue, MIN(TO_UDINT(anyValue.diSize), nTypeSize));
         nFieldIndex := nFieldIndex + 1;
         
-        hr := F_MaybeConsumeTag(aBuffer, stState, nTag, bConsumed=> bTagConsumed);
+        hr := F_MaybeConsumeTag(stBuffer, stState, nTag, bConsumed=> bTagConsumed);
         IF FAILED(hr) THEN
             F_ReadRepeatedField := hr;
             RETURN;

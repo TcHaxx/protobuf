@@ -2,8 +2,8 @@
 <TcPlcObject Version="1.1.0.1">
   <POU Name="F_ParseRawVarint64" Id="{5b123e0a-5ec1-4f58-a554-657731655167}" SpecialFunc="None">
     <Declaration><![CDATA[FUNCTION F_ParseRawVarint64 : HRESULT
-VAR_IN_OUT CONSTANT
-    aBuffer : ARRAY [*] OF BYTE;
+VAR_INPUT
+    stBuffer : ST_Span;
 END_VAR
 VAR_IN_OUT
     stState : ST_ParserInternalState;
@@ -22,12 +22,8 @@ END_VAR]]></Declaration>
     RETURN; 
 END_IF
 
-IF UPPER_BOUND(aBuffer,1) > TO_DINT(stState.nBufferSize) THEN
-    F_ParseRawVarint64 := stState.eParserErrorCode := E_ParserErrorCode.TruncatedMessage;     
-    RETURN; 
-END_IF
 
-bTmpByte := aBuffer[stState.nBufferPos];
+bTmpByte := PBYTE_TO_BYTE(stBuffer.pBuffer + stState.nBufferPos);
 
 stState.nBufferPos := stState.nBufferPos + 1;
 
@@ -41,8 +37,8 @@ nResult := bTmpByte AND 16#7F;
 
 {warning 'TODO: MalformedVarInt needs to be compared with C# protobuf}
 
-WHILE (bTmpByte > 16#7F AND TO_DINT(stState.nBufferPos) <= UPPER_BOUND(aBuffer, 1) AND nShift <= 9) DO
-    bTmpByte := aBuffer[stState.nBufferPos];
+WHILE (bTmpByte > 16#7F AND stState.nBufferPos <= stBuffer.nSize AND nShift <= 9) DO
+    bTmpByte := PBYTE_TO_BYTE(stBuffer.pBuffer + stState.nBufferPos);
     
     // MalformedVarInt when we reach the theoretical end of Varint64 but still have MSB set.
     IF nShift = 9 AND bTmpByte >= 16#80 THEN

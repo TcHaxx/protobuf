@@ -25,7 +25,7 @@ nTmp := cExpected;
 
 // Act
 hrWriterActual := F_WriteRawVarint64(aBuffer, stWriterState, nTmp);
-hrParserActual := F_ParseRawVarint64(aBuffer,stParserState, nActual);
+hrParserActual := F_ParseRawVarint64(F_SpanFromArray(aBuffer),stParserState, nActual);
 
 // Assert
 AssertEquals_DINT(Expected:= S_OK, Actual:= hrWriterActual, Message:= 'Expected hrWriterActual = S_OK');

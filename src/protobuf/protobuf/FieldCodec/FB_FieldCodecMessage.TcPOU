@@ -43,8 +43,8 @@ IsPackedRepeatedField := FALSE;]]></ST>
     <Method Name="ValueReader" Id="{e4223324-5674-4c82-b149-f3471b33ed03}">
       <Declaration><![CDATA[
 METHOD ValueReader : HRESULT
-VAR_IN_OUT CONSTANT
-	aBuffer	: ARRAY [*] OF BYTE;
+VAR_INPUT
+    stBuffer : ST_Span;
 END_VAR
 VAR_IN_OUT
 	stState	: ST_ParserInternalState;

@@ -16,7 +16,7 @@ VAR
 END_VAR]]></Declaration>
     <Implementation>
       <ST><![CDATA[
-F_ReadMessage := F_ParseLength(aBuffer, stState, nLength=> nLength);
+F_ReadMessage := F_ParseLength(F_SpanFromArray(aBuffer), stState, nLength=> nLength);
 IF FAILED(F_ReadMessage) THEN
     RETURN;
 END_IF

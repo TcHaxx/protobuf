@@ -5,8 +5,8 @@
  tag is not consumed. (So a subsequent call to "ParseTag" will return the
 same value.)*)
 FUNCTION F_PeekTag : HRESULT
-VAR_IN_OUT CONSTANT
-    aBuffer : ARRAY [*] OF BYTE;   
+VAR_INPUT
+    stBuffer : ST_Span;      
 END_VAR
 VAR_IN_OUT
     stState : ST_ParserInternalState;
@@ -27,7 +27,7 @@ IF stState.bHasNextTag THEN
 END_IF
 
 nSavedLast := stState.nLastTag;
-F_PeekTag := F_ParseTag(aBuffer, stState, nTag=> nTag);
+F_PeekTag := F_ParseTag(stBuffer, stState, nTag=> nTag);
 IF FAILED(F_PeekTag) THEN
     RETURN;
 END_IF
