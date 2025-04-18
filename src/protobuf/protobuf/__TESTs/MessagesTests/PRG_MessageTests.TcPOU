@@ -7,7 +7,7 @@ VAR
     {IF defined (UNIT_TEST)}
     fbMessageTests  : FB_MessageTests;
 //     fbRepeatedStringMessageTests : FB_RepeatedStringMessageTests;
-    fbfbb : FB_FooBarBazMessage;
+    fbfbb : FB_FooMessage;
     fbExam : FB_ExampleMessage;
     stState : ST_ParserInternalState;
     aBuffer : ARRAY [0..15] OF BYTE;

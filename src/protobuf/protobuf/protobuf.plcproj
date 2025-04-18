@@ -560,10 +560,16 @@
     <Compile Include="__TESTs\MessagesTests\POUs\FB_ExampleMessage.TcPOU">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="__TESTs\MessagesTests\POUs\FB_FooBarBazMessage.TcPOU">
+    <Compile Include="__TESTs\MessagesTests\POUs\FB_RepeatedStringMessageTests.TcPOU">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="__TESTs\MessagesTests\POUs\FB_RepeatedStringMessageTests.TcPOU">
+    <Compile Include="__TESTs\MessagesTests\POUs\FooBarBaz\FB_BarMessage.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="__TESTs\MessagesTests\POUs\FooBarBaz\FB_BazMessage.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="__TESTs\MessagesTests\POUs\FooBarBaz\FB_FooMessage.TcPOU">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="__TESTs\MessagesTests\PRG_MessageTests.TcPOU">
@@ -790,6 +796,7 @@
     <Folder Include="__TESTs\MessagesTests\DUTs" />
     <Folder Include="__TESTs\MessagesTests\POUs" />
     <Folder Include="__TESTs\HelperTests" />
+    <Folder Include="__TESTs\MessagesTests\POUs\FooBarBaz" />
     <Folder Include="__TESTs\SpanTests" />
     <Folder Include="__TESTs\RepeatedFieldTests" />
     <Folder Include="__TESTs\RepeatedFieldTests\RoundTrip" />

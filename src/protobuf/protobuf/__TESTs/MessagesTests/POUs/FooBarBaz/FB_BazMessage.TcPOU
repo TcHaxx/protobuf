@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <TcPlcObject Version="1.1.0.1">
-  <POU Name="FB_FooBarBazMessage" Id="{cf2e5f3a-ec46-4558-9f26-acb076490d6c}" SpecialFunc="None">
-    <Declaration><![CDATA[FUNCTION_BLOCK INTERNAL FINAL FB_FooBarBazMessage IMPLEMENTS I_BufferMessage
+  <POU Name="FB_BazMessage" Id="{98b5f4b2-3063-4e33-a1f5-a23aa9851380}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK INTERNAL FINAL FB_BazMessage IMPLEMENTS I_BufferMessage
 
 (*
 syntax = "proto3";
@@ -35,7 +35,7 @@ END_VAR
     <Implementation>
       <ST><![CDATA[]]></ST>
     </Implementation>
-    <Method Name="CalculateSize" Id="{ce3905cf-bfcb-4319-9024-c4cd79291450}">
+    <Method Name="CalculateSize" Id="{1c2ee7ba-a402-4ec0-b4d2-665e7c82c857}">
       <Declaration><![CDATA[{warning 'Add method implementation '}
 (* Calculates the size of this message in Protocol Buffer wire format, in bytes.*)
 METHOD CalculateSize : UDINT
@@ -44,7 +44,7 @@ METHOD CalculateSize : UDINT
         <ST><![CDATA[]]></ST>
       </Implementation>
     </Method>
-    <Method Name="InternalMergeFrom" Id="{2d90d5a3-60a9-484a-8204-c8513ae8a6e5}">
+    <Method Name="InternalMergeFrom" Id="{cb841ee4-bfaf-4250-928e-6f996d90d5cb}">
       <Declaration><![CDATA[{warning 'Add method implementation '}
 METHOD InternalMergeFrom : HRESULT
 VAR_IN_OUT
@@ -55,7 +55,7 @@ END_VAR
         <ST><![CDATA[]]></ST>
       </Implementation>
     </Method>
-    <Method Name="InternalWriteTo" Id="{e33703cb-b48e-4ae7-87a1-9e5e71586db7}">
+    <Method Name="InternalWriteTo" Id="{7cc85d24-c05c-458e-9d2c-a73e9dddf506}">
       <Declaration><![CDATA[{warning 'Add method implementation '}
 METHOD InternalWriteTo : HRESULT
 VAR_IN_OUT
@@ -66,7 +66,7 @@ END_VAR
         <ST><![CDATA[]]></ST>
       </Implementation>
     </Method>
-    <Method Name="MergeFrom" Id="{314e9c79-e00c-4e2b-9692-cca9b4200ec9}">
+    <Method Name="MergeFrom" Id="{01a656b6-337f-423a-a910-0aa23449dd22}">
       <Declaration><![CDATA[{warning 'Add method implementation '}
 (* Merges the data from the specified coded input stream with the current message.*)
 METHOD MergeFrom : HRESULT
@@ -91,7 +91,7 @@ END_IF
 
 CASE nTag OF
     16#0A:         // Bar bar = 1;
-        ;
+        fbInput.ReadRawMessage(iMessage:= THIS^);
            
  
 ELSE
@@ -103,14 +103,14 @@ END_REPEAT
 ]]></ST>
       </Implementation>
     </Method>
-    <Property Name="MessageDescriptor" Id="{b0dc2b91-ccda-4320-85ab-374db1543a47}">
+    <Property Name="MessageDescriptor" Id="{0ea8b4c3-1a93-40c2-be4f-39357961749f}">
       <Declaration><![CDATA[{warning 'Add property implementation'}
 (* Descriptor for this message. All instances are expected to return the same descriptor,
  and for generated types this will be an explicitly-implemented member, returning the
  same value as the static property declared on the type.*)
 PROPERTY MessageDescriptor : REFERENCE TO FB_MessageDescriptor
 ]]></Declaration>
-      <Get Name="Get" Id="{1cdea5fa-77b9-4f87-bc84-b6513d3323ee}">
+      <Get Name="Get" Id="{b8c4dab9-25f7-4332-b043-1d788e814c1e}">
         <Declaration><![CDATA[VAR
 END_VAR
 ]]></Declaration>
@@ -119,7 +119,18 @@ END_VAR
         </Implementation>
       </Get>
     </Property>
-    <Method Name="WriteTo" Id="{43cf5782-5084-41c2-8543-7116a19d9763}">
+    <Property Name="Parser" Id="{44ad5c3c-6e61-4f91-ad79-8466a6ade78b}">
+      <Declaration><![CDATA[PROPERTY PUBLIC Parser : REFERENCE TO FB_MessageParser]]></Declaration>
+      <Get Name="Get" Id="{9f4894c5-7aca-4fc0-9bb5-0e9841979a9b}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[Parser REF= THIS^.fbMessageParser;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Method Name="WriteTo" Id="{b8006ca3-cc58-474d-a5aa-598573cf89d2}">
       <Declaration><![CDATA[{warning 'Add method implementation '}
 (* Writes the data to the given coded output stream.*)
 METHOD WriteTo
