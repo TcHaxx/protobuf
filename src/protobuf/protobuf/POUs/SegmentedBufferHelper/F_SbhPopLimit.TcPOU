@@ -1,7 +1,8 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <TcPlcObject Version="1.1.0.1">
   <POU Name="F_SbhPopLimit" Id="{754c0900-5e24-47a2-933a-820e2db1ac8f}" SpecialFunc="None">
-    <Declaration><![CDATA[FUNCTION INTERNAL F_SbhPopLimit : HRESULT
+    <Declaration><![CDATA[// Discards the current limit, returning the previous limit.
+FUNCTION INTERNAL F_SbhPopLimit : HRESULT
 VAR_IN_OUT
     stState     : ST_ParserInternalState;
 END_VAR

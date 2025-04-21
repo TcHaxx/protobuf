@@ -1,7 +1,12 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <TcPlcObject Version="1.1.0.1">
   <POU Name="F_SbhPushLimit" Id="{8cea7c7c-7bfa-48e0-8baf-555c45c3fa31}" SpecialFunc="None">
-    <Declaration><![CDATA[FUNCTION INTERNAL F_SbhPushLimit : HRESULT
+    <Declaration><![CDATA[(*
+Sets currentLimit to (current position) + byteLimit. This is called
+when descending into a length-delimited embedded message.
+The previouslimit is returned.
+*)
+FUNCTION INTERNAL F_SbhPushLimit : HRESULT
 VAR_IN_OUT
     stState     : ST_ParserInternalState;
 END_VAR

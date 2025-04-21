@@ -1,7 +1,8 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <TcPlcObject Version="1.1.0.1">
   <POU Name="F_SbhIsReachedLimit" Id="{28c6146d-a251-4e02-a457-09194433aa7a}" SpecialFunc="None">
-    <Declaration><![CDATA[FUNCTION F_SbhIsReachedLimit : BOOL
+    <Declaration><![CDATA[// Returns whether or not all the data before the limit has been read.
+FUNCTION INTERNAL F_SbhIsReachedLimit : BOOL
 VAR_IN_OUT
     stState     : ST_ParserInternalState;
 END_VAR
