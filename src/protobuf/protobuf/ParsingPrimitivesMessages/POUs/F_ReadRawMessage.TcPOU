@@ -1,7 +1,8 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <TcPlcObject Version="1.1.0.1">
   <POU Name="F_ReadRawMessage" Id="{c47d844f-4687-416d-9a60-b87fd3566db4}" SpecialFunc="None">
-    <Declaration><![CDATA[FUNCTION F_ReadRawMessage : HRESULT
+    <Declaration><![CDATA[{attribute 'estimated-stack-usage' := '4096'}
+FUNCTION F_ReadRawMessage : HRESULT
 VAR_IN_OUT
     fbCtx   : FB_ParseContext;     
 END_VAR
