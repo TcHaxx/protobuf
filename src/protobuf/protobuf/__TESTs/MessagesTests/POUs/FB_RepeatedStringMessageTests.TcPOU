@@ -96,6 +96,19 @@ END_VAR
         </Implementation>
       </Get>
     </Property>
+    <Property Name="MessageValue" Id="{67d823ce-54d1-458c-856d-92f9d16fbd70}">
+      <Declaration><![CDATA[{warning 'Add property implementation'}
+PROPERTY MessageValue : T_Any
+]]></Declaration>
+      <Get Name="Get" Id="{d6e3df71-b25b-4a3d-9256-24349cc0e012}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
     <Property Name="Parser" Id="{9d9a84d5-eb4a-4abb-8518-acd3e8a5cac7}">
       <Declaration><![CDATA[PROPERTY PUBLIC Parser : REFERENCE TO FB_MessageParser]]></Declaration>
       <Get Name="Get" Id="{8c3c704e-b042-4bc4-ba1e-c6444118c347}">

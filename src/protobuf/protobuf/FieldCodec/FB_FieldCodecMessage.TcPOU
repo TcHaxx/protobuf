@@ -7,7 +7,8 @@ END_VAR
 VAR_OUTPUT
 END_VAR
 VAR
-
+    pParseContextField      : POINTER TO FB_ParseContext;
+    ipMessage               : I_Message;
 END_VAR
 ]]></Declaration>
     <Implementation>
@@ -28,6 +29,17 @@ END_VAR]]></Declaration>
 CalculatePackedDataSize := 0;]]></ST>
       </Implementation>
     </Method>
+    <Property Name="iMessage" Id="{23ab3e77-82ae-4780-9b51-b8b8ae077f9a}">
+      <Declaration><![CDATA[PROPERTY INTERNAL iMessage : I_Message]]></Declaration>
+      <Set Name="Set" Id="{39a8062a-b191-4603-bf39-3e1cc2eca4db}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[THIS^.ipMessage := iMessage;]]></ST>
+        </Implementation>
+      </Set>
+    </Property>
     <Method Name="IsPackedRepeatedField" Id="{695c89eb-30cc-4511-b56e-38db99a5dc46}">
       <Declaration><![CDATA[METHOD IsPackedRepeatedField : BOOL
 VAR_INPUT
@@ -40,6 +52,17 @@ END_VAR
 IsPackedRepeatedField := FALSE;]]></ST>
       </Implementation>
     </Method>
+    <Property Name="pParseContext" Id="{6cc0950c-7450-4135-aa7a-339972992a02}">
+      <Declaration><![CDATA[PROPERTY INTERNAL pParseContext : POINTER TO FB_ParseContext]]></Declaration>
+      <Set Name="Set" Id="{ed989bc5-21af-4f93-91f0-75a12c07147a}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[THIS^.pParseContextField := pParseContext;]]></ST>
+        </Implementation>
+      </Set>
+    </Property>
     <Method Name="ValueReader" Id="{e4223324-5674-4c82-b149-f3471b33ed03}">
       <Declaration><![CDATA[
 METHOD ValueReader : HRESULT
@@ -53,13 +76,17 @@ VAR_OUTPUT
 	anyOut	: T_Any;
 END_VAR]]></Declaration>
       <Implementation>
-        <ST><![CDATA[// IF anyStringTmp.pValue <> NULL THEN
-//     anyOut := anyStringTmp;
-// ELSE
-//     anyOut := F_ToAnyString(sValue);
-// END_IF
-// ValueReader := F_ReadString(aBuffer, stState, anyOut);
-]]></ST>
+        <ST><![CDATA[
+IF THIS^.pParseContextField = NULL THEN
+    ValueReader := stState.eParserErrorCode := E_ParserErrorCode.InternalError;
+    stState.bError := TRUE;
+    RETURN;
+END_IF
+
+THIS^.pParseContextField^.InitializeFromState(stBuffer:= stBuffer, stState:= stState);
+ValueReader := F_ReadMessage(fbCtx:= THIS^.pParseContextField^, iMessage:= THIS^.ipMessage);
+anyOut := THIS^.ipMessage.MessageValue;
+stState := THIS^.pParseContextField^.refCtx.stState;]]></ST>
       </Implementation>
     </Method>
     <Method Name="ValueWriter" Id="{fdb65b05-c4a7-47c5-9055-cbbc790d5d7d}">

@@ -30,6 +30,7 @@ message Baz
 
 VAR
 	fbMessageParser : FB_MessageParser(ipMessage:= THIS^);
+    stBaz : ST_BAZ;
 END_VAR
 ]]></Declaration>
     <Implementation>
@@ -45,14 +46,36 @@ METHOD CalculateSize : UDINT
       </Implementation>
     </Method>
     <Method Name="InternalMergeFrom" Id="{cb841ee4-bfaf-4250-928e-6f996d90d5cb}">
-      <Declaration><![CDATA[{warning 'Add method implementation '}
-METHOD InternalMergeFrom : HRESULT
+      <Declaration><![CDATA[METHOD InternalMergeFrom : HRESULT
 VAR_IN_OUT
-	stState	: ST_ParserInternalState;
+    fbCtx   : FB_ParseContext;
 END_VAR
-]]></Declaration>
+VAR
+    nTag : UDINT;
+END_VAR]]></Declaration>
       <Implementation>
-        <ST><![CDATA[]]></ST>
+        <ST><![CDATA[REPEAT   
+InternalMergeFrom := fbCtx.ReadTag(nTag=> nTag);
+IF SUCCEEDED(InternalMergeFrom) AND nTag = 0 THEN
+    EXIT;
+END_IF;
+
+IF FAILED(InternalMergeFrom) THEN
+    RETURN;
+END_IF
+
+CASE nTag OF
+    16#0D:         // fixed32 value = 1;
+          InternalMergeFrom := fbCtx.ReadFixed32(nValue=> stBaz.value);
+//      
+    16#12:         // string name = 2;
+          InternalMergeFrom := fbCtx.ReadString(anyStringOut:= stBaz.name);
+ELSE
+    InternalMergeFrom := fBCtx.SkipLastField();
+END_CASE
+
+UNTIL (FAILED(InternalMergeFrom) OR nTag = 0)
+END_REPEAT]]></ST>
       </Implementation>
     </Method>
     <Method Name="InternalWriteTo" Id="{7cc85d24-c05c-458e-9d2c-a73e9dddf506}">
@@ -116,6 +139,18 @@ END_VAR
 ]]></Declaration>
         <Implementation>
           <ST><![CDATA[]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Property Name="MessageValue" Id="{81753d7c-9326-4f50-a258-bbda360d3bd0}">
+      <Declaration><![CDATA[PROPERTY MessageValue : T_Any
+]]></Declaration>
+      <Get Name="Get" Id="{0e95fa4c-9f32-4508-9509-ea144d415c9e}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[MessageValue := F_ToAnyType(anyArg:= THIS^.stBaz);]]></ST>
         </Implementation>
       </Get>
     </Property>

@@ -27,6 +27,12 @@ PROPERTY MessageDescriptor : REFERENCE TO FB_MessageDescriptor]]></Declaration>
         <Declaration><![CDATA[]]></Declaration>
       </Get>
     </Property>
+    <Property Name="MessageValue" Id="{97215d09-def5-4507-9b56-dccf22e0973a}">
+      <Declaration><![CDATA[PROPERTY INTERNAL MessageValue : T_Any]]></Declaration>
+      <Get Name="Get" Id="{60067ca2-40f7-4972-b244-de71a629b7b8}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Get>
+    </Property>
     <Method Name="WriteTo" Id="{db7a2abd-e786-44cf-afdc-29280be946e5}">
       <Declaration><![CDATA[// Writes the data to the given coded output stream.
 METHOD WriteTo

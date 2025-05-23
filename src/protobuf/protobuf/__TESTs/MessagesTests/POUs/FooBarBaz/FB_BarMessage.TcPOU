@@ -37,6 +37,17 @@ END_VAR
     <Implementation>
       <ST><![CDATA[]]></ST>
     </Implementation>
+    <Property Name="Bar" Id="{71060d5d-29fd-4587-b251-83b3b7fdee04}">
+      <Declaration><![CDATA[PROPERTY Bar : REFERENCE TO ST_Bar]]></Declaration>
+      <Get Name="Get" Id="{9a7f454b-48b5-4ef2-a9c9-d8d2c1673ed1}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[Bar REF= THIS^.stBar;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
     <Method Name="CalculateSize" Id="{25410386-4583-421d-ab87-f95c9683f513}">
       <Declaration><![CDATA[{warning 'Add method implementation '}
 (* Calculates the size of this message in Protocol Buffer wire format, in bytes.*)
@@ -152,6 +163,18 @@ END_VAR
 ]]></Declaration>
         <Implementation>
           <ST><![CDATA[]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Property Name="MessageValue" Id="{e6656f20-f5df-46b3-bb0a-6bf1a9e52214}">
+      <Declaration><![CDATA[PROPERTY MessageValue : T_Any
+]]></Declaration>
+      <Get Name="Get" Id="{686d27b0-2229-465c-bf62-4fa401d6181d}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[MessageValue := F_ToAnyType(anyArg:= THIS^.stBar);]]></ST>
         </Implementation>
       </Get>
     </Property>

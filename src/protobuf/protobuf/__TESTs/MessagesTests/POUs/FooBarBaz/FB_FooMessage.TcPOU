@@ -31,8 +31,8 @@ message Baz
 VAR
 	fbMessageParser : FB_MessageParser(ipMessage:= THIS^);
     fbBar           : FB_BarMessage;
+    fbBaz           : FB_BazMessage;
     stFoo           : ST_Foo;
-    aBaz            : ARRAY [0..2] OF ST_Baz;
     nField2Index    : UDINT; 
 END_VAR
 ]]></Declaration>
@@ -72,13 +72,15 @@ CASE nTag OF
     16#0A:         // Bar bar = 1;
     ;
          InternalMergeFrom := fbCtx.ReadMessage(iMessage:= fbBar);
-//      
+         THIS^.stFoo.bar := fbBar.Bar;
+         
     16#12:         // repeated Baz baz = 2 ;
-    ;
-//        InternalMergeFrom := fbInput.ReadRepeatedFieldMessage(
-//                     anyArray:= F_ToAnyType(THIS^.aBaz),
-//                     anyFirstElem:= F_ToAnyType(THIS^.aBaz[0]),
-//                     nFieldIndex:= THIS^.nField2Index);
+        ;
+           InternalMergeFrom := fbCtx.ReadRepeatedFieldMessage(
+                        iMessage:= fbBaz,
+                        anyArray:= F_ToAnyType(THIS^.stFoo.baz),
+                        anyFirstElem:= F_ToAnyType(THIS^.stFoo.baz[0]),
+                        nFieldIndex:= THIS^.nField2Index);
 ELSE
     InternalMergeFrom := fBCtx.SkipLastField();
 END_CASE
@@ -105,9 +107,9 @@ METHOD MergeFrom : HRESULT
 VAR_IN_OUT
 	fbInput	: FB_CodedInputStream;
 END_VAR
-VAR
-    nTag : UDINT;
-END_VAR]]></Declaration>
+// VAR
+//     nTag : UDINT;
+// END_VAR]]></Declaration>
       <Implementation>
         <ST><![CDATA[
 MergeFrom := fbInput.ReadRawMessage(THIS^);
@@ -153,6 +155,18 @@ END_VAR
 ]]></Declaration>
         <Implementation>
           <ST><![CDATA[]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Property Name="MessageValue" Id="{cfd2a290-9591-4704-8795-fa192bf92b2c}">
+      <Declaration><![CDATA[PROPERTY MessageValue : T_Any
+]]></Declaration>
+      <Get Name="Get" Id="{730fa78a-e2c7-45ae-94f0-b57d65c6664f}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[MessageValue := F_ToAnyType(anyArg:= THIS^.stFoo);]]></ST>
         </Implementation>
       </Get>
     </Property>

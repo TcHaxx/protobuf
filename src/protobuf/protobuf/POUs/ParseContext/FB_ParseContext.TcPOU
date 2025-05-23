@@ -14,7 +14,10 @@ END_VAR
 VAR
     stCtx   : ST_ParseContext;
 END_VAR
-]]></Declaration>
+
+VAR
+    fbFieldCodecMessage     : FB_FieldCodecMessage;
+END_VAR]]></Declaration>
     <Implementation>
       <ST><![CDATA[]]></ST>
     </Implementation>
@@ -196,8 +199,29 @@ END_VAR
 ]]></Declaration>
       <Implementation>
         <ST><![CDATA[
-ReadMessage := F_ReadMessage(fbCtx:= THIS^, iMessage);
-]]></ST>
+ReadMessage := F_ReadMessage(fbCtx:= THIS^, iMessage);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="ReadRepeatedFieldMessage" Id="{53872132-5c78-41eb-b0d0-4ce10562c0b2}">
+      <Declaration><![CDATA[METHOD INTERNAL ReadRepeatedFieldMessage : HRESULT
+VAR_INPUT CONSTANT
+    iMessage        : I_Message;
+    anyArray        : T_Any;
+    anyFirstElem    : T_Any;
+END_VAR
+
+VAR_IN_OUT   
+    nFieldIndex : UDINT; 
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF iMessage = NULL THEN
+    ReadRepeatedFieldMessage := E_ParserErrorCode.InternalError;
+    RETURN;
+END_IF
+
+THIS^.fbFieldCodecMessage.iMessage := iMessage;
+THIS^.fbFieldCodecMessage.pParseContext := THIS;
+ReadRepeatedFieldMessage := F_ReadRepeatedField(THIS^.stCtx.stBuffer, THIS^.stCtx.stState, anyArray, anyFirstElem, ipFieldCodec:= THIS^.fbFieldCodecMessage, nFieldIndex); ]]></ST>
       </Implementation>
     </Method>
     <Method Name="ReadSFixed32" Id="{9f45ed62-393c-45d5-9752-212dd3ee0e22}">
