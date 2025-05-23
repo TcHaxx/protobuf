@@ -21,6 +21,7 @@ VAR
     nTag        : UDINT;
     hr          : HRESULT;
     nLength     : UDINT;
+    nCurrentLimit : UDINT;
     nArrayLength: UDINT;
     nByteLength : UDINT;
     nTypeSize   : UDINT;
@@ -70,8 +71,9 @@ IF ipFieldCodec.IsPackedRepeatedField(nTag) THEN
         RETURN;
     END_IF 
     
+    F_SbhPushLimit(stState, nLength, nCurrentLimit=> nCurrentLimit);
     nBufferEnd := stState.nBufferPos + nLength;
-    WHILE (stState.nBufferPos < nBufferEnd) DO
+    WHILE NOT F_SbhIsReachedLimit(stState) DO
         hr := ipFieldCodec.ValueReader(stBuffer, stState, anyOut=> anyValue);
         IF FAILED(hr) THEN
             F_ReadRepeatedField := hr;
@@ -82,7 +84,7 @@ IF ipFieldCodec.IsPackedRepeatedField(nTag) THEN
         nFieldIndex := nFieldIndex + 1;
     END_WHILE
 
-    
+    F_SbhPopLimit(stState, nCurrentLimit);
 ELSE
     // Not packed or possibly not packable...
     REPEAT

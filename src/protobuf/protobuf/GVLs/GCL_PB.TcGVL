@@ -9,6 +9,7 @@ VAR_GLOBAL
     cDoubleSize         : UDINT := cLittleEndian64Size;
     cFloatSize          : UDINT := cLittleEndian32Size;
     cBoolSize           : UDINT := 1;
+    cSbhLimit           : UDINT := TO_UDINT(-1);
 END_VAR]]></Declaration>
   </GVL>
 </TcPlcObject>
