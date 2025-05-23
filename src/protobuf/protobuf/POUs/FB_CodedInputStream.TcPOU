@@ -224,6 +224,7 @@ END_VAR
 
 VAR
     nLength : UDINT;
+    nCurrentLimit : UDINT;
 END_VAR]]></Declaration>
       <Implementation>
         <ST><![CDATA[
@@ -238,6 +239,8 @@ IF stState.nRecursionDepth >= stState.nRecursionLimit THEN
     RETURN;
 END_IF
 
+F_SbhPushLimit(stState, nLength, nCurrentLimit=> nCurrentLimit);
+
 stState.nRecursionDepth := stState.nRecursionDepth + 1;
 
 ReadMessage := ReadRawMessage(iMessage);
@@ -248,7 +251,8 @@ IF FAILED(ReadMessage) THEN
 END_IF
 
 
-stState.nRecursionDepth := stState.nRecursionDepth - 1;]]></ST>
+stState.nRecursionDepth := stState.nRecursionDepth - 1;
+F_SbhPopLimit(stState, nCurrentLimit);]]></ST>
       </Implementation>
     </Method>
     <Method Name="ReadRawMessage" Id="{db244a98-0a9a-45c0-b4b8-152bcbb4a14b}">
