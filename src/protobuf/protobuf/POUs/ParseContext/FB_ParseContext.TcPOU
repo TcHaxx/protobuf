@@ -64,13 +64,11 @@ stCtx.stState  := fbInputStream.InternalState;]]></ST>
 METHOD INTERNAL InitializeFromState
 VAR_IN_OUT CONSTANT
     stState : ST_ParserInternalState;
-END_VAR
-VAR_INPUT
     stBuffer : ST_Span;    
 END_VAR]]></Declaration>
       <Implementation>
-        <ST><![CDATA[stBuffer  := stBuffer;
-THIS^.stCtx.stState   := stState;]]></ST>
+        <ST><![CDATA[THIS^.stCtx.stState   := stState;
+THIS^.stCtx.stBuffer := stBuffer;]]></ST>
       </Implementation>
     </Method>
     <Method Name="LoadStateFromInputStream" Id="{9a98476f-a916-47f4-ae28-9a337a191a56}">
