@@ -6,7 +6,6 @@ STRUCT
     nBufferSize         : UDINT;                // Size of the current buffer
     nBufferPos          : UDINT;                // The position within the current buffer (i.e. the next byte to read)
     bError              : BOOL;
-    pCodedOutputStream  : POINTER TO FB_CodedOutputStream;
     eWriterErrorCode    : E_WriterErrorCode;    // 0 = no error, <> 0 = error
 END_STRUCT
 END_TYPE

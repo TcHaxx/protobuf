@@ -37,7 +37,7 @@ nLength := TO_UDINT(UPPER_BOUND(aBytesToWrite, 1) + 1);
 
 // Act
 {warning disable C0041}
-hrActual := F_WriteBytes(aActualBytes, stState, aBytesToWrite, nLength);
+hrActual := F_WriteBytes(F_SpanFromArray(aActualBytes), stState, aBytesToWrite, nLength);
 
 // Assert
 AssertEquals_DINT(

@@ -15,7 +15,7 @@ VAR
 	nActualTag			: UDINT;
 	nExpectedTag	    : UDINT;
 	fbParseCtx_SUT      : FB_ParseContext;
-	fbOutputSUT			: FB_CodedOutputStream;
+	fbWriteCtx_SUT  	: FB_WriteContext;
 END_VAR]]></Declaration>
     <Implementation>
       <ST><![CDATA[TEST(__POUNAME());
@@ -24,13 +24,12 @@ END_VAR]]></Declaration>
 nExpectedTag := F_MakeTag(nFieldNumber:= 3, eWireType:= E_WireType.LengthDelimited);
 aValues := cExpected;
 
-fbOutputSUT(aBuffer:= aBuffer);
-fbOutputSUT.FromBuffer();
-fbParseCtx_SUT.Initialize(stBuffer:= F_SpanFromArray(aBuffer));
+fbWriteCtx_SUT.FromBuffer(aBuffer);
+fbParseCtx_SUT.FromBuffer(aBuffer);
 
 // Act
 
-hrWriterActual := fbOutputSUT.WriteRepeatedFieldUInt32(
+hrWriterActual := fbWriteCtx_SUT.WriteRepeatedFieldUInt32(
 					anyArray:= F_ToAnyType(aValues),
 					anyFirstElem:= F_ToAnyType(aValues[0]), 
 					nLength:= 5,

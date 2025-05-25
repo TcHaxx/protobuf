@@ -54,10 +54,8 @@ END_VAR
     <Method Name="ValueReader" Id="{51284e44-3de6-4991-93bd-086796106a10}">
       <Declaration><![CDATA[
 METHOD ValueReader : HRESULT
-VAR_INPUT
-    stBuffer : ST_Span;
-END_VAR
 VAR_IN_OUT
+    stBuffer : ST_Span;
 	stState	: ST_ParserInternalState;
 END_VAR
 VAR_OUTPUT
@@ -87,10 +85,8 @@ anyOut.diSize := TO_DINT(nLength);]]></ST>
     <Method Name="ValueWriter" Id="{44ad94e9-25af-4045-92d0-4895405d85b6}">
       <Declaration><![CDATA[METHOD ValueWriter : HRESULT
 VAR_IN_OUT
-	aBuffer	: ARRAY [*] OF BYTE;
-END_VAR
-VAR_IN_OUT
-	stState	: ST_WriterInternalState;
+    stBuffer : ST_Span;
+    stState  : ST_WriterInternalState;
 END_VAR
 VAR_INPUT
     anyIn : T_ANY;
@@ -98,9 +94,9 @@ END_VAR
 ]]></Declaration>
       <Implementation>
         <ST><![CDATA[{warning 'FIXME: This should write the actual number of bytes, otherwise we waste space on the wire...'}
-ValueWriter := F_WriteLength(aBuffer, stState, TO_UDINT(anyin.diSize));
+ValueWriter := F_WriteLength(stBuffer, stState, TO_UDINT(anyin.diSize));
 IF SUCCEEDED(ValueWriter) THEN
-	ValueWriter := F_WriteRawBytes(aBuffer, stState, anyIn, TO_UDINT(anyin.diSize));
+	ValueWriter := F_WriteRawBytes(stBuffer, stState, anyIn, TO_UDINT(anyin.diSize));
 END_IF]]></ST>
       </Implementation>
     </Method>

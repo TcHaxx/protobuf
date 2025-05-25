@@ -6,10 +6,8 @@
     <Method Name="ValueWriter" Id="{79795000-1c35-41ae-8483-d11fc25b9e78}">
       <Declaration><![CDATA[METHOD ValueWriter : HRESULT
 VAR_IN_OUT
-    aBuffer : ARRAY [*] OF BYTE;   
-END_VAR
-VAR_IN_OUT
-    stState : ST_WriterInternalState;
+    stBuffer : ST_Span;
+    stState  : ST_WriterInternalState;
 END_VAR
 VAR_INPUT
     anyIn : T_ANY;

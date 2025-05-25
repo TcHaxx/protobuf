@@ -3,9 +3,11 @@
   <POU Name="F_WriteDouble" Id="{bd6826a6-616d-4379-89c3-33633543bf20}" SpecialFunc="None">
     <Declaration><![CDATA[// Writes a double field value, without a tag, to the stream.
 FUNCTION F_WriteDouble : HRESULT
+VAR_INPUT
+    stBuffer    : ST_Span;
+END_VAR
 VAR_IN_OUT
-    aBuffer : ARRAY [*] OF BYTE;
-    stState : ST_WriterInternalState;
+    stState     : ST_WriterInternalState;
 END_VAR
 VAR_INPUT CONSTANT
     fValue : LREAL;
@@ -29,7 +31,7 @@ END_IF
 {warning 'TODO: Check for endianess?'}
 fTmp := fValue;
 
-MEMCPY(destAddr:= ADR(aBuffer[stState.nBufferPos]), srcAddr:= ADR(fTmp), n:= cLength);
+MEMCPY(destAddr:= stBuffer.pBuffer + stState.nBufferPos, srcAddr:= ADR(fTmp), n:= cLength);
 stState.nBufferPos := stState.nBufferPos + cLength;]]></ST>
     </Implementation>
   </POU>

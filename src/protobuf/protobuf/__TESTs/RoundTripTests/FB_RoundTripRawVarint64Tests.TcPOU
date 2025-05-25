@@ -24,7 +24,7 @@ stWriterState.nBufferPos := stParserState.nBufferPos := 2;
 nTmp := cExpected;
 
 // Act
-hrWriterActual := F_WriteRawVarint64(aBuffer, stWriterState, nTmp);
+hrWriterActual := F_WriteRawVarint64(F_SpanFromArray(aBuffer), stWriterState, nTmp);
 hrParserActual := F_ParseRawVarint64(F_SpanFromArray(aBuffer),stParserState, nActual);
 
 // Assert

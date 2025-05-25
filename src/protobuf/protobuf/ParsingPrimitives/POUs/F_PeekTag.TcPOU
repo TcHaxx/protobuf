@@ -6,9 +6,9 @@
 same value.)*)
 FUNCTION F_PeekTag : HRESULT
 VAR_INPUT
-    stBuffer : ST_Span;      
+    stBuffer : ST_Span;
 END_VAR
-VAR_IN_OUT
+VAR_IN_OUT      
     stState : ST_ParserInternalState;
 END_VAR
 VAR_OUTPUT

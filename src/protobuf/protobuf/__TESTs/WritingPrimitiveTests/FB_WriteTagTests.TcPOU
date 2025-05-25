@@ -39,7 +39,7 @@ stState.nBufferSize := SIZEOF(aActualBuffer);
 stState.nBufferPos := nBufferPosStart;
 
 // Act
-hrActual := F_WriteTag(aActualBuffer, stState, nFieldNumber, eWireType);
+hrActual := F_WriteTag(F_SpanFromArray(aActualBuffer), stState, nFieldNumber, eWireType);
 
 // Assert
 AssertEquals_DINT(

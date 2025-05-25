@@ -3,9 +3,11 @@
   <POU Name="F_WriteRawBytes" Id="{03486a0e-d593-43a1-9f38-f3fba2cd9d73}" SpecialFunc="None">
     <Declaration><![CDATA[// Writes out part of an array of bytes.
 FUNCTION F_WriteRawBytes : HRESULT
+VAR_INPUT
+    stBuffer    : ST_Span;
+END_VAR
 VAR_IN_OUT
-    aBuffer : ARRAY [*] OF BYTE;
-    stState : ST_WriterInternalState;
+    stState     : ST_WriterInternalState;
 END_VAR
 VAR_INPUT CONSTANT
     tBytes  : T_AnyBytes;
@@ -16,20 +18,7 @@ END_VAR
       <ST><![CDATA[
 F_WriteRawBytes := S_OK;
 
-IF nLength > stState.nBufferSize - stState.nBufferPos THEN
-    F_WriteRawBytes := stState.eWriterErrorCode := E_WriterErrorCode.TruncatedMessage;
-    stState.bError := TRUE;
-    RETURN;
-END_IF
-
-IF nLength > TO_UDINT(tBytes.diSize) + 1 THEN
-    F_WriteRawBytes := stState.eWriterErrorCode := E_WriterErrorCode.NotEnoughMem;
-    stState.bError := TRUE;
-    RETURN;
-END_IF
-
-MEMCPY(destAddr:= ADR(aBuffer[stState.nBufferPos]), srcAddr:= tBytes.pValue, n:=  nLength);
-stState.nBufferPos := stState.nBufferPos + nLength;]]></ST>
+F_WriteRawBytes := F_WriteToBuffer(stBuffer, stState, tBytes, nLength);]]></ST>
     </Implementation>
   </POU>
 </TcPlcObject>

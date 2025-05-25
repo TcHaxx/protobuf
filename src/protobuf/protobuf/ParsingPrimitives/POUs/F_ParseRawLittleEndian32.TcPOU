@@ -4,9 +4,9 @@
     <Declaration><![CDATA[// Parses a 32-bit little-endian integer.
 FUNCTION F_ParseRawLittleEndian32 : HRESULT
 VAR_INPUT
-    stBuffer : ST_Span;   
+    stBuffer : ST_Span;
 END_VAR
-VAR_IN_OUT
+VAR_IN_OUT      
     stState : ST_ParserInternalState;
 END_VAR
 VAR_OUTPUT

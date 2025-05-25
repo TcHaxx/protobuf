@@ -3,9 +3,11 @@
   <POU Name="F_WriteRawByte" Id="{b076660d-c3ec-4678-82dc-e1aecd7132d4}" SpecialFunc="None">
     <Declaration><![CDATA[// Writes out part of an array of bytes.
 FUNCTION F_WriteRawByte : HRESULT
+VAR_INPUT
+    stBuffer    : ST_Span;
+END_VAR
 VAR_IN_OUT
-    aBuffer : ARRAY [*] OF BYTE;
-    stState : ST_WriterInternalState;
+    stState     : ST_WriterInternalState;
 END_VAR
 VAR_INPUT CONSTANT
     nValue  : BYTE;
@@ -13,6 +15,9 @@ END_VAR
 
 VAR CONSTANT
     cLength : UDINT := SIZEOF(nValue);
+END_VAR
+VAR
+    pByte   : POINTER TO BYTE;
 END_VAR]]></Declaration>
     <Implementation>
       <ST><![CDATA[
@@ -24,7 +29,8 @@ IF cLength > stState.nBufferSize - stState.nBufferPos THEN
     RETURN;
 END_IF
 
-aBuffer[stState.nBufferPos] := nValue;
+pByte := stBuffer.pBuffer + stState.nBufferPos;
+pByte^ := nValue;
 stState.nBufferPos := stState.nBufferPos + cLength;]]></ST>
     </Implementation>
   </POU>

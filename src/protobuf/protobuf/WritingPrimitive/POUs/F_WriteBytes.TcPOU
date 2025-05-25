@@ -3,9 +3,11 @@
   <POU Name="F_WriteBytes" Id="{51c66637-48b4-4fb7-bc05-3692f28296d9}" SpecialFunc="None">
     <Declaration><![CDATA[// Reads a bytes field value from the input.
 FUNCTION F_WriteBytes : HRESULT
+VAR_INPUT
+    stBuffer    : ST_Span;
+END_VAR
 VAR_IN_OUT
-    aBuffer : ARRAY [*] OF BYTE;
-    stState : ST_WriterInternalState;   
+    stState     : ST_WriterInternalState;
 END_VAR
 VAR_IN_OUT CONSTANT    
     aBytes  : ARRAY[*] OF BYTE;
@@ -16,12 +18,12 @@ END_VAR]]></Declaration>
     <Implementation>
       <ST><![CDATA[F_WriteBytes := S_OK;
 
-F_WriteBytes := F_WriteLength(aBuffer, stState, nLength);
+F_WriteBytes := F_WriteLength(stBuffer, stState, nLength);
 IF FAILED(F_WriteBytes) THEN
     RETURN;
 END_IF
 
-F_WriteBytes := F_WriteRawBytes(aBuffer, stState, F_ToAnyBytes(aBytes), nLength);]]></ST>
+F_WriteBytes := F_WriteRawBytes(stBuffer, stState, F_ToAnyBytes(aBytes), nLength);]]></ST>
     </Implementation>
   </POU>
 </TcPlcObject>

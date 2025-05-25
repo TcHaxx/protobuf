@@ -23,7 +23,7 @@ stWriterState.nBufferPos := stParserState.nBufferPos := 3;
 
 // Act
 
-hrWriterActual := F_WriteString(aBuffer, stWriterState, cExpectedString);
+hrWriterActual := F_WriteString(F_SpanFromArray(aBuffer), stWriterState, cExpectedString);
 hrParserActual := F_ReadString(F_SpanFromArray(aBuffer), stParserState, F_ToAnyType(sActual));
 
 // Assert

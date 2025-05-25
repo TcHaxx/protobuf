@@ -2,15 +2,18 @@
 <TcPlcObject Version="1.1.0.1">
   <POU Name="F_WriteRawVarint32" Id="{1ebc98d9-6b9e-427e-9469-28c03076e903}" SpecialFunc="None">
     <Declaration><![CDATA[FUNCTION F_WriteRawVarint32 : HRESULT
+VAR_INPUT
+    stBuffer    : ST_Span;
+END_VAR
 VAR_IN_OUT
-    aBuffer : ARRAY [*] OF BYTE;
-    stState : ST_WriterInternalState;
+    stState     : ST_WriterInternalState;
 END_VAR
 VAR_INPUT
     anyVarInt32 : ANY_INT;
 END_VAR
 VAR
     nValue  : UDINT;
+    pByte   : POINTER TO BYTE;
 END_VAR
 ]]></Declaration>
     <Implementation>
@@ -28,23 +31,26 @@ IF (stState.nBufferPos + SIZEOF(nValue) + 1) > stState.nBufferSize THEN
     RETURN; 
 END_IF
 
-MEMCPY(destAddr:= ADR(nValue), srcAddr:= anyVarInt32.pValue, n:= TO_UDINT(anyVarInt32.diSize));
+nValue := PUDINT_TO_UDINT(in:= anyVarInt32.pValue);
+
+pByte := stBuffer.pBuffer + stState.nBufferPos;
 
 // fastpath for a common case of single byte value
 IF nValue < 16#80 THEN
-    aBuffer[stState.nBufferPos] := TO_BYTE(nValue);
+    pByte^ :=  TO_BYTE(nValue);
     stState.nBufferPos := stState.nBufferPos + 1;
     F_WriteRawVarint32 := S_OK;
     RETURN;
 END_IF
 
 WHILE (stState.nBufferPos < stState.nBufferSize) DO
+    pByte := stBuffer.pBuffer + stState.nBufferPos;
     IF nValue > 16#7F THEN
-        aBuffer[stState.nBufferPos] := TO_BYTE((nValue AND 16#7F) OR 16#80);
+        pByte^ := TO_BYTE((nValue AND 16#7F) OR 16#80);
         nValue := SHR(nValue, 7);
         stState.nBufferPos := stState.nBufferPos + 1;
     ELSE
-        aBuffer[stState.nBufferPos] := TO_BYTE(nValue);
+        pByte^ := TO_BYTE(nValue);
         stState.nBufferPos := stState.nBufferPos + 1;
         F_WriteRawVarint32 := S_OK;
         RETURN;

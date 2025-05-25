@@ -3,9 +3,9 @@
   <POU Name="F_ParseRawVarint32" Id="{51c6c8a1-a14a-4443-b331-fa1787d7bb62}" SpecialFunc="None">
     <Declaration><![CDATA[FUNCTION F_ParseRawVarint32 : HRESULT
 VAR_INPUT
-    stBuffer : ST_Span;   
+    stBuffer : ST_Span;
 END_VAR
-VAR_IN_OUT
+VAR_IN_OUT      
     stState : ST_ParserInternalState;
 END_VAR
 VAR_INPUT

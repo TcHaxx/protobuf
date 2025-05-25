@@ -66,10 +66,8 @@ END_VAR
     <Method Name="ValueReader" Id="{e4223324-5674-4c82-b149-f3471b33ed03}">
       <Declaration><![CDATA[
 METHOD ValueReader : HRESULT
-VAR_INPUT
-    stBuffer : ST_Span;
-END_VAR
 VAR_IN_OUT
+    stBuffer : ST_Span;
 	stState	: ST_ParserInternalState;
 END_VAR
 VAR_OUTPUT
@@ -92,10 +90,8 @@ stState := THIS^.pParseContextField^.refCtx.stState;]]></ST>
     <Method Name="ValueWriter" Id="{fdb65b05-c4a7-47c5-9055-cbbc790d5d7d}">
       <Declaration><![CDATA[METHOD ValueWriter : HRESULT
 VAR_IN_OUT
-	aBuffer	: ARRAY [*] OF BYTE;
-END_VAR
-VAR_IN_OUT
-	stState	: ST_WriterInternalState;
+    stBuffer : ST_Span;
+    stState  : ST_WriterInternalState;
 END_VAR
 VAR_INPUT
     anyIn : T_ANY;
@@ -103,7 +99,7 @@ END_VAR
 ]]></Declaration>
       <Implementation>
         <ST><![CDATA[
-// ValueWriter := F_WriteRawString(aBuffer, stState, anyIn);]]></ST>
+// ValueWriter := F_WriteRawString(F_SpanFromArray(aBuffer), stState, anyIn);]]></ST>
       </Implementation>
     </Method>
   </POU>

@@ -54,6 +54,20 @@ END_VAR
         </Implementation>
       </Set>
     </Property>
+    <Method Name="FromBuffer" Id="{2b7c5563-5ff2-4519-b454-28877ecfba59}">
+      <Declaration><![CDATA[METHOD FromBuffer : HRESULT
+VAR_IN_OUT CONSTANT
+    aBuffer : ARRAY [*] OF BYTE;
+END_VAR
+VAR
+    hr : HRESULT;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[
+Reset();
+Initialize(F_SpanFromArray(aBuffer));]]></ST>
+      </Implementation>
+    </Method>
     <Method Name="Initialize" Id="{8119bb60-2785-42c8-b5db-cc0a8f260d85}">
       <Declaration><![CDATA[METHOD INTERNAL Initialize
 VAR_INPUT CONSTANT
@@ -540,6 +554,19 @@ END_VAR
         </Implementation>
       </Get>
     </Property>
+    <Method Name="Reset" Id="{09f049fb-0b8a-47f1-bb43-77baa133b86c}">
+      <Declaration><![CDATA[METHOD PRIVATE Reset
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[
+stCtx.stState.bError := FALSE;
+stCtx.stState.eParserErrorCode := S_OK;
+stCtx.stState.nBufferPos := 0;
+stCtx.stState.nBufferSize := 0;]]></ST>
+      </Implementation>
+    </Method>
     <Method Name="SetTempBuffer" Id="{6a17e5f9-2bbf-4c81-81ce-466075b31fc5}">
       <Declaration><![CDATA[// Temp. buffer for repeated fields, e.g. string or bytes, if larger then default.
 METHOD SetTempBuffer

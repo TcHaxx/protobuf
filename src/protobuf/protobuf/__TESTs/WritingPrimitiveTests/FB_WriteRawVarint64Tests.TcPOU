@@ -38,7 +38,7 @@ stState.nBufferSize := SIZEOF(aActualBuffer);
 stState.nBufferPos := nBufferPosStart;
 
 // Act
-hrActual := F_WriteRawVarint64(aActualBuffer, stState, nValue);
+hrActual := F_WriteRawVarint64(F_SpanFromArray(aActualBuffer), stState, nValue);
 
 // Assert
 AssertEquals_DINT(

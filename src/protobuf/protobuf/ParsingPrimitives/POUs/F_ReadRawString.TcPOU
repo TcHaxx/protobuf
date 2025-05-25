@@ -4,14 +4,14 @@
     <Declaration><![CDATA[// Reads a UTF-8 string from the next "length" bytes.
 FUNCTION INTERNAL F_ReadRawString : HRESULT
 VAR_INPUT
-    stBuffer : ST_Span;      
+    stBuffer : ST_Span;
+END_VAR
+VAR_IN_OUT      
+    stState : ST_ParserInternalState;
 END_VAR
 VAR_INPUT CONSTANT
     nLength : UDINT;   
     stAnyStringOut : T_Any;
-END_VAR
-VAR_IN_OUT
-    stState : ST_ParserInternalState;
 END_VAR
 VAR
     pNullByte : POINTER TO BYTE;

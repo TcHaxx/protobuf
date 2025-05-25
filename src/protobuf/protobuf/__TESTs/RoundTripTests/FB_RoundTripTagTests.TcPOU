@@ -30,7 +30,7 @@ stWriterState.nBufferSize := stParserState.nBufferSize := TO_UDINT(UPPER_BOUND(a
 stWriterState.nBufferPos := stParserState.nBufferPos := cStartBufferPos;
 
 // Act / Assert
-hrWriterActual := F_WriteTag(aBuffer, stWriterState, cExpectedFieldNumber, cEcpectedWireType);
+hrWriterActual := F_WriteTag(F_SpanFromArray(aBuffer), stWriterState, cExpectedFieldNumber, cEcpectedWireType);
 AssertEquals_DINT(Expected:= S_OK, Actual:= hrWriterActual, Message:= 'Expected hrWriterActual = S_OK');
 
 hrPeekActual := F_PeekTag(F_SpanFromArray(aBuffer), stParserState, nTag=> nActualTag);

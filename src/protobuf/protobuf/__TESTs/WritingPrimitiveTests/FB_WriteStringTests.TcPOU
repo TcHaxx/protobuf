@@ -34,7 +34,7 @@ stState.nBufferSize := TO_UDINT(UPPER_BOUND(aExpectedBuffer, 1) + 1);
 stState.nBufferPos := nBufferPosStart;
 
 // Act
-hrActual := F_WriteString(aActualBuffer, stState, sStringToWrite);
+hrActual := F_WriteString(F_SpanFromArray(aActualBuffer), stState, sStringToWrite);
 
 // Assert
 AssertEquals_DINT(

@@ -3,9 +3,11 @@
   <POU Name="F_WriteFloat" Id="{31c0f91b-2323-44ae-b077-dd782051d522}" SpecialFunc="None">
     <Declaration><![CDATA[// Writes a float field value, without a tag, to the stream.
 FUNCTION F_WriteFloat : HRESULT
+VAR_INPUT
+    stBuffer    : ST_Span;
+END_VAR
 VAR_IN_OUT
-    aBuffer : ARRAY [*] OF BYTE;
-    stState : ST_WriterInternalState;
+    stState     : ST_WriterInternalState;
 END_VAR
 VAR_INPUT CONSTANT
     fValue : REAL;
@@ -21,16 +23,10 @@ END_VAR
       <ST><![CDATA[
 F_WriteFloat := S_OK;
 
-IF stState.nBufferSize - stState.nBufferPos < cLength THEN
-    F_WriteFloat := stState.eWriterErrorCode := E_WriterErrorCode.TruncatedMessage;
-    stState.bError := TRUE;
-    RETURN;
-END_IF
 {warning 'TODO: Check for endianess?'}
 fTmp := fValue;
 
-MEMCPY(destAddr:= ADR(aBuffer[stState.nBufferPos]), srcAddr:= ADR(fTmp), n:= cLength);
-stState.nBufferPos := stState.nBufferPos + cLength;]]></ST>
+F_WriteFloat := F_WriteToBuffer(stBuffer, stState, F_ToAnyType(fValue)  , cLength);]]></ST>
     </Implementation>
   </POU>
 </TcPlcObject>

@@ -1,0 +1,39 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1">
+  <POU Name="F_WriteToBuffer" Id="{33b34f65-e388-4c61-86ed-3ee8b9348237}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION F_WriteToBuffer : HRESULT
+VAR_IN_OUT CONSTANT
+    stBuffer    : ST_Span;
+END_VAR
+VAR_IN_OUT
+    stState     : ST_WriterInternalState;
+END_VAR
+VAR_INPUT
+    anyData       : T_ANY;
+    nLength       : UDINT;      // Items to write 
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[IF stBuffer.pBuffer = NULL AND_THEN stBuffer.nSize = 0 THEN
+    F_WriteToBuffer := stState.eWriterErrorCode := E_WriterErrorCode.NotEnoughMem;
+    stState.bError := TRUE;
+    RETURN;    
+END_IF
+
+IF nLength > stState.nBufferSize - stState.nBufferPos THEN
+    F_WriteToBuffer := stState.eWriterErrorCode := E_WriterErrorCode.TruncatedMessage;
+    stState.bError := TRUE;
+    RETURN;
+END_IF
+
+IF nLength > TO_UDINT(anyData.diSize) THEN
+    F_WriteToBuffer := stState.eWriterErrorCode := E_WriterErrorCode.NotEnoughMem;
+    stState.bError := TRUE;
+    RETURN;
+END_IF
+
+MEMCPY(destAddr:= stBuffer.pBuffer + stState.nBufferPos, srcAddr:= anyData.pValue, n:=  nLength);
+stState.nBufferPos := stState.nBufferPos + nLength;]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>

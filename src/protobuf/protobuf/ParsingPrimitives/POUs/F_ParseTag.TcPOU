@@ -5,9 +5,9 @@
 // If the end of logical stream was reached, an invalid tag of 0 is returned.
 FUNCTION F_ParseTag : HRESULT
 VAR_INPUT
-    stBuffer : ST_Span;      
+    stBuffer : ST_Span;
 END_VAR
-VAR_IN_OUT
+VAR_IN_OUT      
     stState : ST_ParserInternalState;
 END_VAR
 VAR_OUTPUT

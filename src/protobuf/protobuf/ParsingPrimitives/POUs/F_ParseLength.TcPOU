@@ -4,9 +4,9 @@
     <Declaration><![CDATA[// Reads a length for length-delimited data.
 FUNCTION F_ParseLength : HRESULT
 VAR_INPUT
-    stBuffer : ST_Span;      
+    stBuffer : ST_Span;
 END_VAR
-VAR_IN_OUT
+VAR_IN_OUT      
     stState : ST_ParserInternalState;
 END_VAR
 VAR_OUTPUT

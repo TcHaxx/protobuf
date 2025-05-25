@@ -5,11 +5,9 @@
 ]]></Declaration>
     <Method Name="ValueReader" Id="{3b7eefb9-456c-4f6e-87f8-51b5178c58ba}">
       <Declaration><![CDATA[METHOD ValueReader : HRESULT
-VAR_INPUT
-    stBuffer : ST_Span;
-END_VAR
 VAR_IN_OUT
-    stState : ST_ParserInternalState;
+    stBuffer : ST_Span;
+    stState  : ST_ParserInternalState;
 END_VAR
 VAR_OUTPUT
     anyOut : T_Any;

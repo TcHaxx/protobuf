@@ -22,7 +22,7 @@ stWriterState.nBufferSize := stParserState.nBufferSize := TO_UDINT(UPPER_BOUND(a
 stWriterState.nBufferPos := stParserState.nBufferPos := 2;
 
 // Act
-hrWriterActual := F_WriteBytes(aBuffer, stWriterState, cExpectedBytes, nLength:= 150);
+hrWriterActual := F_WriteBytes(F_SpanFromArray(aBuffer), stWriterState, cExpectedBytes, nLength:= 150);
 hrParserActual := F_ReadBytes(F_SpanFromArray(aBuffer),stParserState, aActualBytes);
 
 // Assert

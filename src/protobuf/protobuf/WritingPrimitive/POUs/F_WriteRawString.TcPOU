@@ -3,9 +3,11 @@
   <POU Name="F_WriteRawString" Id="{6e76feb0-8bc9-457c-a81a-c3ae6a77cf29}" SpecialFunc="None">
     <Declaration><![CDATA[// Writes a string field value, without a tag, to the stream. The data is length-prefixed.
 FUNCTION F_WriteRawString : HRESULT
+VAR_INPUT
+    stBuffer    : ST_Span;
+END_VAR
 VAR_IN_OUT
-    aBuffer : ARRAY [*] OF BYTE;
-    stState : ST_WriterInternalState;
+    stState     : ST_WriterInternalState;
 END_VAR
 VAR_IN_OUT CONSTANT
     tAnyString  : T_AnyString;
@@ -23,19 +25,12 @@ IF tAnyString.TypeClass <> __SYSTEM.TYPE_CLASS.TYPE_STRING THEN
 END_IF
 
 UTF8Len(tAnyString.pValue, nSize=> nStrLength);
-F_WriteRawString := F_WriteRawVarint32(aBuffer, stState, nStrLength);
+F_WriteRawString := F_WriteRawVarint32(stBuffer, stState, nStrLength);
 IF FAILED(F_WriteRawString) THEN
     RETURN;
 END_IF
 
-IF nStrLength > stState.nBufferSize - stState.nBufferPos THEN
-    F_WriteRawString := stState.eWriterErrorCode := E_WriterErrorCode.TruncatedMessage;
-    stState.bError := TRUE;
-    RETURN;  
-END_IF
-
-MEMCPY(destAddr:= ADR(aBuffer[stState.nBufferPos]), srcAddr:= tAnyString.pValue, n:=  nStrLength);
-stState.nBufferPos := stState.nBufferPos + nStrLength;]]></ST>
+F_WriteRawString := F_WriteToBuffer(stBuffer, stState, tAnyString, nStrLength);]]></ST>
     </Implementation>
   </POU>
 </TcPlcObject>

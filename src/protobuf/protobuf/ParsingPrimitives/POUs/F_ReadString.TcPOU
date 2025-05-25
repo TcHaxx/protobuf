@@ -4,9 +4,9 @@
     <Declaration><![CDATA[// Reads a string field value from the input.
 FUNCTION F_ReadString : HRESULT
 VAR_INPUT
-    stBuffer : ST_Span;      
+    stBuffer : ST_Span;
 END_VAR
-VAR_IN_OUT
+VAR_IN_OUT      
     stState : ST_ParserInternalState;
 END_VAR
 VAR_INPUT
@@ -23,7 +23,7 @@ IF FAILED(F_ReadString) THEN
     RETURN;
 END_IF
 
-F_ReadString := F_ReadRawString(stBuffer, nStrLength, anyStringOut, stState);]]></ST>
+F_ReadString := F_ReadRawString(stBuffer, stState, nStrLength, anyStringOut);]]></ST>
     </Implementation>
   </POU>
 </TcPlcObject>

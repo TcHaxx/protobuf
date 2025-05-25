@@ -55,10 +55,8 @@ END_VAR
     <Method Name="ValueReader" Id="{f0e2f0a6-ad5d-4700-b47f-c0159be5e107}">
       <Declaration><![CDATA[
 METHOD ValueReader : HRESULT
-VAR_INPUT
-    stBuffer : ST_Span;
-END_VAR
 VAR_IN_OUT
+    stBuffer : ST_Span;
 	stState	: ST_ParserInternalState;
 END_VAR
 VAR_OUTPUT
@@ -73,10 +71,8 @@ anyOut := F_ToAnyType(anyArg:= nValue);]]></ST>
     <Method Name="ValueWriter" Id="{3b271a1e-cec2-4f7c-b69e-965369e26732}">
       <Declaration><![CDATA[METHOD ValueWriter : HRESULT
 VAR_IN_OUT
-	aBuffer	: ARRAY [*] OF BYTE;
-END_VAR
-VAR_IN_OUT
-	stState	: ST_WriterInternalState;
+    stBuffer : ST_Span;
+    stState  : ST_WriterInternalState;
 END_VAR
 VAR_INPUT
     anyIn : T_ANY;
@@ -87,7 +83,7 @@ END_VAR]]></Declaration>
       <Implementation>
         <ST><![CDATA[
 nValue := PDINT_TO_DINT(anyIn.pValue);
-ValueWriter := F_WriteInt32(aBuffer, stState, nValue);]]></ST>
+ValueWriter := F_WriteInt32(stBuffer, stState, nValue);]]></ST>
       </Implementation>
     </Method>
   </POU>
