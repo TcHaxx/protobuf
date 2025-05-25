@@ -22,8 +22,10 @@ VAR_INPUT CONSTANT
     nBufferPosStart     : UDINT;
     nExpectedBufferPos  : UDINT;
 END_VAR
+VAR_INST
+    fbCtx           : FB_ParseContext;
+END_VAR
 VAR
-    stState : ST_ParserInternalState;
     hrActual : HRESULT; 
     // '--- ' to check for null-byte!
     sActual : T_MAXSTRING := '--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------';
@@ -31,12 +33,11 @@ END_VAR]]></Declaration>
       <Implementation>
         <ST><![CDATA[
 // Arrange
-stState.nBufferSize := TO_UDINT(UPPER_BOUND(aBuffer, 1) + 1);
-stState.nBufferPos := nBufferPosStart;
+fbCtx.FromBuffer(aBuffer);
+fbCtx.refCtx.stState.nBufferPos := nBufferPosStart;
 
 // Act
-{warning disable C0041}
-hrActual := F_ReadString(F_SpanFromArray(aBuffer), stState, F_ToAnyType(sActual));
+hrActual := F_ReadString(fbCtx.refCtx, F_ToAnyType(sActual));
 
 // Assert
 AssertEquals_DINT(
@@ -49,7 +50,7 @@ AssertEquals_STRING(
     Message:= '');
 AssertEquals_UDINT(
     Expected:= nExpectedBufferPos,
-    Actual:= stState.nBufferPos,
+    Actual:= fbCtx.refCtx.stState.nBufferPos,
     Message:= CONCAT(CONCAT('Expected stState.nBufferPos to equal ', TO_STRING(nExpectedBufferPos)), CONCAT(', for String ', LEFT(sExpectedString, 32))));]]></ST>
       </Implementation>
     </Method>

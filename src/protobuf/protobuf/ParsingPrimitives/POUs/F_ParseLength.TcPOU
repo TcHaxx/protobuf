@@ -3,11 +3,8 @@
   <POU Name="F_ParseLength" Id="{93c884db-4f4d-492d-b48f-8e5fbd80cd44}" SpecialFunc="None">
     <Declaration><![CDATA[// Reads a length for length-delimited data.
 FUNCTION F_ParseLength : HRESULT
-VAR_INPUT
-    stBuffer : ST_Span;
-END_VAR
 VAR_IN_OUT      
-    stState : ST_ParserInternalState;
+    stCtx : ST_ParseContext;
 END_VAR
 VAR_OUTPUT
     nLength : UDINT;
@@ -15,7 +12,7 @@ END_VAR
 ]]></Declaration>
     <Implementation>
       <ST><![CDATA[
-F_ParseLength := F_ParseRawVarint32(stBuffer, stState, nLength);
+F_ParseLength := F_ParseRawVarint32(stCtx, nLength);
 ]]></ST>
     </Implementation>
   </POU>

@@ -7,11 +7,8 @@
     otherwise, the stream is left in the original position and the method returns "FALSE".
 *)
 FUNCTION F_MaybeConsumeTag : HRESULT
-VAR_INPUT
-    stBuffer    : ST_Span;
-END_VAR
 VAR_IN_OUT
-    stState     : ST_ParserInternalState;
+    stCtx : ST_ParseContext;
 END_VAR
 VAR_INPUT
     nTag : UDINT;
@@ -25,10 +22,10 @@ END_VAR
 ]]></Declaration>
     <Implementation>
       <ST><![CDATA[
-F_MaybeConsumeTag := F_PeekTag(stBuffer, stState, nTag=> nPeekTag);
+F_MaybeConsumeTag := F_PeekTag(stCtx, nTag=> nPeekTag);
 
 IF SUCCEEDED(F_MaybeConsumeTag) AND nTag = nPeekTag THEN
-    stState.bHasNextTag := FALSE;
+    stCtx.stState.bHasNextTag := FALSE;
     bConsumed := TRUE;
     RETURN;
 END_IF]]></ST>

@@ -27,7 +27,7 @@ VAR_INPUT CONSTANT
     ipFieldCodec        : I_FieldCodec;
 END_VAR
 VAR_INST
-    stState : ST_ParserInternalState;
+    fbCtx               : FB_ParseContext;
 END_VAR
 VAR
     aActual             : ARRAY[0..3] OF ARRAY[0..15] OF BYTE;
@@ -40,13 +40,13 @@ END_VAR
 ]]></Declaration>
       <Implementation>
         <ST><![CDATA[// Arrange
-stState.nBufferPos := nBufferPosStart;
-stState.nBufferSize := TO_UDINT(UPPER_BOUND(aBuffer, 1) + 1);
+fbCtx.FromBuffer(aBuffer);
+fbCtx.refCtx.stState.nBufferPos := nBufferPosStart;
 THIS^.fbFieldCodec.SetTmpBuffer(anyBytes:= F_ToAnyBytes(aTmpBuffer));
 
 // Act
-F_ParseTag(F_SpanFromArray(aBuffer), stState, nTag=> nTag);
-hr := F_ReadRepeatedField(F_SpanFromArray(aBuffer), stState, anyArray:= F_ToAnyType(aActual), anyFirstElem:= F_ToAnyType(aActual[0]), ipFieldCodec, nFieldIndex:= nActualFieldIndex);
+F_ParseTag(fbCtx.refCtx, nTag=> nTag);
+hr := F_ReadRepeatedField(fbCtx.refCtx, anyArray:= F_ToAnyType(aActual), anyFirstElem:= F_ToAnyType(aActual[0]), ipFieldCodec, nFieldIndex:= nActualFieldIndex);
 
 // Assert
 AssertEquals_DINT(
@@ -61,7 +61,7 @@ END_FOR
 
 AssertEquals_UDINT(
     Expected:= nExpectedBufferPos,
-    Actual:= stState.nBufferPos,
+    Actual:= fbCtx.refCtx.stState.nBufferPos,
     Message:= CONCAT('Expected stState.nBufferPos to equal ', TO_STRING(nExpectedBufferPos)));
     
 AssertEquals_UDINT(

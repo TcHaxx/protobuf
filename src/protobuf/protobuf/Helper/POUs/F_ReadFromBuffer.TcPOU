@@ -1,0 +1,33 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1">
+  <POU Name="F_ReadFromBuffer" Id="{c5f12579-5a7c-4f68-92e5-accdc0a99dbd}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION F_ReadFromBuffer : HRESULT
+VAR_IN_OUT      
+    stCtx : ST_ParseContext;
+END_VAR
+VAR_INPUT
+    anyData       : T_ANY;
+    nLength       : UDINT;      // Items to read
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[IF stCtx.stBuffer.pBuffer = NULL OR stCtx.stBuffer.nSize = 0 THEN
+    F_ReadFromBuffer := F_ParseError(stCtx, E_ParserErrorCode.NotEnoughMem);
+    RETURN;    
+END_IF
+
+IF nLength > stCtx.stState.nBufferSize - stCtx.stState.nBufferPos THEN
+    F_ReadFromBuffer := F_ParseError(stCtx, E_ParserErrorCode.TruncatedMessage);
+    RETURN;
+END_IF
+
+IF nLength > TO_UDINT(anyData.diSize) THEN
+    F_ReadFromBuffer := F_ParseError(stCtx, E_ParserErrorCode.NotEnoughMem);
+    RETURN;
+END_IF
+
+MEMCPY(destAddr:= anyData.pValue, srcAddr:= stCtx.stBuffer.pBuffer + stCtx.stState.nBufferPos, n:= nLength);
+stCtx.stState.nBufferPos := stCtx.stState.nBufferPos + nLength;]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>

@@ -7,8 +7,8 @@ VAR CONSTANT
 END_VAR
 VAR
     aBuffer         : ARRAY[0..255] OF BYTE;
-    stWriterState   : ST_WriterInternalState;
-    stParserState   : ST_ParserInternalState;
+    fbWriteCtx      : FB_WriteContext;
+    fbParseCtx      : FB_ParseContext;
     hrWriterActual  : HRESULT;
     hrParserActual  : HRESULT;
 // '--- ' to check for null-byte!
@@ -18,13 +18,14 @@ END_VAR]]></Declaration>
       <ST><![CDATA[TEST(__POUNAME());
 
 // Arrange
-stWriterState.nBufferSize := stParserState.nBufferSize := TO_UDINT(UPPER_BOUND(aBuffer, 1) + 1);
-stWriterState.nBufferPos := stParserState.nBufferPos := 3;
+fbWriteCtx.FromBuffer(aBuffer);
+fbParseCtx.FromBuffer(aBuffer);
+fbWriteCtx.refCtx.stState.nBufferPos := fbParseCtx.refCtx.stState.nBufferPos := 3;
 
 // Act
 
-hrWriterActual := F_WriteString(F_SpanFromArray(aBuffer), stWriterState, cExpectedString);
-hrParserActual := F_ReadString(F_SpanFromArray(aBuffer), stParserState, F_ToAnyType(sActual));
+hrWriterActual := F_WriteString(fbWriteCtx.refCtx.stBuffer, fbWriteCtx.refCtx.stState, cExpectedString);
+hrParserActual := F_ReadString(fbParseCtx.refCtx, F_ToAnyType(sActual));
 
 // Assert
 AssertEquals_DINT(Expected:= S_OK, Actual:= hrWriterActual, Message:= 'Expected hrWriterActual = S_OK');

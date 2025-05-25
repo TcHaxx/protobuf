@@ -3,11 +3,8 @@
   <POU Name="F_ParseRawLittleEndian32" Id="{562fac10-4f40-4f06-ac41-d13ff8cdd378}" SpecialFunc="None">
     <Declaration><![CDATA[// Parses a 32-bit little-endian integer.
 FUNCTION F_ParseRawLittleEndian32 : HRESULT
-VAR_INPUT
-    stBuffer : ST_Span;
-END_VAR
 VAR_IN_OUT      
-    stState : ST_ParserInternalState;
+    stCtx : ST_ParseContext;
 END_VAR
 VAR_OUTPUT
     nValue : UDINT;
@@ -18,16 +15,7 @@ END_VAR
 ]]></Declaration>
     <Implementation>
       <ST><![CDATA[
-F_ParseRawLittleEndian32 := S_OK;
-
-IF stState.nBufferSize - stState.nBufferPos < cLength THEN
-    F_ParseRawLittleEndian32 := stState.eParserErrorCode := E_ParserErrorCode.TruncatedMessage;
-    stState.bError := TRUE;
-    RETURN;
-END_IF
-
-MEMCPY(destAddr:= ADR(nValue), srcAddr:= stBuffer.pBuffer + stState.nBufferPos, n:= cLength);
-stState.nBufferPos := stState.nBufferPos + cLength;
+F_ParseRawLittleEndian32 := F_ReadFromBuffer(stCtx, F_ToAnyType(nValue), cLength);
 ]]></ST>
     </Implementation>
   </POU>

@@ -3,11 +3,8 @@
   <POU Name="F_ParseFloat" Id="{1d40ac6c-43db-4054-963c-67b66f65dca7}" SpecialFunc="None">
     <Declaration><![CDATA[// Parses a float value.
 FUNCTION F_ParseFloat : HRESULT
-VAR_INPUT
-    stBuffer : ST_Span;
-END_VAR
 VAR_IN_OUT      
-    stState : ST_ParserInternalState;
+    stCtx : ST_ParseContext;
 END_VAR
 VAR_OUTPUT
     fValue : REAL;
@@ -21,16 +18,7 @@ END_VAR
 ]]></Declaration>
     <Implementation>
       <ST><![CDATA[
-F_ParseFloat := S_OK;
-
-IF stState.nBufferSize - stState.nBufferPos < cLength THEN
-    F_ParseFloat := stState.eParserErrorCode := E_ParserErrorCode.TruncatedMessage;
-    stState.bError := TRUE;
-    RETURN;
-END_IF
-
-MEMCPY(destAddr:= ADR(fTmp), srcAddr:= stBuffer.pBuffer + stState.nBufferPos, n:= cLength);
-stState.nBufferPos := stState.nBufferPos + cLength;
+F_ParseFloat := F_ReadFromBuffer(stCtx, F_ToAnyType(fTmp), cLength);
 
 {warning 'TODO: Check for endianess?'}
 fValue := fTmp;]]></ST>

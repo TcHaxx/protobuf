@@ -6,9 +6,9 @@ VAR CONSTANT
     cExpected : UDINT := 2961488830;
 END_VAR
 VAR
+    fbWriteCtx      : FB_WriteContext;
+    fbParseCtx      : FB_ParseContext;
     aBuffer         : ARRAY[0..15] OF BYTE;
-    stWriterState   : ST_WriterInternalState;
-    stParserState   : ST_ParserInternalState;
     hrWriterActual  : HRESULT;
     hrParserActual  : HRESULT;
     nActual         : UDINT;
@@ -19,13 +19,14 @@ END_VAR
       <ST><![CDATA[TEST(__POUNAME());
 
 // Arrange
-stWriterState.nBufferSize := stParserState.nBufferSize := TO_UDINT(UPPER_BOUND(aBuffer, 1) + 1);
-stWriterState.nBufferPos := stParserState.nBufferPos := 2;
+fbWriteCtx.FromBuffer(aBuffer);
+fbParseCtx.FromBuffer(aBuffer);
+fbWriteCtx.refCtx.stState.nBufferPos := fbParseCtx.refCtx.stState.nBufferPos := 2;
 nTmp := cExpected;
 
 // Act
-hrWriterActual := F_WriteRawVarint32(F_SpanFromArray(aBuffer), stWriterState, nTmp);
-hrParserActual := F_ParseRawVarint32(F_SpanFromArray(aBuffer),stParserState, nActual);
+hrWriterActual := F_WriteRawVarint32(fbWriteCtx.refCtx.stBuffer, fbWriteCtx.refCtx.stState, nTmp);
+hrParserActual := F_ParseRawVarint32(fbParseCtx.refCtx, nActual);
 
 // Assert
 AssertEquals_DINT(Expected:= S_OK, Actual:= hrWriterActual, Message:= 'Expected hrWriterActual = S_OK');

@@ -5,11 +5,8 @@
  tag is not consumed. (So a subsequent call to "ParseTag" will return the
 same value.)*)
 FUNCTION F_PeekTag : HRESULT
-VAR_INPUT
-    stBuffer : ST_Span;
-END_VAR
-VAR_IN_OUT      
-    stState : ST_ParserInternalState;
+VAR_IN_OUT
+    stCtx : ST_ParseContext;
 END_VAR
 VAR_OUTPUT
     nTag : UDINT;
@@ -21,20 +18,20 @@ END_VAR]]></Declaration>
     <Implementation>
       <ST><![CDATA[F_PeekTag := S_OK;
 
-IF stState.bHasNextTag THEN
-    nTag := stState.nNextTag;
+IF stCtx.stState.bHasNextTag THEN
+    nTag := stCtx.stState.nNextTag;
     RETURN;
 END_IF
 
-nSavedLast := stState.nLastTag;
-F_PeekTag := F_ParseTag(stBuffer, stState, nTag=> nTag);
+nSavedLast := stCtx.stState.nLastTag;
+F_PeekTag := F_ParseTag(stCtx, nTag=> nTag);
 IF FAILED(F_PeekTag) THEN
     RETURN;
 END_IF
 
-stState.bHasNextTag := TRUE;
-stState.nNextTag := nTag;
-stState.nLastTag := nSavedLast; // Undo the side effect of ReadTag]]></ST>
+stCtx.stState.bHasNextTag := TRUE;
+stCtx.stState.nNextTag := nTag;
+stCtx.stState.nLastTag := nSavedLast; // Undo the side effect of ReadTag]]></ST>
     </Implementation>
   </POU>
 </TcPlcObject>

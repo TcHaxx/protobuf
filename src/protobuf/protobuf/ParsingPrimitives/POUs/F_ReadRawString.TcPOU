@@ -3,14 +3,11 @@
   <POU Name="F_ReadRawString" Id="{e87fdb38-99fb-4e2f-b3dc-522d23307b10}" SpecialFunc="None">
     <Declaration><![CDATA[// Reads a UTF-8 string from the next "length" bytes.
 FUNCTION INTERNAL F_ReadRawString : HRESULT
-VAR_INPUT
-    stBuffer : ST_Span;
-END_VAR
 VAR_IN_OUT      
-    stState : ST_ParserInternalState;
+    stCtx : ST_ParseContext;
 END_VAR
 VAR_INPUT CONSTANT
-    nLength : UDINT;   
+    nLength : UDINT;       
     stAnyStringOut : T_Any;
 END_VAR
 VAR
@@ -20,21 +17,21 @@ END_VAR]]></Declaration>
       <ST><![CDATA[F_ReadRawString := S_OK;
 
 IF stAnyStringOut.TypeClass = __SYSTEM.TYPE_CLASS.TYPE_WSTRING THEN
-    F_ReadRawString := stState.eParserErrorCode := E_ParserErrorCode.InvalidDataType;
-    stState.bError := TRUE;
+    F_ReadRawString := stCtx.stState.eParserErrorCode := E_ParserErrorCode.InvalidDataType;
+    stCtx.stState.bError := TRUE;
     RETURN;
 END_IF
 
 IF stAnyStringOut.pValue = NULL THEN 
-	F_ReadRawString := stState.eParserErrorCode := E_ParserErrorCode.InternalError;
-    stState.bError := TRUE;
+	F_ReadRawString := stCtx.stState.eParserErrorCode := E_ParserErrorCode.InternalError;
+    stCtx.stState.bError := TRUE;
     RETURN;
 END_IF
 
 IF nLength > TO_UDINT(stAnyStringOut.diSize - 1) OR 
-    nLength > stState.nBufferSize - stState.nBufferPos THEN
-    F_ReadRawString := stState.eParserErrorCode := E_ParserErrorCode.TruncatedMessage;
-    stState.bError := TRUE;
+    nLength > stCtx.stState.nBufferSize - stCtx.stState.nBufferPos THEN
+    F_ReadRawString := stCtx.stState.eParserErrorCode := E_ParserErrorCode.TruncatedMessage;
+    stCtx.stState.bError := TRUE;
     RETURN;  
 END_IF
 
@@ -45,11 +42,11 @@ IF nLength = 0 THEN
 END_IF
 
 
-MEMCPY(destAddr:= stAnyStringOut.pValue, srcAddr:= stBuffer.pBuffer + stState.nBufferPos, n:=  nLength);
+MEMCPY(destAddr:= stAnyStringOut.pValue, srcAddr:= stCtx.stBuffer.pBuffer + stCtx.stState.nBufferPos, n:=  nLength);
 pNullByte := stAnyStringOut.pValue + nLength;
 pNullByte^ := 16#0;
 
-stState.nBufferPos := stState.nBufferPos + nLength;
+stCtx.stState.nBufferPos := stCtx.stState.nBufferPos + nLength;
 ]]></ST>
     </Implementation>
   </POU>

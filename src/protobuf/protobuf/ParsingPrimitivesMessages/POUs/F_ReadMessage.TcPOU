@@ -13,7 +13,7 @@ VAR
 END_VAR]]></Declaration>
     <Implementation>
       <ST><![CDATA[
-F_ReadMessage := F_ParseLength(fbCtx.refCtx.stBuffer, fbCtx.refCtx.stState, nLength=> nLength);
+F_ReadMessage := F_ParseLength(fbCtx.refCtx, nLength=> nLength);
 IF FAILED(F_ReadMessage) THEN
     RETURN;
 END_IF

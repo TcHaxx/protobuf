@@ -23,20 +23,19 @@ VAR_INPUT CONSTANT
     nExpectedBufferPos  : UDINT;
 END_VAR
 VAR_INST
-    stState : ST_ParserInternalState;
+    fbCtx           : FB_ParseContext;
 END_VAR
 VAR
     fActual         : LREAL;  
-    hr              : HRESULT;  
+    hr              : HRESULT; 
 END_VAR]]></Declaration>
       <Implementation>
         <ST><![CDATA[// Arrange
-stState.nBufferPos := nBufferPosStart;
-stState.nBufferSize := TO_UDINT(UPPER_BOUND(aBuffer, 1) + 1);
+fbCtx.FromBuffer(aBuffer);
+fbCtx.refCtx.stState.nBufferPos := nBufferPosStart;
 
 // Act
-{warning disable C0041}
-hr := F_ParseDouble(F_SpanFromArray(aBuffer), stState, fValue=> fActual);
+hr := F_ParseDouble(fbCtx.refCtx, fValue=> fActual);
 
 // Assert
 AssertEquals_DINT(
@@ -52,7 +51,7 @@ AssertEquals_LREAL(
  
 AssertEquals_UDINT(
     Expected:= nExpectedBufferPos,
-    Actual:= stState.nBufferPos,
+    Actual:= fbCtx.refCtx.stState.nBufferPos,
     Message:= CONCAT(CONCAT('Expected stState.nBufferPos to equal ', TO_STRING(nExpectedBufferPos)), CONCAT(', for Double ', TO_STRING(fExpected))));]]></ST>
       </Implementation>
     </Method>

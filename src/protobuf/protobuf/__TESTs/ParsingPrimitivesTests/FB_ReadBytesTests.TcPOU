@@ -22,21 +22,23 @@ VAR_INPUT CONSTANT
     nBufferPosStart     : UDINT;
     nExpectedBufferPos  : UDINT;
 END_VAR
+VAR_INST
+    fbCtx           : FB_ParseContext;
+END_VAR
 VAR
     aActualBytes : ARRAY[0..31] OF BYTE;
-    stState : ST_ParserInternalState;
     hrActual : HRESULT; 
 END_VAR]]></Declaration>
       <Implementation>
         <ST><![CDATA[
 // Arrange
-stState.nBufferSize := TO_UDINT(UPPER_BOUND(aBuffer, 1) + 1);
-stState.nBufferPos := nBufferPosStart;
+fbCtx.FromBuffer(aBuffer);
+fbCtx.refCtx.stState.nBufferPos := nBufferPosStart;
 
 
 // Act
 {warning disable C0041}
-hrActual := F_ReadBytes(F_SpanFromArray(aBuffer), stState, aActualBytes);
+hrActual := F_ReadBytes(fbCtx.refCtx, aActualBytes);
 
 // Assert
 AssertEquals_DINT(
@@ -51,7 +53,7 @@ AssertArrayEquals_BYTE(
     
 AssertEquals_UDINT(
     Expected:= nExpectedBufferPos,
-    Actual:= stState.nBufferPos,
+    Actual:= fbCtx.refCtx.stState.nBufferPos,
     Message:= CONCAT('Expected stState.nBufferPos to equal ', TO_STRING(nExpectedBufferPos)));]]></ST>
       </Implementation>
     </Method>

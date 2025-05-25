@@ -19,7 +19,7 @@ VAR_INPUT CONSTANT
     nExpectedBufferPos  : UDINT;
 END_VAR
 VAR_INST
-    stState : ST_ParserInternalState;
+    fbCtx           : FB_ParseContext;
 END_VAR
 VAR
     nActualHR       : DINT;
@@ -27,11 +27,11 @@ VAR
 END_VAR]]></Declaration>
       <Implementation>
         <ST><![CDATA[// Arrange
-stState.nBufferPos := nBufferPosStart;
-stState.nBufferSize := TO_UDINT(UPPER_BOUND(aBuffer, 1) + 1);
+fbCtx.FromBuffer(aBuffer);
+fbCtx.refCtx.stState.nBufferPos := nBufferPosStart;
 
 // Act
-nActualHR := F_ParseRawVarint32(F_SpanFromArray(aBuffer), stState, anyVarInt32Result:= nActualResult);
+nActualHR := F_ParseRawVarint32(fbCtx.refCtx, anyVarInt32Result:= nActualResult);
 
 // Assert
 AssertEquals_DINT(
@@ -41,7 +41,7 @@ AssertEquals_DINT(
  
 AssertEquals_UDINT(
     Expected:= nExpectedBufferPos,
-    Actual:= stState.nBufferPos,
+    Actual:= fbCtx.refCtx.stState.nBufferPos,
     Message:= CONCAT(CONCAT('Expected stState.nBufferPos to equal ', TO_STRING(nExpectedBufferPos)), CONCAT(', for Varint ', TO_STRING(nExpectedHR))));]]></ST>
       </Implementation>
     </Method>
@@ -73,7 +73,7 @@ VAR_INPUT CONSTANT
     nExpectedBufferPos  : UDINT;
 END_VAR
 VAR_INST
-    stState : ST_ParserInternalState;
+    fbCtx           : FB_ParseContext;
 END_VAR
 VAR
     nActual         : UDINT;  
@@ -81,11 +81,11 @@ VAR
 END_VAR]]></Declaration>
       <Implementation>
         <ST><![CDATA[// Arrange
-stState.nBufferPos := nBufferPosStart;
-stState.nBufferSize := TO_UDINT(UPPER_BOUND(aBuffer, 1) + 1);
+fbCtx.FromBuffer(aBuffer);
+fbCtx.refCtx.stState.nBufferPos := nBufferPosStart;
 
 // Act
-hr := F_ParseRawVarint32(F_SpanFromArray(aBuffer), stState, anyVarInt32Result:= nActual);
+hr := F_ParseRawVarint32(fbCtx.refCtx, anyVarInt32Result:= nActual);
 
 // Assert
 AssertEquals_DINT(
@@ -100,7 +100,7 @@ AssertEquals_UDINT(
  
 AssertEquals_UDINT(
     Expected:= nExpectedBufferPos,
-    Actual:= stState.nBufferPos,
+    Actual:= fbCtx.refCtx.stState.nBufferPos,
     Message:= CONCAT(CONCAT('Expected stState.nBufferPos to equal ', TO_STRING(nExpectedBufferPos)), CONCAT(', for Varint ', TO_STRING(nExpected))));]]></ST>
       </Implementation>
     </Method>

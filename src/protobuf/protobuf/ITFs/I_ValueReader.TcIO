@@ -6,8 +6,7 @@
     <Method Name="ValueReader" Id="{3b7eefb9-456c-4f6e-87f8-51b5178c58ba}">
       <Declaration><![CDATA[METHOD ValueReader : HRESULT
 VAR_IN_OUT
-    stBuffer : ST_Span;
-    stState  : ST_ParserInternalState;
+    stCtx  : ST_ParseContext;
 END_VAR
 VAR_OUTPUT
     anyOut : T_Any;

@@ -14,7 +14,7 @@ VAR_INPUT
 END_VAR
 ]]></Declaration>
     <Implementation>
-      <ST><![CDATA[IF stBuffer.pBuffer = NULL AND_THEN stBuffer.nSize = 0 THEN
+      <ST><![CDATA[IF stBuffer.pBuffer = NULL OR stBuffer.nSize = 0 THEN
     F_WriteToBuffer := stState.eWriterErrorCode := E_WriterErrorCode.NotEnoughMem;
     stState.bError := TRUE;
     RETURN;    

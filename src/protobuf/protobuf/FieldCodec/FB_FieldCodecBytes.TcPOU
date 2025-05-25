@@ -54,9 +54,8 @@ END_VAR
     <Method Name="ValueReader" Id="{51284e44-3de6-4991-93bd-086796106a10}">
       <Declaration><![CDATA[
 METHOD ValueReader : HRESULT
-VAR_IN_OUT
-    stBuffer : ST_Span;
-	stState	: ST_ParserInternalState;
+VAR_IN_OUT      
+    stCtx : ST_ParseContext;
 END_VAR
 VAR_OUTPUT
 	anyOut	: T_Any;
@@ -67,7 +66,7 @@ END_VAR
 ]]></Declaration>
       <Implementation>
         <ST><![CDATA[
-ValueReader := F_ParseLength(stBuffer, stState, nLength=> nLength);
+ValueReader := F_ParseLength(stCtx, nLength=> nLength);
 IF FAILED(ValueReader) THEN
     RETURN;
 END_IF
@@ -78,7 +77,7 @@ ELSE
     anyOut := F_ToAnyBytes(aValue);
 END_IF
 
-ValueReader := F_ReadRawBytes(stBuffer, stState, nLength, anyOut);
+ValueReader := F_ReadRawBytes(stCtx, anyOut, nLength);
 anyOut.diSize := TO_DINT(nLength);]]></ST>
       </Implementation>
     </Method>

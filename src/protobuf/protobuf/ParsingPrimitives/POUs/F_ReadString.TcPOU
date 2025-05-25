@@ -3,11 +3,8 @@
   <POU Name="F_ReadString" Id="{d90e99f7-a7ef-43ab-94c0-307afbb7fd5d}" SpecialFunc="None">
     <Declaration><![CDATA[// Reads a string field value from the input.
 FUNCTION F_ReadString : HRESULT
-VAR_INPUT
-    stBuffer : ST_Span;
-END_VAR
 VAR_IN_OUT      
-    stState : ST_ParserInternalState;
+    stCtx : ST_ParseContext;
 END_VAR
 VAR_INPUT
     anyStringOut : T_AnyString;
@@ -18,12 +15,12 @@ END_VAR]]></Declaration>
     <Implementation>
       <ST><![CDATA[F_ReadString := S_OK;
 
-F_ReadString := F_ParseLength(stBuffer, stState, nLength=> nStrLength);
+F_ReadString := F_ParseLength(stCtx, nLength=> nStrLength);
 IF FAILED(F_ReadString) THEN
     RETURN;
 END_IF
 
-F_ReadString := F_ReadRawString(stBuffer, stState, nStrLength, anyStringOut);]]></ST>
+F_ReadString := F_ReadRawString(stCtx, nStrLength, anyStringOut);]]></ST>
     </Implementation>
   </POU>
 </TcPlcObject>

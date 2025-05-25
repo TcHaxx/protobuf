@@ -4,11 +4,8 @@
     <Declaration><![CDATA[// Parses the next tag.
 // If the end of logical stream was reached, an invalid tag of 0 is returned.
 FUNCTION F_ParseTag : HRESULT
-VAR_INPUT
-    stBuffer : ST_Span;
-END_VAR
-VAR_IN_OUT      
-    stState : ST_ParserInternalState;
+VAR_IN_OUT
+    stCtx : ST_ParseContext;
 END_VAR
 VAR_OUTPUT
     nTag : UDINT;
@@ -23,37 +20,37 @@ F_ParseTag := S_OK;
 
 // The "nextTag" logic is there only as an optimization for reading non-packed repeated / map
 // fields and is strictly speaking not necessary.
-IF stState.bHasNextTag THEN
-    stState.nLastTag := stState.nNextTag;
-    stState.bHasNextTag := FALSE;
-    nTag := stState.nLastTag;
+IF stCtx.stState.bHasNextTag THEN
+    stCtx.stState.nLastTag := stCtx.stState.nNextTag;
+    stCtx.stState.bHasNextTag := FALSE;
+    nTag := stCtx.stState.nLastTag;
     RETURN;
 END_IF
 
 // Optimize for the incredibly common case of having at least two bytes left in the buffer,
 // and those two bytes being enough to get the tag. This will be true for fields up to 4095.
-IF stState.nBufferPos + 2 <= stState.nBufferSize THEN
-    nTmp := TO_UDINT(PBYTE_TO_BYTE(stBuffer.pBuffer + stState.nBufferPos));    
+IF stCtx.stState.nBufferPos + 2 <= stCtx.stState.nBufferSize THEN
+    nTmp := TO_UDINT(PBYTE_TO_BYTE(stCtx.stBuffer.pBuffer + stCtx.stState.nBufferPos));    
     IF nTmp < 16#80 THEN
-        stState.nLastTag := nTmp;
-        stState.nBufferPos := stState.nBufferPos + 1;
+        stCtx.stState.nLastTag := nTmp;
+        stCtx.stState.nBufferPos := stCtx.stState.nBufferPos + 1;
     ELSE
-        F_ParseTag := F_ParseRawVarint32(stBuffer, stState, nTmp);
+        F_ParseTag := F_ParseRawVarint32(stCtx, nTmp);
         IF FAILED(F_ParseTag) THEN            
             RETURN;
         END_IF
     END_IF
 ELSE   
     // is at end?
-    IF stState.nBufferPos = stState.nBufferSize THEN
-        nTag := stState.nLastTag := 0;
+    IF stCtx.stState.nBufferPos = stCtx.stState.nBufferSize THEN
+        nTag := stCtx.stState.nLastTag := 0;
         RETURN;
     END_IF;
     
-    F_ParseTag := F_ParseRawVarint32(stBuffer, stState, nTmp);
+    F_ParseTag := F_ParseRawVarint32(stCtx, nTmp);
 END_IF
 
-nTag := stState.nLastTag := nTmp;]]></ST>
+nTag := stCtx.stState.nLastTag := nTmp;]]></ST>
     </Implementation>
   </POU>
 </TcPlcObject>

@@ -1,0 +1,20 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1">
+  <POU Name="F_ParseError" Id="{a1c4861e-f15d-4873-bf55-af1f2451477e}" SpecialFunc="None">
+    <Declaration><![CDATA[// Sets the E_ParserErrorCode in the given ST_ParseContext.
+FUNCTION F_ParseError : E_ParserErrorCode
+VAR_IN_OUT
+    stCtx : ST_ParseContext;
+END_VAR
+VAR_INPUT
+    eError : E_ParserErrorCode;
+END_VAR]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[
+stCtx.stState.bError := TRUE;
+stCtx.stState.eParserErrorCode := eError;
+
+F_ParseError := eError;]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>

@@ -3,39 +3,23 @@
   <POU Name="F_ReadRawBytes" Id="{48071b53-e0c3-491f-85e3-655474ae17ff}" SpecialFunc="None">
     <Declaration><![CDATA[// Reads a fixed size of bytes from the input.
 FUNCTION F_ReadRawBytes : HRESULT
-VAR_INPUT
-    stBuffer : ST_Span;
-END_VAR
 VAR_IN_OUT      
-    stState : ST_ParserInternalState;
+    stCtx : ST_ParseContext;
 END_VAR
 VAR_INPUT CONSTANT
-    nLength : UDINT;
     anyBytes : T_AnyBytes;
+    nLength : UDINT;
 END_VAR]]></Declaration>
     <Implementation>
       <ST><![CDATA[F_ReadRawBytes := S_OK;
 
 IF anyBytes.TypeClass <> __SYSTEM.TYPE_CLASS.TYPE_ARRAY THEN
-    F_ReadRawBytes := stState.eParserErrorCode := E_ParserErrorCode.InvalidDataType;
-    stState.bError := TRUE;
+    F_ReadRawBytes := stCtx.stState.eParserErrorCode := E_ParserErrorCode.InvalidDataType;
+    stCtx.stState.bError := TRUE;
     RETURN;  
 END_IF
 
-IF nLength > (stState.nBufferSize - stState.nBufferPos) + 1 THEN
-    F_ReadRawBytes := stState.eParserErrorCode := E_ParserErrorCode.TruncatedMessage;
-    stState.bError := TRUE;
-    RETURN;  
-END_IF
-
-IF nLength > TO_UDINT(anyBytes.diSize) THEN
-    F_ReadRawBytes := stState.eParserErrorCode := E_ParserErrorCode.NotEnoughMem;
-    stState.bError := TRUE;
-    RETURN;      
-END_IF
-
-MEMCPY(destAddr:= anyBytes.pValue, srcAddr:= stBuffer.pBuffer + stState.nBufferPos, n:=  nLength);
-stState.nBufferPos := stState.nBufferPos + nLength;]]></ST>
+F_ReadRawBytes := F_ReadFromBuffer(stCtx, anyBytes, nLength);]]></ST>
     </Implementation>
   </POU>
 </TcPlcObject>

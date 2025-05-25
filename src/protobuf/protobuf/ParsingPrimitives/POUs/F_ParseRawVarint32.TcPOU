@@ -2,11 +2,8 @@
 <TcPlcObject Version="1.1.0.1">
   <POU Name="F_ParseRawVarint32" Id="{51c6c8a1-a14a-4443-b331-fa1787d7bb62}" SpecialFunc="None">
     <Declaration><![CDATA[FUNCTION F_ParseRawVarint32 : HRESULT
-VAR_INPUT
-    stBuffer : ST_Span;
-END_VAR
 VAR_IN_OUT      
-    stState : ST_ParserInternalState;
+    stCtx : ST_ParseContext;
 END_VAR
 VAR_INPUT
     anyVarInt32Result : ANY;
@@ -19,14 +16,14 @@ VAR
 END_VAR]]></Declaration>
     <Implementation>
       <ST><![CDATA[IF anyVarInt32Result.diSize > SIZEOF(UDINT) THEN
-    F_ParseRawVarint32 := stState.eParserErrorCode := E_ParserErrorCode.InvalidDataType;     
+    F_ParseRawVarint32 := F_ParseError(stCtx, E_ParserErrorCode.InvalidDataType);     
     RETURN; 
 END_IF
 
 
-bTmpByte := PBYTE_TO_BYTE(stBuffer.pBuffer + stState.nBufferPos);
+bTmpByte := PBYTE_TO_BYTE(stCtx.stBuffer.pBuffer + stCtx.stState.nBufferPos);
 
-stState.nBufferPos := stState.nBufferPos + 1;
+stCtx.stState.nBufferPos := stCtx.stState.nBufferPos + 1;
 
 IF bTmpByte < 16#80 THEN
     nResult := TO_UDINT(bTmpByte);
@@ -38,13 +35,14 @@ nResult := bTmpByte AND 16#7F;
 
 {warning 'TODO: MalformedVarInt needs to be compared with C# protobuf}
 
-WHILE (bTmpByte > 16#7F AND stState.nBufferPos <= stBuffer.nSize AND nShift < 5) DO
-    bTmpByte := PBYTE_TO_BYTE(stBuffer.pBuffer + stState.nBufferPos);
+WHILE (bTmpByte > 16#7F AND stCtx.stState.nBufferPos <= stCtx.stBuffer.nSize AND nShift < 5) DO
+    bTmpByte := PBYTE_TO_BYTE(stCtx.stBuffer.pBuffer + stCtx.stState.nBufferPos);
     
     // MalformedVarInt when we encounter zero value, but MSB was set last iteration.
     IF bTmpByte = 0 THEN
-        stState.eParserErrorCode := E_ParserErrorCode.MalformedVarInt;
-        JMP _ERROR_FUNCTION;
+        F_ParseRawVarint32 := F_ParseError(stCtx, E_ParserErrorCode.MalformedVarInt);
+        nResult := 0;        
+        RETURN;
     END_IF
     
     IF nShift = 4 AND bTmpByte >= 16#80 THEN        
@@ -52,31 +50,26 @@ WHILE (bTmpByte > 16#7F AND stState.nBufferPos <= stBuffer.nSize AND nShift < 5)
         nResult := nResult OR SHL((bTmpByte AND 16#7F), nShift * 7);
         FOR i:= 0 TO 5 DO
             // Discard upper 32 bits.
-            F_ParseRawVarint32 := F_ReadRawByte(stBuffer, stState, nByte=> bTmpByte);
+            F_ParseRawVarint32 := F_ReadRawByte(stCtx, nByte=> bTmpByte);
             IF bTmpByte < 16#80 THEN                
                 JMP _END_FUNCTION;
             END_IF
         END_FOR
-        stState.eParserErrorCode := E_ParserErrorCode.MalformedVarInt;
-        JMP _ERROR_FUNCTION;
+        F_ParseRawVarint32 := F_ParseError(stCtx, E_ParserErrorCode.MalformedVarInt);
+        nResult := 0;        
+        RETURN;
     
     END_IF
         
     nResult := nResult OR SHL((bTmpByte AND 16#7F), nShift * 7); 
     nShift := nShift + 1; 
-    stState.nBufferPos := stState.nBufferPos + 1;
+    stCtx.stState.nBufferPos := stCtx.stState.nBufferPos + 1;
 END_WHILE 
 
 _END_FUNCTION:
 MEMMOVE(destAddr:= anyVarInt32Result.pValue, srcAddr:= ADR(nResult), SIZEOF(nResult));
 F_ParseRawVarint32 := S_OK;
-RETURN;
-
-_ERROR_FUNCTION:
-F_ParseRawVarint32 := stState.eParserErrorCode;
-stState.bError := TRUE;
-nResult := 0;
-RETURN;]]></ST>
+]]></ST>
     </Implementation>
   </POU>
 </TcPlcObject>

@@ -3,9 +3,6 @@
   <POU Name="FB_WriteContext" Id="{18246595-6bbb-43ef-aa75-24f9e22ace2b}" SpecialFunc="None">
     <Declaration><![CDATA[{attribute 'no_explicit_call' := 'do not call this POU directly'} 
 FUNCTION_BLOCK PUBLIC FINAL FB_WriteContext
-VAR_IN_OUT
-    aBuffer : ARRAY [*] OF BYTE;
-END_VAR
 VAR
     stCtx   : ST_WriteContext;
 END_VAR
@@ -32,9 +29,6 @@ END_VAR]]></Declaration>
       <Declaration><![CDATA[METHOD FromBuffer : HRESULT
 VAR_IN_OUT CONSTANT
     aBuffer : ARRAY [*] OF BYTE;
-END_VAR
-VAR
-    hr : HRESULT;
 END_VAR]]></Declaration>
       <Implementation>
         <ST><![CDATA[
@@ -75,6 +69,17 @@ END_VAR
 ]]></Declaration>
         <Implementation>
           <ST><![CDATA[nSpaceLeft := stCtx.stState.nBufferSize - stCtx.stState.nBufferPos;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Property Name="refCtx" Id="{e5294272-b90e-41bf-a1d1-aff26b19e5fd}">
+      <Declaration><![CDATA[PROPERTY refCtx : REFERENCE TO ST_WriteContext]]></Declaration>
+      <Get Name="Get" Id="{b80681af-b361-4c87-8d39-73970893001f}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[refCtx REF= THIS^.stCtx ;]]></ST>
         </Implementation>
       </Get>
     </Property>
