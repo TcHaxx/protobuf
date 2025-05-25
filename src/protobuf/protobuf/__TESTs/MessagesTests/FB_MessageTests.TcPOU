@@ -24,9 +24,9 @@ END_VAR
 
 
 // Act
-// fbExampleMessage.Parser.ParseFrom(aBuffer);
+fbExampleMessage.Parser.ParseFrom(aBuffer);
 // 
-// fbRepeatedStrings.Parser.ParseFrom(aBuffer2);
+fbRepeatedStrings.Parser.ParseFrom(aBuffer2);
 
 fbFooBarBazMessage.Parser.ParseFrom(aBufferFooBarBaz);
 // Assert
