@@ -111,7 +111,7 @@ END_VAR
 //     nTag : UDINT;
 // END_VAR]]></Declaration>
       <Implementation>
-        <ST><![CDATA[
+        <ST><![CDATA[nField2Index := 0;
 MergeFrom := fbInput.ReadRawMessage(THIS^);
 // REPEAT   
 // MergeFrom := fbInput.ReadTag(nTag=>nTag);

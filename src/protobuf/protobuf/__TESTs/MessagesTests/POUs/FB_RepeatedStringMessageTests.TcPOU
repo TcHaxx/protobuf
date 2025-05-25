@@ -49,7 +49,8 @@ VAR
     nTag    : UDINT;
 END_VAR]]></Declaration>
       <Implementation>
-        <ST><![CDATA[
+        <ST><![CDATA[nField1Index := 0;
+
 fbInput.SetTempBuffer(anyBuffer:= THIS^.aTmpBuffer);
 
 REPEAT   

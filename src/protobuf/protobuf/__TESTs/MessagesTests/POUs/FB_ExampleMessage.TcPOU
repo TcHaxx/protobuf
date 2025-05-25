@@ -65,7 +65,10 @@ VAR
     nTag    : UDINT;
 END_VAR]]></Declaration>
       <Implementation>
-        <ST><![CDATA[
+        <ST><![CDATA[nField2Index := 0;
+nField7Index := 0;
+nField9Index := 0;
+
 REPEAT   
 MergeFrom := fbInput.ReadTag(nTag=>nTag);
 IF SUCCEEDED(MergeFrom) AND nTag = 0 THEN
