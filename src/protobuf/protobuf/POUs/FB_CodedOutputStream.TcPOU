@@ -1,7 +1,8 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <TcPlcObject Version="1.1.0.1">
   <POU Name="FB_CodedOutputStream" Id="{18246595-6bbb-43ef-aa75-24f9e22ace2b}" SpecialFunc="None">
-    <Declaration><![CDATA[FUNCTION_BLOCK PUBLIC FINAL FB_CodedOutputStream
+    <Declaration><![CDATA[{warning 'TODO: Delete once FB_WriteContext is implemented'}
+FUNCTION_BLOCK PUBLIC FINAL FB_CodedOutputStream
 VAR_IN_OUT
     aBuffer : ARRAY [*] OF BYTE;
 END_VAR

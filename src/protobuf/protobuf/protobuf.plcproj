@@ -162,9 +162,6 @@
     <Compile Include="Helper\POUs\F_BufferInfo.TcPOU">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="ITFs\I_BufferMessage.TcIO">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="ITFs\I_Message.TcIO">
       <SubType>Code</SubType>
     </Compile>
@@ -357,9 +354,6 @@
       <SubType>Code</SubType>
       <LinkAlways>true</LinkAlways>
     </Compile>
-    <Compile Include="POUs\FB_CodedInputStream.TcPOU">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="POUs\FB_CodedOutputStream.TcPOU">
       <SubType>Code</SubType>
     </Compile>
@@ -391,6 +385,9 @@
     <Compile Include="POUs\Span\F_SpanSlice.TcPOU">
       <SubType>Code</SubType>
       <LinkAlways>true</LinkAlways>
+    </Compile>
+    <Compile Include="POUs\WriteContext\FB_WriteContext.TcPOU">
+      <SubType>Code</SubType>
     </Compile>
     <Compile Include="Project Information\F_GetCompany.TcPOU">
       <SubType>Code</SubType>
@@ -781,6 +778,7 @@
     <Folder Include="ParsingPrimitivesMessages" />
     <Folder Include="ParsingPrimitivesMessages\POUs" />
     <Folder Include="POUs\ComputeSize" />
+    <Folder Include="POUs\WriteContext" />
     <Folder Include="POUs\SegmentedBufferHelper" />
     <Folder Include="POUs\ParseContext" />
     <Folder Include="POUs\Span" />
@@ -857,8 +855,8 @@
   <ProjectExtensions>
     <PlcProjectOptions>
       <XmlArchive>
-        <Data>
-          <o xml:space="preserve" t="OptionKey">
+  <Data>
+    <o xml:space="preserve" t="OptionKey">
       <v n="Name">"&lt;ProjectRoot&gt;"</v>
       <d n="SubKeys" t="Hashtable" ckt="String" cvt="OptionKey">
         <v>{192FAD59-8248-4824-A8DE-9177C94C195A}</v>
@@ -1006,15 +1004,15 @@
       </d>
       <d n="Values" t="Hashtable" />
     </o>
-        </Data>
-        <TypeList>
-          <Type n="Boolean">System.Boolean</Type>
-          <Type n="Hashtable">System.Collections.Hashtable</Type>
-          <Type n="Int32">System.Int32</Type>
-          <Type n="OptionKey">{54dd0eac-a6d8-46f2-8c27-2f43c7e49861}</Type>
-          <Type n="String">System.String</Type>
-        </TypeList>
-      </XmlArchive>
+  </Data>
+  <TypeList>
+    <Type n="Boolean">System.Boolean</Type>
+    <Type n="Hashtable">System.Collections.Hashtable</Type>
+    <Type n="Int32">System.Int32</Type>
+    <Type n="OptionKey">{54dd0eac-a6d8-46f2-8c27-2f43c7e49861}</Type>
+    <Type n="String">System.String</Type>
+  </TypeList>
+</XmlArchive>
     </PlcProjectOptions>
   </ProjectExtensions>
 </Project>

@@ -16,47 +16,57 @@ VAR
 END_VAR
 
 VAR
+    fbFieldCodecInt32       : FB_FieldCodecInt32;
+    fbFieldCodecUInt32      : FB_FieldCodecUInt32;
+    fbFieldCodecInt64       : FB_FieldCodecInt64;
+    fbFieldCodecSInt32      : FB_FieldCodecSInt32;
+    fbFieldCodecSInt64      : FB_FieldCodecSInt64;
+    fbFieldCodecFixed32     : FB_FieldCodecFixed32;
+    fbFieldCodecFixed64     : FB_FieldCodecFixed64;    
+    fbFieldCodecFloat       : FB_FieldCodecFloat;
+    fbFieldCodecDouble      : FB_FieldCodecDouble;
+    fbFieldCodecString      : FB_FieldCodecString;
+    fbFieldCodecBytes       : FB_FieldCodecBytes;
+    fbFieldCodecBool        : FB_FieldCodecBool;
+    
     fbFieldCodecMessage     : FB_FieldCodecMessage;
 END_VAR]]></Declaration>
     <Implementation>
       <ST><![CDATA[]]></ST>
     </Implementation>
-    <Method Name="CopyStateToInputStream" Id="{affc5e96-c102-46f1-97e2-16701abb4cc5}">
-      <Declaration><![CDATA[METHOD INTERNAL CopyStateToInputStream
-VAR_IN_OUT
-    fbInputStream : FB_CodedInputStream;
+    <Property Name="DiscardUnknownFields" Id="{00d117ed-687f-4a05-9f93-1740fbb958c8}">
+      <Declaration><![CDATA[// Internal-only property; when set to true, unknown fields will be discarded while parsing.
+PROPERTY INTERNAL DiscardUnknownFields : BOOL]]></Declaration>
+      <Get Name="Get" Id="{9c267ab0-f51f-42a4-ade8-8b337d9756af}">
+        <Declaration><![CDATA[VAR
 END_VAR
 ]]></Declaration>
-      <Implementation>
-        <ST><![CDATA[
-fbInputStream.InternalState := stCtx.stState;
-]]></ST>
-      </Implementation>
-    </Method>
+        <Implementation>
+          <ST><![CDATA[DiscardUnknownFields := stCtx.stState.bDiscardUnknownFields;]]></ST>
+        </Implementation>
+      </Get>
+      <Set Name="Set" Id="{c0dc5b8c-1073-496a-91a1-e4aa0e7e1a93}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[stCtx.stState.bDiscardUnknownFields := DiscardUnknownFields;]]></ST>
+        </Implementation>
+      </Set>
+    </Property>
     <Method Name="Initialize" Id="{8119bb60-2785-42c8-b5db-cc0a8f260d85}">
       <Declaration><![CDATA[METHOD INTERNAL Initialize
-VAR_INPUT
+VAR_INPUT CONSTANT
     stBuffer    : ST_Span;    
 END_VAR
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[stBuffer := stBuffer;
+        <ST><![CDATA[stCtx.stBuffer := stBuffer;
 
 stCtx.stState.nBufferSize        := stBuffer.nSize;
 stCtx.stState.nSizeLimit         := Param_PB.cMaxProtobufRawBuffer;
 stCtx.stState.nRecursionLimit    := Param_PB.cRecursionLimit; 
 stCtx.stState.nCurrentLimit      := TO_UDINT(-1);]]></ST>
-      </Implementation>
-    </Method>
-    <Method Name="InitializeFromInputStream" Id="{7f0a753d-87d8-4597-a04d-40e3a1ec6c70}">
-      <Declaration><![CDATA[// Initialize a ST_ParseContext, building all ST_ParserInternalState from defaults and the given buffer.
-METHOD INTERNAL InitializeFromInputStream
-VAR_IN_OUT CONSTANT
-    fbInputStream : FB_CodedInputStream;
-END_VAR]]></Declaration>
-      <Implementation>
-        <ST><![CDATA[stCtx.stBuffer := fbInputStream.stBuffer;
-stCtx.stState  := fbInputStream.InternalState;]]></ST>
       </Implementation>
     </Method>
     <Method Name="InitializeFromState" Id="{49b2fb6e-7981-495b-912c-6024e1028cf7}">
@@ -71,16 +81,18 @@ END_VAR]]></Declaration>
 THIS^.stCtx.stBuffer := stBuffer;]]></ST>
       </Implementation>
     </Method>
-    <Method Name="LoadStateFromInputStream" Id="{9a98476f-a916-47f4-ae28-9a337a191a56}">
-      <Declaration><![CDATA[METHOD INTERNAL LoadStateFromInputStream
-VAR_IN_OUT    
-    fbInputStream : FB_CodedInputStream;
-END_VAR]]></Declaration>
-      <Implementation>
-        <ST><![CDATA[
-stCtx.stState := fbInputStream.InternalState;]]></ST>
-      </Implementation>
-    </Method>
+    <Property Name="LastTag" Id="{3a0beeb8-51d3-475f-9d08-06678302f68f}">
+      <Declaration><![CDATA[// Returns the last tag read, OR 0 IF no tags have been read OR we've read beyond the end of the input.
+PROPERTY INTERNAL LastTag : UDINT]]></Declaration>
+      <Get Name="Get" Id="{41bb4c08-8917-4c55-b248-6149997987a6}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[LastTag := stCtx.stState.nLastTag;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
     <Method Name="ReadBool" Id="{89c29bb6-d513-4d2b-aacf-0b905a1ea349}">
       <Declaration><![CDATA[METHOD ReadBool : HRESULT
 VAR_OUTPUT
@@ -91,7 +103,7 @@ VAR
 END_VAR]]></Declaration>
       <Implementation>
         <ST><![CDATA[
-ReadBool := F_ParseRawVarint32(stCtx.stBuffer, stCtx.stState, nTmp);
+ReadBool := F_ParseRawVarint32(THIS^.stCtx.stBuffer, THIS^.stCtx.stState, nTmp);
 bValue := nTmp <> 0;]]></ST>
       </Implementation>
     </Method>
@@ -103,7 +115,7 @@ END_VAR
 ]]></Declaration>
       <Implementation>
         <ST><![CDATA[
-ReadBytes := F_ReadBytes(stCtx.stBuffer, stCtx.stState, aBytes); ]]></ST>
+ReadBytes := F_ReadBytes(THIS^.stCtx.stBuffer, THIS^.stCtx.stState, aBytes); ]]></ST>
       </Implementation>
     </Method>
     <Method Name="ReadEnum" Id="{94929d12-39b1-4d65-901a-08d5f4ed083c}">
@@ -116,7 +128,7 @@ VAR
 END_VAR]]></Declaration>
       <Implementation>
         <ST><![CDATA[
-ReadEnum := F_ParseRawVarint32(stCtx.stBuffer, stCtx.stState, nTmp);
+ReadEnum := F_ParseRawVarint32(THIS^.stCtx.stBuffer, THIS^.stCtx.stState, nTmp);
 nValue := TO_DINT(nTmp);]]></ST>
       </Implementation>
     </Method>
@@ -127,7 +139,7 @@ VAR_OUTPUT
 END_VAR]]></Declaration>
       <Implementation>
         <ST><![CDATA[
-ReadFixed32 := F_ParseRawLittleEndian32(stCtx.stBuffer, stCtx.stState, nValue=> nValue);]]></ST>
+ReadFixed32 := F_ParseRawLittleEndian32(THIS^.stCtx.stBuffer, THIS^.stCtx.stState, nValue=> nValue);]]></ST>
       </Implementation>
     </Method>
     <Method Name="ReadFixed64" Id="{343a76a1-067d-48aa-84aa-d005060019f6}">
@@ -137,7 +149,7 @@ VAR_OUTPUT
 END_VAR]]></Declaration>
       <Implementation>
         <ST><![CDATA[
-ReadFixed64 := F_ParseRawLittleEndian64(stCtx.stBuffer, stCtx.stState, nValue=> nValue);]]></ST>
+ReadFixed64 := F_ParseRawLittleEndian64(THIS^.stCtx.stBuffer, THIS^.stCtx.stState, nValue=> nValue);]]></ST>
       </Implementation>
     </Method>
     <Method Name="ReadFloat" Id="{ae5be64d-ac38-4693-99a6-f461c30093eb}">
@@ -147,7 +159,7 @@ VAR_OUTPUT
 END_VAR]]></Declaration>
       <Implementation>
         <ST><![CDATA[
-ReadFloat := F_ParseFloat(stCtx.stBuffer, stCtx.stState, fValue=> fValue);]]></ST>
+ReadFloat := F_ParseFloat(THIS^.stCtx.stBuffer, THIS^.stCtx.stState, fValue=> fValue);]]></ST>
       </Implementation>
     </Method>
     <Method Name="ReadInt32" Id="{98149cf0-c874-466c-84a8-ded7ed12b5d2}">
@@ -160,7 +172,7 @@ VAR
 END_VAR]]></Declaration>
       <Implementation>
         <ST><![CDATA[
-ReadInt32 := F_ParseRawVarint32(stCtx.stBuffer, stCtx.stState, nTmp);
+ReadInt32 := F_ParseRawVarint32(THIS^.stCtx.stBuffer, THIS^.stCtx.stState, nTmp);
 nValue := TO_DINT(nTmp);]]></ST>
       </Implementation>
     </Method>
@@ -174,7 +186,7 @@ VAR
 END_VAR]]></Declaration>
       <Implementation>
         <ST><![CDATA[
-ReadInt64 := F_ParseRawVarint64(stCtx.stBuffer, stCtx.stState, nTmp);
+ReadInt64 := F_ParseRawVarint64(THIS^.stCtx.stBuffer, THIS^.stCtx.stState, nTmp);
 nValue := TO_LINT(nTmp);]]></ST>
       </Implementation>
     </Method>
@@ -200,6 +212,126 @@ END_VAR
 ReadMessage := F_ReadMessage(fbCtx:= THIS^, iMessage);]]></ST>
       </Implementation>
     </Method>
+    <Method Name="ReadRepeatedFieldBool" Id="{f409752c-bcae-4c3f-b94e-46ba52e533b6}">
+      <Declaration><![CDATA[METHOD ReadRepeatedFieldBool : HRESULT
+VAR_INPUT CONSTANT
+    anyArray        : T_Any;
+    anyFirstElem    : T_Any; 
+END_VAR
+
+VAR_IN_OUT   
+    nFieldIndex : UDINT; 
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[
+ReadRepeatedFieldBool := F_ReadRepeatedField(THIS^.stCtx.stBuffer, THIS^.stCtx.stState, anyArray, anyFirstElem, ipFieldCodec:= THIS^.fbFieldCodecBool, nFieldIndex); ]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="ReadRepeatedFieldBytes" Id="{1de1e6dd-5ec9-40f3-8f87-d2342dede21e}">
+      <Declaration><![CDATA[METHOD ReadRepeatedFieldBytes : HRESULT
+VAR_INPUT CONSTANT
+    anyArray        : T_Any;
+    anyFirstElem    : T_Any; 
+END_VAR
+
+VAR_IN_OUT   
+    nFieldIndex : UDINT; 
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[
+ReadRepeatedFieldBytes := F_ReadRepeatedField(THIS^.stCtx.stBuffer, THIS^.stCtx.stState, anyArray, anyFirstElem, ipFieldCodec:= THIS^.fbFieldCodecBytes, nFieldIndex); ]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="ReadRepeatedFieldDouble" Id="{de27cfb9-c85e-4879-954b-4d68a36238f7}">
+      <Declaration><![CDATA[METHOD ReadRepeatedFieldDouble : HRESULT
+VAR_INPUT CONSTANT
+    anyArray        : T_Any;
+    anyFirstElem    : T_Any; 
+END_VAR
+
+VAR_IN_OUT   
+    nFieldIndex : UDINT; 
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[
+ReadRepeatedFieldDouble := F_ReadRepeatedField(THIS^.stCtx.stBuffer, THIS^.stCtx.stState, anyArray, anyFirstElem, ipFieldCodec:= THIS^.fbFieldCodecDouble, nFieldIndex); ]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="ReadRepeatedFieldFixed32" Id="{c26bc937-691d-454d-8306-bd5266ba5831}">
+      <Declaration><![CDATA[METHOD ReadRepeatedFieldFixed32 : HRESULT
+VAR_INPUT CONSTANT
+    anyArray        : T_Any;
+    anyFirstElem    : T_Any; 
+END_VAR
+
+VAR_IN_OUT   
+    nFieldIndex : UDINT; 
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[
+ReadRepeatedFieldFixed32 := F_ReadRepeatedField(THIS^.stCtx.stBuffer, THIS^.stCtx.stState, anyArray, anyFirstElem, ipFieldCodec:= THIS^.fbFieldCodecFixed32, nFieldIndex); ]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="ReadRepeatedFieldFixed64" Id="{2ac24897-ae19-4371-b3ac-f3cdc9272a7f}">
+      <Declaration><![CDATA[METHOD ReadRepeatedFieldFixed64 : HRESULT
+VAR_INPUT CONSTANT
+    anyArray        : T_Any;
+    anyFirstElem    : T_Any; 
+END_VAR
+
+VAR_IN_OUT   
+    nFieldIndex : UDINT; 
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[
+ReadRepeatedFieldFixed64 := F_ReadRepeatedField(THIS^.stCtx.stBuffer, THIS^.stCtx.stState, anyArray, anyFirstElem, ipFieldCodec:= THIS^.fbFieldCodecFixed64, nFieldIndex); ]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="ReadRepeatedFieldFloat" Id="{fdead9da-7afc-416a-bb87-a0ce721f188c}">
+      <Declaration><![CDATA[METHOD ReadRepeatedFieldFloat : HRESULT
+VAR_INPUT CONSTANT
+    anyArray        : T_Any;
+    anyFirstElem    : T_Any; 
+END_VAR
+
+VAR_IN_OUT   
+    nFieldIndex : UDINT; 
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[
+ReadRepeatedFieldFloat := F_ReadRepeatedField(THIS^.stCtx.stBuffer, THIS^.stCtx.stState, anyArray, anyFirstElem, ipFieldCodec:= THIS^.fbFieldCodecFloat, nFieldIndex); ]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="ReadRepeatedFieldInt32" Id="{bd7c6618-dda2-4fb6-bea3-6deb94cbc358}">
+      <Declaration><![CDATA[METHOD ReadRepeatedFieldInt32 : HRESULT
+VAR_INPUT CONSTANT
+    anyArray        : T_Any;
+    anyFirstElem    : T_Any; 
+END_VAR
+
+VAR_IN_OUT   
+    nFieldIndex : UDINT; 
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[
+ReadRepeatedFieldInt32 := F_ReadRepeatedField(THIS^.stCtx.stBuffer, THIS^.stCtx.stState, anyArray, anyFirstElem, ipFieldCodec:= THIS^.fbFieldCodecInt32, nFieldIndex); ]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="ReadRepeatedFieldInt64" Id="{6057d532-fe6a-408f-af4b-a86a71cc5fc1}">
+      <Declaration><![CDATA[METHOD ReadRepeatedFieldInt64 : HRESULT
+VAR_INPUT CONSTANT
+    anyArray        : T_Any;
+    anyFirstElem    : T_Any; 
+END_VAR
+
+VAR_IN_OUT   
+    nFieldIndex : UDINT; 
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[
+ReadRepeatedFieldInt64 := F_ReadRepeatedField(THIS^.stCtx.stBuffer, THIS^.stCtx.stState, anyArray, anyFirstElem, ipFieldCodec:= THIS^.fbFieldCodecInt64, nFieldIndex); ]]></ST>
+      </Implementation>
+    </Method>
     <Method Name="ReadRepeatedFieldMessage" Id="{53872132-5c78-41eb-b0d0-4ce10562c0b2}">
       <Declaration><![CDATA[METHOD INTERNAL ReadRepeatedFieldMessage : HRESULT
 VAR_INPUT CONSTANT
@@ -222,6 +354,81 @@ THIS^.fbFieldCodecMessage.pParseContext := THIS;
 ReadRepeatedFieldMessage := F_ReadRepeatedField(THIS^.stCtx.stBuffer, THIS^.stCtx.stState, anyArray, anyFirstElem, ipFieldCodec:= THIS^.fbFieldCodecMessage, nFieldIndex); ]]></ST>
       </Implementation>
     </Method>
+    <Method Name="ReadRepeatedFieldSint32" Id="{9fa69235-7929-4c05-aa45-da9153aeb0b4}">
+      <Declaration><![CDATA[METHOD ReadRepeatedFieldSint32 : HRESULT
+VAR_INPUT CONSTANT
+    anyArray        : T_Any;
+    anyFirstElem    : T_Any; 
+END_VAR
+
+VAR_IN_OUT   
+    nFieldIndex : UDINT; 
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[
+ReadRepeatedFieldSint32 := F_ReadRepeatedField(THIS^.stCtx.stBuffer, THIS^.stCtx.stState, anyArray, anyFirstElem, ipFieldCodec:= THIS^.fbFieldCodecSint32, nFieldIndex); ]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="ReadRepeatedFieldSint64" Id="{cfbfa489-5084-4077-8b86-4bb15c7aafbf}">
+      <Declaration><![CDATA[METHOD ReadRepeatedFieldSint64 : HRESULT
+VAR_INPUT CONSTANT
+    anyArray        : T_Any;
+    anyFirstElem    : T_Any; 
+END_VAR
+
+VAR_IN_OUT   
+    nFieldIndex : UDINT; 
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[
+ReadRepeatedFieldSint64 := F_ReadRepeatedField(THIS^.stCtx.stBuffer, THIS^.stCtx.stState, anyArray, anyFirstElem, ipFieldCodec:= THIS^.fbFieldCodecSint64, nFieldIndex); ]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="ReadRepeatedFieldString" Id="{2321057e-1210-4ec8-8f9a-e7cf30629861}">
+      <Declaration><![CDATA[METHOD ReadRepeatedFieldString : HRESULT
+VAR_INPUT CONSTANT
+    anyArray        : T_Any;
+    anyFirstElem    : T_Any;
+END_VAR
+
+VAR_IN_OUT   
+    nFieldIndex : UDINT; 
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[
+ReadRepeatedFieldString := F_ReadRepeatedField(THIS^.stCtx.stBuffer, THIS^.stCtx.stState, anyArray, anyFirstElem, ipFieldCodec:= THIS^.fbFieldCodecString, nFieldIndex); ]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="ReadRepeatedFieldUint32" Id="{35a54862-58ea-43fe-9f2b-956d9955b388}">
+      <Declaration><![CDATA[METHOD ReadRepeatedFieldUint32 : HRESULT
+VAR_INPUT CONSTANT
+    anyArray        : T_Any;
+    anyFirstElem    : T_Any; 
+END_VAR
+
+VAR_IN_OUT   
+    nFieldIndex : UDINT; 
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[
+ReadRepeatedFieldUint32 := F_ReadRepeatedField(THIS^.stCtx.stBuffer, THIS^.stCtx.stState, anyArray, anyFirstElem, ipFieldCodec:= THIS^.fbFieldCodecUInt32, nFieldIndex); ]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="ReadRepeatedFieldUint64" Id="{886b13d8-ee4a-4bb3-b07c-87dbc33e75b9}">
+      <Declaration><![CDATA[METHOD ReadRepeatedFieldUint64 : HRESULT
+VAR_INPUT CONSTANT
+    anyArray        : T_Any;
+    anyFirstElem    : T_Any; 
+END_VAR
+
+VAR_IN_OUT   
+    nFieldIndex : UDINT; 
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[
+ReadRepeatedFieldUint64 := F_ReadRepeatedField(THIS^.stCtx.stBuffer, THIS^.stCtx.stState, anyArray, anyFirstElem, ipFieldCodec:= THIS^.fbFieldCodecInt64, nFieldIndex); ]]></ST>
+      </Implementation>
+    </Method>
     <Method Name="ReadSFixed32" Id="{9f45ed62-393c-45d5-9752-212dd3ee0e22}">
       <Declaration><![CDATA[METHOD PUBLIC ReadSFixed32 : HRESULT
 VAR_OUTPUT
@@ -232,7 +439,7 @@ VAR
 END_VAR]]></Declaration>
       <Implementation>
         <ST><![CDATA[
-ReadSFixed32 := F_ParseRawLittleEndian32(stCtx.stBuffer, stCtx.stState, nValue=> nTmp);
+ReadSFixed32 := F_ParseRawLittleEndian32(THIS^.stCtx.stBuffer, THIS^.stCtx.stState, nValue=> nTmp);
 
 nValue := TO_DINT(nTmp);]]></ST>
       </Implementation>
@@ -247,7 +454,7 @@ VAR
 END_VAR]]></Declaration>
       <Implementation>
         <ST><![CDATA[
-ReadSFixed64 := F_ParseRawLittleEndian64(stCtx.stBuffer, stCtx.stState, nValue=> nTmp);
+ReadSFixed64 := F_ParseRawLittleEndian64(THIS^.stCtx.stBuffer, THIS^.stCtx.stState, nValue=> nTmp);
 
 nValue := TO_LINT(nTmp);]]></ST>
       </Implementation>
@@ -262,7 +469,7 @@ VAR
 END_VAR]]></Declaration>
       <Implementation>
         <ST><![CDATA[
-ReadSInt32 := F_ParseRawVarint32(stCtx.stBuffer, stCtx.stState, nTmp);
+ReadSInt32 := F_ParseRawVarint32(THIS^.stCtx.stBuffer, THIS^.stCtx.stState, nTmp);
 nValue := F_DecodeZigZag32(nTmp);]]></ST>
       </Implementation>
     </Method>
@@ -276,7 +483,7 @@ VAR
 END_VAR]]></Declaration>
       <Implementation>
         <ST><![CDATA[
-ReadSInt64 := F_ParseRawVarint32(stCtx.stBuffer, stCtx.stState, nTmp);
+ReadSInt64 := F_ParseRawVarint32(THIS^.stCtx.stBuffer, THIS^.stCtx.stState, nTmp);
 nValue := F_DecodeZigZag64(nTmp);]]></ST>
       </Implementation>
     </Method>
@@ -287,7 +494,7 @@ VAR_INPUT
 END_VAR
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[ReadString := F_ReadString(stCtx.stBuffer, stCtx.stState, F_ToAnyType(anyStringOut));]]></ST>
+        <ST><![CDATA[ReadString := F_ReadString(THIS^.stCtx.stBuffer, THIS^.stCtx.stState, F_ToAnyType(anyStringOut));]]></ST>
       </Implementation>
     </Method>
     <Method Name="ReadTag" Id="{6e59f247-ef7c-45e6-b2dc-64a50e97c070}">
@@ -309,7 +516,7 @@ VAR_OUTPUT
 END_VAR]]></Declaration>
       <Implementation>
         <ST><![CDATA[
-ReadUint32 := F_ParseRawVarint32(stCtx.stBuffer, stCtx.stState, nValue);]]></ST>
+ReadUint32 := F_ParseRawVarint32(THIS^.stCtx.stBuffer, THIS^.stCtx.stState, nValue);]]></ST>
       </Implementation>
     </Method>
     <Method Name="ReadUint64" Id="{01b6070b-c07f-4367-85e7-1d9c2c63ec50}">
@@ -319,7 +526,7 @@ VAR_OUTPUT
 END_VAR]]></Declaration>
       <Implementation>
         <ST><![CDATA[
-ReadUint64 := F_ParseRawVarint64(stCtx.stBuffer, stCtx.stState, nValue);]]></ST>
+ReadUint64 := F_ParseRawVarint64(THIS^.stCtx.stBuffer, THIS^.stCtx.stState, nValue);]]></ST>
       </Implementation>
     </Method>
     <Property Name="refCtx" Id="{889a9bbf-4ef8-4348-a5eb-48336314fc4d}">
@@ -333,6 +540,19 @@ END_VAR
         </Implementation>
       </Get>
     </Property>
+    <Method Name="SetTempBuffer" Id="{6a17e5f9-2bbf-4c81-81ce-466075b31fc5}">
+      <Declaration><![CDATA[// Temp. buffer for repeated fields, e.g. string or bytes, if larger then default.
+METHOD SetTempBuffer
+VAR_INPUT
+	anyBuffer : ANY;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[
+THIS^.fbFieldCodecBytes.SetTmpBuffer(anyBytes:= anyBuffer);
+
+THIS^.fbFieldCodecString.SetTmpBuffer(anyString:= anyBuffer);]]></ST>
+      </Implementation>
+    </Method>
     <Method Name="SkipLastField" Id="{3e46d1b1-25c1-40fa-87b3-41790dad8370}">
       <Declaration><![CDATA[METHOD SkipLastField : HRESULT
 VAR_INPUT
@@ -340,7 +560,7 @@ END_VAR
 ]]></Declaration>
       <Implementation>
         <ST><![CDATA[
-SkipLastField := F_SkipLastField(stCtx.stBuffer, stCtx.stState);]]></ST>
+SkipLastField := F_SkipLastField(THIS^.stCtx.stBuffer, THIS^.stCtx.stState);]]></ST>
       </Implementation>
     </Method>
   </POU>

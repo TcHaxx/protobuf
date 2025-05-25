@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <TcPlcObject Version="1.1.0.1">
   <POU Name="FB_FooMessage" Id="{cf2e5f3a-ec46-4558-9f26-acb076490d6c}" SpecialFunc="None">
-    <Declaration><![CDATA[FUNCTION_BLOCK INTERNAL FINAL FB_FooMessage IMPLEMENTS I_BufferMessage
+    <Declaration><![CDATA[FUNCTION_BLOCK INTERNAL FINAL FB_FooMessage IMPLEMENTS I_Message
 
 (*
 syntax = "proto3";
@@ -48,48 +48,6 @@ METHOD CalculateSize : UDINT
         <ST><![CDATA[]]></ST>
       </Implementation>
     </Method>
-    <Method Name="InternalMergeFrom" Id="{2d90d5a3-60a9-484a-8204-c8513ae8a6e5}">
-      <Declaration><![CDATA[METHOD InternalMergeFrom : HRESULT
-VAR_IN_OUT
-    fbCtx   : FB_ParseContext;
-END_VAR
-VAR
-    nTag : UDINT;
-END_VAR]]></Declaration>
-      <Implementation>
-        <ST><![CDATA[
-REPEAT   
-InternalMergeFrom := fbCtx.ReadTag(nTag=> nTag);
-IF SUCCEEDED(InternalMergeFrom) AND nTag = 0 THEN
-    EXIT;
-END_IF;
-
-IF FAILED(InternalMergeFrom) THEN
-    RETURN;
-END_IF
-
-CASE nTag OF
-    16#0A:         // Bar bar = 1;
-    ;
-         InternalMergeFrom := fbCtx.ReadMessage(iMessage:= fbBar);
-         THIS^.stFoo.bar := fbBar.Bar;
-         
-    16#12:         // repeated Baz baz = 2 ;
-        ;
-           InternalMergeFrom := fbCtx.ReadRepeatedFieldMessage(
-                        iMessage:= fbBaz,
-                        anyArray:= F_ToAnyType(THIS^.stFoo.baz),
-                        anyFirstElem:= F_ToAnyType(THIS^.stFoo.baz[0]),
-                        nFieldIndex:= THIS^.nField2Index);
-ELSE
-    InternalMergeFrom := fBCtx.SkipLastField();
-END_CASE
-
-UNTIL (FAILED(InternalMergeFrom) OR nTag = 0)
-END_REPEAT
-]]></ST>
-      </Implementation>
-    </Method>
     <Method Name="InternalWriteTo" Id="{e33703cb-b48e-4ae7-87a1-9e5e71586db7}">
       <Declaration><![CDATA[{warning 'Add method implementation '}
 METHOD InternalWriteTo : HRESULT
@@ -105,41 +63,43 @@ END_VAR
       <Declaration><![CDATA[(* Merges the data from the specified coded input stream with the current message.*)
 METHOD MergeFrom : HRESULT
 VAR_IN_OUT
-	fbInput	: FB_CodedInputStream;
+	fbParseCtx : FB_ParseContext;
 END_VAR
-// VAR
-//     nTag : UDINT;
-// END_VAR]]></Declaration>
+VAR
+    nTag : UDINT;
+END_VAR]]></Declaration>
       <Implementation>
         <ST><![CDATA[nField2Index := 0;
-MergeFrom := fbInput.ReadRawMessage(THIS^);
-// REPEAT   
-// MergeFrom := fbInput.ReadTag(nTag=>nTag);
-// IF SUCCEEDED(MergeFrom) AND nTag = 0 THEN
-//     EXIT;
-// END_IF;
-// 
-// IF FAILED(MergeFrom) THEN
-//     MergeFrom := MergeFrom;
-//     RETURN;
-// END_IF
-// 
-// CASE nTag OF
-//     16#0A:         // Bar bar = 1;
-//         MergeFrom := fbInput.ReadMessage(iMessage:= fbBar);
-//      
-//     16#12:         // repeated Baz baz = 2 ;
-//        MergeFrom := fbInput.ReadRepeatedFieldMessage(
-//                     anyArray:= F_ToAnyType(THIS^.aBaz),
-//                     anyFirstElem:= F_ToAnyType(THIS^.aBaz[0]),
-//                     nFieldIndex:= THIS^.nField2Index);
-// ELSE
-//     MergeFrom := fBInput.SkipLastField();
-// END_CASE
-// 
-// UNTIL (FAILED(MergeFrom) OR nTag = 0)
-// END_REPEAT
-]]></ST>
+
+REPEAT   
+MergeFrom := fbParseCtx.ReadTag(nTag=> nTag);
+IF SUCCEEDED(MergeFrom) AND nTag = 0 THEN
+    EXIT;
+END_IF;
+
+IF FAILED(MergeFrom) THEN
+    RETURN;
+END_IF
+
+CASE nTag OF
+    16#0A:         // Bar bar = 1;
+    ;
+         MergeFrom := fbParseCtx.ReadMessage(iMessage:= fbBar);
+         THIS^.stFoo.bar := fbBar.Bar;
+         
+    16#12:         // repeated Baz baz = 2 ;
+        ;
+           MergeFrom := fbParseCtx.ReadRepeatedFieldMessage(
+                        iMessage:= fbBaz,
+                        anyArray:= F_ToAnyType(THIS^.stFoo.baz),
+                        anyFirstElem:= F_ToAnyType(THIS^.stFoo.baz[0]),
+                        nFieldIndex:= THIS^.nField2Index);
+ELSE
+    MergeFrom := fbParseCtx.SkipLastField();
+END_CASE
+
+UNTIL (FAILED(MergeFrom) OR nTag = 0)
+END_REPEAT]]></ST>
       </Implementation>
     </Method>
     <Property Name="MessageDescriptor" Id="{b0dc2b91-ccda-4320-85ab-374db1543a47}">
@@ -187,7 +147,7 @@ END_VAR
 METHOD WriteTo
 VAR_IN_OUT
 	(* Coded output stream to write the data to. *)
-	fbOutput	: FB_CodedOutputStream;
+	fbWriteCtx	: FB_WriteContext;
 END_VAR
 ]]></Declaration>
       <Implementation>

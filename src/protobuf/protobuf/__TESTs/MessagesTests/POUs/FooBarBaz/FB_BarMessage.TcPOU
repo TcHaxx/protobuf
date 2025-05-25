@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <TcPlcObject Version="1.1.0.1">
   <POU Name="FB_BarMessage" Id="{edcbcbf1-b1d9-441a-af79-725c6c536556}" SpecialFunc="None">
-    <Declaration><![CDATA[FUNCTION_BLOCK INTERNAL FINAL FB_BarMessage IMPLEMENTS I_BufferMessage
+    <Declaration><![CDATA[FUNCTION_BLOCK INTERNAL FINAL FB_BarMessage IMPLEMENTS I_Message
 
 (*
 syntax = "proto3";
@@ -57,42 +57,6 @@ METHOD CalculateSize : UDINT
         <ST><![CDATA[]]></ST>
       </Implementation>
     </Method>
-    <Method Name="InternalMergeFrom" Id="{0b2e6b93-1295-487c-9145-cd072e930234}">
-      <Declaration><![CDATA[METHOD InternalMergeFrom : HRESULT
-VAR_IN_OUT
-    fbCtx : FB_ParseContext;
-END_VAR
-VAR
-        nTag : UDINT;
-END_VAR]]></Declaration>
-      <Implementation>
-        <ST><![CDATA[
-REPEAT   
-InternalMergeFrom := fbCtx.ReadTag(nTag=>nTag);
-IF SUCCEEDED(InternalMergeFrom) AND nTag = 0 THEN
-    EXIT;
-END_IF;
-
-IF FAILED(InternalMergeFrom) THEN
-    RETURN;
-END_IF
-
-CASE nTag OF
-    16#0A:         // string name = 1;
-        fbCtx.ReadString(anyStringOut:= stBar.name);
-    16#10:         //uint32 age = 2;
-        fbCtx.ReadUint32(nValue=> stBar.age);        
-    16#1A:         // optional string email = 3; 
-        fbCtx.ReadString(anyStringOut:= stBar.email);
-ELSE
-    InternalMergeFrom := fbCtx.SkipLastField();
-END_CASE
-
-UNTIL (FAILED(InternalMergeFrom) OR nTag = 0)
-END_REPEAT
-]]></ST>
-      </Implementation>
-    </Method>
     <Method Name="InternalWriteTo" Id="{89fe8644-bd0e-46d5-a962-31f6fcbef28f}">
       <Declaration><![CDATA[{warning 'Add method implementation '}
 METHOD InternalWriteTo : HRESULT
@@ -108,7 +72,7 @@ END_VAR
       <Declaration><![CDATA[(* Merges the data from the specified coded input stream with the current message.*)
 METHOD MergeFrom : HRESULT
 VAR_IN_OUT
-	fbInput	: FB_CodedInputStream;
+	fbParseCtx : FB_ParseContext;
 END_VAR
 VAR
     nTag : UDINT;
@@ -124,7 +88,7 @@ END_VAR
       <Implementation>
         <ST><![CDATA[
 REPEAT   
-MergeFrom := fbInput.ReadTag(nTag=>nTag);
+MergeFrom := fbParseCtx.ReadTag(nTag=>nTag);
 IF SUCCEEDED(MergeFrom) AND nTag = 0 THEN
     EXIT;
 END_IF;
@@ -136,13 +100,13 @@ END_IF
 
 CASE nTag OF
     16#0A:         // string name = 1;
-        fbInput.ReadString(anyStringOut:= stBar.name);
+        fbParseCtx.ReadString(anyStringOut:= stBar.name);
     16#10:         //uint32 age = 2;
-        fbInput.ReadUint32(nValue=> stBar.age);        
+        fbParseCtx.ReadUint32(nValue=> stBar.age);        
     16#1A:         // optional string email = 3; 
-        fbInput.ReadString(anyStringOut:= stBar.email);
+        fbParseCtx.ReadString(anyStringOut:= stBar.email);
 ELSE
-    MergeFrom := fBInput.SkipLastField();
+    MergeFrom := fbParseCtx.SkipLastField();
 END_CASE
 
 UNTIL (FAILED(MergeFrom) OR nTag = 0)
@@ -195,7 +159,7 @@ END_VAR
 METHOD WriteTo
 VAR_IN_OUT
 	(* Coded output stream to write the data to. *)
-	fbOutput	: FB_CodedOutputStream;
+	fbWriteCtx	: FB_WriteContext;
 END_VAR
 ]]></Declaration>
       <Implementation>

@@ -14,7 +14,7 @@ VAR
 	nFieldIndex			: UDINT;
 	nActualTag			: UDINT;
 	nExpectedTag	    : UDINT;
-	fbInputSUT			: FB_CodedInputStream;
+	fbParseCtx_SUT      : FB_ParseContext;
 	fbOutputSUT			: FB_CodedOutputStream;
 END_VAR]]></Declaration>
     <Implementation>
@@ -26,8 +26,7 @@ aValues := cExpected;
 
 fbOutputSUT(aBuffer:= aBuffer);
 fbOutputSUT.FromBuffer();
-fbInputSUT(aBuffer:= aBuffer);
-fbInputSUT.FromBuffer();
+fbParseCtx_SUT.Initialize(stBuffer:= F_SpanFromArray(aBuffer));
 
 // Act
 
@@ -37,8 +36,8 @@ hrWriterActual := fbOutputSUT.WriteRepeatedFieldUInt64(
 					nLength:= 5,
 					nTag:= nExpectedTag);
 
-fbInputSUT.ReadTag(nTag=> nActualTag);
-hrParserActual := fbInputSUT.ReadRepeatedFieldUint64(
+fbParseCtx_SUT.ReadTag(nTag=> nActualTag);
+hrParserActual := fbParseCtx_SUT.ReadRepeatedFieldUint64(
 					anyArray:= F_ToAnyType(aActuals),
 					anyFirstElem:= F_ToAnyType(aActuals[0]),
 					nFieldIndex:= nFieldIndex);

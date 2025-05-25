@@ -14,7 +14,7 @@ END_VAR
       <Declaration><![CDATA[// Merges the data from the specified coded input stream with the current message.
 METHOD MergeFrom : HRESULT
 VAR_IN_OUT
-    fbInput : FB_CodedInputStream;  //
+    fbParseCtx   : FB_ParseContext;
 END_VAR
 ]]></Declaration>
     </Method>
@@ -37,7 +37,7 @@ PROPERTY MessageDescriptor : REFERENCE TO FB_MessageDescriptor]]></Declaration>
       <Declaration><![CDATA[// Writes the data to the given coded output stream.
 METHOD WriteTo
 VAR_IN_OUT
-    fbOutput : FB_CodedOutputStream;        // Coded output stream to write the data to. 
+    fbWriteCtx : FB_WriteContext;
 END_VAR
 ]]></Declaration>
     </Method>

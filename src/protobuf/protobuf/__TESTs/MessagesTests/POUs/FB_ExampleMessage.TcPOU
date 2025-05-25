@@ -59,7 +59,7 @@ METHOD CalculateSize : UDINT
       <Declaration><![CDATA[(* Merges the data from the specified coded input stream with the current message.*)
 METHOD MergeFrom : HRESULT
 VAR_IN_OUT
-	fbInput	: FB_CodedInputStream;
+	fbParseCtx : FB_ParseContext;
 END_VAR
 VAR
     nTag    : UDINT;
@@ -70,7 +70,7 @@ nField7Index := 0;
 nField9Index := 0;
 
 REPEAT   
-MergeFrom := fbInput.ReadTag(nTag=>nTag);
+MergeFrom := fbParseCtx.ReadTag(nTag=>nTag);
 IF SUCCEEDED(MergeFrom) AND nTag = 0 THEN
     EXIT;
 END_IF;
@@ -82,43 +82,43 @@ END_IF
 
 CASE nTag OF
     16#0A:         // string (1)
-        MergeFrom := fbInput.ReadString(stExample.sName); 
+        MergeFrom := fbParseCtx.ReadString(stExample.sName); 
         IF FAILED(MergeFrom) THEN
             RETURN;
         END_IF
     16#12: // repeated uint32 (2)
-        MergeFrom := fbInput.ReadRepeatedFieldUint32(
+        MergeFrom := fbParseCtx.ReadRepeatedFieldUint32(
                         anyArray:= F_ToAnyType(stExample.aUdintArray),
                         anyFirstElem:= F_ToAnyType(stExample.aUdintArray[0]),
                         nFieldIndex:= THIS^.nField2Index);
     16#18:  // int32 (3)
-        MergeFrom := fbInput.ReadInt32(nValue=> stExample.nDInt2);
+        MergeFrom := fbParseCtx.ReadInt32(nValue=> stExample.nDInt2);
       
     16#22:  // string (4)
-        MergeFrom := fbInput.ReadString(anyStringOut:= stExample.sMyString);
+        MergeFrom := fbParseCtx.ReadString(anyStringOut:= stExample.sMyString);
         
     16#29:  // fixed64 (5)
-        MergeFrom := fbInput.ReadFixed64(nValue=> stExample.nFixed64);
+        MergeFrom := fbParseCtx.ReadFixed64(nValue=> stExample.nFixed64);
         
     16#31:  // sfixed64 (6)
-        MergeFrom := fbInput.ReadSFixed64(nValue=> stExample.nSFixed64);
+        MergeFrom := fbParseCtx.ReadSFixed64(nValue=> stExample.nSFixed64);
                      
     16#3A:  // repeated uint32 (7)
-        MergeFrom := fbInput.ReadRepeatedFieldUint32(
+        MergeFrom := fbParseCtx.ReadRepeatedFieldUint32(
                     anyArray:= F_ToAnyType(stExample.aByteArray),
                     anyFirstElem:= F_ToAnyType(stExample.aByteArray[0]),
                     nFieldIndex:= THIS^.nField7Index);
     16#45:  // float (8)
-        MergeFrom := fbInput.ReadFloat(fValue=> stExample.fReal);
+        MergeFrom := fbParseCtx.ReadFloat(fValue=> stExample.fReal);
     16#4A:  // aLReal (9)
-        MergeFrom := fBInput.ReadRepeatedFieldDouble(
+        MergeFrom := fbParseCtx.ReadRepeatedFieldDouble(
                     anyArray:= F_ToAnyType(stExample.aLReal),
                     anyFirstElem:= F_ToAnyType(stExample.aLReal[0]),
                     nFieldIndex:= THIS^.nField9Index);  
     16#52:  // aBytes (10)
-        MergeFrom := fbInput.ReadBytes(stExample.aBytes);
+        MergeFrom := fbParseCtx.ReadBytes(stExample.aBytes);
 ELSE
-    MergeFrom := fBInput.SkipLastField();
+    MergeFrom := fbParseCtx.SkipLastField();
 END_CASE
 
 UNTIL (FAILED(MergeFrom) OR nTag = 0)
@@ -173,7 +173,7 @@ END_VAR
 METHOD WriteTo
 VAR_IN_OUT
 	(* Coded output stream to write the data to. *)
-	fbOutput	: FB_CodedOutputStream;
+	fbWriteCtx	: FB_WriteContext;
 END_VAR
 ]]></Declaration>
       <Implementation>

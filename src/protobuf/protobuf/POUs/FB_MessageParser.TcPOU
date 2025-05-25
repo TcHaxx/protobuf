@@ -7,7 +7,7 @@ END_VAR
 VAR_OUTPUT
 END_VAR
 VAR
-    fbCodedInputStream : FB_CodedInputStream;
+    fbParseCtx  : FB_ParseContext;
     ipMessage   : I_Message;
 END_VAR
 ]]></Declaration>
@@ -38,9 +38,8 @@ END_VAR
       <Implementation>
         <ST><![CDATA[
 IF ipMessage <> 0 THEN
-    fbCodedInputStream(aBuffer:= aBuffer);
-    fbCodedInputStream.FromBuffer();
-    ipMessage.MergeFrom(fbInput:= fbCodedInputStream);
+    fbParseCtx.Initialize(stBuffer:= F_SpanFromArray(aBuffer));
+    ipMessage.MergeFrom(fbParseCtx:= fbParseCtx);
 END_IF]]></ST>
       </Implementation>
     </Method>

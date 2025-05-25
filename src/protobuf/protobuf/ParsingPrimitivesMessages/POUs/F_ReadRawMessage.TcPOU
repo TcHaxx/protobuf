@@ -10,7 +10,6 @@ VAR_INPUT
     iMessage : I_Message;
 END_VAR
 VAR
-    iBufferMessage : I_BufferMessage;
     refState : REFERENCE TO ST_ParserInternalState;
 END_VAR]]></Declaration>
     <Implementation>
@@ -23,23 +22,7 @@ IF iMessage = 0 THEN
     RETURN;
 END_IF
 
-IF __QUERYINTERFACE(iMessage, iBufferMessage) THEN
-
-    F_ReadRawMessage := iBufferMessage.InternalMergeFrom(fbCtx);
-    RETURN;
-  
-ELSE
-    IF refState.pCodedInputStream = NULL THEN
-        F_ReadRawMessage := refState.eParserErrorCode := E_ParserErrorCode.InternalError;
-        refState.bError := TRUE;
-        RETURN;
-    END_IF
-    fbCtx.CopyStateToInputStream(fbInputStream:= refState.pCodedInputStream^);
-    iMessage.MergeFrom(fbInput:= refState.pCodedInputStream^);
-    fbCtx.LoadStateFromInputStream(fbInputStream:= refState.pCodedInputStream^);
-END_IF
-
-
+F_ReadRawMessage := iMessage.MergeFrom(fbCtx);
 ]]></ST>
     </Implementation>
   </POU>

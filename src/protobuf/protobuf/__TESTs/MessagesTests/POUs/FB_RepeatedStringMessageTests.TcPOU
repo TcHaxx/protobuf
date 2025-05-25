@@ -43,7 +43,7 @@ METHOD CalculateSize : UDINT
       <Declaration><![CDATA[(* Merges the data from the specified coded input stream with the current message.*)
 METHOD MergeFrom : HRESULT
 VAR_IN_OUT
-	fbInput	: FB_CodedInputStream;
+	fbParseCtx : FB_ParseContext;
 END_VAR
 VAR
     nTag    : UDINT;
@@ -51,10 +51,10 @@ END_VAR]]></Declaration>
       <Implementation>
         <ST><![CDATA[nField1Index := 0;
 
-fbInput.SetTempBuffer(anyBuffer:= THIS^.aTmpBuffer);
+fbParseCtx.SetTempBuffer(anyBuffer:= THIS^.aTmpBuffer);
 
 REPEAT   
-MergeFrom := fbInput.ReadTag(nTag=>nTag);
+MergeFrom := fbParseCtx.ReadTag(nTag=>nTag);
 IF SUCCEEDED(MergeFrom) AND nTag = 0 THEN
     EXIT;
 END_IF;
@@ -66,14 +66,14 @@ END_IF
 
 CASE nTag OF
     16#0A:         // repeated string (1)
-       MergeFrom := fbInput.ReadRepeatedFieldString(
+       MergeFrom := fbParseCtx.ReadRepeatedFieldString(
                     anyArray:= F_ToAnyType(THIS^.aRepeatedStrings),
                     anyFirstElem:= F_ToAnyType(THIS^.aRepeatedStrings[0]),
                     nFieldIndex:= THIS^.nField1Index);
            
  
 ELSE
-    MergeFrom := fBInput.SkipLastField();
+    MergeFrom := fbParseCtx.SkipLastField();
 END_CASE
 
 UNTIL (FAILED(MergeFrom) OR nTag = 0)
@@ -128,7 +128,7 @@ END_VAR
 METHOD WriteTo
 VAR_IN_OUT
 	(* Coded output stream to write the data to. *)
-	fbOutput	: FB_CodedOutputStream;
+	fbWriteCtx	: FB_WriteContext;
 END_VAR
 ]]></Declaration>
       <Implementation>

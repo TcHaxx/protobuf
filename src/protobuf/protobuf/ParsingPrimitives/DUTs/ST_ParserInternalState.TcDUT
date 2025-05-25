@@ -16,7 +16,6 @@ STRUCT
     bError                  : BOOL;                         // True if error occured.
     bDiscardUnknownFields   : BOOL;                         // When set to true, unknown fields will be discarded while parsing.
     bHasNextTag             : BOOL; 
-    pCodedInputStream       : POINTER TO FB_CodedInputStream;
     eParserErrorCode        : E_ParserErrorCode;            // 0 = no error, <> 0 = error
 END_STRUCT
 END_TYPE
