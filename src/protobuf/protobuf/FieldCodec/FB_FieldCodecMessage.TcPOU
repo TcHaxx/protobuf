@@ -88,8 +88,7 @@ stCtx.stState := THIS^.pParseContextField^.refCtx.stState;]]></ST>
     <Method Name="ValueWriter" Id="{fdb65b05-c4a7-47c5-9055-cbbc790d5d7d}">
       <Declaration><![CDATA[METHOD ValueWriter : HRESULT
 VAR_IN_OUT
-    stBuffer : ST_Span;
-    stState  : ST_WriterInternalState;
+    stCtx  : ST_WriteContext;
 END_VAR
 VAR_INPUT
     anyIn : T_ANY;

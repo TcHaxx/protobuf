@@ -1,7 +1,11 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <TcPlcObject Version="1.1.0.1">
   <POU Name="FB_WriteContext" Id="{18246595-6bbb-43ef-aa75-24f9e22ace2b}" SpecialFunc="None">
-    <Declaration><![CDATA[{attribute 'no_explicit_call' := 'do not call this POU directly'} 
+    <Declaration><![CDATA[// Represents the current serialization state and is passed along
+// as the serialization proceeds.
+// All the public methods are intended to be invoked only by the generated code,
+// users should never invoke them directly.
+{attribute 'no_explicit_call' := 'do not call this POU directly'} 
 FUNCTION_BLOCK PUBLIC FINAL FB_WriteContext
 VAR
     stCtx   : ST_WriteContext;
@@ -50,7 +54,7 @@ stCtx.stState.nBufferPos         := 0;]]></ST>
       </Implementation>
     </Method>
     <Method Name="InitializeFromState" Id="{e95638a0-ab7e-4b84-941e-d84723767bdb}">
-      <Declaration><![CDATA[// Initialize a ST_ParseContext using existing ST_ParserInternalState,
+      <Declaration><![CDATA[// Initialize a ST_WriterContext using existing ST_WriterInternalState,
 METHOD INTERNAL InitializeFromState
 VAR_IN_OUT CONSTANT
     stBuffer : ST_Span;
@@ -104,7 +108,7 @@ END_VAR
 ]]></Declaration>
       <Implementation>
         <ST><![CDATA[
-WriteBool := F_WriteRawByte(THIS^.stCtx.stBuffer, THIS^.stCtx.stState, TO_BYTE(bValue));]]></ST>
+WriteBool := F_WriteRawByte(THIS^.stCtx, TO_BYTE(bValue));]]></ST>
       </Implementation>
     </Method>
     <Method Name="WriteBytes" Id="{02b8f0af-661f-4944-85ff-f76fd4cec3ea}">
@@ -117,7 +121,7 @@ VAR_INPUT
 END_VAR]]></Declaration>
       <Implementation>
         <ST><![CDATA[
-WriteBytes := F_WriteBytes(THIS^.stCtx.stBuffer, THIS^.stCtx.stState, aBytes, nLength);]]></ST>
+WriteBytes := F_WriteBytes(THIS^.stCtx, aBytes, nLength);]]></ST>
       </Implementation>
     </Method>
     <Method Name="WriteDouble" Id="{3b86ec3f-2cad-45c5-9a6f-d56de79d1415}">
@@ -127,7 +131,7 @@ VAR_INPUT
 END_VAR
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[WriteDouble := F_WriteDouble(THIS^.stCtx.stBuffer, THIS^.stCtx.stState, fValue);]]></ST>
+        <ST><![CDATA[WriteDouble := F_WriteDouble(THIS^.stCtx, fValue);]]></ST>
       </Implementation>
     </Method>
     <Method Name="WriteEnum" Id="{4fb9d4ab-4be6-42ee-a3bb-3f86dbf2061c}">
@@ -138,7 +142,7 @@ END_VAR
 ]]></Declaration>
       <Implementation>
         <ST><![CDATA[
-WriteEnum := F_WriteEnum(THIS^.stCtx.stBuffer, THIS^.stCtx.stState, nValue);]]></ST>
+WriteEnum := F_WriteEnum(THIS^.stCtx, nValue);]]></ST>
       </Implementation>
     </Method>
     <Method Name="WriteFixed32" Id="{75c23fcd-723d-4cbc-9e77-8e2301b57ac1}">
@@ -149,7 +153,7 @@ END_VAR
 ]]></Declaration>
       <Implementation>
         <ST><![CDATA[
-WriteFixed32 := F_WriteFixed32(THIS^.stCtx.stBuffer, THIS^.stCtx.stState, nValue);]]></ST>
+WriteFixed32 := F_WriteFixed32(THIS^.stCtx, nValue);]]></ST>
       </Implementation>
     </Method>
     <Method Name="WriteFixed64" Id="{ac5b07e1-2d27-4aea-84db-e2a22552a9fb}">
@@ -160,7 +164,7 @@ END_VAR
 ]]></Declaration>
       <Implementation>
         <ST><![CDATA[
-WriteFixed64 := F_WriteFixed64(THIS^.stCtx.stBuffer, THIS^.stCtx.stState, nValue);]]></ST>
+WriteFixed64 := F_WriteFixed64(THIS^.stCtx, nValue);]]></ST>
       </Implementation>
     </Method>
     <Method Name="WriteFloat" Id="{ec5060f6-e490-4798-a185-1d013ad3518c}">
@@ -170,7 +174,7 @@ VAR_INPUT
 END_VAR
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[WriteFloat := F_WriteFloat(THIS^.stCtx.stBuffer, THIS^.stCtx.stState, fValue);]]></ST>
+        <ST><![CDATA[WriteFloat := F_WriteFloat(THIS^.stCtx, fValue);]]></ST>
       </Implementation>
     </Method>
     <Method Name="WriteInt32" Id="{cb424f8c-2286-402b-adff-21634a582503}">
@@ -180,7 +184,7 @@ VAR_INPUT
 END_VAR
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[WriteInt32 := F_WriteInt32(THIS^.stCtx.stBuffer, THIS^.stCtx.stState, nValue);]]></ST>
+        <ST><![CDATA[WriteInt32 := F_WriteInt32(THIS^.stCtx, nValue);]]></ST>
       </Implementation>
     </Method>
     <Method Name="WriteInt64" Id="{470d349f-a883-451f-86ff-5add09c6bbc1}">
@@ -190,7 +194,7 @@ VAR_INPUT
 END_VAR
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[WriteInt64 := F_WriteInt64(THIS^.stCtx.stBuffer, THIS^.stCtx.stState, nValue);]]></ST>
+        <ST><![CDATA[WriteInt64 := F_WriteInt64(THIS^.stCtx, nValue);]]></ST>
       </Implementation>
     </Method>
     <Method Name="WriteLength" Id="{aefabf76-233a-48e5-bd46-c3bd214198fb}">
@@ -201,7 +205,7 @@ END_VAR
 ]]></Declaration>
       <Implementation>
         <ST><![CDATA[
-WriteLength := F_WriteLength(THIS^.stCtx.stBuffer, THIS^.stCtx.stState, nLength);]]></ST>
+WriteLength := F_WriteLength(THIS^.stCtx, nLength);]]></ST>
       </Implementation>
     </Method>
     <Method Name="WriteRepeatedFieldBool" Id="{5021b455-644d-4e5d-8e2d-3fb2c93ed3cf}">
@@ -214,7 +218,7 @@ VAR_INPUT CONSTANT
 END_VAR]]></Declaration>
       <Implementation>
         <ST><![CDATA[
-WriteRepeatedFieldBool := F_WriteRepeatedField(THIS^.stCtx.stBuffer, THIS^.stCtx.stState, anyArray, anyFirstElem, nLength, nTag, THIS^.fbFieldCodecBool);
+WriteRepeatedFieldBool := F_WriteRepeatedField(THIS^.stCtx, anyArray, anyFirstElem, nLength, nTag, THIS^.fbFieldCodecBool);
 ]]></ST>
       </Implementation>
     </Method>
@@ -228,7 +232,7 @@ VAR_INPUT CONSTANT
 END_VAR]]></Declaration>
       <Implementation>
         <ST><![CDATA[
-WriteRepeatedFieldBytes := F_WriteRepeatedField(THIS^.stCtx.stBuffer, THIS^.stCtx.stState, anyArray, anyFirstElem, nLength, nTag, THIS^.fbFieldCodecBytes);
+WriteRepeatedFieldBytes := F_WriteRepeatedField(THIS^.stCtx, anyArray, anyFirstElem, nLength, nTag, THIS^.fbFieldCodecBytes);
 ]]></ST>
       </Implementation>
     </Method>
@@ -242,7 +246,7 @@ VAR_INPUT CONSTANT
 END_VAR]]></Declaration>
       <Implementation>
         <ST><![CDATA[
-WriteRepeatedFieldDouble := F_WriteRepeatedField(THIS^.stCtx.stBuffer, THIS^.stCtx.stState, anyArray, anyFirstElem, nLength, nTag, THIS^.fbFieldCodecDouble);
+WriteRepeatedFieldDouble := F_WriteRepeatedField(THIS^.stCtx, anyArray, anyFirstElem, nLength, nTag, THIS^.fbFieldCodecDouble);
 ]]></ST>
       </Implementation>
     </Method>
@@ -256,7 +260,7 @@ VAR_INPUT CONSTANT
 END_VAR]]></Declaration>
       <Implementation>
         <ST><![CDATA[
-WriteRepeatedFieldFixed32 := F_WriteRepeatedField(THIS^.stCtx.stBuffer, THIS^.stCtx.stState, anyArray, anyFirstElem, nLength, nTag, THIS^.fbFieldCodecFixed32);
+WriteRepeatedFieldFixed32 := F_WriteRepeatedField(THIS^.stCtx, anyArray, anyFirstElem, nLength, nTag, THIS^.fbFieldCodecFixed32);
 ]]></ST>
       </Implementation>
     </Method>
@@ -270,7 +274,7 @@ VAR_INPUT CONSTANT
 END_VAR]]></Declaration>
       <Implementation>
         <ST><![CDATA[
-WriteRepeatedFieldFixed64 := F_WriteRepeatedField(THIS^.stCtx.stBuffer, THIS^.stCtx.stState, anyArray, anyFirstElem, nLength, nTag, THIS^.fbFieldCodecFixed64);
+WriteRepeatedFieldFixed64 := F_WriteRepeatedField(THIS^.stCtx, anyArray, anyFirstElem, nLength, nTag, THIS^.fbFieldCodecFixed64);
 ]]></ST>
       </Implementation>
     </Method>
@@ -284,7 +288,7 @@ VAR_INPUT CONSTANT
 END_VAR]]></Declaration>
       <Implementation>
         <ST><![CDATA[
-WriteRepeatedFieldFloat := F_WriteRepeatedField(THIS^.stCtx.stBuffer, THIS^.stCtx.stState, anyArray, anyFirstElem, nLength, nTag, THIS^.fbFieldCodecFloat);
+WriteRepeatedFieldFloat := F_WriteRepeatedField(THIS^.stCtx, anyArray, anyFirstElem, nLength, nTag, THIS^.fbFieldCodecFloat);
 ]]></ST>
       </Implementation>
     </Method>
@@ -300,7 +304,7 @@ END_VAR
       <Implementation>
         <ST><![CDATA[
 
-WriteRepeatedFieldInt32 := F_WriteRepeatedField(THIS^.stCtx.stBuffer, THIS^.stCtx.stState, anyArray, anyFirstElem, nLength, nTag, THIS^.fbFieldCodecInt32);]]></ST>
+WriteRepeatedFieldInt32 := F_WriteRepeatedField(THIS^.stCtx, anyArray, anyFirstElem, nLength, nTag, THIS^.fbFieldCodecInt32);]]></ST>
       </Implementation>
     </Method>
     <Method Name="WriteRepeatedFieldInt64" Id="{63cbfa1a-e523-490e-9547-e7d56f25fce8}">
@@ -315,7 +319,7 @@ END_VAR
       <Implementation>
         <ST><![CDATA[
 
-WriteRepeatedFieldInt64 := F_WriteRepeatedField(THIS^.stCtx.stBuffer, THIS^.stCtx.stState, anyArray, anyFirstElem, nLength, nTag, THIS^.fbFieldCodecInt64);]]></ST>
+WriteRepeatedFieldInt64 := F_WriteRepeatedField(THIS^.stCtx, anyArray, anyFirstElem, nLength, nTag, THIS^.fbFieldCodecInt64);]]></ST>
       </Implementation>
     </Method>
     <Method Name="WriteRepeatedFieldSInt32" Id="{666d5292-259a-4c9d-92fc-58f17d5b5cc2}">
@@ -330,7 +334,7 @@ END_VAR
       <Implementation>
         <ST><![CDATA[
 
-WriteRepeatedFieldSInt32 := F_WriteRepeatedField(THIS^.stCtx.stBuffer, THIS^.stCtx.stState, anyArray, anyFirstElem, nLength, nTag, THIS^.fbFieldCodecSInt32);]]></ST>
+WriteRepeatedFieldSInt32 := F_WriteRepeatedField(THIS^.stCtx, anyArray, anyFirstElem, nLength, nTag, THIS^.fbFieldCodecSInt32);]]></ST>
       </Implementation>
     </Method>
     <Method Name="WriteRepeatedFieldSInt64" Id="{d799e33e-86e9-4fa5-8d4b-6fb02ca3b8f2}">
@@ -345,7 +349,7 @@ END_VAR
       <Implementation>
         <ST><![CDATA[
 
-WriteRepeatedFieldSInt64 := F_WriteRepeatedField(THIS^.stCtx.stBuffer, THIS^.stCtx.stState, anyArray, anyFirstElem, nLength, nTag, THIS^.fbFieldCodecSInt64);]]></ST>
+WriteRepeatedFieldSInt64 := F_WriteRepeatedField(THIS^.stCtx, anyArray, anyFirstElem, nLength, nTag, THIS^.fbFieldCodecSInt64);]]></ST>
       </Implementation>
     </Method>
     <Method Name="WriteRepeatedFieldString" Id="{3c1dcc4b-c34b-4c95-a10d-fb1de4f1751e}">
@@ -358,7 +362,7 @@ VAR_INPUT CONSTANT
 END_VAR]]></Declaration>
       <Implementation>
         <ST><![CDATA[
-WriteRepeatedFieldString := F_WriteRepeatedField(THIS^.stCtx.stBuffer, THIS^.stCtx.stState, anyArray, anyFirstElem, nLength, nTag, THIS^.fbFieldCodecString);
+WriteRepeatedFieldString := F_WriteRepeatedField(THIS^.stCtx, anyArray, anyFirstElem, nLength, nTag, THIS^.fbFieldCodecString);
 ]]></ST>
       </Implementation>
     </Method>
@@ -374,7 +378,7 @@ END_VAR
       <Implementation>
         <ST><![CDATA[
 
-WriteRepeatedFieldUInt32 := F_WriteRepeatedField(THIS^.stCtx.stBuffer, THIS^.stCtx.stState, anyArray, anyFirstElem, nLength, nTag, THIS^.fbFieldCodecUInt32);]]></ST>
+WriteRepeatedFieldUInt32 := F_WriteRepeatedField(THIS^.stCtx, anyArray, anyFirstElem, nLength, nTag, THIS^.fbFieldCodecUInt32);]]></ST>
       </Implementation>
     </Method>
     <Method Name="WriteRepeatedFieldUInt64" Id="{77aa14f0-634c-46e1-8ac2-c033181caece}">
@@ -389,7 +393,7 @@ END_VAR
       <Implementation>
         <ST><![CDATA[
 
-WriteRepeatedFieldUInt64 := F_WriteRepeatedField(THIS^.stCtx.stBuffer, THIS^.stCtx.stState, anyArray, anyFirstElem, nLength, nTag, THIS^.fbFieldCodecUInt64);]]></ST>
+WriteRepeatedFieldUInt64 := F_WriteRepeatedField(THIS^.stCtx, anyArray, anyFirstElem, nLength, nTag, THIS^.fbFieldCodecUInt64);]]></ST>
       </Implementation>
     </Method>
     <Method Name="WriteSFixed32" Id="{c5db7557-6b1a-4521-ab52-97e9e0d0670f}">
@@ -400,7 +404,7 @@ END_VAR
 ]]></Declaration>
       <Implementation>
         <ST><![CDATA[
-WriteSFixed32 := F_WriteSFixed32(THIS^.stCtx.stBuffer, THIS^.stCtx.stState, nValue);]]></ST>
+WriteSFixed32 := F_WriteSFixed32(THIS^.stCtx, nValue);]]></ST>
       </Implementation>
     </Method>
     <Method Name="WriteSFixed64" Id="{1d1909aa-43d1-452a-93e7-9bb5567d60cd}">
@@ -411,7 +415,7 @@ END_VAR
 ]]></Declaration>
       <Implementation>
         <ST><![CDATA[
-WriteSFixed64 := F_WriteSFixed64(THIS^.stCtx.stBuffer, THIS^.stCtx.stState, nValue);]]></ST>
+WriteSFixed64 := F_WriteSFixed64(THIS^.stCtx, nValue);]]></ST>
       </Implementation>
     </Method>
     <Method Name="WriteSint32" Id="{9b3c1ae8-a598-4a54-9dcf-fc39ef583879}">
@@ -421,7 +425,7 @@ VAR_INPUT
 END_VAR
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[WriteSint32 := F_WriteSInt32(THIS^.stCtx.stBuffer, THIS^.stCtx.stState, nValue);]]></ST>
+        <ST><![CDATA[WriteSint32 := F_WriteSInt32(THIS^.stCtx, nValue);]]></ST>
       </Implementation>
     </Method>
     <Method Name="WriteSint64" Id="{b35dcafc-ac19-4012-a560-388617eee3d1}">
@@ -431,7 +435,7 @@ VAR_INPUT
 END_VAR
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[WriteSint64 := F_WriteSInt64(THIS^.stCtx.stBuffer, THIS^.stCtx.stState, nValue);]]></ST>
+        <ST><![CDATA[WriteSint64 := F_WriteSInt64(THIS^.stCtx, nValue);]]></ST>
       </Implementation>
     </Method>
     <Method Name="WriteString" Id="{e0704046-198b-43d6-993d-44c5595830da}">
@@ -442,7 +446,7 @@ END_VAR
 ]]></Declaration>
       <Implementation>
         <ST><![CDATA[
-WriteString := F_WriteString(THIS^.stCtx.stBuffer, THIS^.stCtx.stState, sStringToWrite);]]></ST>
+WriteString := F_WriteString(THIS^.stCtx, sStringToWrite);]]></ST>
       </Implementation>
     </Method>
     <Method Name="WriteTag" Id="{7d0d5de0-234e-4fd9-b783-7b62ad087c0a}">
@@ -454,7 +458,7 @@ END_VAR
 ]]></Declaration>
       <Implementation>
         <ST><![CDATA[
-WriteTag := F_WriteTag(THIS^.stCtx.stBuffer, THIS^.stCtx.stState, nFieldNumber, eWireType);]]></ST>
+WriteTag := F_WriteTag(THIS^.stCtx, nFieldNumber, eWireType);]]></ST>
       </Implementation>
     </Method>
     <Method Name="WriteUint32" Id="{5d55f154-a20b-441b-9140-093b322d95f5}">
@@ -466,7 +470,7 @@ END_VAR
       <Implementation>
         <ST><![CDATA[
 
-WriteUint32 := F_WriteUInt32(THIS^.stCtx.stBuffer, THIS^.stCtx.stState, nValue);]]></ST>
+WriteUint32 := F_WriteUInt32(THIS^.stCtx, nValue);]]></ST>
       </Implementation>
     </Method>
     <Method Name="WriteUint64" Id="{340b2f1b-3da7-48bf-82ca-67d4a8315258}">
@@ -476,7 +480,7 @@ VAR_INPUT
 END_VAR
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[WriteUint64 := F_WriteUInt64(THIS^.stCtx.stBuffer, THIS^.stCtx.stState, nValue);]]></ST>
+        <ST><![CDATA[WriteUint64 := F_WriteUInt64(THIS^.stCtx, nValue);]]></ST>
       </Implementation>
     </Method>
   </POU>

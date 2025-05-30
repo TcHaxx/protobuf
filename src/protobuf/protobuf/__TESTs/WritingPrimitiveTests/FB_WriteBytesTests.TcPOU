@@ -22,22 +22,24 @@ VAR_INPUT CONSTANT
     nBufferPosStart     : UDINT;
     nExpectedBufferPos  : UDINT;
 END_VAR
+VAR_INST
+    fbCtx   : FB_WriteContext;
+END_VAR
 VAR
     aActualBytes : ARRAY[0..31] OF BYTE;
-    stState : ST_WriterInternalState;
     hrActual : HRESULT; 
     nLength : UDINT;
 END_VAR]]></Declaration>
       <Implementation>
         <ST><![CDATA[
 // Arrange
-stState.nBufferSize := TO_UDINT(UPPER_BOUND(aActualBytes, 1) + 1);
-stState.nBufferPos := nBufferPosStart;
+fbCtx.FromBuffer(aActualBytes);
+fbCtx.refCtx.stState.nBufferPos := nBufferPosStart;
 nLength := TO_UDINT(UPPER_BOUND(aBytesToWrite, 1) + 1);
 
 // Act
 {warning disable C0041}
-hrActual := F_WriteBytes(F_SpanFromArray(aActualBytes), stState, aBytesToWrite, nLength);
+hrActual := F_WriteBytes(fbCtx.refCtx, aBytesToWrite, nLength);
 
 // Assert
 AssertEquals_DINT(
@@ -52,7 +54,7 @@ AssertArrayEquals_BYTE(
     
 AssertEquals_UDINT(
     Expected:= nExpectedBufferPos,
-    Actual:= stState.nBufferPos,
+    Actual:= fbCtx.refCtx.stState.nBufferPos,
     Message:= CONCAT('Expected stState.nBufferPos to equal ', TO_STRING(nExpectedBufferPos)));]]></ST>
       </Implementation>
     </Method>

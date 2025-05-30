@@ -3,11 +3,8 @@
   <POU Name="F_WriteEnum" Id="{9efd0922-0421-488b-8db4-fa01c76f70a4}" SpecialFunc="None">
     <Declaration><![CDATA[// Writes an enum value, without a tag, to the stream.
 FUNCTION F_WriteEnum : HRESULT
-VAR_INPUT
-    stBuffer    : ST_Span;
-END_VAR
-VAR_IN_OUT
-    stState     : ST_WriterInternalState;
+VAR_IN_OUT      
+    stCtx : ST_WriteContext;
 END_VAR
 VAR_INPUT
     nValue : DINT;
@@ -17,7 +14,7 @@ END_VAR
 ]]></Declaration>
     <Implementation>
       <ST><![CDATA[
-F_WriteEnum := F_WriteInt32(stBuffer, stState, nValue);
+F_WriteEnum := F_WriteInt32(stCtx, nValue);
 ]]></ST>
     </Implementation>
   </POU>

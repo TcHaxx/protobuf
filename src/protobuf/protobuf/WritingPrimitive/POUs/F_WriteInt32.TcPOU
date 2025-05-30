@@ -3,11 +3,8 @@
   <POU Name="F_WriteInt32" Id="{0a936a08-8cff-450b-a215-fe0c3a950f83}" SpecialFunc="None">
     <Declaration><![CDATA[// Writes an int32 field value, without a tag, to the stream.
 FUNCTION F_WriteInt32 : HRESULT
-VAR_INPUT
-    stBuffer    : ST_Span;
-END_VAR
 VAR_IN_OUT
-    stState     : ST_WriterInternalState;
+    stCtx   : ST_WriteContext;
 END_VAR
 VAR_INPUT
     nValue : DINT;
@@ -17,10 +14,10 @@ END_VAR
 ]]></Declaration>
     <Implementation>
       <ST><![CDATA[IF nValue >= 0 THEN
-    F_WriteInt32 := F_WriteRawVarint32(stBuffer, stState, nValue);
+    F_WriteInt32 := F_WriteRawVarint32(stCtx, nValue);
 ELSE
     // Must sign-extend.
-    F_WriteInt32 := F_WriteRawVarint64(stBuffer, stState, nValue);
+    F_WriteInt32 := F_WriteRawVarint64(stCtx, nValue);
 END_IF]]></ST>
     </Implementation>
   </POU>

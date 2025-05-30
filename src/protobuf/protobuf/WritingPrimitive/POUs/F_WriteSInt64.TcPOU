@@ -3,11 +3,8 @@
   <POU Name="F_WriteSInt64" Id="{794e3a36-5091-474d-b8d3-a6fdb267f084}" SpecialFunc="None">
     <Declaration><![CDATA[// Writes an sint64 value, without a tag, to the stream.
 FUNCTION F_WriteSInt64 : HRESULT
-VAR_INPUT
-    stBuffer    : ST_Span;
-END_VAR
-VAR_IN_OUT
-    stState     : ST_WriterInternalState;
+VAR_IN_OUT      
+    stCtx : ST_WriteContext;
 END_VAR
 VAR_INPUT
     nValue : LINT;
@@ -18,7 +15,7 @@ END_VAR
 ]]></Declaration>
     <Implementation>
       <ST><![CDATA[nTmp := F_EncodeZigZag64(nValue);
-F_WriteSInt64 := F_WriteRawVarint64(stBuffer, stState, nTmp);
+F_WriteSInt64 := F_WriteRawVarint64(stCtx, nTmp);
 ]]></ST>
     </Implementation>
   </POU>

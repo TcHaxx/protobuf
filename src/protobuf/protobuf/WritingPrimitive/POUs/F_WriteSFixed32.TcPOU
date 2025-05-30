@@ -3,11 +3,8 @@
   <POU Name="F_WriteSFixed32" Id="{1954aae2-e95c-4dac-8af1-a579da471d1b}" SpecialFunc="None">
     <Declaration><![CDATA[// Writes an sfixed32 value, without a tag, to the stream.
 FUNCTION F_WriteSFixed32 : HRESULT
-VAR_INPUT
-    stBuffer    : ST_Span;
-END_VAR
-VAR_IN_OUT
-    stState     : ST_WriterInternalState;
+VAR_IN_OUT      
+    stCtx : ST_WriteContext;
 END_VAR
 VAR_INPUT
     nValue : DINT;
@@ -16,7 +13,7 @@ VAR
 END_VAR
 ]]></Declaration>
     <Implementation>
-      <ST><![CDATA[F_WriteSFixed32 := F_WriteRawLittleEndian32(stBuffer, stState, TO_UDINT(nValue));]]></ST>
+      <ST><![CDATA[F_WriteSFixed32 := F_WriteRawLittleEndian32(stCtx, TO_UDINT(nValue));]]></ST>
     </Implementation>
   </POU>
 </TcPlcObject>

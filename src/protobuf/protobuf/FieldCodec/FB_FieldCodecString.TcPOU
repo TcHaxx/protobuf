@@ -74,8 +74,7 @@ ValueReader := F_ReadString(stCtx, anyOut);
     <Method Name="ValueWriter" Id="{abfdac70-fd08-4671-ada6-743506bccff6}">
       <Declaration><![CDATA[METHOD ValueWriter : HRESULT
 VAR_IN_OUT
-    stBuffer : ST_Span;
-    stState  : ST_WriterInternalState;
+    stCtx  : ST_WriteContext;
 END_VAR
 VAR_INPUT
     anyIn : T_ANY;
@@ -83,7 +82,7 @@ END_VAR
 ]]></Declaration>
       <Implementation>
         <ST><![CDATA[
-ValueWriter := F_WriteRawString(stBuffer, stState, anyIn);]]></ST>
+ValueWriter := F_WriteRawString(stCtx, anyIn);]]></ST>
       </Implementation>
     </Method>
   </POU>

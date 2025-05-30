@@ -3,11 +3,8 @@
   <POU Name="F_WriteRawBytes" Id="{03486a0e-d593-43a1-9f38-f3fba2cd9d73}" SpecialFunc="None">
     <Declaration><![CDATA[// Writes out part of an array of bytes.
 FUNCTION F_WriteRawBytes : HRESULT
-VAR_INPUT
-    stBuffer    : ST_Span;
-END_VAR
-VAR_IN_OUT
-    stState     : ST_WriterInternalState;
+VAR_IN_OUT      
+    stCtx : ST_WriteContext;
 END_VAR
 VAR_INPUT CONSTANT
     tBytes  : T_AnyBytes;
@@ -18,7 +15,7 @@ END_VAR
       <ST><![CDATA[
 F_WriteRawBytes := S_OK;
 
-F_WriteRawBytes := F_WriteToBuffer(stBuffer, stState, tBytes, nLength);]]></ST>
+F_WriteRawBytes := F_WriteToBuffer(stCtx, tBytes, nLength);]]></ST>
     </Implementation>
   </POU>
 </TcPlcObject>

@@ -77,8 +77,7 @@ anyOut := F_ToAnyType(anyArg:= nValue);]]></ST>
     <Method Name="ValueWriter" Id="{7e533af0-62c5-4ab0-893f-1ea20268bec2}">
       <Declaration><![CDATA[METHOD ValueWriter : HRESULT
 VAR_IN_OUT
-    stBuffer : ST_Span;
-    stState  : ST_WriterInternalState;
+    stCtx  : ST_WriteContext;
 END_VAR
 VAR_INPUT
     anyIn : T_ANY;
@@ -89,7 +88,7 @@ END_VAR]]></Declaration>
       <Implementation>
         <ST><![CDATA[
 nValue := PLINT_TO_LINT(anyIn.pValue);
-ValueWriter := F_WriteSInt64(stBuffer, stState, nValue);]]></ST>
+ValueWriter := F_WriteSInt64(stCtx, nValue);]]></ST>
       </Implementation>
     </Method>
   </POU>

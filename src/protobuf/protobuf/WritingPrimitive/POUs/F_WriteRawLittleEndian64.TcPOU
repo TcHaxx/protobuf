@@ -3,11 +3,8 @@
   <POU Name="F_WriteRawLittleEndian64" Id="{b65dc470-e97e-4ecb-bd6d-af355d41c263}" SpecialFunc="None">
     <Declaration><![CDATA[// Writes a 64-bit little-endian integer.
 FUNCTION F_WriteRawLittleEndian64 : HRESULT
-VAR_INPUT
-    stBuffer    : ST_Span;
-END_VAR
-VAR_IN_OUT
-    stState     : ST_WriterInternalState;
+VAR_IN_OUT      
+    stCtx : ST_WriteContext;
 END_VAR
 VAR_INPUT CONSTANT
     nValue : ULINT;
@@ -17,10 +14,7 @@ VAR CONSTANT
 END_VAR
 ]]></Declaration>
     <Implementation>
-      <ST><![CDATA[
-F_WriteRawLittleEndian64 := S_OK;
-
-F_WriteRawLittleEndian64 := F_WriteToBuffer(stBuffer, stState, F_ToAnyType(nValue), cLength);]]></ST>
+      <ST><![CDATA[F_WriteRawLittleEndian64 := F_WriteToBuffer(stCtx, F_ToAnyType(nValue), cLength);]]></ST>
     </Implementation>
   </POU>
 </TcPlcObject>

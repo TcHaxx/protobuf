@@ -31,7 +31,7 @@ fbParseCtx.FromBuffer(aBuffer);
 fbWriteCtx.refCtx.stState.nBufferPos := fbParseCtx.refCtx.stState.nBufferPos := cStartBufferPos;
 
 // Act / Assert
-hrWriterActual := F_WriteTag(fbWriteCtx.refCtx.stBuffer, fbWriteCtx.refCtx.stState, cExpectedFieldNumber, cEcpectedWireType);
+hrWriterActual := F_WriteTag(fbWriteCtx.refCtx, cExpectedFieldNumber, cEcpectedWireType);
 AssertEquals_DINT(Expected:= S_OK, Actual:= hrWriterActual, Message:= 'Expected hrWriterActual = S_OK');
 
 hrPeekActual := F_PeekTag(fbParseCtx.refCtx, nTag=> nActualTag);

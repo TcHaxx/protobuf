@@ -3,11 +3,8 @@
   <POU Name="F_WriteSFixed64" Id="{7b2a4de3-db7e-43cb-9133-2e939ff4fe38}" SpecialFunc="None">
     <Declaration><![CDATA[// Writes an sfixed64 value, without a tag, to the stream.
 FUNCTION F_WriteSFixed64 : HRESULT
-VAR_INPUT
-    stBuffer    : ST_Span;
-END_VAR
-VAR_IN_OUT
-    stState     : ST_WriterInternalState;
+VAR_IN_OUT      
+    stCtx : ST_WriteContext;
 END_VAR
 VAR_INPUT
     nValue : LINT;
@@ -16,7 +13,7 @@ VAR
 END_VAR
 ]]></Declaration>
     <Implementation>
-      <ST><![CDATA[F_WriteSFixed64 := F_WriteRawLittleEndian64(stBuffer, stState, TO_ULINT(nValue));]]></ST>
+      <ST><![CDATA[F_WriteSFixed64 := F_WriteRawLittleEndian64(stCtx, TO_ULINT(nValue));]]></ST>
     </Implementation>
   </POU>
 </TcPlcObject>

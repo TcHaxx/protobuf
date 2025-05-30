@@ -23,7 +23,7 @@ fbParseCtx.FromBuffer(aBuffer);
 fbWriteCtx.refCtx.stState.nBufferPos := fbParseCtx.refCtx.stState.nBufferPos := 2;
 
 // Act
-hrWriterActual := F_WriteBytes(fbWriteCtx.refCtx.stBuffer, fbWriteCtx.refCtx.stState, cExpectedBytes, nLength:= 150);
+hrWriterActual := F_WriteBytes(fbWriteCtx.refCtx, cExpectedBytes, nLength:= 150);
 hrParserActual := F_ReadBytes(fbParseCtx.refCtx, aActualBytes);
 
 // Assert

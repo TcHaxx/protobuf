@@ -25,7 +25,7 @@ fbWriteCtx.refCtx.stState.nBufferPos := fbParseCtx.refCtx.stState.nBufferPos := 
 nTmp := cExpected;
 
 // Act
-hrWriterActual := F_WriteRawVarint64(fbWriteCtx.refCtx.stBuffer, fbWriteCtx.refCtx.stState, nTmp);
+hrWriterActual := F_WriteRawVarint64(fbWriteCtx.refCtx, nTmp);
 hrParserActual := F_ParseRawVarint64(fbParseCtx.refCtx, nActual);
 
 // Assert

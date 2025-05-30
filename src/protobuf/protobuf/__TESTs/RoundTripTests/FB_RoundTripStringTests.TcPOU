@@ -24,7 +24,7 @@ fbWriteCtx.refCtx.stState.nBufferPos := fbParseCtx.refCtx.stState.nBufferPos := 
 
 // Act
 
-hrWriterActual := F_WriteString(fbWriteCtx.refCtx.stBuffer, fbWriteCtx.refCtx.stState, cExpectedString);
+hrWriterActual := F_WriteString(fbWriteCtx.refCtx, cExpectedString);
 hrParserActual := F_ReadString(fbParseCtx.refCtx, F_ToAnyType(sActual));
 
 // Assert

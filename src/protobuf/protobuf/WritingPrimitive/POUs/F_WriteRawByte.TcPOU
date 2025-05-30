@@ -3,11 +3,8 @@
   <POU Name="F_WriteRawByte" Id="{b076660d-c3ec-4678-82dc-e1aecd7132d4}" SpecialFunc="None">
     <Declaration><![CDATA[// Writes out part of an array of bytes.
 FUNCTION F_WriteRawByte : HRESULT
-VAR_INPUT
-    stBuffer    : ST_Span;
-END_VAR
 VAR_IN_OUT
-    stState     : ST_WriterInternalState;
+    stCtx   : ST_WriteContext;
 END_VAR
 VAR_INPUT CONSTANT
     nValue  : BYTE;
@@ -23,15 +20,15 @@ END_VAR]]></Declaration>
       <ST><![CDATA[
 F_WriteRawByte := S_OK;
 
-IF cLength > stState.nBufferSize - stState.nBufferPos THEN
-    F_WriteRawByte := stState.eWriterErrorCode := E_WriterErrorCode.TruncatedMessage;
-    stState.bError := TRUE;
+IF cLength > stCtx.stState.nBufferSize - stCtx.stState.nBufferPos THEN
+    F_WriteRawByte := stCtx.stState.eWriterErrorCode := E_WriterErrorCode.TruncatedMessage;
+    stCtx.stState.bError := TRUE;
     RETURN;
 END_IF
 
-pByte := stBuffer.pBuffer + stState.nBufferPos;
+pByte := stCtx.stBuffer.pBuffer + stCtx.stState.nBufferPos;
 pByte^ := nValue;
-stState.nBufferPos := stState.nBufferPos + cLength;]]></ST>
+stCtx.stState.nBufferPos := stCtx.stState.nBufferPos + cLength;]]></ST>
     </Implementation>
   </POU>
 </TcPlcObject>

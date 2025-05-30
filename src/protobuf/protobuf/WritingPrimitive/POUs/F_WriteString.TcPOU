@@ -3,11 +3,8 @@
   <POU Name="F_WriteString" Id="{09fd94e5-4952-4576-a108-1cdf6abd18f4}" SpecialFunc="None">
     <Declaration><![CDATA[// Writes a string field value, without a tag, to the stream. The data is length-prefixed.
 FUNCTION F_WriteString : HRESULT
-VAR_INPUT
-    stBuffer    : ST_Span;
-END_VAR
-VAR_IN_OUT
-    stState     : ST_WriterInternalState;
+VAR_IN_OUT      
+    stCtx : ST_WriteContext;
 END_VAR
 VAR_IN_OUT CONSTANT
     sValue  : T_ProtobufMaxString;
@@ -22,7 +19,7 @@ tAnyString.pValue := ADR(sValue[0]);
 tAnyString.TypeClass := __SYSTEM.TYPE_CLASS.TYPE_STRING;
 tAnyString.diSize := SIZEOF(T_ProtobufMaxString);
 
-F_WriteString := F_WriteRawString(stBuffer, stState, tAnyString);]]></ST>
+F_WriteString := F_WriteRawString(stCtx, tAnyString);]]></ST>
     </Implementation>
   </POU>
 </TcPlcObject>

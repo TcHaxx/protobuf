@@ -2,11 +2,8 @@
 <TcPlcObject Version="1.1.0.1">
   <POU Name="F_WriteRawVarint64" Id="{529ba7fd-604b-4712-80e6-c429e7431e0d}" SpecialFunc="None">
     <Declaration><![CDATA[FUNCTION F_WriteRawVarint64 : HRESULT
-VAR_INPUT
-    stBuffer    : ST_Span;
-END_VAR
-VAR_IN_OUT
-    stState     : ST_WriterInternalState;
+VAR_IN_OUT      
+    stCtx : ST_WriteContext;
 END_VAR
 VAR_INPUT
     anyVarInt64 : ANY_INT;
@@ -19,39 +16,39 @@ END_VAR
     <Implementation>
       <ST><![CDATA[
 IF anyVarInt64.diSize > SIZEOF(nValue) THEN
-    F_WriteRawVarint64 := stState.eWriterErrorCode := E_WriterErrorCode.InvalidDataType;     
-    stState.bError := TRUE;
+    F_WriteRawVarint64 := stCtx.stState.eWriterErrorCode := E_WriterErrorCode.InvalidDataType;     
+    stCtx.stState.bError := TRUE;
     RETURN; 
 END_IF
 
 // Enough capacity left for theoretical max Varint64?
-IF (stState.nBufferPos + SIZEOF(nValue) + 1) > stState.nBufferSize THEN
-    F_WriteRawVarint64 := stState.eWriterErrorCode := E_WriterErrorCode.TruncatedMessage;     
-    stState.bError := TRUE;
+IF (stCtx.stState.nBufferPos + SIZEOF(nValue) + 1) > stCtx.stState.nBufferSize THEN
+    F_WriteRawVarint64 := stCtx.stState.eWriterErrorCode := E_WriterErrorCode.TruncatedMessage;     
+    stCtx.stState.bError := TRUE;
     RETURN; 
 END_IF
 
 nValue := PULINT_TO_ULINT(in:= anyVarInt64.pValue);
 
-pByte := stBuffer.pBuffer + stState.nBufferPos;
+pByte := stCtx.stBuffer.pBuffer + stCtx.stState.nBufferPos;
 
 // fastpath for a common case of single byte value
 IF nValue < 16#80 THEN
     pByte^ := TO_BYTE(nValue);
-    stState.nBufferPos := stState.nBufferPos + 1;
+    stCtx.stState.nBufferPos := stCtx.stState.nBufferPos + 1;
     F_WriteRawVarint64 := S_OK;
     RETURN;
 END_IF
 
-WHILE (stState.nBufferPos < stState.nBufferSize) DO
-    pByte := stBuffer.pBuffer + stState.nBufferPos;
+WHILE (stCtx.stState.nBufferPos < stCtx.stState.nBufferSize) DO
+    pByte := stCtx.stBuffer.pBuffer + stCtx.stState.nBufferPos;
     IF nValue > 16#7F THEN
         pByte^ := TO_BYTE((nValue AND 16#7F) OR 16#80);
         nValue := SHR(nValue, 7);
-        stState.nBufferPos := stState.nBufferPos + 1;
+        stCtx.stState.nBufferPos := stCtx.stState.nBufferPos + 1;
     ELSE
         pByte^ := TO_BYTE(nValue);
-        stState.nBufferPos := stState.nBufferPos + 1;
+        stCtx.stState.nBufferPos := stCtx.stState.nBufferPos + 1;
         F_WriteRawVarint64 := S_OK;
         RETURN;
     END_IF

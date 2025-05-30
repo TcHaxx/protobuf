@@ -3,11 +3,8 @@
   <POU Name="F_WriteSInt32" Id="{01b4ad30-e64a-466f-9b41-61d0b834a634}" SpecialFunc="None">
     <Declaration><![CDATA[// Writes an sint32 value, without a tag, to the stream.
 FUNCTION F_WriteSInt32 : HRESULT
-VAR_INPUT
-    stBuffer    : ST_Span;
-END_VAR
-VAR_IN_OUT
-    stState     : ST_WriterInternalState;
+VAR_IN_OUT      
+    stCtx : ST_WriteContext;
 END_VAR
 VAR_INPUT
     nValue : DINT;
@@ -18,7 +15,7 @@ END_VAR
 ]]></Declaration>
     <Implementation>
       <ST><![CDATA[nTmp := F_EncodeZigZag32(nValue);
-F_WriteSInt32 := F_WriteRawVarint32(stBuffer, stState, nTmp);
+F_WriteSInt32 := F_WriteRawVarint32(stCtx, nTmp);
 ]]></ST>
     </Implementation>
   </POU>

@@ -3,11 +3,8 @@
   <POU Name="F_WriteRawString" Id="{6e76feb0-8bc9-457c-a81a-c3ae6a77cf29}" SpecialFunc="None">
     <Declaration><![CDATA[// Writes a string field value, without a tag, to the stream. The data is length-prefixed.
 FUNCTION F_WriteRawString : HRESULT
-VAR_INPUT
-    stBuffer    : ST_Span;
-END_VAR
-VAR_IN_OUT
-    stState     : ST_WriterInternalState;
+VAR_IN_OUT      
+    stCtx : ST_WriteContext;
 END_VAR
 VAR_IN_OUT CONSTANT
     tAnyString  : T_AnyString;
@@ -19,18 +16,18 @@ END_VAR]]></Declaration>
       <ST><![CDATA[F_WriteRawString := S_OK;
 
 IF tAnyString.TypeClass <> __SYSTEM.TYPE_CLASS.TYPE_STRING THEN
-    F_WriteRawString := stState.eWriterErrorCode := E_WriterErrorCode.InvalidDataType;
-    stState.bError := TRUE;
+    F_WriteRawString := stCtx.stState.eWriterErrorCode := E_WriterErrorCode.InvalidDataType;
+    stCtx.stState.bError := TRUE;
     RETURN;  
 END_IF
 
 UTF8Len(tAnyString.pValue, nSize=> nStrLength);
-F_WriteRawString := F_WriteRawVarint32(stBuffer, stState, nStrLength);
+F_WriteRawString := F_WriteRawVarint32(stCtx, nStrLength);
 IF FAILED(F_WriteRawString) THEN
     RETURN;
 END_IF
 
-F_WriteRawString := F_WriteToBuffer(stBuffer, stState, tAnyString, nStrLength);]]></ST>
+F_WriteRawString := F_WriteToBuffer(stCtx, tAnyString, nStrLength);]]></ST>
     </Implementation>
   </POU>
 </TcPlcObject>

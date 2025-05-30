@@ -2,11 +2,8 @@
 <TcPlcObject Version="1.1.0.1">
   <POU Name="F_WriteRepeatedField" Id="{5403c111-7c0c-4ce8-8ebe-b563f0195a9e}" SpecialFunc="None">
     <Declaration><![CDATA[FUNCTION INTERNAL F_WriteRepeatedField : HRESULT
-VAR_INPUT
-    stBuffer        : ST_Span;
-END_VAR
 VAR_IN_OUT
-    stState         : ST_WriterInternalState;
+    stCtx  : ST_WriteContext;
 END_VAR
 VAR_INPUT CONSTANT
     anyArray        : T_Any;
@@ -26,29 +23,29 @@ END_VAR
 ]]></Declaration>
     <Implementation>
       <ST><![CDATA[IF ipFieldCodec = 0  THEN
-    F_WriteRepeatedField := stState.eWriterErrorCode := E_WriterErrorCode.InternalError;
-    stState.bError := TRUE;
+    F_WriteRepeatedField := stCtx.stState.eWriterErrorCode := E_WriterErrorCode.InternalError;
+    stCtx.stState.bError := TRUE;
     RETURN;
 END_IF
 
 IF anyArray.TypeClass <> __SYSTEM.TYPE_CLASS.TYPE_ARRAY THEN
-    F_WriteRepeatedField := stState.eWriterErrorCode := E_WriterErrorCode.InvalidDataType;
-    stState.bError := TRUE;
+    F_WriteRepeatedField := stCtx.stState.eWriterErrorCode := E_WriterErrorCode.InvalidDataType;
+    stCtx.stState.bError := TRUE;
     RETURN;
 END_IF
 
 nTypeSize := TO_UDINT(anyFirstElem.diSize);
 
 IF nTypeSize = 0 THEN
-    F_WriteRepeatedField := stState.eWriterErrorCode := E_WriterErrorCode.InvalidDataType;
-    stState.bError := TRUE;
+    F_WriteRepeatedField := stCtx.stState.eWriterErrorCode := E_WriterErrorCode.InvalidDataType;
+    stCtx.stState.bError := TRUE;
     RETURN;
 END_IF
 
 IF ipFieldCodec.IsPackedRepeatedField(nTag) THEN
     // packed: tag, length, and value
     
-    hr := F_WriteRawVarint32(stBuffer, stState, nTag);
+    hr := F_WriteRawVarint32(stCtx, nTag);
     IF FAILED(hr) THEN
         F_WriteRepeatedField := hr;
         RETURN;
@@ -60,7 +57,7 @@ IF ipFieldCodec.IsPackedRepeatedField(nTag) THEN
         RETURN;
     END_IF
     
-    hr := F_WriteLength(stBuffer, stState, nPackedDataSize);
+    hr := F_WriteLength(stCtx, nPackedDataSize);
     IF FAILED(hr) THEN
         F_WriteRepeatedField := hr;
         RETURN;
@@ -73,7 +70,7 @@ IF ipFieldCodec.IsPackedRepeatedField(nTag) THEN
     anyItem := anyFirstElem;
     FOR i := 0 TO nLength - 1 DO
         anyItem.pValue := anyFirstElem.pValue + (i * TO_UDINT(anyFirstElem.diSize)); 
-        hr := ipFieldCodec.ValueWriter(stBuffer, stState, anyItem);
+        hr := ipFieldCodec.ValueWriter(stCtx, anyItem);
         IF FAILED(hr) THEN
             F_WriteRepeatedField := hr;
             RETURN;
@@ -85,25 +82,25 @@ ELSE
    anyItem := anyFirstElem;
    
    IF nLength < 1 THEN
-        hr := F_WriteRawVarint32(stBuffer, stState, nTag);
+        hr := F_WriteRawVarint32(stCtx, nTag);
         IF FAILED(hr) THEN
             F_WriteRepeatedField := hr;
             RETURN;
         END_IF
-        hr := F_WriteLength(stBuffer, stState, 0);
+        hr := F_WriteLength(stCtx, 0);
         F_WriteRepeatedField := hr;
         RETURN;
     END_IF
    
     FOR i := 0 TO nLength - 1 DO
-        hr := F_WriteRawVarint32(stBuffer, stState, nTag);
+        hr := F_WriteRawVarint32(stCtx, nTag);
         IF FAILED(hr) THEN
             F_WriteRepeatedField := hr;
             RETURN;
         END_IF
         
         anyItem.pValue := anyFirstElem.pValue + (i * TO_UDINT(anyFirstElem.diSize)); 
-        hr := ipFieldCodec.ValueWriter(stBuffer, stState, anyItem);
+        hr := ipFieldCodec.ValueWriter(stCtx, anyItem);
         IF FAILED(hr) THEN
             F_WriteRepeatedField := hr;
             RETURN;

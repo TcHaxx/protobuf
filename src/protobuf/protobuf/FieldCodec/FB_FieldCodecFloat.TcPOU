@@ -70,8 +70,7 @@ anyOut := F_ToAnyType(anyArg:= fValue);]]></ST>
     <Method Name="ValueWriter" Id="{82739368-41e6-4d6c-82cd-f15dee5abfbd}">
       <Declaration><![CDATA[METHOD ValueWriter : HRESULT
 VAR_IN_OUT
-    stBuffer : ST_Span;
-    stState  : ST_WriterInternalState;
+    stCtx  : ST_WriteContext;
 END_VAR
 VAR_INPUT
     anyIn : T_ANY;
@@ -82,7 +81,7 @@ END_VAR]]></Declaration>
       <Implementation>
         <ST><![CDATA[
 fValue := PREAL_TO_REAL(anyIn.pValue);
-ValueWriter := F_WriteFloat(stBuffer, stState, fValue);]]></ST>
+ValueWriter := F_WriteFloat(stCtx, fValue);]]></ST>
       </Implementation>
     </Method>
   </POU>

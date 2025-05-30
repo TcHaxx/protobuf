@@ -3,11 +3,8 @@
   <POU Name="F_WriteTag" Id="{ae3ccd4b-1305-434e-9f0c-c1a8e3523e7a}" SpecialFunc="None">
     <Declaration><![CDATA[// Encodes and writes a tag.
 FUNCTION F_WriteTag : HRESULT
-VAR_INPUT
-    stBuffer    : ST_Span;
-END_VAR
-VAR_IN_OUT
-    stState     : ST_WriterInternalState;
+VAR_IN_OUT      
+    stCtx : ST_WriteContext;
 END_VAR
 VAR_INPUT
     nFieldNumber    : UDINT;
@@ -18,7 +15,7 @@ VAR
 END_VAR]]></Declaration>
     <Implementation>
       <ST><![CDATA[nTag := F_MakeTag(nFieldNumber, eWireType);
-F_WriteTag := F_WriteRawVarint32(stBuffer, stState, nTag);]]></ST>
+F_WriteTag := F_WriteRawVarint32(stCtx, nTag);]]></ST>
     </Implementation>
   </POU>
 </TcPlcObject>

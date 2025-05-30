@@ -23,7 +23,7 @@ fbParseCtx.FromBuffer(aBuffer);
 fbWriteCtx.refCtx.stState.nBufferPos := fbParseCtx.refCtx.stState.nBufferPos := 2;
 
 // Act
-hrWriterActual := F_WriteFloat(fbWriteCtx.refCtx.stBuffer, fbWriteCtx.refCtx.stState, cExpected);
+hrWriterActual := F_WriteFloat(fbWriteCtx.refCtx, cExpected);
 hrParserActual := F_ParseFloat(fbParseCtx.refCtx, fVAlue=> fActual);
 
 // Assert
