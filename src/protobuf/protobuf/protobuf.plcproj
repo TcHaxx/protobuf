@@ -366,10 +366,10 @@
       <SubType>Code</SubType>
       <LinkAlways>true</LinkAlways>
     </Compile>
-    <Compile Include="POUs\FB_MessageDescriptor.TcPOU">
+    <Compile Include="POUs\FB_MessageParser.TcPOU">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="POUs\FB_MessageParser.TcPOU">
+    <Compile Include="POUs\FB_MessageWriter.TcPOU">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="POUs\ParseContext\FB_ParseContext.TcPOU">

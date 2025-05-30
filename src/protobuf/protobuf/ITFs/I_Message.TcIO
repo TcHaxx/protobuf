@@ -18,24 +18,29 @@ VAR_IN_OUT
 END_VAR
 ]]></Declaration>
     </Method>
-    <Property Name="MessageDescriptor" Id="{6ab92ca8-0868-416c-9525-df470c1a881e}">
-      <Declaration><![CDATA[/// Descriptor for this message. All instances are expected to return the same descriptor,
-/// and for generated types this will be an explicitly-implemented member, returning the
-/// same value as the static property declared on the type.
-PROPERTY MessageDescriptor : REFERENCE TO FB_MessageDescriptor]]></Declaration>
-      <Get Name="Get" Id="{9fc93d54-5f70-4bec-980e-8ce0de368e72}">
-        <Declaration><![CDATA[]]></Declaration>
-      </Get>
-    </Property>
     <Property Name="MessageValue" Id="{97215d09-def5-4507-9b56-dccf22e0973a}">
       <Declaration><![CDATA[PROPERTY INTERNAL MessageValue : T_Any]]></Declaration>
       <Get Name="Get" Id="{60067ca2-40f7-4972-b244-de71a629b7b8}">
         <Declaration><![CDATA[]]></Declaration>
       </Get>
     </Property>
+    <Property Name="Parser" Id="{6ab92ca8-0868-416c-9525-df470c1a881e}">
+      <Declaration><![CDATA[/// Parser for this message.
+PROPERTY Parser : REFERENCE TO FB_MessageParser]]></Declaration>
+      <Get Name="Get" Id="{9fc93d54-5f70-4bec-980e-8ce0de368e72}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Get>
+    </Property>
+    <Property Name="Writer" Id="{29b67140-1218-4855-b8d2-0afee340a134}">
+      <Declaration><![CDATA[/// Writer for this message.
+PROPERTY Writer : REFERENCE TO FB_MessageWriter]]></Declaration>
+      <Get Name="Get" Id="{24e7c725-1dc3-4f60-af6a-1ae67bafdcea}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Get>
+    </Property>
     <Method Name="WriteTo" Id="{db7a2abd-e786-44cf-afdc-29280be946e5}">
       <Declaration><![CDATA[// Writes the data to the given coded output stream.
-METHOD WriteTo
+METHOD WriteTo : HRESULT
 VAR_IN_OUT
     fbWriteCtx : FB_WriteContext;
 END_VAR

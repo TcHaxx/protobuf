@@ -30,7 +30,7 @@ message Baz
 
 VAR
 	fbMessageParser : FB_MessageParser(ipMessage:= THIS^);
-    
+    fbMessageWriter : FB_MessageWriter(ipMessage:= THIS^);
     stBar           : ST_Bar;
 END_VAR
 ]]></Declaration>
@@ -52,17 +52,6 @@ END_VAR
       <Declaration><![CDATA[{warning 'Add method implementation '}
 (* Calculates the size of this message in Protocol Buffer wire format, in bytes.*)
 METHOD CalculateSize : UDINT
-]]></Declaration>
-      <Implementation>
-        <ST><![CDATA[]]></ST>
-      </Implementation>
-    </Method>
-    <Method Name="InternalWriteTo" Id="{89fe8644-bd0e-46d5-a962-31f6fcbef28f}">
-      <Declaration><![CDATA[{warning 'Add method implementation '}
-METHOD InternalWriteTo : HRESULT
-VAR_IN_OUT
-	stState	: ST_WriterInternalState;
-END_VAR
 ]]></Declaration>
       <Implementation>
         <ST><![CDATA[]]></ST>
@@ -114,22 +103,6 @@ END_REPEAT
 ]]></ST>
       </Implementation>
     </Method>
-    <Property Name="MessageDescriptor" Id="{4079c4b5-affa-498b-8a2e-085330967dca}">
-      <Declaration><![CDATA[{warning 'Add property implementation'}
-(* Descriptor for this message. All instances are expected to return the same descriptor,
- and for generated types this will be an explicitly-implemented member, returning the
- same value as the static property declared on the type.*)
-PROPERTY MessageDescriptor : REFERENCE TO FB_MessageDescriptor
-]]></Declaration>
-      <Get Name="Get" Id="{0a691177-ee7c-47e7-b0a9-59b4b145bc85}">
-        <Declaration><![CDATA[VAR
-END_VAR
-]]></Declaration>
-        <Implementation>
-          <ST><![CDATA[]]></ST>
-        </Implementation>
-      </Get>
-    </Property>
     <Property Name="MessageValue" Id="{e6656f20-f5df-46b3-bb0a-6bf1a9e52214}">
       <Declaration><![CDATA[PROPERTY MessageValue : T_Any
 ]]></Declaration>
@@ -153,10 +126,23 @@ END_VAR
         </Implementation>
       </Get>
     </Property>
+    <Property Name="Writer" Id="{d723a0d9-7332-41ee-9e6c-a3f93ebd4909}">
+      <Declaration><![CDATA[(* Writer for this message.*)
+PROPERTY Writer : REFERENCE TO FB_MessageWriter
+]]></Declaration>
+      <Get Name="Get" Id="{361b547b-2c4a-48fa-8cdd-5f0af22aa9b8}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[Writer REF=THIS^.fbMessageWriter;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
     <Method Name="WriteTo" Id="{bf85dfc6-0a92-4590-9099-18c115fe20ed}">
       <Declaration><![CDATA[{warning 'Add method implementation '}
 (* Writes the data to the given coded output stream.*)
-METHOD WriteTo
+METHOD WriteTo : HRESULT
 VAR_IN_OUT
 	(* Coded output stream to write the data to. *)
 	fbWriteCtx	: FB_WriteContext;

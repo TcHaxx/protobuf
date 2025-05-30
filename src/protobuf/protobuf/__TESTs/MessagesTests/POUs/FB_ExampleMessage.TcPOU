@@ -35,6 +35,7 @@ message ST_Example {
 
 VAR
     fbMessageParser : FB_MessageParser(ipMessage:= THIS^);
+    fbMessageWriter : FB_MessageWriter(ipMessage:= THIS^);
 END_VAR
 
 VAR
@@ -126,22 +127,6 @@ END_REPEAT
 ]]></ST>
       </Implementation>
     </Method>
-    <Property Name="MessageDescriptor" Id="{73ca8b07-2197-4edb-ba5a-68a7927b11cd}">
-      <Declaration><![CDATA[{warning 'Add property implementation'}
-(* Descriptor for this message. All instances are expected to return the same descriptor,
- and for generated types this will be an explicitly-implemented member, returning the
- same value as the static property declared on the type.*)
-PROPERTY MessageDescriptor : REFERENCE TO FB_MessageDescriptor
-]]></Declaration>
-      <Get Name="Get" Id="{d00cfe7b-754b-4de3-b648-d8c535c191da}">
-        <Declaration><![CDATA[VAR
-END_VAR
-]]></Declaration>
-        <Implementation>
-          <ST><![CDATA[]]></ST>
-        </Implementation>
-      </Get>
-    </Property>
     <Property Name="MessageValue" Id="{11e74633-0392-4da7-a6e7-41072cb25a3b}">
       <Declaration><![CDATA[{warning 'Add property implementation'}
 PROPERTY MessageValue : T_Any
@@ -166,11 +151,24 @@ END_VAR
         </Implementation>
       </Get>
     </Property>
+    <Property Name="Writer" Id="{9343b3cc-075a-45e8-82f8-a01c270796d6}">
+      <Declaration><![CDATA[(* Writer for this message.*)
+PROPERTY Writer : REFERENCE TO FB_MessageWriter
+]]></Declaration>
+      <Get Name="Get" Id="{81997e23-b7de-47e5-a45e-ca8d521c8ba2}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[Writer REF= THIS^.fbMessageWriter;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
     <Method Name="WriteTo" Id="{83629895-5d90-4af0-b7ec-deda108511b0}">
       <Declaration><![CDATA[{warning 'Add method implementation '}
 {attribute 'analysis' := '-33'}
 (* Writes the data to the given coded output stream.*)
-METHOD WriteTo
+METHOD WriteTo : HRESULT
 VAR_IN_OUT
 	(* Coded output stream to write the data to. *)
 	fbWriteCtx	: FB_WriteContext;

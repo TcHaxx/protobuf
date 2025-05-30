@@ -1,20 +1,20 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <TcPlcObject Version="1.1.0.1">
-  <POU Name="FB_MessageParser" Id="{556675f3-c8ae-4ae6-a8c4-f625632c6ee3}" SpecialFunc="None">
-    <Declaration><![CDATA[FUNCTION_BLOCK PUBLIC FINAL FB_MessageParser
+  <POU Name="FB_MessageWriter" Id="{82251ec4-7522-4e16-b95a-4cac6022241a}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK PUBLIC FINAL FB_MessageWriter
 VAR_INPUT
 END_VAR
 VAR_OUTPUT
 END_VAR
 VAR
-    fbParseCtx  : FB_ParseContext;
+    fbWriteCtx  : FB_WriteContext;
     ipMessage   : I_Message;
 END_VAR
 ]]></Declaration>
     <Implementation>
       <ST><![CDATA[]]></ST>
     </Implementation>
-    <Method Name="FB_Init" Id="{fbef6f6c-4f3e-4527-b2ae-b083c5d3592d}">
+    <Method Name="FB_Init" Id="{f2669fd7-bc5e-416d-a680-ab6a6a2a4d14}">
       <Declaration><![CDATA[//FB_Init is always available implicitly and it is used primarily for initialization.
 //The return value is not evaluated. For a specific influence, you can also declare the
 //methods explicitly and provide additional code there with the standard initialization
@@ -29,8 +29,8 @@ END_VAR]]></Declaration>
         <ST><![CDATA[THIS^.ipMessage := ipMessage;]]></ST>
       </Implementation>
     </Method>
-    <Method Name="ParseFrom" Id="{bc50726a-bc1e-4a3a-8fa8-1f88b35a432e}">
-      <Declaration><![CDATA[METHOD PUBLIC ParseFrom : I_Message
+    <Method Name="WriteTo" Id="{721f4c0c-dcec-4498-ad06-eeae5ba3bc2f}">
+      <Declaration><![CDATA[METHOD PUBLIC WriteTo : I_Message
 VAR_IN_OUT CONSTANT
     aBuffer     : ARRAY[*] OF BYTE;
 END_VAR
@@ -38,8 +38,8 @@ END_VAR
       <Implementation>
         <ST><![CDATA[
 IF ipMessage <> 0 THEN
-    fbParseCtx.FromBuffer(aBuffer);
-    ipMessage.MergeFrom(fbParseCtx:= fbParseCtx);
+    fbWriteCtx.FromBuffer(aBuffer);
+    ipMessage.WriteTo(fbWriteCtx);
 END_IF]]></ST>
       </Implementation>
     </Method>
