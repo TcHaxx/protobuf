@@ -30,17 +30,24 @@ END_VAR]]></Declaration>
       </Implementation>
     </Method>
     <Method Name="WriteTo" Id="{721f4c0c-dcec-4498-ad06-eeae5ba3bc2f}">
-      <Declaration><![CDATA[METHOD PUBLIC WriteTo : I_Message
+      <Declaration><![CDATA[METHOD PUBLIC WriteTo : HRESULT
 VAR_IN_OUT CONSTANT
     aBuffer     : ARRAY[*] OF BYTE;
 END_VAR
 ]]></Declaration>
       <Implementation>
         <ST><![CDATA[
-IF ipMessage <> 0 THEN
-    fbWriteCtx.FromBuffer(aBuffer);
-    ipMessage.WriteTo(fbWriteCtx);
-END_IF]]></ST>
+IF ipMessage = 0 THEN
+    WriteTo := E_WriterErrorCode.InternalError;
+    RETURN;
+END_IF
+
+WriteTo := fbWriteCtx.FromBuffer(aBuffer);
+IF FAILED(WriteTo) THEN
+    RETURN;
+END_IF
+
+WriteTo := ipMessage.WriteTo(fbWriteCtx);]]></ST>
       </Implementation>
     </Method>
   </POU>

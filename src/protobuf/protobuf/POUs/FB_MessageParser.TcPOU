@@ -30,17 +30,24 @@ END_VAR]]></Declaration>
       </Implementation>
     </Method>
     <Method Name="ParseFrom" Id="{bc50726a-bc1e-4a3a-8fa8-1f88b35a432e}">
-      <Declaration><![CDATA[METHOD PUBLIC ParseFrom : I_Message
+      <Declaration><![CDATA[METHOD PUBLIC ParseFrom : HRESULT
 VAR_IN_OUT CONSTANT
     aBuffer     : ARRAY[*] OF BYTE;
 END_VAR
 ]]></Declaration>
       <Implementation>
         <ST><![CDATA[
-IF ipMessage <> 0 THEN
-    fbParseCtx.FromBuffer(aBuffer);
-    ipMessage.MergeFrom(fbParseCtx:= fbParseCtx);
-END_IF]]></ST>
+IF ipMessage = 0 THEN
+    ParseFrom := E_ParserErrorCode.InternalError;
+    RETURN;
+END_IF
+
+ParseFrom := fbParseCtx.FromBuffer(aBuffer);
+IF FAILED(ParseFrom) THEN
+    RETURN;
+END_IF
+
+ParseFrom := ipMessage.MergeFrom(fbParseCtx:= fbParseCtx);]]></ST>
       </Implementation>
     </Method>
   </POU>
