@@ -56,6 +56,17 @@ METHOD CalculateSize : UDINT
         <ST><![CDATA[]]></ST>
       </Implementation>
     </Method>
+    <Property Name="Example" Id="{209a7d2d-c128-4fb3-a095-0e93174c8f54}">
+      <Declaration><![CDATA[PROPERTY Example : REFERENCE TO ST_Example]]></Declaration>
+      <Get Name="Get" Id="{61d86430-b3ef-47ca-bb06-eec7d29e4443}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[Example REF= THIS^.stExample;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
     <Method Name="MergeFrom" Id="{92e74d9d-83d8-4035-900e-95dac619ab45}">
       <Declaration><![CDATA[(* Merges the data from the specified coded input stream with the current message.*)
 METHOD MergeFrom : HRESULT
@@ -164,9 +175,7 @@ END_VAR
       </Get>
     </Property>
     <Method Name="WriteTo" Id="{83629895-5d90-4af0-b7ec-deda108511b0}">
-      <Declaration><![CDATA[{warning 'Add method implementation '}
-{attribute 'analysis' := '-33'}
-(* Writes the data to the given coded output stream.*)
+      <Declaration><![CDATA[(* Writes the data to the given coded output stream.*)
 METHOD WriteTo : HRESULT
 VAR_IN_OUT
 	(* Coded output stream to write the data to. *)
@@ -174,7 +183,34 @@ VAR_IN_OUT
 END_VAR
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[]]></ST>
+        <ST><![CDATA[
+WriteTo := fbWriteCtx.WriteTag(1, E_WireType.LengthDelimited);
+IF FAILED(WriteTo) THEN
+    RETURN;
+END_IF
+WriteTo := fbWriteCtx.WriteString(stExample.sName);
+IF FAILED(WriteTo) THEN
+    RETURN;
+END_IF
+
+WriteTo := fbWriteCtx.WriteRepeatedFieldUInt32(
+                    anyArray:= F_ToAnyType(stExample.aUdintArray),
+                    anyFirstElem:= F_ToAnyType(stExample.aUdintArray[0]),
+                    nLength:= 7,
+                    nTag:= F_MakeTag(2, E_WireType.LengthDelimited));
+                    
+IF FAILED(WriteTo) THEN
+    RETURN;
+END_IF
+
+WriteTo := fbWriteCtx.WriteTag(3, E_WireType.Varint);
+IF FAILED(WriteTo) THEN
+    RETURN;
+END_IF
+WriteTo := fbWriteCtx.WriteInt32(stExample.nDInt2);
+IF FAILED(WriteTo) THEN
+    RETURN;
+END_IF]]></ST>
       </Implementation>
     </Method>
   </POU>

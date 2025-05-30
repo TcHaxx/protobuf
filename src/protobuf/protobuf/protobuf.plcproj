@@ -574,6 +574,9 @@
     <Compile Include="__TESTs\MessagesTests\POUs\FB_RepeatedStringMessageTests.TcPOU">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="__TESTs\MessagesTests\POUs\FB_RoundTripMessageExampleTest.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="__TESTs\MessagesTests\POUs\FooBarBaz\FB_BarMessage.TcPOU">
       <SubType>Code</SubType>
     </Compile>
