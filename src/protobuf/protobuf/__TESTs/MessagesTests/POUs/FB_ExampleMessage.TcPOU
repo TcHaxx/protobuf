@@ -128,15 +128,14 @@ END_REPEAT
       </Implementation>
     </Method>
     <Property Name="MessageValue" Id="{11e74633-0392-4da7-a6e7-41072cb25a3b}">
-      <Declaration><![CDATA[{warning 'Add property implementation'}
-PROPERTY MessageValue : T_Any
+      <Declaration><![CDATA[PROPERTY MessageValue : T_Any
 ]]></Declaration>
       <Get Name="Get" Id="{4604595d-4d76-4fa7-8102-f3ac685d48b3}">
         <Declaration><![CDATA[VAR
 END_VAR
 ]]></Declaration>
         <Implementation>
-          <ST><![CDATA[]]></ST>
+          <ST><![CDATA[MessageValue := F_ToAnyType(anyArg:= THIS^.stExample);]]></ST>
         </Implementation>
       </Get>
     </Property>

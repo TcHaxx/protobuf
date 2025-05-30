@@ -96,7 +96,7 @@ END_VAR
 ]]></Declaration>
       <Implementation>
         <ST><![CDATA[
-// ValueWriter := F_WriteRawString(F_SpanFromArray(aBuffer), stState, anyIn);]]></ST>
+ValueWriter := F_WriteRawString(stCtx, anyIn);]]></ST>
       </Implementation>
     </Method>
   </POU>
