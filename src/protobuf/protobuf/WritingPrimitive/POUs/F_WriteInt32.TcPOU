@@ -10,6 +10,7 @@ VAR_INPUT
     nValue : DINT;
 END_VAR
 VAR
+    nValueTmp : ULINT;
 END_VAR
 ]]></Declaration>
     <Implementation>
@@ -17,7 +18,8 @@ END_VAR
     F_WriteInt32 := F_WriteRawVarint32(stCtx, nValue);
 ELSE
     // Must sign-extend.
-    F_WriteInt32 := F_WriteRawVarint64(stCtx, nValue);
+    nValueTmp := TO_ULINT(nValue);
+    F_WriteInt32 := F_WriteRawVarint64(stCtx, nValueTmp);
 END_IF]]></ST>
     </Implementation>
   </POU>
