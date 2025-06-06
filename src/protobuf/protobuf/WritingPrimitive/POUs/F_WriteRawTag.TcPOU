@@ -1,0 +1,21 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1">
+  <POU Name="F_WriteRawTag" Id="{9eb534c9-7c56-48f6-9d7a-7ce7b53095e4}" SpecialFunc="None">
+    <Declaration><![CDATA[// Writes a tag directly to the stream.
+FUNCTION F_WriteRawTag : HRESULT
+VAR_IN_OUT      
+    stCtx : ST_WriteContext;
+END_VAR
+VAR_INPUT
+    nTag    : UDINT;
+END_VAR]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[IF nTag < 16#80 THEN
+	F_WriteRawTag := F_WriteRawByte(stCtx, TO_BYTE(nTag));
+ELSE
+	F_WriteRawTag := F_WriteRawVarint32(stCtx, nTag);	
+END_IF
+]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>

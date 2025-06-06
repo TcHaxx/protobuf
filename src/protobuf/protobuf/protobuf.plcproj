@@ -499,6 +499,10 @@
       <SubType>Code</SubType>
       <LinkAlways>true</LinkAlways>
     </Compile>
+    <Compile Include="WritingPrimitive\POUs\F_WriteRawTag.TcPOU">
+      <SubType>Code</SubType>
+      <LinkAlways>true</LinkAlways>
+    </Compile>
     <Compile Include="WritingPrimitive\POUs\F_WriteUInt32.TcPOU">
       <SubType>Code</SubType>
       <LinkAlways>true</LinkAlways>
