@@ -440,117 +440,123 @@
     <Compile Include="WireFormat\POus\F_MakeTag.TcPOU">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="WritingPrimitive\DUTs\E_WriterErrorCode.TcDUT">
+    <Compile Include="WritingPrimitivesMessages\POUs\F_WriteMessage.TcPOU">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="WritingPrimitive\DUTs\ST_WriterInternalState.TcDUT">
+    <Compile Include="WritingPrimitivesMessages\POUs\F_WriteRawMessage.TcPOU">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="WritingPrimitive\POUs\F_EncodeZigZag32.TcPOU">
+    <Compile Include="WritingPrimitives\DUTs\E_WriterErrorCode.TcDUT">
       <SubType>Code</SubType>
-      <LinkAlways>true</LinkAlways>
     </Compile>
-    <Compile Include="WritingPrimitive\POUs\F_EncodeZigZag64.TcPOU">
+    <Compile Include="WritingPrimitives\DUTs\ST_WriterInternalState.TcDUT">
       <SubType>Code</SubType>
-      <LinkAlways>true</LinkAlways>
     </Compile>
-    <Compile Include="WritingPrimitive\POUs\F_WriteBytes.TcPOU">
+    <Compile Include="WritingPrimitives\POUs\F_EncodeZigZag32.TcPOU">
       <SubType>Code</SubType>
       <LinkAlways>true</LinkAlways>
     </Compile>
-    <Compile Include="WritingPrimitive\POUs\F_WriteDouble.TcPOU">
+    <Compile Include="WritingPrimitives\POUs\F_EncodeZigZag64.TcPOU">
       <SubType>Code</SubType>
       <LinkAlways>true</LinkAlways>
     </Compile>
-    <Compile Include="WritingPrimitive\POUs\F_WriteFixed32.TcPOU">
+    <Compile Include="WritingPrimitives\POUs\F_WriteBytes.TcPOU">
       <SubType>Code</SubType>
       <LinkAlways>true</LinkAlways>
     </Compile>
-    <Compile Include="WritingPrimitive\POUs\F_WriteRawByte.TcPOU">
+    <Compile Include="WritingPrimitives\POUs\F_WriteDouble.TcPOU">
       <SubType>Code</SubType>
       <LinkAlways>true</LinkAlways>
     </Compile>
-    <Compile Include="WritingPrimitive\POUs\F_WriteSInt32.TcPOU">
+    <Compile Include="WritingPrimitives\POUs\F_WriteFixed32.TcPOU">
       <SubType>Code</SubType>
       <LinkAlways>true</LinkAlways>
     </Compile>
-    <Compile Include="WritingPrimitive\POUs\F_WriteSFixed32.TcPOU">
+    <Compile Include="WritingPrimitives\POUs\F_WriteRawByte.TcPOU">
       <SubType>Code</SubType>
       <LinkAlways>true</LinkAlways>
     </Compile>
-    <Compile Include="WritingPrimitive\POUs\F_WriteFloat.TcPOU">
+    <Compile Include="WritingPrimitives\POUs\F_WriteSInt32.TcPOU">
       <SubType>Code</SubType>
       <LinkAlways>true</LinkAlways>
     </Compile>
-    <Compile Include="WritingPrimitive\POUs\F_WriteInt32.TcPOU">
+    <Compile Include="WritingPrimitives\POUs\F_WriteSFixed32.TcPOU">
       <SubType>Code</SubType>
       <LinkAlways>true</LinkAlways>
     </Compile>
-    <Compile Include="WritingPrimitive\POUs\F_WriteFixed64.TcPOU">
+    <Compile Include="WritingPrimitives\POUs\F_WriteFloat.TcPOU">
       <SubType>Code</SubType>
       <LinkAlways>true</LinkAlways>
     </Compile>
-    <Compile Include="WritingPrimitive\POUs\F_WriteSFixed64.TcPOU">
+    <Compile Include="WritingPrimitives\POUs\F_WriteInt32.TcPOU">
       <SubType>Code</SubType>
       <LinkAlways>true</LinkAlways>
     </Compile>
-    <Compile Include="WritingPrimitive\POUs\F_WriteSInt64.TcPOU">
+    <Compile Include="WritingPrimitives\POUs\F_WriteFixed64.TcPOU">
       <SubType>Code</SubType>
       <LinkAlways>true</LinkAlways>
     </Compile>
-    <Compile Include="WritingPrimitive\POUs\F_WriteRawString.TcPOU">
+    <Compile Include="WritingPrimitives\POUs\F_WriteSFixed64.TcPOU">
       <SubType>Code</SubType>
       <LinkAlways>true</LinkAlways>
     </Compile>
-    <Compile Include="WritingPrimitive\POUs\F_WriteRawTag.TcPOU">
+    <Compile Include="WritingPrimitives\POUs\F_WriteSInt64.TcPOU">
       <SubType>Code</SubType>
       <LinkAlways>true</LinkAlways>
     </Compile>
-    <Compile Include="WritingPrimitive\POUs\F_WriteUInt32.TcPOU">
+    <Compile Include="WritingPrimitives\POUs\F_WriteRawString.TcPOU">
       <SubType>Code</SubType>
       <LinkAlways>true</LinkAlways>
     </Compile>
-    <Compile Include="WritingPrimitive\POUs\F_WriteRawLittleEndian32.TcPOU">
+    <Compile Include="WritingPrimitives\POUs\F_WriteRawTag.TcPOU">
       <SubType>Code</SubType>
       <LinkAlways>true</LinkAlways>
     </Compile>
-    <Compile Include="WritingPrimitive\POUs\F_WriteLength.TcPOU">
+    <Compile Include="WritingPrimitives\POUs\F_WriteUInt32.TcPOU">
       <SubType>Code</SubType>
       <LinkAlways>true</LinkAlways>
     </Compile>
-    <Compile Include="WritingPrimitive\POUs\F_WriteRawBytes.TcPOU">
+    <Compile Include="WritingPrimitives\POUs\F_WriteRawLittleEndian32.TcPOU">
       <SubType>Code</SubType>
       <LinkAlways>true</LinkAlways>
     </Compile>
-    <Compile Include="WritingPrimitive\POUs\F_WriteRawLittleEndian64.TcPOU">
+    <Compile Include="WritingPrimitives\POUs\F_WriteLength.TcPOU">
       <SubType>Code</SubType>
       <LinkAlways>true</LinkAlways>
     </Compile>
-    <Compile Include="WritingPrimitive\POUs\F_WriteRawVarint32.TcPOU">
+    <Compile Include="WritingPrimitives\POUs\F_WriteRawBytes.TcPOU">
       <SubType>Code</SubType>
       <LinkAlways>true</LinkAlways>
     </Compile>
-    <Compile Include="WritingPrimitive\POUs\F_WriteRawVarint64.TcPOU">
+    <Compile Include="WritingPrimitives\POUs\F_WriteRawLittleEndian64.TcPOU">
       <SubType>Code</SubType>
       <LinkAlways>true</LinkAlways>
     </Compile>
-    <Compile Include="WritingPrimitive\POUs\F_WriteString.TcPOU">
+    <Compile Include="WritingPrimitives\POUs\F_WriteRawVarint32.TcPOU">
       <SubType>Code</SubType>
       <LinkAlways>true</LinkAlways>
     </Compile>
-    <Compile Include="WritingPrimitive\POUs\F_WriteTag.TcPOU">
+    <Compile Include="WritingPrimitives\POUs\F_WriteRawVarint64.TcPOU">
       <SubType>Code</SubType>
       <LinkAlways>true</LinkAlways>
     </Compile>
-    <Compile Include="WritingPrimitive\POUs\F_WriteEnum.TcPOU">
+    <Compile Include="WritingPrimitives\POUs\F_WriteString.TcPOU">
       <SubType>Code</SubType>
       <LinkAlways>true</LinkAlways>
     </Compile>
-    <Compile Include="WritingPrimitive\POUs\F_WriteUInt64.TcPOU">
+    <Compile Include="WritingPrimitives\POUs\F_WriteTag.TcPOU">
       <SubType>Code</SubType>
       <LinkAlways>true</LinkAlways>
     </Compile>
-    <Compile Include="WritingPrimitive\POUs\F_WriteInt64.TcPOU">
+    <Compile Include="WritingPrimitives\POUs\F_WriteEnum.TcPOU">
+      <SubType>Code</SubType>
+      <LinkAlways>true</LinkAlways>
+    </Compile>
+    <Compile Include="WritingPrimitives\POUs\F_WriteUInt64.TcPOU">
+      <SubType>Code</SubType>
+      <LinkAlways>true</LinkAlways>
+    </Compile>
+    <Compile Include="WritingPrimitives\POUs\F_WriteInt64.TcPOU">
       <SubType>Code</SubType>
       <LinkAlways>true</LinkAlways>
     </Compile>
@@ -794,6 +800,7 @@
     <Folder Include="GVLs" />
     <Folder Include="DUTs" />
     <Folder Include="FieldCodec" />
+    <Folder Include="WritingPrimitivesMessages" />
     <Folder Include="ParsingPrimitivesMessages" />
     <Folder Include="ParsingPrimitivesMessages\POUs" />
     <Folder Include="POUs\ComputeSize" />
@@ -809,10 +816,11 @@
     <Folder Include="WireFormat\DUTs" />
     <Folder Include="WireFormat\GCLs" />
     <Folder Include="WireFormat\POus" />
-    <Folder Include="WritingPrimitive" />
+    <Folder Include="WritingPrimitives" />
     <Folder Include="ParsingPrimitives" />
-    <Folder Include="WritingPrimitive\DUTs" />
-    <Folder Include="WritingPrimitive\POUs" />
+    <Folder Include="WritingPrimitivesMessages\POUs" />
+    <Folder Include="WritingPrimitives\DUTs" />
+    <Folder Include="WritingPrimitives\POUs" />
     <Folder Include="__TESTs" />
     <Folder Include="Project Information" />
     <Folder Include="__TESTs\MessagesTests" />

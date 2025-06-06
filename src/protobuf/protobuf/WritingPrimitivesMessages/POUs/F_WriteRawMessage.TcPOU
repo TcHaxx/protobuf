@@ -1,0 +1,22 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1">
+  <POU Name="F_WriteRawMessage" Id="{b5cb61de-a97f-4b09-9e8a-7a4d768e256c}" SpecialFunc="None">
+    <Declaration><![CDATA[// Writes a message, without a tag. Message will be written without a length prefix.
+FUNCTION F_WriteRawMessage : HRESULT
+VAR_IN_OUT
+    fbCtx   : FB_WriteContext;     
+END_VAR
+VAR_INPUT
+    iMessage : I_Message;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[IF iMEssage = NULL THEN
+	F_WriteRawMessage := F_WriteError(stCtx:= fbCtx.refCtx, eError:= E_WriterErrorCode.InternalError);
+	RETURN;
+END_IF
+
+F_WriteRawMessage := iMessage.WriteTo(fbWriteCtx:= fbCtx);]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>

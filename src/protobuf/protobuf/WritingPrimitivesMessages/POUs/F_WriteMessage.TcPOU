@@ -1,0 +1,30 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1">
+  <POU Name="F_WriteMessage" Id="{e4751bf1-1312-4dd2-881e-ae3463ea8207}" SpecialFunc="None">
+    <Declaration><![CDATA[// Writes a message, without a tag. The data is length-prefixed.
+FUNCTION F_WriteMessage : HRESULT
+VAR_IN_OUT
+    fbCtx   : FB_WriteContext;     
+END_VAR
+VAR_INPUT
+    iMessage : I_Message;
+END_VAR
+VAR
+	nLength : UDINT;
+END_VAR]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[IF iMEssage = NULL THEN
+	F_WriteMessage := F_WriteError(stCtx:= fbCtx.refCtx, eError:= E_WriterErrorCode.InternalError);
+	RETURN;
+END_IF
+
+nLength := iMessage.CalculateSize();
+F_WriteMessage := F_WriteLength(stCtx:= fbCtx.refCtx, nLength);
+IF FAILED(F_WriteMessage) THEN
+	RETURN;
+END_IF
+
+F_WriteMessage := F_WriteRawMessage(fbCtx, iMessage);]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>
