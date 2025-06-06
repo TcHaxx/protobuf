@@ -197,8 +197,7 @@ WriteTo := fbWriteCtx.WriteRepeatedFieldUInt32(
                     anyArray:= F_ToAnyType(stExample.aUdintArray),
                     anyFirstElem:= F_ToAnyType(stExample.aUdintArray[0]),
                     nLength:= 7,
-                    nTag:= F_MakeTag(2, E_WireType.LengthDelimited));
-                    
+                    nTag:= F_MakeTag(2, E_WireType.LengthDelimited));                    
 IF FAILED(WriteTo) THEN
     RETURN;
 END_IF
@@ -210,7 +209,71 @@ END_IF
 WriteTo := fbWriteCtx.WriteInt32(stExample.nDInt2);
 IF FAILED(WriteTo) THEN
     RETURN;
-END_IF]]></ST>
+END_IF
+
+WriteTo := fbWriteCtx.WriteTag(4, E_WireType.LengthDelimited);
+IF FAILED(WriteTo) THEN
+    RETURN;
+END_IF
+WriteTo := fbWriteCtx.WriteString(stExample.sMyString);
+IF FAILED(WriteTo) THEN
+    RETURN;
+END_IF
+
+WriteTo := fbWriteCtx.WriteTag(5, E_WireType.Fixed64);
+IF FAILED(WriteTo) THEN
+    RETURN;
+END_IF
+WriteTo := fbWriteCtx.WriteFixed64(stExample.nFixed64);
+IF FAILED(WriteTo) THEN
+    RETURN;
+END_IF
+
+WriteTo := fbWriteCtx.WriteTag(6, E_WireType.Fixed64);
+IF FAILED(WriteTo) THEN
+    RETURN;
+END_IF
+WriteTo := fbWriteCtx.WriteSFixed64(stExample.nSFixed64);
+IF FAILED(WriteTo) THEN
+    RETURN;
+END_IF
+
+WriteTo := fbWriteCtx.WriteRepeatedFieldUInt32(
+            anyArray:= F_ToAnyType(stExample.aByteArray),
+            anyFirstElem:= F_ToAnyType(stExample.aByteArray[0]),
+            nLength:= 9,
+            nTag:= F_MakeTag(7, E_WireType.LengthDelimited));
+IF FAILED(WriteTo) THEN
+    RETURN;
+END_IF
+
+WriteTo := fbWriteCtx.WriteTag(8, E_WireType.Fixed32);
+IF FAILED(WriteTo) THEN
+    RETURN;
+END_IF
+WriteTo := fbWriteCtx.WriteFloat(stExample.fReal);
+IF FAILED(WriteTo) THEN
+    RETURN;
+END_IF
+
+WriteTo := fbWriteCtx.WriteRepeatedFieldDouble(
+            anyArray:= F_ToAnyType(stExample.aLReal),
+            anyFirstElem:= F_ToAnyType(stExample.aLReal[0]),
+            nLength:= 4,
+            nTag:= F_MakeTag(9, E_WireType.LengthDelimited));
+IF FAILED(WriteTo) THEN
+    RETURN;
+END_IF
+
+WriteTo := fbWriteCtx.WriteTag(10, E_WireType.LengthDelimited);
+IF FAILED(WriteTo) THEN
+    RETURN;
+END_IF
+WriteTo := fbWriteCtx.WriteBytes(aBytes:= stExample.aBytes, nLength:= 6); 
+IF FAILED(WriteTo) THEN
+    RETURN;
+END_IF
+]]></ST>
       </Implementation>
     </Method>
   </POU>
