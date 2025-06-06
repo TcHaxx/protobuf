@@ -208,6 +208,16 @@ END_VAR
 WriteLength := F_WriteLength(THIS^.stCtx, nLength);]]></ST>
       </Implementation>
     </Method>
+    <Method Name="WriteRawTag" Id="{a86dd6ed-09e8-4909-8291-9a826323973b}">
+      <Declaration><![CDATA[METHOD WriteRawTag : HRESULT
+VAR_INPUT
+	nTag    : UDINT;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[WriteRawTag := F_WriteRawTag(THIS^.stCtx, nTag);]]></ST>
+      </Implementation>
+    </Method>
     <Method Name="WriteRepeatedFieldBool" Id="{5021b455-644d-4e5d-8e2d-3fb2c93ed3cf}">
       <Declaration><![CDATA[METHOD WriteRepeatedFieldBool : HRESULT
 VAR_INPUT CONSTANT

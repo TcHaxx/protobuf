@@ -184,7 +184,7 @@ END_VAR
 ]]></Declaration>
       <Implementation>
         <ST><![CDATA[
-WriteTo := fbWriteCtx.WriteTag(1, E_WireType.LengthDelimited);
+WriteTo := fbWriteCtx.WriteRawTag(16#0A);
 IF FAILED(WriteTo) THEN
     RETURN;
 END_IF
@@ -202,7 +202,7 @@ IF FAILED(WriteTo) THEN
     RETURN;
 END_IF
 
-WriteTo := fbWriteCtx.WriteTag(3, E_WireType.Varint);
+WriteTo := fbWriteCtx.WriteRawTag(16#18);
 IF FAILED(WriteTo) THEN
     RETURN;
 END_IF
@@ -211,7 +211,7 @@ IF FAILED(WriteTo) THEN
     RETURN;
 END_IF
 
-WriteTo := fbWriteCtx.WriteTag(4, E_WireType.LengthDelimited);
+WriteTo := fbWriteCtx.WriteRawTag(16#22);
 IF FAILED(WriteTo) THEN
     RETURN;
 END_IF
@@ -220,7 +220,7 @@ IF FAILED(WriteTo) THEN
     RETURN;
 END_IF
 
-WriteTo := fbWriteCtx.WriteTag(5, E_WireType.Fixed64);
+WriteTo := fbWriteCtx.WriteRawTag(16#29);
 IF FAILED(WriteTo) THEN
     RETURN;
 END_IF
@@ -229,7 +229,7 @@ IF FAILED(WriteTo) THEN
     RETURN;
 END_IF
 
-WriteTo := fbWriteCtx.WriteTag(6, E_WireType.Fixed64);
+WriteTo := fbWriteCtx.WriteRawTag(16#31);
 IF FAILED(WriteTo) THEN
     RETURN;
 END_IF
@@ -247,7 +247,7 @@ IF FAILED(WriteTo) THEN
     RETURN;
 END_IF
 
-WriteTo := fbWriteCtx.WriteTag(8, E_WireType.Fixed32);
+WriteTo := fbWriteCtx.WriteRawTag(16#45);
 IF FAILED(WriteTo) THEN
     RETURN;
 END_IF
@@ -265,7 +265,7 @@ IF FAILED(WriteTo) THEN
     RETURN;
 END_IF
 
-WriteTo := fbWriteCtx.WriteTag(10, E_WireType.LengthDelimited);
+WriteTo := fbWriteCtx.WriteRawTag(16#52);
 IF FAILED(WriteTo) THEN
     RETURN;
 END_IF
