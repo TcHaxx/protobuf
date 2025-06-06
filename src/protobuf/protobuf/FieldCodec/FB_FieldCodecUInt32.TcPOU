@@ -36,8 +36,8 @@ IF nLength < 1 THEN
 END_IF
 
 FOR i := 0  TO nLength - 1 DO
-    anyItem.pValue := anyFirstElem.pValue + (i * TO_UDINT(anyFirstElem.diSize)); 
-    nValue := PUDINT_TO_UDINT(anyItem.pValue);
+    anyItem.pValue := anyFirstElem.pValue + (i * TO_UDINT(anyFirstElem.diSize));
+    MEMCPY(destAddr:= ADR(nValue), srcAddr:= anyItem.pValue, n:= TO_UDINT(anyFirstElem.diSize));
     nPackedDataSize := nPackedDataSize + F_ComputeUInt32Size(nValue);
 END_FOR]]></ST>
       </Implementation>
@@ -80,7 +80,8 @@ VAR
 END_VAR]]></Declaration>
       <Implementation>
         <ST><![CDATA[
-nValue := PUDINT_TO_UDINT(anyIn.pValue);
+// nValue := PUDINT_TO_UDINT(anyIn.pValue);
+MEMCPY(destAddr:= ADR(nValue), srcAddr:= anyIn.pValue, n:= TO_UDINT(anyIn.diSize));
 ValueWriter := F_WriteUInt32(stCtx, nValue);]]></ST>
       </Implementation>
     </Method>

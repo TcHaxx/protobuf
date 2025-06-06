@@ -37,7 +37,7 @@ END_IF
 
 FOR i := 0  TO nLength - 1 DO
     anyItem.pValue := anyFirstElem.pValue + (i * TO_UDINT(anyFirstElem.diSize)); 
-    nValue := PULINT_TO_ULINT(anyItem.pValue);
+    MEMCPY(destAddr:= ADR(nValue), srcAddr:= anyItem.pValue, n:= TO_UDINT(anyFirstElem.diSize));
     nPackedDataSize := nPackedDataSize + F_ComputeUInt64Size(nValue);
 END_FOR]]></ST>
       </Implementation>
@@ -80,7 +80,8 @@ VAR
 END_VAR]]></Declaration>
       <Implementation>
         <ST><![CDATA[
-nValue := PULINT_TO_ULINT(anyIn.pValue);
+// nValue := PULINT_TO_ULINT(anyIn.pValue);
+MEMCPY(destAddr:= ADR(nValue), srcAddr:= anyIn.pValue, n:= TO_UDINT(anyIn.diSize));
 ValueWriter := F_WriteUInt64(stCtx, nValue);]]></ST>
       </Implementation>
     </Method>
