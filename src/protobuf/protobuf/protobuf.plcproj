@@ -141,6 +141,9 @@
     <Compile Include="Helper\POUs\F_ParseError.TcPOU">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Helper\POUs\F_WriteError.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Helper\POUs\F_ToAnyBit.TcPOU">
       <SubType>Code</SubType>
       <LinkAlways>true</LinkAlways>

@@ -1,0 +1,20 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1">
+  <POU Name="F_WriteError" Id="{2826f101-616c-489f-8aef-9dc3fcfd43ac}" SpecialFunc="None">
+    <Declaration><![CDATA[// Sets the E_WriterErrorCode in the given ST_WriteContext.
+FUNCTION F_WriteError : E_WriterErrorCode
+VAR_IN_OUT
+    stCtx : ST_WriteContext;
+END_VAR
+VAR_INPUT
+    eError : E_WriterErrorCode;
+END_VAR]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[
+stCtx.stState.bError := TRUE;
+stCtx.stState.eWriterErrorCode := eError;
+
+F_WriteError := eError;]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>
