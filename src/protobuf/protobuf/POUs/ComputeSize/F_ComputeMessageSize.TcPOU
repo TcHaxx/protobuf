@@ -1,0 +1,23 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1">
+  <POU Name="F_ComputeMessageSize" Id="{ee9eebb3-63b9-48a3-8f47-ea53b3104af8}" SpecialFunc="None">
+    <Declaration><![CDATA[// Computes the number of bytes that would be needed to encode an
+// embedded message field, including the tag.
+FUNCTION F_ComputeMessageSize : UDINT
+VAR_INPUT
+    iMessage : I_Message;
+END_VAR
+VAR
+	nSize	: UDINT;
+END_VAR]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[
+IF iMessage = NULL THEN
+	RETURN;
+END_IF
+
+nSize := iMessage.CalculateSize();
+F_ComputeMessageSize := F_ComputeLengthSize(nSize) + nSize;]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>

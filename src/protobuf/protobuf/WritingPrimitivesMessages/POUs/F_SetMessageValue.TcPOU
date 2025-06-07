@@ -1,0 +1,28 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1">
+  <POU Name="F_SetMessageValue" Id="{4930023b-9dbb-4d90-957d-7d922826a85b}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION INTERNAL F_SetMessageValue : E_WriterErrorCode
+VAR_INPUT
+	anyValue : T_ANY;
+	iMessage : I_Message;
+END_VAR
+VAR
+	anyMessage : T_ANY;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[IF iMessage = NULL THEN
+	 F_SetMessageValue := E_WriterErrorCode.InternalError;
+	 RETURN;
+END_IF;
+
+anyMessage := iMessage.MessageValue;
+IF anyValue.diSize <> anyMessage.diSize THEN
+	 F_SetMessageValue := E_WriterErrorCode.InternalError;
+	 RETURN;
+END_IF;
+ 
+MEMCPY(destAddr:= anyMessage.pValue, srcAddr:= anyValue.pValue, n:= TO_UDINT(anyValue.diSize)); ]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>
