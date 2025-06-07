@@ -29,7 +29,7 @@ VAR
     fbFieldCodecBytes       : FB_FieldCodecBytes;
     fbFieldCodecBool        : FB_FieldCodecBool;
     
-    fbFieldCodecMessage     : FB_FieldCodecMessage;
+    fbFieldCodecMessage     : FB_FieldCodecMessage(nTag:= 0, iMessage:= NULL);
 END_VAR]]></Declaration>
     <Implementation>
       <ST><![CDATA[]]></ST>
@@ -360,7 +360,7 @@ END_VAR]]></Declaration>
     RETURN;
 END_IF
 
-THIS^.fbFieldCodecMessage.iMessage := iMessage;
+THIS^.fbFieldCodecMessage.ipMessage := iMessage;
 THIS^.fbFieldCodecMessage.pParseContext := THIS;
 ReadRepeatedFieldMessage := F_ReadRepeatedField(THIS^.stCtx, anyArray, anyFirstElem, ipFieldCodec:= THIS^.fbFieldCodecMessage, nFieldIndex); ]]></ST>
       </Implementation>

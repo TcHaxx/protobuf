@@ -1,0 +1,151 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1">
+  <POU Name="FB_RepeatedField" Id="{6273a734-0b68-4ba6-b443-f02c4e67ae6b}" SpecialFunc="None">
+    <Declaration><![CDATA[// Generic wrapper for ARRAY[*] OF T
+FUNCTION_BLOCK FINAL FB_RepeatedField IMPLEMENTS I_RepeatedField
+VAR_INPUT
+END_VAR
+VAR_OUTPUT
+END_VAR
+VAR
+	anyArrayField       : T_Any;
+    anyFirstElemField   : T_Any;
+    ipFieldCodecField	: I_FieldCodec;
+END_VAR
+VAR
+	nCapacity			: UDINT;
+	nCount				: UDINT;		// Actual number of elements in the Array
+END_VAR]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[]]></ST>
+    </Implementation>
+    <Method Name="CalculatePackedDataSize" Id="{90e54b0d-eaa3-492d-97d1-6ecfaa9fb248}">
+      <Declaration><![CDATA[{warning 'Add method implementation '}
+METHOD CalculatePackedDataSize : UDINT
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="CalculateSize" Id="{5892bb9f-d840-4406-badf-74aae82acf82}">
+      <Declaration><![CDATA[{warning 'Add method implementation '}
+METHOD CalculateSize : UDINT
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[]]></ST>
+      </Implementation>
+    </Method>
+    <Property Name="Capcacity" Id="{02f68e37-5912-4996-9507-87a873524f1a}">
+      <Declaration><![CDATA[{warning 'Add property implementation'}
+PROPERTY Capcacity : UDINT
+]]></Declaration>
+      <Get Name="Get" Id="{fb1cafc4-00dd-480e-ac47-5aefc582e3fe}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[Capcacity := nCapacity;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Method Name="ComputeCapacity" Id="{afe8a243-10c9-425f-b110-73d6acc35475}">
+      <Declaration><![CDATA[METHOD PRIVATE ComputeCapacity : UDINT
+VAR_INPUT
+END_VAR
+VAR
+	nTotalSize		: UDINT;
+	nElementSize	: UDINT;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[
+nTotalSize := TO_UDINT(anyArrayField.diSize);
+IF nTotalSize = 0 THEN
+	RETURN;
+END_IF
+
+nElementSize := TO_UDINT(anyFirstElemField.diSize);
+IF nElementSize = 0 THEN
+	RETURN;
+END_IF
+
+ComputeCapacity := nTotalSize / nElementSize;
+]]></ST>
+      </Implementation>
+    </Method>
+    <Property Name="Count" Id="{935b9e97-e1dc-4e85-a299-be6bfd0e0e76}">
+      <Declaration><![CDATA[{warning 'Add property implementation'}
+PROPERTY Count : UDINT
+]]></Declaration>
+      <Get Name="Get" Id="{7f8827ea-e9cd-4310-9284-d87e61bb67ae}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Method Name="ElementAtIndex" Id="{0c3f4543-a722-41c0-84ce-92f47960c155}">
+      <Declaration><![CDATA[METHOD ElementAtIndex : T_ANY
+VAR_INPUT
+	nIndex	: UDINT;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[ElementAtIndex := THIS^.anyFirstElemField;
+
+IF nIndex > nCapacity - 1 THEN
+	RETURN;
+END_IF
+
+ElementAtIndex := THIS^.anyFirstElemField;
+ElementAtIndex.pValue := THIS^.anyFirstElemField.pValue + (nIndex * TO_UDINT(THIS^.anyFirstElemField.diSize)); ]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="FB_Init" Id="{177fec20-a9cf-4d77-9f17-44aa33f5a0d5}">
+      <Declaration><![CDATA[//FB_Init is always available implicitly and it is used primarily for initialization.
+//The return value is not evaluated. For a specific influence, you can also declare the
+//methods explicitly and provide additional code there with the standard initialization
+//code. You can evaluate the return value.
+METHOD FB_Init: BOOL
+VAR_INPUT
+    bInitRetains: BOOL; // TRUE: the retain variables are initialized (reset warm / reset cold)
+    bInCopyCode: BOOL;  // TRUE: the instance will be copied to the copy code afterward (online change)   
+	anyArray        : T_Any;
+    anyFirstElem    : T_Any;
+    ipFieldCodec    : I_FieldCodec;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[anyArrayField       := anyArray;
+anyFirstElemField   := anyFirstElem;
+ipFieldCodecField	:= ipFieldCodec;
+
+Initialize();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Initialize" Id="{16109bc0-6856-479b-b08c-db0a5f544e10}">
+      <Declaration><![CDATA[METHOD Initialize : HRESULT
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[
+nCapacity := ComputeCapacity();
+nCount 	:= 0;]]></ST>
+      </Implementation>
+    </Method>
+    <Property Name="ipFieldCodec" Id="{af641ca7-e4a7-4470-a085-a12dba67de50}">
+      <Declaration><![CDATA[{warning 'Add property implementation'}
+PROPERTY ipFieldCodec : I_FieldCodec
+]]></Declaration>
+      <Get Name="Get" Id="{4dfee661-3c43-41f7-a9f8-05276ffe98a1}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[ipFieldCodec := ipFieldCodecField;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+  </POU>
+</TcPlcObject>

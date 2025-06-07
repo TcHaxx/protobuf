@@ -25,6 +25,8 @@ VAR
     fbFieldCodecString      : FB_FieldCodecString;
     fbFieldCodecBytes       : FB_FieldCodecBytes;
     fbFieldCodecBool        : FB_FieldCodecBool;
+	
+	fbFieldCodecMessage     : FB_FieldCodecMessage(nTag:= 0, iMessage:= NULL);
 END_VAR]]></Declaration>
     <Implementation>
       <ST><![CDATA[]]></ST>
@@ -218,6 +220,23 @@ END_VAR
         <ST><![CDATA[WriteRawTag := F_WriteRawTag(THIS^.stCtx, nTag);]]></ST>
       </Implementation>
     </Method>
+    <Method Name="WriteRepeatedField" Id="{6307f0b6-c22c-4f2d-88bb-e535047698bd}">
+      <Declaration><![CDATA[METHOD WriteRepeatedField : HRESULT
+VAR_INPUT CONSTANT
+	iRepeatedField		: I_RepeatedField; 
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[
+IF iRepeatedField = NULL AND_THEN iRepeatedField.ipFieldCodec = NULL THEN
+	WriteRepeatedField := E_WriterErrorCode.InternalError;
+	RETURN;
+END_IF
+
+iRepeatedField.ipFieldCodec.pWriteContext := THIS;
+WriteRepeatedField := F_WriteRepeatedField_1(THIS^.stCtx, iRepeatedField);
+]]></ST>
+      </Implementation>
+    </Method>
     <Method Name="WriteRepeatedFieldBool" Id="{5021b455-644d-4e5d-8e2d-3fb2c93ed3cf}">
       <Declaration><![CDATA[METHOD WriteRepeatedFieldBool : HRESULT
 VAR_INPUT CONSTANT
@@ -330,6 +349,26 @@ END_VAR
         <ST><![CDATA[
 
 WriteRepeatedFieldInt64 := F_WriteRepeatedField(THIS^.stCtx, anyArray, anyFirstElem, nLength, nTag, THIS^.fbFieldCodecInt64);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="WriteRepeatedFieldMessage" Id="{cc75cde5-d8be-4a56-991b-0bf96daaf1ac}">
+      <Declaration><![CDATA[METHOD INTERNAL WriteRepeatedFieldMessage : HRESULT
+VAR_INPUT CONSTANT
+	iMessage        : I_Message;
+    anyArray        : T_Any;
+    anyFirstElem    : T_Any; 
+    nLength         : UDINT;
+    nTag            : UDINT;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF iMessage = NULL THEN
+    WriteRepeatedFieldMessage := E_WriterErrorCode.InternalError;
+    RETURN;
+END_IF
+
+THIS^.fbFieldCodecMessage.ipMessage := iMessage;
+THIS^.fbFieldCodecMessage.pWriteContext := THIS;
+WriteRepeatedFieldMessage := F_WriteRepeatedField(THIS^.stCtx, anyArray, anyFirstElem, nLength, nTag, ipFieldCodec:= THIS^.fbFieldCodecMessage); ]]></ST>
       </Implementation>
     </Method>
     <Method Name="WriteRepeatedFieldSInt32" Id="{666d5292-259a-4c9d-92fc-58f17d5b5cc2}">

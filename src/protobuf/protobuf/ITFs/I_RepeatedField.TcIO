@@ -1,0 +1,45 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1">
+  <Itf Name="I_RepeatedField" Id="{df287fba-c0ab-4d65-bbd3-aa9b11c253c5}">
+    <Declaration><![CDATA[INTERFACE I_RepeatedField
+]]></Declaration>
+    <Method Name="CalculatePackedDataSize" Id="{e5b4cca5-e8f8-4023-8274-715fdfd4c456}">
+      <Declaration><![CDATA[METHOD CalculatePackedDataSize : UDINT
+VAR_INPUT
+END_VAR
+]]></Declaration>
+    </Method>
+    <Method Name="CalculateSize" Id="{7131302d-4e7f-40e9-ac93-ed1dc95621e5}">
+      <Declaration><![CDATA[METHOD CalculateSize : UDINT
+VAR_INPUT
+END_VAR
+]]></Declaration>
+    </Method>
+    <Property Name="Capcacity" Id="{4914541c-9d02-48cf-8983-8f50db23c15b}">
+      <Declaration><![CDATA[PROPERTY Capcacity : UDINT]]></Declaration>
+      <Get Name="Get" Id="{e9413b38-69c2-4619-af78-34c77feb1c35}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Get>
+    </Property>
+    <Property Name="Count" Id="{a7e19284-ec89-4001-9bd9-258e5e66966e}">
+      <Declaration><![CDATA[PROPERTY Count : UDINT]]></Declaration>
+      <Get Name="Get" Id="{6e0af163-7a85-41f2-a729-f468ec5e1d22}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Get>
+    </Property>
+    <Method Name="ElementAtIndex" Id="{811730db-b114-46ba-8b85-1b8fffa011d8}">
+      <Declaration><![CDATA[METHOD ElementAtIndex : T_ANY
+VAR_INPUT
+	nIndex		: UDINT;
+END_VAR
+
+]]></Declaration>
+    </Method>
+    <Property Name="ipFieldCodec" Id="{77aead32-80b0-4b85-a8ea-2e22373bbd25}">
+      <Declaration><![CDATA[PROPERTY ipFieldCodec : I_FieldCodec]]></Declaration>
+      <Get Name="Get" Id="{f7aee202-98c4-4bf3-8440-204f034e065b}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Get>
+    </Property>
+  </Itf>
+</TcPlcObject>

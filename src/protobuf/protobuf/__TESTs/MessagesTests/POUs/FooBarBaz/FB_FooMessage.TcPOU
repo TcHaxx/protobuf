@@ -30,11 +30,17 @@ message Baz
 
 VAR
 	fbMessageParser : FB_MessageParser(ipMessage:= THIS^);
-    fbMessageWriter : FB_MessageWriter(ipMessage:= THIS^);
+    fbMessageWriter : FB_MessageWriter(ipMessage:= THIS^);	  
     fbBar           : FB_BarMessage;
     fbBaz           : FB_BazMessage;
     stFoo           : ST_Foo;
     nField2Index    : UDINT; 
+END_VAR
+
+// Repeated Fields
+VAR
+	fbRepeatedBazCodec	: FB_FieldCodecMessage(nTag:= 16#0A, iMessage:= fbBaz);
+	fbRepeatedBaz		: FB_RepeatedField(anyArray:= F_ToAnyType(stFoo.baz), anyFirstElem:= F_ToAnyType(stFoo.baz[0]), ipFieldCodec:= fbRepeatedBazCodec);
 END_VAR
 ]]></Declaration>
     <Implementation>
@@ -129,8 +135,7 @@ END_VAR
       </Get>
     </Property>
     <Method Name="WriteTo" Id="{43cf5782-5084-41c2-8543-7116a19d9763}">
-      <Declaration><![CDATA[{warning 'Add method implementation '}
-(* Writes the data to the given coded output stream.*)
+      <Declaration><![CDATA[(* Writes the data to the given coded output stream.*)
 METHOD WriteTo : HRESULT
 VAR_IN_OUT
 	(* Coded output stream to write the data to. *)
@@ -138,7 +143,10 @@ VAR_IN_OUT
 END_VAR
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[]]></ST>
+        <ST><![CDATA[
+fbWriteCtx.WriteRepeatedField(fbRepeatedBaz);
+
+// fbWriteCtx.WriteRepeatedFieldMessage(iMessage:= fbBaz, F_ToAnyType(stFoo.baz), F_ToAnyType(stFoo.baz[0]), 3, nTag:= 16#12);]]></ST>
       </Implementation>
     </Method>
   </POU>

@@ -1,0 +1,39 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1">
+  <POU Name="FB_WriteRepeatedFieldMessageTests" Id="{89bc8e78-f313-44c0-ab2f-dd749b8a02dd}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK INTERNAL FB_WriteRepeatedFieldMessageTests EXTENDS FB_TestSuite
+VAR
+	fbWriteCtx		: FB_WriteContext;
+	fbFoo   		: FB_FooMessage;
+	stFoo           : ST_Foo;
+	fbFieldCodec 	: FB_FieldCodecMessage(nTag:= 16#12, iMessage:= fbFoo);
+	fbRepeatedField	: FB_RepeatedField(anyArray:= F_ToAnyType(stFoo.baz), anyFirstElem:= F_ToAnyType(stFoo.baz[0]), ipFieldCodec:= fbFieldCodec);
+	aBuffer 		: ARRAY[0..255] OF BYTE;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[TEST(__POUNAME());
+
+
+// Arrange
+fbWriteCtx.FromBuffer(aBuffer);
+stFoo.baz[0].value:= 42;
+stFoo.baz[0].name:= 'foo';
+stFoo.baz[1].value:= 6969;
+stFoo.baz[1].name:= 'bar';
+stFoo.baz[2].value:= 1337;
+stFoo.baz[2].name:= 'baz';
+F_SetMessageValue(F_ToAnyType(stFoo), fbFoo);
+
+// Act 
+fbFoo.WriteTo(fbWriteCtx);
+
+
+// Assert
+
+
+
+TEST_FINISHED_NAMED(__POUNAME());]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>

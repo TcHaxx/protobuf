@@ -13,6 +13,24 @@ VAR_OUTPUT
     nPackedDataSize : UDINT;
 END_VAR]]></Declaration>
     </Method>
+    <Property Name="EndTag" Id="{a92b111e-aec0-49cb-9779-fcd8ec50daf6}">
+      <Declaration><![CDATA[// Gets the end tag of the codec or 0 if there is no end tag
+PROPERTY EndTag : UDINT]]></Declaration>
+      <Get Name="Get" Id="{5afa8c61-e6f1-4948-b0cc-2f6e70483221}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Get>
+    </Property>
+    <Property Name="ipMessage" Id="{92c808d1-aff3-4627-bc99-ad4ab62d2e35}">
+      <Declaration><![CDATA[PROPERTY ipMessage : I_Message]]></Declaration>
+      <Get Name="Get" Id="{cabfc5d4-1ee1-4075-b96a-8797fec773c4}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Get>
+      <Set Name="Set" Id="{67e3cd2a-f90a-4681-a853-72d7d52428d9}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+      </Set>
+    </Property>
     <Method Name="IsPackedRepeatedField" Id="{d897caca-16d3-4594-8894-ca03ec47971f}">
       <Declaration><![CDATA[METHOD IsPackedRepeatedField : BOOL
 VAR_INPUT
@@ -20,5 +38,24 @@ VAR_INPUT
 END_VAR
 ]]></Declaration>
     </Method>
+    <Property Name="pParseContext" Id="{f13db6c0-8e86-41ad-a754-4dcbabcf35be}">
+      <Declaration><![CDATA[PROPERTY pParseContext : POINTER TO FB_ParseContext]]></Declaration>
+      <Set Name="Set" Id="{10950d80-91cf-47e8-90d2-6e0f79d42e4c}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Set>
+    </Property>
+    <Property Name="pWriteContext" Id="{ba40bb47-6807-46d0-ac14-339f14626dd8}">
+      <Declaration><![CDATA[PROPERTY INTERNAL pWriteContext : POINTER TO FB_WriteContext]]></Declaration>
+      <Set Name="Set" Id="{f9e3da26-62b0-4dfd-abff-5a2785228647}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Set>
+    </Property>
+    <Property Name="Tag" Id="{e61b4e4d-d298-4eca-8895-f24018afe180}">
+      <Declaration><![CDATA[// Gets the tag of the codec.
+PROPERTY Tag : UDINT]]></Declaration>
+      <Get Name="Get" Id="{f1383ff6-baa9-4880-b894-4d60b2baaa56}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Get>
+    </Property>
   </Itf>
 </TcPlcObject>

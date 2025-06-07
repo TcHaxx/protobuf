@@ -184,6 +184,9 @@
       <SubType>Code</SubType>
       <LinkAlways>true</LinkAlways>
     </Compile>
+    <Compile Include="ITFs\I_RepeatedField.TcIO">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="ITFs\I_ValueReader.TcIO">
       <SubType>Code</SubType>
     </Compile>
@@ -290,6 +293,10 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="POUs\ComputeSize\F_ComputeBoolSize.TcPOU">
+      <SubType>Code</SubType>
+      <LinkAlways>true</LinkAlways>
+    </Compile>
+    <Compile Include="POUs\ComputeSize\F_ComputeMessageSize.TcPOU">
       <SubType>Code</SubType>
       <LinkAlways>true</LinkAlways>
     </Compile>
@@ -413,6 +420,9 @@
       <SubType>Code</SubType>
       <SystemCall>true</SystemCall>
     </Compile>
+    <Compile Include="RepeatedField\FB_RepeatedField.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="RepeatedField\F_IsPackedRepeatedField.TcPOU">
       <SubType>Code</SubType>
     </Compile>
@@ -421,6 +431,10 @@
       <LinkAlways>true</LinkAlways>
     </Compile>
     <Compile Include="RepeatedField\F_WriteRepeatedField.TcPOU">
+      <SubType>Code</SubType>
+      <LinkAlways>true</LinkAlways>
+    </Compile>
+    <Compile Include="RepeatedField\F_WriteRepeatedField_1.TcPOU">
       <SubType>Code</SubType>
       <LinkAlways>true</LinkAlways>
     </Compile>
@@ -438,6 +452,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="WireFormat\POus\F_MakeTag.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="WritingPrimitivesMessages\POUs\F_SetMessageValue.TcPOU">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="WritingPrimitivesMessages\POUs\F_WriteMessage.TcPOU">
@@ -696,6 +713,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="__TESTs\RepeatedFieldTests\Write\FB_WriteRepeatedFieldInt64Tests.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="__TESTs\RepeatedFieldTests\Write\FB_WriteRepeatedFieldMessageTests.TcPOU">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="__TESTs\RepeatedFieldTests\Write\FB_WriteRepeatedFieldSInt32Tests.TcPOU">

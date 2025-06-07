@@ -9,7 +9,7 @@
 TYPE E_WriterErrorCode :
 (
 	NoError := S_OK,            // No Error.
-    InternalError := -1,        // Internal parser error.
+    InternalError := -1,        // Internal writer error.
     MalformedVarInt := -2,      // Encountered a malformed Varint.
     InvalidDataType := -3,      // Datatype not supported, e.g. F_WriteVarInt32 -> LINT
     TruncatedMessage := -4,     // Not enough space left in given buffer

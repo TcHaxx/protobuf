@@ -1,7 +1,8 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <TcPlcObject Version="1.1.0.1">
   <POU Name="F_WriteRepeatedField" Id="{5403c111-7c0c-4ce8-8ebe-b563f0195a9e}" SpecialFunc="None">
-    <Declaration><![CDATA[FUNCTION INTERNAL F_WriteRepeatedField : HRESULT
+    <Declaration><![CDATA[{attribute 'estimated-stack-usage' := '4096'}
+FUNCTION INTERNAL F_WriteRepeatedField : HRESULT
 VAR_IN_OUT
     stCtx  : ST_WriteContext;
 END_VAR
