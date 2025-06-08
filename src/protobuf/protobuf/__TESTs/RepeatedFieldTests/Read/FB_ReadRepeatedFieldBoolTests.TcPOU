@@ -21,7 +21,7 @@ VAR_INPUT
 END_VAR
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[
+        <ST><![CDATA[fbRepeatedField.Initialize();
 MEMSET(destAddr:= ADR(aActual), fillByte:= 16#0, n:= SIZEOF(aActual));]]></ST>
       </Implementation>
     </Method>
@@ -72,7 +72,7 @@ AssertEquals_UDINT(
 AssertEquals_UDINT(
     Expected:= nExpectedFieldIndex,
     Actual:= fbRepeatedField.nCount,
-    Message:= CONCAT('Expected fbRepeatedField.nCount to equal ', TO_STRING(fbRepeatedField.nCount)));
+    Message:= CONCAT('Expected fbRepeatedField.nCount to equal ', TO_STRING(nExpectedFieldIndex)));
 ]]></ST>
       </Implementation>
     </Method>

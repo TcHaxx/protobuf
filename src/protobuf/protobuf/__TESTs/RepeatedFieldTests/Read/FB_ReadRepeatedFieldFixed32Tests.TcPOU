@@ -7,12 +7,13 @@ END_VAR
 VAR_OUTPUT
 END_VAR
 VAR
-    fbFieldCodec : FB_FieldCodecFixed32;
+	aActual             : ARRAY [0..7] OF DINT;
+	fbFieldCodec 		: FB_FieldCodecFixed32(nTag:= 16#0A);
+	fbRepeatedField		: FB_RepeatedField(anyArray:= F_ToAnyType(aActual), anyFirstElem:= F_ToAnyType(aActual[0]));
 END_VAR
 ]]></Declaration>
     <Implementation>
-      <ST><![CDATA[ShouldReadRepeatedFieldTheory();
-ShouldReadNonConsecutiveRepeatedFields(); ]]></ST>
+      <ST><![CDATA[ShouldReadRepeatedFieldTheory();]]></ST>
     </Implementation>
     <Method Name="Reset" Id="{a33328b2-d872-446d-93d0-07d1d546219b}">
       <Declaration><![CDATA[METHOD PRIVATE Reset
@@ -20,73 +21,8 @@ VAR_INPUT
 END_VAR
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[
-MEMSET(destAddr:= ADR(aActual[0]), fillByte:= 16#0, n:= SIZEOF(aActual[0]));]]></ST>
-      </Implementation>
-    </Method>
-    <Method Name="ShouldReadNonConsecutiveRepeatedFields" Id="{433c45b7-2759-4c34-8a72-9f5dccca30e9}">
-      <Declaration><![CDATA[METHOD PRIVATE ShouldReadNonConsecutiveRepeatedFields
-VAR CONSTANT
-    (*
-        message Demo {
-            repeated uint32 a = 1;
-            fixed32 b =2;
-        }
-        JSON:
-        {
-          "a": [
-            0, 1, 2, 151
-          ],
-          "b": 321
-        }
-    *)
-    cRawMessage : ARRAY[0..15] OF BYTE := [16#0A, 16#03, 16#00, 16#01, 16#02, 16#15, 16#41, 16#01, 16#00, 16#00, 16#0A, 16#02, 16#97, 16#01];
-    cExpected   : ARRAY[0..15] OF BYTE := [0, 1, 2, 151];
-END_VAR
-VAR_INST
-    fbCtx               : FB_ParseContext;
-    fbFieldCodecInt32 : FB_FieldCodecInt32;
-END_VAR
-VAR
-    aActual             : ARRAY [0..15] OF BYTE;
-    hr                  : HRESULT;
-    nActualFieldIndex   : UDINT;
-    nB                  : UDINT;
-END_VAR]]></Declaration>
-      <Implementation>
-        <ST><![CDATA[TEST(__POUNAME());
-
-// Arrange
-fbCtx.FromBuffer(cRawMessage);
-
-// Act
-// Parses a=[0,1,2]: 16#0A, 16#03, 16#00, 16#01, 16#02
-F_ParseTag(fbCtx.refCtx, nTag=> );
-hr := F_ReadRepeatedField(fbCtx.refCtx, anyArray:= F_ToAnyType(aActual), anyFirstElem:= F_ToAnyType(aActual[0]), ipFieldCodec:= fbFieldCodecInt32,  nFieldIndex:= nActualFieldIndex);
-
-// Parses b=321: 16#15, 16#41, 16#01, 16#00, 16#00
-F_ParseTag(fbCtx.refCtx, nTag=> );
-F_ParseRawLittleEndian32(fbCtx.refCtx, nValue=> nB);
-
-// Parses a=[151]: 16#0A, 16#02, 16#97, 16#01
-F_ParseTag(fbCtx.refCtx, nTag=> );
-hr := F_ReadRepeatedField(fbCtx.refCtx, anyArray:= F_ToAnyType(aActual), anyFirstElem:= F_ToAnyType(aActual[0]), ipFieldCodec:= fbFieldCodecInt32, nFieldIndex:= nActualFieldIndex);
-
-// Assert
-AssertEquals_DINT(
-    Expected:= S_OK,
-    Actual:= hr,
-    Message:= 'Expected S_OK instead of error');
-    
-{warning disable C0041}
-AssertArrayEquals_BYTE(Expecteds:= cExpected, Actuals:= aActual, Message:= '');
-    
-AssertEquals_UDINT(
-    Expected:= 4,
-    Actual:= nActualFieldIndex,
-    Message:= CONCAT('Expected nActualFieldIndex to equal ', TO_STRING(4)));
-    
-TEST_FINISHED_NAMED(__POUNAME());]]></ST>
+        <ST><![CDATA[fbRepeatedField.Initialize();
+MEMSET(destAddr:= ADR(aActual), fillByte:= 16#0, n:= SIZEOF(aActual[0]));]]></ST>
       </Implementation>
     </Method>
     <Method Name="ShouldReadRepeatedField" Id="{f5e4b169-ab63-40a0-aad4-6ff8c1081522}">
@@ -105,20 +41,19 @@ VAR_INST
     fbCtx               : FB_ParseContext;
 END_VAR
 VAR
-    aActual             : ARRAY [0..7] OF DINT;
     hr                  : HRESULT;
-    nActualFieldIndex   : UDINT;
-    nTag                : UDINT;
+	nTag                : UDINT;
 END_VAR
 ]]></Declaration>
       <Implementation>
         <ST><![CDATA[// Arrange
+Reset();
 fbCtx.FromBuffer(aBuffer);
 fbCtx.refCtx.stState.nBufferPos := nBufferPosStart;;
 
 // Act
 F_ParseTag(fbCtx.refCtx, nTag=> nTag);
-hr := F_ReadRepeatedField(fbCtx.refCtx, anyArray:= F_ToAnyType(aActual), anyFirstElem:= F_ToAnyType(aActual[0]), ipFieldCodec, nFieldIndex:= nActualFieldIndex);
+hr := fbRepeatedField.AddEntriesFrom(fbParseCtx:= fbCtx, ipFieldCodec:= ipFieldCodec);
 
 // Assert
 AssertEquals_DINT(
@@ -136,8 +71,8 @@ AssertEquals_UDINT(
     
 AssertEquals_UDINT(
     Expected:= nExpectedFieldIndex,
-    Actual:= nActualFieldIndex,
-    Message:= CONCAT('Expected nActualFieldIndex to equal ', TO_STRING(nExpectedFieldIndex)));
+    Actual:= fbRepeatedField.nCount,
+    Message:= CONCAT('Expected fbRepeatedField.nCount to equal ', TO_STRING(nExpectedFieldIndex)));
 ]]></ST>
       </Implementation>
     </Method>

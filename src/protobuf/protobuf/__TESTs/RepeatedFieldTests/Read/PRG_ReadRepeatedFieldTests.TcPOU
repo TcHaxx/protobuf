@@ -6,10 +6,10 @@ PROGRAM INTERNAL PRG_ReadRepeatedFieldTests
 {IF defined (UNIT_TEST)}
 	fbReadRepeatedFieldBoolTests    : FB_ReadRepeatedFieldBoolTests;
 	fbReadRepeatedFieldBytesTests   : FB_ReadRepeatedFieldBytesTests;
-//     fbReadRepeatedFieldUint32Tests  : FB_ReadRepeatedFieldUint32Tests;
-//     fbReadRepeatedFieldFixed32Tests : FB_ReadRepeatedFieldFixed32Tests;
-//     fbReadRepeatedFieldFixed64Tests : FB_ReadRepeatedFieldFixed64Tests;
-//     fbReadRepeatedFieldStringTests  : FB_ReadRepeatedFieldStringTests;
+    fbReadRepeatedFieldUint32Tests  : FB_ReadRepeatedFieldUint32Tests;
+    fbReadRepeatedFieldFixed32Tests : FB_ReadRepeatedFieldFixed32Tests;
+    fbReadRepeatedFieldFixed64Tests : FB_ReadRepeatedFieldFixed64Tests;
+    fbReadRepeatedFieldStringTests  : FB_ReadRepeatedFieldStringTests;
 {END_IF}]]></Declaration>
     <Implementation>
       <ST><![CDATA[]]></ST>

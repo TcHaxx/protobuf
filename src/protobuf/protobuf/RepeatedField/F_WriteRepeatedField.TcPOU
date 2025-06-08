@@ -25,7 +25,7 @@ END_VAR
     RETURN;
 END_IF
 
-IF ipRepeatedField.nCapcacity = 0 THEN
+IF ipRepeatedField.nCapcacity = 0 OR ipRepeatedField.nCount = 0 THEN
 	RETURN;
 END_IF
 
@@ -41,7 +41,11 @@ IF ipRepeatedField.ipFieldCodec.IsPackedRepeatedField(nTag)  THEN
         RETURN;
     END_IF
     
-    nPackedDataSize := ipRepeatedField.CalculatePackedDataSize();
+    hr := ipRepeatedField.CalculatePackedDataSize(nPackedDataSize=> nPackedDataSize);
+	IF FAILED(hr) THEN
+        F_WriteRepeatedField := hr;
+        RETURN;
+    END_IF
     
     hr := F_WriteLength(stCtx, nPackedDataSize);
     IF FAILED(hr) THEN
@@ -49,12 +53,7 @@ IF ipRepeatedField.ipFieldCodec.IsPackedRepeatedField(nTag)  THEN
         RETURN;
     END_IF
     
-    IF ipRepeatedField.nCapcacity < 1 THEN
-        RETURN;
-    END_IF
-    
-    
-    FOR i := 0 TO ipRepeatedField.nCapcacity - 1 DO
+    FOR i := 0 TO ipRepeatedField.nCount - 1 DO
  		anyItem := ipRepeatedField.ElementAtIndex(i);
         hr := ipRepeatedField.ipFieldCodec.ValueWriter(stCtx, anyItem);
         IF FAILED(hr) THEN
@@ -65,8 +64,7 @@ IF ipRepeatedField.ipFieldCodec.IsPackedRepeatedField(nTag)  THEN
     
 ELSE    
    // Not packed: a simple tag/value pair for each value.
- 
-    FOR i := 0 TO ipRepeatedField.nCapcacity - 1 DO
+    FOR i := 0 TO ipRepeatedField.nCount - 1 DO
 		
 		// Write Tag
         hr := F_WriteRawVarint32(stCtx, nTag);

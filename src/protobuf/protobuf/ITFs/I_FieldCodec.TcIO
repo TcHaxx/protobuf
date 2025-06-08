@@ -19,6 +19,11 @@ PROPERTY EndTag : UDINT]]></Declaration>
       <Get Name="Get" Id="{5afa8c61-e6f1-4948-b0cc-2f6e70483221}">
         <Declaration><![CDATA[]]></Declaration>
       </Get>
+      <Set Name="Set" Id="{f88ba73b-6aa7-4c04-8e4c-1b00d6dce91d}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+      </Set>
     </Property>
     <Property Name="ipMessage" Id="{92c808d1-aff3-4627-bc99-ad4ab62d2e35}">
       <Declaration><![CDATA[PROPERTY ipMessage : I_Message]]></Declaration>
@@ -44,6 +49,11 @@ PROPERTY Tag : UDINT]]></Declaration>
       <Get Name="Get" Id="{f1383ff6-baa9-4880-b894-4d60b2baaa56}">
         <Declaration><![CDATA[]]></Declaration>
       </Get>
+      <Set Name="Set" Id="{4d32ec2a-1686-4cb4-b0b6-9988eb104355}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+      </Set>
     </Property>
   </Itf>
 </TcPlcObject>

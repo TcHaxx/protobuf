@@ -22,7 +22,7 @@ VAR_INPUT
 END_VAR
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[
+        <ST><![CDATA[fbRepeatedField.Initialize();
 MEMSET(destAddr:= ADR(aActual), fillByte:= 16#0, n:= SIZEOF(aActual));]]></ST>
       </Implementation>
     </Method>

@@ -10,12 +10,17 @@ VAR
     aBuffer         	: ARRAY[0..255] OF BYTE;
     hrWriterActual  	: HRESULT;
     hrParserActual  	: HRESULT;
-    aActuals, aValues	: ARRAY[0..7] OF ULINT ;
-	nFieldIndex			: UDINT;
+	aActuals,aValues	: ARRAY[0..7] OF ULINT ;
 	nActualTag			: UDINT;
 	nExpectedTag	    : UDINT;
 	fbParseCtx_SUT      : FB_ParseContext;
 	fbWriteCtx_SUT      : FB_WriteContext;
+	fbFieldCodec 		: FB_FieldCodecUint64(nTag:= F_MakeTag(nFieldNumber:= 3, eWireType:= E_WireType.LengthDelimited));
+	fbRepeatedField_Write : FB_RepeatedField(anyArray:= F_ToAnyType(aValues), anyFirstElem:= F_ToAnyType(aValues[0]));
+	fbRepeatedField_Parse : FB_RepeatedField(anyArray:= F_ToAnyType(aActuals), anyFirstElem:= F_ToAnyType(aActuals[0]));	
+END_VAR
+VAR_TEMP
+	i : INT;
 END_VAR]]></Declaration>
     <Implementation>
       <ST><![CDATA[TEST(__POUNAME());
@@ -23,29 +28,22 @@ END_VAR]]></Declaration>
 // Arrange
 nExpectedTag := F_MakeTag(nFieldNumber:= 3, eWireType:= E_WireType.LengthDelimited);
 aValues := cExpected;
-
+fbRepeatedField_Write.InitializeFromArray(anyArray:= F_ToAnyType(aValues), anyFirstElem:= F_ToAnyType(aValues[0]), nCount:= 5);
 fbWriteCtx_SUT.FromBuffer(aBuffer);
 fbParseCtx_SUT.FromBuffer(aBuffer);
 
 // Act
 
-hrWriterActual := fbWriteCtx_SUT.WriteRepeatedFieldUInt64(
-					anyArray:= F_ToAnyType(aValues),
-					anyFirstElem:= F_ToAnyType(aValues[0]), 
-					nLength:= 5,
-					nTag:= nExpectedTag);
-
+hrWriterActual := fbRepeatedField_Write.WriteTo(fbWriteCtx_SUT, fbFieldCodec);
 fbParseCtx_SUT.ReadTag(nTag=> nActualTag);
-hrParserActual := fbParseCtx_SUT.ReadRepeatedFieldUint64(
-					anyArray:= F_ToAnyType(aActuals),
-					anyFirstElem:= F_ToAnyType(aActuals[0]),
-					nFieldIndex:= nFieldIndex);
+hrParserActual := fbRepeatedField_Parse.AddEntriesFrom(fbParseCtx_SUT, fbFieldCodec);
+
 // Assert
 
 AssertEquals_DINT(Expected:= S_OK, Actual:= hrWriterActual, Message:= 'Expected hrWriterActual = S_OK');
 AssertEquals_DINT(Expected:= S_OK, Actual:= hrParserActual, Message:= 'Expected hrParserActual = S_OK');
 AssertEquals_UDINT(Expected:= nExpectedTag, Actual:= nActualTag, Message:= 'Expeced nActualTag to equal nExpectedTag.');
-AssertEquals_UDINT(Expected:= cExpectedFieldIndex, Actual:= nFieldIndex, Message:= 'Expeced nFieldIndex to equal cExpectedFieldIndex.');
+AssertEquals_UDINT(Expected:= cExpectedFieldIndex, Actual:= fbRepeatedField_Parse.nCount, Message:= 'Expeced fbRepeatedField_Parse.nCount to equal cExpectedFieldIndex.');
 {warning disable C0041}
 AssertArrayEquals_ULINT(Expecteds:= cExpected, Actuals:= aActuals, Message:= '');
 

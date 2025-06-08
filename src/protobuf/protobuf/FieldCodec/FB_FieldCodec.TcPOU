@@ -44,6 +44,15 @@ END_VAR
           <ST><![CDATA[EndTag := THIS^.nEndTagField;]]></ST>
         </Implementation>
       </Get>
+      <Set Name="Set" Id="{97706bdf-9008-4e69-a7fa-e305ca386419}">
+        <Declaration><![CDATA[
+VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[THIS^.nEndTagField := EndTag;]]></ST>
+        </Implementation>
+      </Set>
     </Property>
     <Method Name="FB_Init" Id="{16d4c543-9c15-4ce2-a3cc-687ffea975c7}">
       <Declaration><![CDATA[//FB_Init is always available implicitly and it is used primarily for initialization.
@@ -105,6 +114,15 @@ END_VAR
           <ST><![CDATA[Tag := THIS^.nTagField;]]></ST>
         </Implementation>
       </Get>
+      <Set Name="Set" Id="{3401ac34-7798-4468-9426-a31d0ce1ab1c}">
+        <Declaration><![CDATA[
+VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[THIS^.nTagField := Tag;]]></ST>
+        </Implementation>
+      </Set>
     </Property>
     <Method Name="ValueReader" Id="{94e8bf03-4b1f-459b-9d24-d4a8f124423a}">
       <Declaration><![CDATA[{attribute 'no-analysis'}

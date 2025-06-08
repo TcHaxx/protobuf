@@ -38,11 +38,20 @@ AddEntriesFrom := F_ReadRepeatedField(stCtx:= refCtx, ipRepeatedField:= THIS^);]
       </Implementation>
     </Method>
     <Method Name="CalculatePackedDataSize" Id="{90e54b0d-eaa3-492d-97d1-6ecfaa9fb248}">
-      <Declaration><![CDATA[{warning 'Add method implementation '}
-METHOD CalculatePackedDataSize : UDINT
-]]></Declaration>
+      <Declaration><![CDATA[METHOD CalculatePackedDataSize : HRESULT
+VAR_OUTPUT
+    nPackedDataSize : UDINT;
+END_VAR]]></Declaration>
       <Implementation>
-        <ST><![CDATA[]]></ST>
+        <ST><![CDATA[IF ipFieldCodecField = NULL OR THIS^.anyFirstElemField.pValue = NULL THEN
+	CalculatePackedDataSize := E_WriterErrorCode.InternalError;
+	RETURN;
+END_IF
+
+CalculatePackedDataSize := ipFieldCodecField.CalculatePackedDataSize(
+								anyFirstElem:= THIS^.anyFirstElemField,
+								nLength:= THIS^.nCount,
+								nPackedDataSize=> nPackedDataSize);]]></ST>
       </Implementation>
     </Method>
     <Method Name="CalculateSize" Id="{5892bb9f-d840-4406-badf-74aae82acf82}">
@@ -122,6 +131,24 @@ END_VAR
         <ST><![CDATA[
 nCapacityField := ComputeCapacity();
 nCountField 	:= 0;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="InitializeFromArray" Id="{253eea7f-9927-4d4d-be14-2b1ec6c2f700}">
+      <Declaration><![CDATA[METHOD InitializeFromArray : HRESULT
+VAR_INPUT
+	anyArray        : T_Any;
+    anyFirstElem    : T_Any;
+	nCount			: UDINT;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[anyArrayField       := anyArray;
+anyFirstElemField   := anyFirstElem;
+
+Initialize();
+IF nCount <= THIS^.nCapacityField THEN
+	THIS^.nCountField := nCount;
+END_IF]]></ST>
       </Implementation>
     </Method>
     <Property Name="ipFieldCodec" Id="{af641ca7-e4a7-4470-a085-a12dba67de50}">

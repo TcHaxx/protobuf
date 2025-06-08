@@ -4,8 +4,9 @@
     <Declaration><![CDATA[INTERFACE I_RepeatedField
 ]]></Declaration>
     <Method Name="CalculatePackedDataSize" Id="{e5b4cca5-e8f8-4023-8274-715fdfd4c456}">
-      <Declaration><![CDATA[METHOD CalculatePackedDataSize : UDINT
-VAR_INPUT
+      <Declaration><![CDATA[METHOD CalculatePackedDataSize : HRESULT
+VAR_OUTPUT
+    nPackedDataSize : UDINT;
 END_VAR
 ]]></Declaration>
     </Method>
