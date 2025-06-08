@@ -1,0 +1,138 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1">
+  <POU Name="FB_FieldCodec" Id="{6f6b06a5-a8a9-4112-8bc8-645fce5ed92c}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK INTERNAL ABSTRACT FB_FieldCodec IMPLEMENTS I_FieldCodec
+VAR_INPUT
+END_VAR
+VAR_OUTPUT
+END_VAR
+VAR	
+	nTagField				: UDINT;
+	nEndTagField			: UDINT;
+    ipMessageField          : I_Message;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[]]></ST>
+    </Implementation>
+    <Method Name="CalculatePackedDataSize" Id="{eba1a773-8167-4bdb-aaa6-213f64cdea6c}">
+      <Declaration><![CDATA[{attribute 'no-analysis'}
+METHOD ABSTRACT CalculatePackedDataSize : HRESULT
+VAR_INPUT
+	anyFirstElem	: T_Any;
+	(* items to write*)
+	nLength	: UDINT;
+END_VAR
+VAR_OUTPUT
+	nPackedDataSize	: UDINT;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[]]></ST>
+      </Implementation>
+    </Method>
+    <Property Name="EndTag" Id="{7644fe42-2647-46e2-b811-2142c17e2a15}">
+      <Declaration><![CDATA[{warning 'Add property implementation'}
+(* Gets the end tag of the codec or 0 if there is no end tag*)
+PROPERTY EndTag : UDINT
+]]></Declaration>
+      <Get Name="Get" Id="{b15dc5fa-8a08-4a7d-a223-d7a42fa20cf7}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[EndTag := THIS^.nEndTagField;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Method Name="FB_Init" Id="{16d4c543-9c15-4ce2-a3cc-687ffea975c7}">
+      <Declaration><![CDATA[//FB_Init is always available implicitly and it is used primarily for initialization.
+//The return value is not evaluated. For a specific influence, you can also declare the
+//methods explicitly and provide additional code there with the standard initialization
+//code. You can evaluate the return value.
+METHOD FB_Init: BOOL
+VAR_INPUT
+    bInitRetains: BOOL; // TRUE: the retain variables are initialized (reset warm / reset cold)
+    bInCopyCode: BOOL;  // TRUE: the instance will be copied to the copy code afterward (online change)
+	nTag : UDINT;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[THIS^.nTagField := nTag;]]></ST>
+      </Implementation>
+    </Method>
+    <Property Name="ipMessage" Id="{87ab2de9-fddd-4bb7-8ba5-30028794b2ca}">
+      <Declaration><![CDATA[// The I_Message for this FieldCodec
+PROPERTY ipMessage : I_Message
+]]></Declaration>
+      <Get Name="Get" Id="{a7b6b2dd-0fbc-4fb4-9524-7e9116364345}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[ipMessage := THIS^.ipMessageField;]]></ST>
+        </Implementation>
+      </Get>
+      <Set Name="Set" Id="{912eb063-e4b5-41b4-a5cc-a2f9442b3648}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[THIS^.ipMessageField := ipMessage;]]></ST>
+        </Implementation>
+      </Set>
+    </Property>
+    <Method Name="IsPackedRepeatedField" Id="{526d0a88-3154-4737-9e80-8d4a872f9c83}">
+      <Declaration><![CDATA[{attribute 'no-analysis'}
+METHOD ABSTRACT IsPackedRepeatedField : BOOL
+VAR_INPUT
+	nTag	: UDINT;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[]]></ST>
+      </Implementation>
+    </Method>
+    <Property Name="Tag" Id="{ca6415b5-e709-4327-aee2-f3dc4fe3c7b1}">
+      <Declaration><![CDATA[{warning 'Add property implementation'}
+(* Gets the tag of the codec.*)
+PROPERTY Tag : UDINT
+]]></Declaration>
+      <Get Name="Get" Id="{5d751c95-c1a2-4d05-b6fb-522a0897af45}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[Tag := THIS^.nTagField;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Method Name="ValueReader" Id="{94e8bf03-4b1f-459b-9d24-d4a8f124423a}">
+      <Declaration><![CDATA[{attribute 'no-analysis'}
+METHOD ABSTRACT ValueReader : HRESULT
+VAR_IN_OUT
+	stCtx	: ST_ParseContext;
+END_VAR
+VAR_OUTPUT
+	anyOut	: T_Any;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="ValueWriter" Id="{247f3b40-a101-431e-aac2-ae10ff555ab4}">
+      <Declaration><![CDATA[{attribute 'no-analysis'}
+METHOD ABSTRACT ValueWriter : HRESULT
+VAR_IN_OUT
+	stCtx	: ST_WriteContext;
+END_VAR
+VAR_INPUT
+	anyIn	: T_ANY;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[]]></ST>
+      </Implementation>
+    </Method>
+  </POU>
+</TcPlcObject>

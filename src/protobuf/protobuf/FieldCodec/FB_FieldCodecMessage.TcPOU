@@ -1,16 +1,12 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <TcPlcObject Version="1.1.0.1">
   <POU Name="FB_FieldCodecMessage" Id="{2b6842e3-d7c2-44a7-bf52-c88156fac8f3}" SpecialFunc="None">
-    <Declaration><![CDATA[FUNCTION_BLOCK FB_FieldCodecMessage IMPLEMENTS I_FieldCodec
+    <Declaration><![CDATA[FUNCTION_BLOCK FB_FieldCodecMessage Extends FB_FieldCodec
 VAR_INPUT
 END_VAR
 VAR_OUTPUT
 END_VAR
 VAR
-    pParseContextField      : POINTER TO FB_ParseContext;
-	pWriteContextField      : POINTER TO FB_WriteContext;
-	nTagField				: UDINT;
-    ipMessageField          : I_Message;
 END_VAR
 ]]></Declaration>
     <Implementation>
@@ -31,19 +27,6 @@ END_VAR]]></Declaration>
 CalculatePackedDataSize := 0;]]></ST>
       </Implementation>
     </Method>
-    <Property Name="EndTag" Id="{940dffed-6254-4c19-9f1d-6e85fd06e7bc}">
-      <Declaration><![CDATA[(* Gets the end tag of the codec or 0 if there is no end tag*)
-PROPERTY EndTag : UDINT
-]]></Declaration>
-      <Get Name="Get" Id="{7d812845-cd82-4cdc-a278-333028d28f90}">
-        <Declaration><![CDATA[VAR
-END_VAR
-]]></Declaration>
-        <Implementation>
-          <ST><![CDATA[EndTag := 0;]]></ST>
-        </Implementation>
-      </Get>
-    </Property>
     <Method Name="FB_Init" Id="{f867bdfb-12c8-48a6-b5a1-7d0c3441f26d}">
       <Declaration><![CDATA[//FB_Init is always available implicitly and it is used primarily for initialization.
 //The return value is not evaluated. For a specific influence, you can also declare the
@@ -54,32 +37,13 @@ VAR_INPUT
     bInitRetains: BOOL; // TRUE: the retain variables are initialized (reset warm / reset cold)
     bInCopyCode: BOOL;  // TRUE: the instance will be copied to the copy code afterward (online change)
 	nTag : UDINT;	
-	iMessage : I_Message;
+	ipMessage : I_Message;
 END_VAR]]></Declaration>
       <Implementation>
         <ST><![CDATA[nTagField := nTag;
-ipMessageField := iMessage;]]></ST>
+ipMessageField := ipMessage;]]></ST>
       </Implementation>
     </Method>
-    <Property Name="ipMessage" Id="{23ab3e77-82ae-4780-9b51-b8b8ae077f9a}">
-      <Declaration><![CDATA[PROPERTY ipMessage : I_Message]]></Declaration>
-      <Get Name="Get" Id="{54737248-7341-4b46-8d1e-42a9486a6989}">
-        <Declaration><![CDATA[VAR
-END_VAR
-]]></Declaration>
-        <Implementation>
-          <ST><![CDATA[ipMessage := THIS^.ipMessageField; ]]></ST>
-        </Implementation>
-      </Get>
-      <Set Name="Set" Id="{39a8062a-b191-4603-bf39-3e1cc2eca4db}">
-        <Declaration><![CDATA[VAR
-END_VAR
-]]></Declaration>
-        <Implementation>
-          <ST><![CDATA[THIS^.ipMessageField := ipMessage;]]></ST>
-        </Implementation>
-      </Set>
-    </Property>
     <Method Name="IsPackedRepeatedField" Id="{695c89eb-30cc-4511-b56e-38db99a5dc46}">
       <Declaration><![CDATA[METHOD IsPackedRepeatedField : BOOL
 VAR_INPUT
@@ -92,42 +56,6 @@ END_VAR
 IsPackedRepeatedField := FALSE;]]></ST>
       </Implementation>
     </Method>
-    <Property Name="pParseContext" Id="{6cc0950c-7450-4135-aa7a-339972992a02}">
-      <Declaration><![CDATA[PROPERTY pParseContext : POINTER TO FB_ParseContext]]></Declaration>
-      <Set Name="Set" Id="{ed989bc5-21af-4f93-91f0-75a12c07147a}">
-        <Declaration><![CDATA[VAR
-END_VAR
-]]></Declaration>
-        <Implementation>
-          <ST><![CDATA[THIS^.pParseContextField := pParseContext;]]></ST>
-        </Implementation>
-      </Set>
-    </Property>
-    <Property Name="pWriteContext" Id="{e59b11f4-34e3-4624-9b61-f55dc63af9fb}">
-      <Declaration><![CDATA[PROPERTY pWriteContext : POINTER TO FB_WriteContext
-]]></Declaration>
-      <Set Name="Set" Id="{075c5db4-db34-4bf4-8f00-3713ef3a0baa}">
-        <Declaration><![CDATA[VAR
-END_VAR
-]]></Declaration>
-        <Implementation>
-          <ST><![CDATA[THIS^.pWriteContextField := pWriteContext;]]></ST>
-        </Implementation>
-      </Set>
-    </Property>
-    <Property Name="Tag" Id="{cdff8583-ac62-43a7-bfde-54a03ee5e98e}">
-      <Declaration><![CDATA[(* Gets the tag of the codec.*)
-PROPERTY Tag : UDINT
-]]></Declaration>
-      <Get Name="Get" Id="{85679d2f-b3f6-488e-af17-128f175ce9f2}">
-        <Declaration><![CDATA[VAR
-END_VAR
-]]></Declaration>
-        <Implementation>
-          <ST><![CDATA[Tag := nTagField;]]></ST>
-        </Implementation>
-      </Get>
-    </Property>
     <Method Name="ValueReader" Id="{e4223324-5674-4c82-b149-f3471b33ed03}">
       <Declaration><![CDATA[
 METHOD ValueReader : HRESULT
@@ -139,15 +67,15 @@ VAR_OUTPUT
 END_VAR]]></Declaration>
       <Implementation>
         <ST><![CDATA[
-IF THIS^.pParseContextField = NULL THEN
+IF stCtx.pCurrentContext = NULL THEN
     ValueReader := F_ParseError(stCtx, E_ParserErrorCode.InternalError);
     RETURN;
 END_IF
 
-THIS^.pParseContextField^.InitializeFromState(stBuffer:= stCtx.stBuffer, stState:= stCtx.stState);
-ValueReader := F_ReadMessage(fbCtx:= THIS^.pParseContextField^, iMessage:= THIS^.ipMessageField);
+stCtx.pCurrentContext^.InitializeFromState(stBuffer:= stCtx.stBuffer, stState:= stCtx.stState);
+ValueReader := F_ReadMessage(fbCtx:= stCtx.pCurrentContext^, iMessage:= THIS^.ipMessageField);
 anyOut := THIS^.ipMessageField.MessageValue;
-stCtx.stState := THIS^.pParseContextField^.refCtx.stState;]]></ST>
+stCtx.stState := stCtx.pCurrentContext^.refCtx.stState;]]></ST>
       </Implementation>
     </Method>
     <Method Name="ValueWriter" Id="{fdb65b05-c4a7-47c5-9055-cbbc790d5d7d}">
@@ -163,12 +91,12 @@ VAR
 END_VAR]]></Declaration>
       <Implementation>
         <ST><![CDATA[
-IF THIS^.pWriteContextField = NULL THEN
-    ValueWriter := F_WriteError(stCtx, E_WriterErrorCode.InternalError);
-    RETURN;
-END_IF
-
-THIS^.pWriteContextField^.InitializeFromState(stBuffer:= stCtx.stBuffer, stState:= stCtx.stState);
+// IF THIS^.pWriteContextField = NULL THEN
+//     ValueWriter := F_WriteError(stCtx, E_WriterErrorCode.InternalError);
+//     RETURN;
+// END_IF
+// 
+// THIS^.pWriteContextField^.InitializeFromState(stBuffer:= stCtx.stBuffer, stState:= stCtx.stState);
 
 
 eErrorCode := F_SetMessageValue(anyValue:= anyIn, iMessage:= THIS^.ipMessageField);
@@ -177,7 +105,8 @@ IF FAILED(eErrorCode) THEN
 	RETURN;
 END_IF
 
-ValueWriter := F_WriteMessage(fbCtx:= THIS^.pWriteContextField^, THIS^.ipMessageField);]]></ST>
+// ValueWriter := F_WriteMessage(fbCtx:= THIS^.pWriteContextField^, THIS^.ipMessageField);
+ValueWriter := F_WriteMessage(stCtx:= stCtx, THIS^.ipMessageField);]]></ST>
       </Implementation>
     </Method>
   </POU>

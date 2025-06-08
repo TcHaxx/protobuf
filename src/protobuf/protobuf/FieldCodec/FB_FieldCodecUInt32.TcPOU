@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <TcPlcObject Version="1.1.0.1">
   <POU Name="FB_FieldCodecUInt32" Id="{65e787ec-494b-4a47-a750-1e70e9a278a2}" SpecialFunc="None">
-    <Declaration><![CDATA[FUNCTION_BLOCK FB_FieldCodecUInt32 IMPLEMENTS I_FieldCodec
+    <Declaration><![CDATA[FUNCTION_BLOCK FB_FieldCodecUInt32 EXTENDS FB_FieldCodec
 VAR_INPUT
 END_VAR
 VAR_OUTPUT
@@ -42,41 +42,6 @@ FOR i := 0  TO nLength - 1 DO
 END_FOR]]></ST>
       </Implementation>
     </Method>
-    <Property Name="EndTag" Id="{7feb5c2d-0808-494e-8653-8ddce408334a}">
-      <Declaration><![CDATA[{warning 'Add property implementation'}
-(* Gets the end tag of the codec or 0 if there is no end tag*)
-PROPERTY EndTag : UDINT
-]]></Declaration>
-      <Get Name="Get" Id="{4635e539-8b21-44bb-8db7-95c56c9f6a5e}">
-        <Declaration><![CDATA[VAR
-END_VAR
-]]></Declaration>
-        <Implementation>
-          <ST><![CDATA[]]></ST>
-        </Implementation>
-      </Get>
-    </Property>
-    <Property Name="ipMessage" Id="{68d2377d-d511-4956-9d44-cf736ef3f4c4}">
-      <Declaration><![CDATA[{warning 'Add property implementation'}
-PROPERTY ipMessage : I_Message
-]]></Declaration>
-      <Get Name="Get" Id="{221b0430-681a-4771-b724-2ce1f8cf7aaf}">
-        <Declaration><![CDATA[VAR
-END_VAR
-]]></Declaration>
-        <Implementation>
-          <ST><![CDATA[]]></ST>
-        </Implementation>
-      </Get>
-      <Set Name="Set" Id="{a630f003-25b5-44a7-a708-636f8188d44d}">
-        <Declaration><![CDATA[VAR
-END_VAR
-]]></Declaration>
-        <Implementation>
-          <ST><![CDATA[]]></ST>
-        </Implementation>
-      </Set>
-    </Property>
     <Method Name="IsPackedRepeatedField" Id="{4fbc3fd0-d99f-4835-88b1-9d66b0f4a24d}">
       <Declaration><![CDATA[METHOD IsPackedRepeatedField : BOOL
 VAR_INPUT
@@ -87,46 +52,6 @@ END_VAR
         <ST><![CDATA[IsPackedRepeatedField := F_IsPackedRepeatedField(nTag);]]></ST>
       </Implementation>
     </Method>
-    <Property Name="pParseContext" Id="{a25d2ca2-4af8-4d38-8f0b-5665176b8621}">
-      <Declaration><![CDATA[{warning 'Add property implementation'}
-PROPERTY pParseContext : POINTER TO FB_ParseContext
-]]></Declaration>
-      <Set Name="Set" Id="{b90ffabe-cb8a-4cfb-9d18-7a5ca6b3bf85}">
-        <Declaration><![CDATA[VAR
-END_VAR
-]]></Declaration>
-        <Implementation>
-          <ST><![CDATA[]]></ST>
-        </Implementation>
-      </Set>
-    </Property>
-    <Property Name="pWriteContext" Id="{1a286269-9dba-4b79-a112-6166f085bd1b}">
-      <Declaration><![CDATA[{warning 'Add property implementation'}
-PROPERTY pWriteContext : POINTER TO FB_WriteContext
-]]></Declaration>
-      <Set Name="Set" Id="{130bdb3c-caf6-4981-867c-91a421d2b1bc}">
-        <Declaration><![CDATA[VAR
-END_VAR
-]]></Declaration>
-        <Implementation>
-          <ST><![CDATA[]]></ST>
-        </Implementation>
-      </Set>
-    </Property>
-    <Property Name="Tag" Id="{c866ae2d-c6ee-472c-a385-53b84b55a988}">
-      <Declaration><![CDATA[{warning 'Add property implementation'}
-(* Gets the tag of the codec.*)
-PROPERTY Tag : UDINT
-]]></Declaration>
-      <Get Name="Get" Id="{e6e0b0b5-7399-42a7-8181-c494fa7ac10f}">
-        <Declaration><![CDATA[VAR
-END_VAR
-]]></Declaration>
-        <Implementation>
-          <ST><![CDATA[]]></ST>
-        </Implementation>
-      </Get>
-    </Property>
     <Method Name="ValueReader" Id="{4c83271b-1e30-4f01-9fbe-2c14057e30c1}">
       <Declaration><![CDATA[
 METHOD ValueReader : HRESULT

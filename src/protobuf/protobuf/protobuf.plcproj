@@ -63,6 +63,9 @@
     <Compile Include="DUTs\T_ProtobufRawBuffer.TcDUT">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="FieldCodec\FB_FieldCodec.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="FieldCodec\FB_FieldCodecFixed32.TcPOU">
       <SubType>Code</SubType>
     </Compile>
