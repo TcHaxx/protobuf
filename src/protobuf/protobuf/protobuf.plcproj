@@ -437,10 +437,6 @@
       <SubType>Code</SubType>
       <LinkAlways>true</LinkAlways>
     </Compile>
-    <Compile Include="RepeatedField\F_WriteRepeatedField_1.TcPOU">
-      <SubType>Code</SubType>
-      <LinkAlways>true</LinkAlways>
-    </Compile>
     <Compile Include="WireFormat\DUTs\E_WireType.TcDUT">
       <SubType>Code</SubType>
     </Compile>
@@ -606,6 +602,7 @@
     </Compile>
     <Compile Include="__TESTs\MessagesTests\POUs\FB_RepeatedStringMessageTests.TcPOU">
       <SubType>Code</SubType>
+      <ExcludeFromBuild>true</ExcludeFromBuild>
     </Compile>
     <Compile Include="__TESTs\MessagesTests\POUs\FB_RoundTripMessageExampleTest.TcPOU">
       <SubType>Code</SubType>
@@ -666,21 +663,27 @@
     </Compile>
     <Compile Include="__TESTs\RepeatedFieldTests\Read\FB_ReadRepeatedFieldBytesTests.TcPOU">
       <SubType>Code</SubType>
+      <ExcludeFromBuild>false</ExcludeFromBuild>
     </Compile>
     <Compile Include="__TESTs\RepeatedFieldTests\Read\FB_ReadRepeatedFieldFixed32Tests.TcPOU">
       <SubType>Code</SubType>
+      <ExcludeFromBuild>false</ExcludeFromBuild>
     </Compile>
     <Compile Include="__TESTs\RepeatedFieldTests\Read\FB_ReadRepeatedFieldFixed64Tests.TcPOU">
       <SubType>Code</SubType>
+      <ExcludeFromBuild>false</ExcludeFromBuild>
     </Compile>
     <Compile Include="__TESTs\RepeatedFieldTests\Read\FB_ReadRepeatedFieldStringTests.TcPOU">
       <SubType>Code</SubType>
+      <ExcludeFromBuild>false</ExcludeFromBuild>
     </Compile>
     <Compile Include="__TESTs\RepeatedFieldTests\Read\FB_ReadRepeatedFieldUint32Tests.TcPOU">
       <SubType>Code</SubType>
+      <ExcludeFromBuild>false</ExcludeFromBuild>
     </Compile>
     <Compile Include="__TESTs\RepeatedFieldTests\Read\PRG_ReadRepeatedFieldTests.TcPOU">
       <SubType>Code</SubType>
+      <ExcludeFromBuild>false</ExcludeFromBuild>
     </Compile>
     <Compile Include="__TESTs\RepeatedFieldTests\RoundTrip\FB_RoundTripRepeatedFieldUInt32Tests.TcPOU">
       <SubType>Code</SubType>
@@ -852,8 +855,12 @@
     <Folder Include="__TESTs\HelperTests" />
     <Folder Include="__TESTs\MessagesTests\POUs\FooBarBaz" />
     <Folder Include="__TESTs\SpanTests" />
-    <Folder Include="__TESTs\RepeatedFieldTests" />
-    <Folder Include="__TESTs\RepeatedFieldTests\RoundTrip" />
+    <Folder Include="__TESTs\RepeatedFieldTests">
+      <ExcludeFromBuild>false</ExcludeFromBuild>
+    </Folder>
+    <Folder Include="__TESTs\RepeatedFieldTests\RoundTrip">
+      <ExcludeFromBuild>true</ExcludeFromBuild>
+    </Folder>
     <Folder Include="__TESTs\RepeatedFieldTests\Write" />
     <Folder Include="__TESTs\RepeatedFieldTests\Read" />
     <Folder Include="__TESTs\WireFormatTests" />

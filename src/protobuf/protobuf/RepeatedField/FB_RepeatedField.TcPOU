@@ -13,12 +13,30 @@ VAR
     ipFieldCodecField	: I_FieldCodec;
 END_VAR
 VAR
-	nCapacity			: UDINT;
-	nCount				: UDINT;		// Actual number of elements in the Array
+	nCapacityField		: UDINT;
+	nCountField			: UDINT;		// Actual number of elements in the Array
 END_VAR]]></Declaration>
     <Implementation>
       <ST><![CDATA[]]></ST>
     </Implementation>
+    <Method Name="AddEntriesFrom" Id="{72f65244-7f13-453c-bcee-a20eaf48b6ec}">
+      <Declaration><![CDATA[// Adds the entries from the given parse context, decoding them with the specified codec.
+METHOD AddEntriesFrom : HRESULT
+VAR_IN_OUT CONSTANT
+	fbParseCtx	: FB_ParseContext;
+END_VAR
+VAR_INPUT
+	ipFieldCodec : I_FieldCodec;
+END_VAR
+VAR
+	refCtx	: REFERENCE TO ST_ParseContext;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[refCtx REF= fbParseCtx.refCtx;
+THIS^.ipFieldCodecField := ipFieldCodec;
+AddEntriesFrom := F_ReadRepeatedField(stCtx:= refCtx, ipRepeatedField:= THIS^);]]></ST>
+      </Implementation>
+    </Method>
     <Method Name="CalculatePackedDataSize" Id="{90e54b0d-eaa3-492d-97d1-6ecfaa9fb248}">
       <Declaration><![CDATA[{warning 'Add method implementation '}
 METHOD CalculatePackedDataSize : UDINT
@@ -35,19 +53,6 @@ METHOD CalculateSize : UDINT
         <ST><![CDATA[]]></ST>
       </Implementation>
     </Method>
-    <Property Name="Capcacity" Id="{02f68e37-5912-4996-9507-87a873524f1a}">
-      <Declaration><![CDATA[{warning 'Add property implementation'}
-PROPERTY Capcacity : UDINT
-]]></Declaration>
-      <Get Name="Get" Id="{fb1cafc4-00dd-480e-ac47-5aefc582e3fe}">
-        <Declaration><![CDATA[VAR
-END_VAR
-]]></Declaration>
-        <Implementation>
-          <ST><![CDATA[Capcacity := nCapacity;]]></ST>
-        </Implementation>
-      </Get>
-    </Property>
     <Method Name="ComputeCapacity" Id="{afe8a243-10c9-425f-b110-73d6acc35475}">
       <Declaration><![CDATA[METHOD PRIVATE ComputeCapacity : UDINT
 VAR_INPUT
@@ -72,19 +77,6 @@ ComputeCapacity := nTotalSize / nElementSize;
 ]]></ST>
       </Implementation>
     </Method>
-    <Property Name="Count" Id="{935b9e97-e1dc-4e85-a299-be6bfd0e0e76}">
-      <Declaration><![CDATA[{warning 'Add property implementation'}
-PROPERTY Count : UDINT
-]]></Declaration>
-      <Get Name="Get" Id="{7f8827ea-e9cd-4310-9284-d87e61bb67ae}">
-        <Declaration><![CDATA[VAR
-END_VAR
-]]></Declaration>
-        <Implementation>
-          <ST><![CDATA[]]></ST>
-        </Implementation>
-      </Get>
-    </Property>
     <Method Name="ElementAtIndex" Id="{0c3f4543-a722-41c0-84ce-92f47960c155}">
       <Declaration><![CDATA[METHOD ElementAtIndex : T_ANY
 VAR_INPUT
@@ -94,7 +86,7 @@ END_VAR
       <Implementation>
         <ST><![CDATA[ElementAtIndex := THIS^.anyFirstElemField;
 
-IF nIndex > nCapacity - 1 THEN
+IF nIndex > nCapacityField - 1 THEN
 	RETURN;
 END_IF
 
@@ -113,12 +105,10 @@ VAR_INPUT
     bInCopyCode: BOOL;  // TRUE: the instance will be copied to the copy code afterward (online change)   
 	anyArray        : T_Any;
     anyFirstElem    : T_Any;
-    ipFieldCodec    : I_FieldCodec;
 END_VAR]]></Declaration>
       <Implementation>
         <ST><![CDATA[anyArrayField       := anyArray;
 anyFirstElemField   := anyFirstElem;
-ipFieldCodecField	:= ipFieldCodec;
 
 Initialize();]]></ST>
       </Implementation>
@@ -130,13 +120,12 @@ END_VAR
 ]]></Declaration>
       <Implementation>
         <ST><![CDATA[
-nCapacity := ComputeCapacity();
-nCount 	:= 0;]]></ST>
+nCapacityField := ComputeCapacity();
+nCountField 	:= 0;]]></ST>
       </Implementation>
     </Method>
     <Property Name="ipFieldCodec" Id="{af641ca7-e4a7-4470-a085-a12dba67de50}">
-      <Declaration><![CDATA[{warning 'Add property implementation'}
-PROPERTY ipFieldCodec : I_FieldCodec
+      <Declaration><![CDATA[PROPERTY ipFieldCodec : I_FieldCodec
 ]]></Declaration>
       <Get Name="Get" Id="{4dfee661-3c43-41f7-a9f8-05276ffe98a1}">
         <Declaration><![CDATA[VAR
@@ -147,5 +136,71 @@ END_VAR
         </Implementation>
       </Get>
     </Property>
+    <Property Name="nCapcacity" Id="{02f68e37-5912-4996-9507-87a873524f1a}">
+      <Declaration><![CDATA[PROPERTY nCapcacity : UDINT
+]]></Declaration>
+      <Get Name="Get" Id="{fb1cafc4-00dd-480e-ac47-5aefc582e3fe}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[nCapcacity := nCapacityField;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Property Name="nCount" Id="{935b9e97-e1dc-4e85-a299-be6bfd0e0e76}">
+      <Declaration><![CDATA[PROPERTY nCount : UDINT
+]]></Declaration>
+      <Get Name="Get" Id="{7f8827ea-e9cd-4310-9284-d87e61bb67ae}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[nCount := THIS^.nCountField;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Method Name="SetValue" Id="{4d35c2f2-eb7c-4eeb-82f5-c3ea1a9f1a96}">
+      <Declaration><![CDATA[// Sets the given value at the current element and increases nCount
+METHOD SetValue : HRESULT
+VAR_INPUT
+	anyValue	: T_ANY;
+END_VAR
+VAR
+	anyCurrentElem : T_ANY;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[
+IF THIS^.nCountField > THIS^.nCapacityField THEN
+	SetValue := E_ParserErrorCode.NotEnoughMem;
+	RETURN;
+END_IF
+
+anyCurrentElem := THIS^.ElementAtIndex(THIS^.nCountField);
+
+MEMCPY(destAddr:= anyCurrentElem.pValue, srcAddr:= anyValue.pValue, n:= TO_UDINT(MIN(anyCurrentElem.diSize, anyValue.diSize)));
+ 
+THIS^.nCountField := THIS^.nCountField + 1;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="WriteTo" Id="{13998a98-9f58-46b4-b17a-76b3ffdca256}">
+      <Declaration><![CDATA[// Writes the contents of this collection to the given write context, encoding each
+// value using the specified codec.
+METHOD WriteTo : HRESULT
+VAR_IN_OUT CONSTANT
+	fbWriteCtx	: FB_WriteContext;
+END_VAR
+VAR_INPUT
+	ipFieldCodec : I_FieldCodec;
+END_VAR
+VAR
+	refCtx	: REFERENCE TO ST_WriteContext;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[refCtx REF= fbWriteCtx.refCtx;
+THIS^.ipFieldCodecField := ipFieldCodec;
+WriteTo := F_WriteRepeatedField(stCtx:= refCtx, ipRepeatedField:= THIS^);]]></ST>
+      </Implementation>
+    </Method>
   </POU>
 </TcPlcObject>

@@ -6,8 +6,6 @@ VAR
 	fbWriteCtx		: FB_WriteContext;
 	fbFoo   		: FB_FooMessage;
 	stFoo           : ST_Foo;
-	fbFieldCodec 	: FB_FieldCodecMessage(nTag:= 16#12, iMessage:= fbFoo);
-	fbRepeatedField	: FB_RepeatedField(anyArray:= F_ToAnyType(stFoo.baz), anyFirstElem:= F_ToAnyType(stFoo.baz[0]), ipFieldCodec:= fbFieldCodec);
 	aBuffer 		: ARRAY[0..255] OF BYTE;
 END_VAR
 ]]></Declaration>
@@ -27,6 +25,7 @@ F_SetMessageValue(F_ToAnyType(stFoo), fbFoo);
 
 // Act 
 fbFoo.WriteTo(fbWriteCtx);
+
 
 
 // Assert

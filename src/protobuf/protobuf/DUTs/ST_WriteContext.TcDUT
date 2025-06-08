@@ -4,8 +4,9 @@
     <Declaration><![CDATA[// An opaque struct that represents the current serialization state and is passed along as the serialization proceeds.
 TYPE ST_WriteContext :
 STRUCT
-    stBuffer    : ST_Span;
-    stState     : ST_WriterInternalState;
+    stBuffer    	: ST_Span;
+    stState     	: ST_WriterInternalState;
+	pCurrentContext : POINTER TO FB_WriteContext;	// The current context we are operating on
 END_STRUCT
 END_TYPE
 ]]></Declaration>

@@ -4,19 +4,18 @@
     <Declaration><![CDATA[// Writes a message, without a tag. Message will be written without a length prefix.
 FUNCTION F_WriteRawMessage : HRESULT
 VAR_IN_OUT
-    fbCtx   : FB_WriteContext;     
+    stCtx	: ST_WriteContext;    
 END_VAR
 VAR_INPUT
-    iMessage : I_Message;
-END_VAR
-]]></Declaration>
+    ipMessage : I_Message;
+END_VAR]]></Declaration>
     <Implementation>
-      <ST><![CDATA[IF iMEssage = NULL THEN
-	F_WriteRawMessage := F_WriteError(stCtx:= fbCtx.refCtx, eError:= E_WriterErrorCode.InternalError);
+      <ST><![CDATA[IF ipMessage = NULL OR stCtx.pCurrentContext = NULL THEN
+	F_WriteRawMessage := F_WriteError(stCtx:= stCtx, eError:= E_WriterErrorCode.InternalError);
 	RETURN;
 END_IF
 
-F_WriteRawMessage := iMessage.WriteTo(fbWriteCtx:= fbCtx);]]></ST>
+F_WriteRawMessage := ipMessage.WriteTo(fbWriteCtx:= stCtx.pCurrentContext^);]]></ST>
     </Implementation>
   </POU>
 </TcPlcObject>

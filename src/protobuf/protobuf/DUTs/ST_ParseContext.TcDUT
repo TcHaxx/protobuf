@@ -3,8 +3,9 @@
   <DUT Name="ST_ParseContext" Id="{95883e15-46b0-4bcb-bbdc-d8888725c7a3}">
     <Declaration><![CDATA[TYPE ST_ParseContext :
 STRUCT
-    stBuffer    : ST_Span;
-    stState     : ST_ParserInternalState;
+    stBuffer    	: ST_Span;
+    stState     	: ST_ParserInternalState;
+	pCurrentContext : POINTER TO FB_ParseContext; 	// The current context we are operating on
 END_STRUCT
 END_TYPE
 ]]></Declaration>

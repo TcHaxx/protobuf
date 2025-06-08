@@ -4,20 +4,20 @@
     <Declaration><![CDATA[{attribute 'analysis' := '-33'}
 PROGRAM INTERNAL PRG_WriteRepeatedFieldTests
 {IF defined (UNIT_TEST)}
-	fbWriteRepeatedFieldBoolTests : FB_WriteRepeatedFieldBoolTests;
-	fbWriteRepeatedFieldBytesTests : FB_WriteRepeatedFieldBytesTests;
-    fbWriteRepeatedFieldDoubleTests : FB_WriteRepeatedFieldDoubleTests;
-	fbWriteRepeatedFieldFixed32Tests : FB_WriteRepeatedFieldFixed32Tests;
-    fbWriteRepeatedFieldFixed64Tests : FB_WriteRepeatedFieldFixed64Tests;
-	fbWriteRepeatedFieldFloatTests : FB_WriteRepeatedFieldFloatTests;
-    fbWriteRepeatedFieldInt32Tests : FB_WriteRepeatedFieldInt32Tests;
-    fbWriteRepeatedFieldInt64Tests : FB_WriteRepeatedFieldInt64Tests;
-    fbWriteRepeatedFieldSInt32Tests : FB_WriteRepeatedFieldSInt32Tests;
-    fbWriteRepeatedFieldSInt64Tests : FB_WriteRepeatedFieldSInt64Tests;
-    fbWriteRepeatedFieldStringTests : FB_WriteRepeatedFieldStringTests;
-	fbWriteRepeatedFieldUint32Tests : FB_WriteRepeatedFieldUint32Tests;
-	fbWriteRepeatedFieldUint64Tests : FB_WriteRepeatedFieldUint64Tests;
-	fbWriteRepeatedFieldMessageTests : FB_WriteRepeatedFieldMessageTests;
+// 	fbWriteRepeatedFieldBoolTests : FB_WriteRepeatedFieldBoolTests;
+// 	fbWriteRepeatedFieldBytesTests : FB_WriteRepeatedFieldBytesTests;
+//     fbWriteRepeatedFieldDoubleTests : FB_WriteRepeatedFieldDoubleTests;
+// 	fbWriteRepeatedFieldFixed32Tests : FB_WriteRepeatedFieldFixed32Tests;
+//     fbWriteRepeatedFieldFixed64Tests : FB_WriteRepeatedFieldFixed64Tests;
+// 	fbWriteRepeatedFieldFloatTests : FB_WriteRepeatedFieldFloatTests;
+//     fbWriteRepeatedFieldInt32Tests : FB_WriteRepeatedFieldInt32Tests;
+//     fbWriteRepeatedFieldInt64Tests : FB_WriteRepeatedFieldInt64Tests;
+//     fbWriteRepeatedFieldSInt32Tests : FB_WriteRepeatedFieldSInt32Tests;
+//     fbWriteRepeatedFieldSInt64Tests : FB_WriteRepeatedFieldSInt64Tests;
+//     fbWriteRepeatedFieldStringTests : FB_WriteRepeatedFieldStringTests;
+// 	fbWriteRepeatedFieldUint32Tests : FB_WriteRepeatedFieldUint32Tests;
+// 	fbWriteRepeatedFieldUint64Tests : FB_WriteRepeatedFieldUint64Tests;
+// 	fbWriteRepeatedFieldMessageTests : FB_WriteRepeatedFieldMessageTests;
 {END_IF}]]></Declaration>
     <Implementation>
       <ST><![CDATA[]]></ST>

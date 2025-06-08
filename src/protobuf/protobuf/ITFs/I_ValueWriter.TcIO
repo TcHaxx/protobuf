@@ -4,7 +4,7 @@
     <Declaration><![CDATA[INTERFACE I_ValueWriter
 ]]></Declaration>
     <Method Name="ValueWriter" Id="{79795000-1c35-41ae-8483-d11fc25b9e78}">
-      <Declaration><![CDATA[METHOD ValueWriter : HRESULT
+      <Declaration><![CDATA[METHOD ABSTRACT ValueWriter : HRESULT
 VAR_IN_OUT
     stCtx  : ST_WriteContext;
 END_VAR

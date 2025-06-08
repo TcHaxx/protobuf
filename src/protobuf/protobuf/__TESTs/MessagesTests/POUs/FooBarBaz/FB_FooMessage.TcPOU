@@ -39,8 +39,8 @@ END_VAR
 
 // Repeated Fields
 VAR
-	fbRepeatedBazCodec	: FB_FieldCodecMessage(nTag:= 16#0A, iMessage:= fbBaz);
-	fbRepeatedBaz		: FB_RepeatedField(anyArray:= F_ToAnyType(stFoo.baz), anyFirstElem:= F_ToAnyType(stFoo.baz[0]), ipFieldCodec:= fbRepeatedBazCodec);
+	fbRepeatedBazCodec	: FB_FieldCodecMessage(nTag:= 16#0A, ipMessage:= fbBaz);
+	fbRepeatedBaz		: FB_RepeatedField(anyArray:= F_ToAnyType(stFoo.baz), anyFirstElem:= F_ToAnyType(stFoo.baz[0]));
 END_VAR
 ]]></Declaration>
     <Implementation>
@@ -80,16 +80,12 @@ END_IF
 CASE nTag OF
     16#0A:         // Bar bar = 1;
     ;
-         MergeFrom := fbParseCtx.ReadMessage(iMessage:= fbBar);
+         MergeFrom := fbParseCtx.ReadMessage(ipMessage:= fbBar);
          THIS^.stFoo.bar := fbBar.Bar;
          
     16#12:         // repeated Baz baz = 2 ;
         ;
-           MergeFrom := fbParseCtx.ReadRepeatedFieldMessage(
-                        iMessage:= fbBaz,
-                        anyArray:= F_ToAnyType(THIS^.stFoo.baz),
-                        anyFirstElem:= F_ToAnyType(THIS^.stFoo.baz[0]),
-                        nFieldIndex:= THIS^.nField2Index);
+           MergeFrom := fbRepeatedBaz.AddEntriesFrom(fbParseCtx:= fbParseCtx, ipFieldCodec:= fbRepeatedBazCodec);
 ELSE
     MergeFrom := fbParseCtx.SkipLastField();
 END_CASE
@@ -144,7 +140,9 @@ END_VAR
 ]]></Declaration>
       <Implementation>
         <ST><![CDATA[
-fbWriteCtx.WriteRepeatedField(fbRepeatedBaz);
+// fbWriteCtx.WriteRepeatedField(fbRepeatedBaz);
+
+fbRepeatedBaz.WriteTo(fbWriteCtx, fbRepeatedBazCodec);
 
 // fbWriteCtx.WriteRepeatedFieldMessage(iMessage:= fbBaz, F_ToAnyType(stFoo.baz), F_ToAnyType(stFoo.baz[0]), 3, nTag:= 16#12);]]></ST>
       </Implementation>

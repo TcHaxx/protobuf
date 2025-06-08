@@ -15,18 +15,6 @@ VAR_INPUT
 END_VAR
 ]]></Declaration>
     </Method>
-    <Property Name="Capcacity" Id="{4914541c-9d02-48cf-8983-8f50db23c15b}">
-      <Declaration><![CDATA[PROPERTY Capcacity : UDINT]]></Declaration>
-      <Get Name="Get" Id="{e9413b38-69c2-4619-af78-34c77feb1c35}">
-        <Declaration><![CDATA[]]></Declaration>
-      </Get>
-    </Property>
-    <Property Name="Count" Id="{a7e19284-ec89-4001-9bd9-258e5e66966e}">
-      <Declaration><![CDATA[PROPERTY Count : UDINT]]></Declaration>
-      <Get Name="Get" Id="{6e0af163-7a85-41f2-a729-f468ec5e1d22}">
-        <Declaration><![CDATA[]]></Declaration>
-      </Get>
-    </Property>
     <Method Name="ElementAtIndex" Id="{811730db-b114-46ba-8b85-1b8fffa011d8}">
       <Declaration><![CDATA[METHOD ElementAtIndex : T_ANY
 VAR_INPUT
@@ -41,5 +29,24 @@ END_VAR
         <Declaration><![CDATA[]]></Declaration>
       </Get>
     </Property>
+    <Property Name="nCapcacity" Id="{4914541c-9d02-48cf-8983-8f50db23c15b}">
+      <Declaration><![CDATA[PROPERTY nCapcacity : UDINT]]></Declaration>
+      <Get Name="Get" Id="{e9413b38-69c2-4619-af78-34c77feb1c35}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Get>
+    </Property>
+    <Property Name="nCount" Id="{a7e19284-ec89-4001-9bd9-258e5e66966e}">
+      <Declaration><![CDATA[PROPERTY nCount : UDINT]]></Declaration>
+      <Get Name="Get" Id="{6e0af163-7a85-41f2-a729-f468ec5e1d22}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Get>
+    </Property>
+    <Method Name="SetValue" Id="{04df43e2-7f98-460e-a299-274520714bef}">
+      <Declaration><![CDATA[METHOD SetValue : HRESULT
+VAR_INPUT
+	anyValue	: T_ANY;
+END_VAR
+]]></Declaration>
+    </Method>
   </Itf>
 </TcPlcObject>

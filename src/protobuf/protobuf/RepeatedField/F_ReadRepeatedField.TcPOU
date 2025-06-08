@@ -6,56 +6,32 @@ VAR_IN_OUT
     stCtx : ST_ParseContext;
 END_VAR
 VAR_INPUT CONSTANT
-    anyArray        : T_Any;
-    anyFirstElem    : T_Any;
-    ipFieldCodec    : I_FieldCodec; 
+	ipRepeatedField	: I_RepeatedField;
 END_VAR
 
-VAR_IN_OUT   
-    nFieldIndex : UDINT; 
-END_VAR
 VAR
-    nTag        : UDINT;
-    hr          : HRESULT;
-    nLength     : UDINT;
-    nCurrentLimit : UDINT;
-    nArrayLength: UDINT;
-    nByteLength : UDINT;
-    nTypeSize   : UDINT;
-    bTagConsumed: BOOL;
-    nBufferEnd  : UDINT;  
-    anyValue    : T_ANY;
+	nLastTag		: UDINT;
+    hr          	: HRESULT;
+    nLength     	: UDINT;
+    nCurrentLimit 	: UDINT;
+    bTagConsumed	: BOOL;
+    nBufferEnd  	: UDINT;  
+    anyValue        : T_Any;
 END_VAR
 ]]></Declaration>
     <Implementation>
-      <ST><![CDATA[IF ipFieldCodec = 0 THEN
+      <ST><![CDATA[IF ipRepeatedField.ipFieldCodec = 0 THEN
     F_ReadRepeatedField := F_ParseError(stCtx,  E_ParserErrorCode.InternalError);
     RETURN;
 END_IF
 
-IF anyArray.TypeClass <> __SYSTEM.TYPE_CLASS.TYPE_ARRAY THEN
-    F_ReadRepeatedField := F_ParseError(stCtx, E_ParserErrorCode.InvalidDataType);
-    RETURN;
+IF ipRepeatedField.nCapcacity = 0 THEN
+	RETURN;
 END_IF
 
-nTypeSize := TO_UDINT(anyFirstElem.diSize);
+nLastTag := stCtx.stState.nLastTag;
 
-IF nTypeSize = 0 THEN
-    F_ReadRepeatedField :=  F_ParseError(stCtx, E_ParserErrorCode.InvalidDataType);
-    RETURN;
-END_IF
-
-nByteLength := TO_UDINT(anyArray.diSize);
-nArrayLength := nByteLength / nTypeSize;
-
-nTag := stCtx.stState.nLastTag;
-
-IF  nFieldIndex < 0 OR nFieldIndex >= nArrayLength THEN
-    F_ReadRepeatedField :=  F_ParseError(stCtx, E_ParserErrorCode.NotEnoughMem);
-    RETURN;
-END_IF
-
-IF ipFieldCodec.IsPackedRepeatedField(nTag) THEN
+IF ipRepeatedField.ipFieldCodec.IsPackedRepeatedField(nLastTag) THEN
     
     hr := F_ParseLength(stCtx, nLength=> nLength);
     IF FAILED(hr) OR nLength <= 0 THEN
@@ -67,30 +43,36 @@ IF ipFieldCodec.IsPackedRepeatedField(nTag) THEN
     F_SbhPushLimit(stCtx.stState, nLength, nCurrentLimit=> nCurrentLimit);
     nBufferEnd := stCtx.stState.nBufferPos + nLength;
     WHILE NOT F_SbhIsReachedLimit(stCtx.stState) DO
-        hr := ipFieldCodec.ValueReader(stCtx, anyOut=> anyValue);
+        hr := ipRepeatedField.ipFieldCodec.ValueReader(stCtx, anyOut=> anyValue);
         IF FAILED(hr) THEN
             F_ReadRepeatedField := hr;
             RETURN;
         END_IF
         
-        MEMCPY(destAddr:= anyArray.pValue + (nFieldIndex * nTypeSize), srcAddr:= anyValue.pValue, MIN(TO_UDINT(anyValue.diSize), nTypeSize));
-        nFieldIndex := nFieldIndex + 1;
+		hr := ipRepeatedField.SetValue(anyValue);
+		IF FAILED(hr) THEN
+            F_ReadRepeatedField := hr;
+            RETURN;
+        END_IF
     END_WHILE
 
     F_SbhPopLimit(stCtx.stState, nCurrentLimit);
 ELSE
     // Not packed or possibly not packable...
     REPEAT
-        hr := ipFieldCodec.ValueReader(stCtx, anyOut=> anyValue);
+        hr := ipRepeatedField.ipFieldCodec.ValueReader(stCtx, anyOut=> anyValue);
         IF FAILED(hr) THEN
             F_ReadRepeatedField := hr;
             RETURN;
         END_IF
         
-        MEMCPY(destAddr:= anyArray.pValue + (nFieldIndex * nTypeSize), srcAddr:= anyValue.pValue, MIN(TO_UDINT(anyValue.diSize), nTypeSize));
-        nFieldIndex := nFieldIndex + 1;
+		hr := ipRepeatedField.SetValue(anyValue);
+		IF FAILED(hr) THEN
+            F_ReadRepeatedField := hr;
+            RETURN;
+        END_IF
         
-        hr := F_MaybeConsumeTag(stCtx, nTag, bConsumed=> bTagConsumed);
+        hr := F_MaybeConsumeTag(stCtx, nLastTag, bConsumed=> bTagConsumed);
         IF FAILED(hr) THEN
             F_ReadRepeatedField := hr;
             RETURN;

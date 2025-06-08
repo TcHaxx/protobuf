@@ -47,7 +47,7 @@ IF FAILED(WriteTo) THEN
     RETURN;
 END_IF
 
-WriteTo := ipMessage.WriteTo(fbWriteCtx);]]></ST>
+WriteTo := ipMessage.WriteTo(fbWriteCtx:= fbWriteCtx);]]></ST>
       </Implementation>
     </Method>
   </POU>

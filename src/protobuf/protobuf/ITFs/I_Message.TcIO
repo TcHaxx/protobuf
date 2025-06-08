@@ -42,7 +42,7 @@ PROPERTY Writer : REFERENCE TO FB_MessageWriter]]></Declaration>
       <Declaration><![CDATA[// Writes the data to the given coded output stream.
 METHOD WriteTo : HRESULT
 VAR_IN_OUT
-    fbWriteCtx : FB_WriteContext;
+    fbWriteCtx	: FB_WriteContext;
 END_VAR
 ]]></Declaration>
     </Method>

@@ -7,13 +7,25 @@ END_VAR
 VAR_OUTPUT
 END_VAR
 VAR
-    fbFieldCodec : FB_FieldCodecBytes;
+	aActual             : ARRAY[0..3] OF ARRAY[0..15] OF BYTE;
+    fbFieldCodec 		: FB_FieldCodecBytes(nTag:= 16#22);
+	fbRepeatedField		: FB_RepeatedField(anyArray:= F_ToAnyType(aActual), anyFirstElem:= F_ToAnyType(aActual[0]));
 END_VAR
 ]]></Declaration>
     <Implementation>
       <ST><![CDATA[ShouldReadRepeatedFieldTheory();
 ]]></ST>
     </Implementation>
+    <Method Name="Reset" Id="{7e0c1d49-ab8c-4abf-b8a2-17987738c598}">
+      <Declaration><![CDATA[METHOD PRIVATE Reset
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[
+MEMSET(destAddr:= ADR(aActual), fillByte:= 16#0, n:= SIZEOF(aActual));]]></ST>
+      </Implementation>
+    </Method>
     <Method Name="ShouldReadRepeatedField" Id="{3988edba-b328-4893-819d-70d3231abe44}">
       <Declaration><![CDATA[METHOD PRIVATE ShouldReadRepeatedField
 VAR_IN_OUT CONSTANT
@@ -30,9 +42,7 @@ VAR_INST
     fbCtx               : FB_ParseContext;
 END_VAR
 VAR
-    aActual             : ARRAY[0..3] OF ARRAY[0..15] OF BYTE;
     hr                  : HRESULT;
-    nActualFieldIndex   : UDINT;
     nTag                : UDINT;
     i                   : UDINT;
     aTmpBuffer          : ARRAY[0..1023] OF BYTE := [SIZEOF(aTmpBuffer)(16#FF)];
@@ -40,13 +50,14 @@ END_VAR
 ]]></Declaration>
       <Implementation>
         <ST><![CDATA[// Arrange
+Reset();
 fbCtx.FromBuffer(aBuffer);
 fbCtx.refCtx.stState.nBufferPos := nBufferPosStart;
 THIS^.fbFieldCodec.SetTmpBuffer(anyBytes:= F_ToAnyBytes(aTmpBuffer));
 
 // Act
 F_ParseTag(fbCtx.refCtx, nTag=> nTag);
-hr := F_ReadRepeatedField(fbCtx.refCtx, anyArray:= F_ToAnyType(aActual), anyFirstElem:= F_ToAnyType(aActual[0]), ipFieldCodec, nFieldIndex:= nActualFieldIndex);
+hr := fbRepeatedField.AddEntriesFrom(fbParseCtx:= fbCtx, ipFieldCodec:= ipFieldCodec);
 
 // Assert
 AssertEquals_DINT(
@@ -66,8 +77,8 @@ AssertEquals_UDINT(
     
 AssertEquals_UDINT(
     Expected:= nExpectedFieldIndex,
-    Actual:= nActualFieldIndex,
-    Message:= CONCAT('Expected nActualFieldIndex to equal ', TO_STRING(nExpectedFieldIndex)));
+    Actual:= fbRepeatedField.nCount,
+    Message:= CONCAT('Expected fbRepeatedField.nCount to equal ', TO_STRING(fbRepeatedField.nCount)));
 ]]></ST>
       </Implementation>
     </Method>
@@ -96,7 +107,6 @@ END_VAR]]></Declaration>
       <Implementation>
         <ST><![CDATA[TEST(__POUNAME());
 
-// THIS^.fbFieldCodec.SetAnyBytes(anyBytes:= F_ToAnyBytes(aBuffer));       // when chunk size is bigger the 256 bytes
 ShouldReadRepeatedField(aBuffer:= cRawBytes1, aExpected:= aExpected1, nBufferPosStart:= 0, nExpectedBufferPos:= 11, nExpectedFieldIndex:= 2, THIS^.fbFieldCodec);
 
 TEST_FINISHED_NAMED(__POUNAME());]]></ST>

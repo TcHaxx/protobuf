@@ -14,6 +14,16 @@ END_VAR
       <ST><![CDATA[ShouldReadRepeatedFieldTheory();
 ShouldReadNonConsecutiveRepeatedFields(); ]]></ST>
     </Implementation>
+    <Method Name="Reset" Id="{1c8c438b-d050-4f72-b369-bb45a3827b46}">
+      <Declaration><![CDATA[METHOD PRIVATE Reset
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[
+MEMSET(destAddr:= ADR(aActual), fillByte:= 16#0, n:= SIZEOF(aActual));]]></ST>
+      </Implementation>
+    </Method>
     <Method Name="ShouldReadNonConsecutiveRepeatedFields" Id="{52cb7e82-bd02-4a86-a734-0d7e1470d8fb}">
       <Declaration><![CDATA[METHOD PRIVATE ShouldReadNonConsecutiveRepeatedFields
 VAR CONSTANT

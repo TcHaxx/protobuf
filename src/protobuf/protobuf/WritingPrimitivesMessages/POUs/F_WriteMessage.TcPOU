@@ -4,27 +4,28 @@
     <Declaration><![CDATA[// Writes a message, without a tag. The data is length-prefixed.
 FUNCTION F_WriteMessage : HRESULT
 VAR_IN_OUT
-    fbCtx   : FB_WriteContext;     
+//     fbCtx   : FB_WriteContext;
+	stCtx : ST_WriteContext;     
 END_VAR
 VAR_INPUT
-    iMessage : I_Message;
+    ipMessage : I_Message;
 END_VAR
 VAR
 	nLength : UDINT;
 END_VAR]]></Declaration>
     <Implementation>
-      <ST><![CDATA[IF iMEssage = NULL THEN
-	F_WriteMessage := F_WriteError(stCtx:= fbCtx.refCtx, eError:= E_WriterErrorCode.InternalError);
+      <ST><![CDATA[IF ipMessage = NULL THEN
+	F_WriteMessage := F_WriteError(stCtx:= stCtx, eError:= E_WriterErrorCode.InternalError);
 	RETURN;
 END_IF
 
-nLength := iMessage.CalculateSize();
-F_WriteMessage := F_WriteLength(stCtx:= fbCtx.refCtx, nLength);
+nLength := ipMessage.CalculateSize();
+F_WriteMessage := F_WriteLength(stCtx:= stCtx, nLength);
 IF FAILED(F_WriteMessage) THEN
 	RETURN;
 END_IF
 
-F_WriteMessage := F_WriteRawMessage(fbCtx, iMessage);]]></ST>
+F_WriteMessage := F_WriteRawMessage(stCtx, ipMessage);]]></ST>
     </Implementation>
   </POU>
 </TcPlcObject>

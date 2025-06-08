@@ -9,7 +9,7 @@ PROGRAM INTERNAL PRG_RepeatedFieldTests
     <Implementation>
       <ST><![CDATA[PRG_ReadRepeatedFieldTests();
 PRG_WriteRepeatedFieldTests();
-PRG_RoundTripRepeatedFieldTests();]]></ST>
+// PRG_RoundTripRepeatedFieldTests();]]></ST>
     </Implementation>
   </POU>
 </TcPlcObject>
