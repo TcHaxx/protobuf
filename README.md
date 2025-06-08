@@ -1,5 +1,9 @@
 # protobuf
-Protocol Buffers for TwinCAT
+
+A port of [C# Protocol Buffers runtime library](https://github.com/protocolbuffers/protobuf/tree/main/csharp) to TwinCAT3.  
+
+It enables efficient, language-neutral, and platform-neutral data serialization for industrial automation systems.  
+This allows seamless integration with modern software stacks, facilitates communication between PLCs and external services, and brings the advantages of a widely adopted serialization standard to the TwinCAT ecosystem.
 
 > <h1> 🚧 WIP
 --- 
