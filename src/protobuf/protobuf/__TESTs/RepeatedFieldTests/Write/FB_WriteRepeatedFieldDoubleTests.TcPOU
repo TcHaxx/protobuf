@@ -7,12 +7,24 @@ END_VAR
 VAR_OUTPUT
 END_VAR
 VAR
-    fbFieldCodec : FB_FieldCodecDouble;
+    fbFieldCodec : FB_FieldCodecDouble(nTag:= 0);
+	aActual    	 : ARRAY [0..7] OF LREAL;
+	fbRepeatedField		: FB_RepeatedField(anyArray:= F_ToAnyType(aActual), anyFirstElem:= F_ToAnyType(aActual[0]));
 END_VAR
 ]]></Declaration>
     <Implementation>
       <ST><![CDATA[ShouldWriteRepeatedFieldTheory();]]></ST>
     </Implementation>
+    <Method Name="Reset" Id="{b0d84137-c498-46e6-94b8-2c1cd580d4fa}">
+      <Declaration><![CDATA[METHOD PRIVATE Reset
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[fbRepeatedField.Initialize();
+MEMSET(destAddr:= ADR(aActual), fillByte:= 16#0, n:= SIZEOF(aActual));]]></ST>
+      </Implementation>
+    </Method>
     <Method Name="ShouldWriteRepeatedField" Id="{66bec3d8-6c3b-47c4-89b1-416991c26389}">
       <Declaration><![CDATA[METHOD PRIVATE ShouldWriteRepeatedField
 VAR_IN_OUT CONSTANT
@@ -37,11 +49,14 @@ END_VAR
 ]]></Declaration>
       <Implementation>
         <ST><![CDATA[// Arrange
+Reset();
 fbCtx.FromBuffer(aActualBuffer);
 fbCtx.refCtx.stState.nBufferPos := nBufferPosStart;
+ipFieldCodec.Tag := nTag;
+fbRepeatedField.InitializeFromArray(anyArray:= F_ToAnyType(aValues), anyFirstElem:= F_ToAnyType(aValues[0]), nCount:= nLength);
 
 // Act
-hr := F_WriteRepeatedField(fbCtx.refCtx, anyArray:= F_ToAnyType(aValues), anyFirstElem:= F_ToAnyType(aValues[0]), nLength, F_MakeTag(nTag, E_WireType.LengthDelimited), ipFieldCodec);
+hr := fbRepeatedField.WriteTo(fbWriteCtx:= fbCtx, ipFieldCodec:= ipFieldCodec);
 
 // Assert
 AssertEquals_DINT(
@@ -63,7 +78,7 @@ AssertEquals_UDINT(
     <Method Name="ShouldWriteRepeatedFieldTheory" Id="{4902ad01-9e37-4e7a-8dce-a02301e94d6c}">
       <Declaration><![CDATA[METHOD PRIVATE ShouldWriteRepeatedFieldTheory : REFERENCE TO FB_Test
 VAR CONSTANT
-    cRawValueZeroLength     : ARRAY[0..63] OF BYTE := [16#0A, 16#00];
+    cRawValueZeroLength     : ARRAY[0..63] OF BYTE := [16#00, 16#00];
     cRawValue1              : ARRAY[0..63] OF BYTE := [16#00, 16#22, 16#30, 16#00, 16#00, 16#00, 16#00, 16#00, 16#00, 16#00, 16#00, 16#54, 16#E3, 16#A5, 16#9B, 16#44, 16#4A, 16#93, 16#40, 16#E7, 16#1D, 16#A7, 16#E8, 16#88, 16#E4, 16#94, 16#40, 16#00, 16#00, 16#00, 16#00, 16#00, 16#00, 16#F0, 16#BF, 16#A2, 16#5B, 16#F3, 16#C3, 16#29, 16#8C, 16#67, 16#41, 16#DD, 16#9A, 16#9F, 16#06, 16#00, 16#00, 16#E0, 16#41];  
 END_VAR
 
@@ -75,8 +90,8 @@ END_VAR
       <Implementation>
         <ST><![CDATA[TEST(__POUNAME());
 
-ShouldWriteRepeatedField(aExpected:= cRawValueZeroLength, aValues:= aExpectedZeroLength, nLength:= 0, nTag:= 1, nBufferPosStart:= 0, nExpectedBufferPos:= 2, ipFieldCodec:= THIS^.fbFieldCodec);
-ShouldWriteRepeatedField(aExpected:= cRawValue1, aValues:= aExpected1, nLength:= 6, nTag:= 4, nBufferPosStart:= 1, nExpectedBufferPos:= 51, ipFieldCodec:= THIS^.fbFieldCodec);
+ShouldWriteRepeatedField(aExpected:= cRawValueZeroLength, aValues:= aExpectedZeroLength, nLength:= 0, nTag:= F_MakeTag(1, E_WireType.LengthDelimited), nBufferPosStart:= 0, nExpectedBufferPos:= 0, ipFieldCodec:= THIS^.fbFieldCodec);
+ShouldWriteRepeatedField(aExpected:= cRawValue1, aValues:= aExpected1, nLength:= 6, nTag:= F_MakeTag(4, E_WireType.LengthDelimited), nBufferPosStart:= 1, nExpectedBufferPos:= 51, ipFieldCodec:= THIS^.fbFieldCodec);
 
 TEST_FINISHED_NAMED(__POUNAME());]]></ST>
       </Implementation>
