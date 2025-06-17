@@ -602,7 +602,7 @@
     </Compile>
     <Compile Include="__TESTs\MessagesTests\POUs\FB_RepeatedStringMessageTests.TcPOU">
       <SubType>Code</SubType>
-      <ExcludeFromBuild>true</ExcludeFromBuild>
+      <ExcludeFromBuild>false</ExcludeFromBuild>
     </Compile>
     <Compile Include="__TESTs\MessagesTests\POUs\FB_RoundTripMessageExampleTest.TcPOU">
       <SubType>Code</SubType>

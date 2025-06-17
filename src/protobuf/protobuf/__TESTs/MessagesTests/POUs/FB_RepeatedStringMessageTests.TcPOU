@@ -21,12 +21,12 @@ message RepStringTest {
 VAR
     fbMessageParser : FB_MessageParser(ipMessage:= THIS^);
     fbMessageWriter : FB_MessageWriter(ipMessage:= THIS^);
-    aTmpBuffer      : ARRAY[0..Param_PB.cMaxCharacter] OF BYTE := [SIZEOF(aTmpBuffer)(16#FF)];
 END_VAR
 
 VAR
     aRepeatedStrings    : ARRAY [0..15] OF STRING(32);
-    nField1Index        : UDINT; 
+	fbRepeatedRepStringsCodec	: FB_FieldCodecString(nTag:= 16#0A);
+	fbRepeatedRepStrings		: FB_RepeatedField(anyArray:= F_ToAnyType(aRepeatedStrings), anyFirstElem:= F_ToAnyType(aRepeatedStrings[0]));
 END_VAR]]></Declaration>
     <Implementation>
       <ST><![CDATA[]]></ST>
@@ -50,10 +50,7 @@ VAR
     nTag    : UDINT;
 END_VAR]]></Declaration>
       <Implementation>
-        <ST><![CDATA[nField1Index := 0;
-
-fbParseCtx.SetTempBuffer(anyBuffer:= THIS^.aTmpBuffer);
-
+        <ST><![CDATA[
 REPEAT   
 MergeFrom := fbParseCtx.ReadTag(nTag=>nTag);
 IF SUCCEEDED(MergeFrom) AND nTag = 0 THEN
@@ -67,10 +64,7 @@ END_IF
 
 CASE nTag OF
     16#0A:         // repeated string (1)
-       MergeFrom := fbParseCtx.ReadRepeatedFieldString(
-                    anyArray:= F_ToAnyType(THIS^.aRepeatedStrings),
-                    anyFirstElem:= F_ToAnyType(THIS^.aRepeatedStrings[0]),
-                    nFieldIndex:= THIS^.nField1Index);
+       MergeFrom := fbRepeatedRepStrings.AddEntriesFrom(fbParseCtx, ipFieldCodec:= fbRepeatedRepStringsCodec);
            
  
 ELSE
