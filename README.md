@@ -20,7 +20,8 @@ See following limitations (for now):
 [Map](https://protobuf.dev/programming-guides/proto3/#maps) fields are not implemented because `Structured Text` does not support dynamic data structures efficiently.
 
 ### Oneof
-[Oneof](https://protobuf.dev/programming-guides/proto3/#oneof) fields are not implemented due to the lack of native support for union types in `Structured Text`.
+~~[Oneof](https://protobuf.dev/programming-guides/proto3/#oneof) fields are not implemented due to the lack of native support for union types in `Structured Text`.~~
+[see #3](https://github.com/TcHaxx/protobuf/issues/3)
 
 ### Unknown Fields
 [Unknown Fields](https://protobuf.dev/programming-guides/proto3/#unknowns) are currently not preserved to avoid dynamic allocations. 
