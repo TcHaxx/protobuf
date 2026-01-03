@@ -9,7 +9,7 @@
     <WriteProductVersion>false</WriteProductVersion>
     <GenerateTpy>false</GenerateTpy>
     <Name>protobuf</Name>
-    <ProgramVersion>3.1.4026.16</ProgramVersion>
+    <ProgramVersion>3.1.4026.20</ProgramVersion>
     <Application>{aab3386f-1433-4e51-aee9-b496d522750f}</Application>
     <TypeSystem>{aa3fbe6c-8030-475f-a685-e873b003fd01}</TypeSystem>
     <Implicit_Task_Info>{4c235652-0fed-4dea-be12-419d132604dd}</Implicit_Task_Info>

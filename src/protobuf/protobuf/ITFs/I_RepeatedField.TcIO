@@ -11,8 +11,9 @@ END_VAR
 ]]></Declaration>
     </Method>
     <Method Name="CalculateSize" Id="{7131302d-4e7f-40e9-ac93-ed1dc95621e5}">
-      <Declaration><![CDATA[METHOD CalculateSize : UDINT
-VAR_INPUT
+      <Declaration><![CDATA[METHOD CalculateSize : HRESULT
+VAR_OUTPUT
+	nSize : UDINT;
 END_VAR
 ]]></Declaration>
     </Method>

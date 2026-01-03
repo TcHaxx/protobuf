@@ -41,12 +41,18 @@ AddEntriesFrom := F_ReadRepeatedField(stCtx:= refCtx, ipRepeatedField:= THIS^);]
       <Declaration><![CDATA[METHOD CalculatePackedDataSize : HRESULT
 VAR_OUTPUT
     nPackedDataSize : UDINT;
-END_VAR]]></Declaration>
+END_VAR
+]]></Declaration>
       <Implementation>
         <ST><![CDATA[IF ipFieldCodecField = NULL OR THIS^.anyFirstElemField.pValue = NULL THEN
 	CalculatePackedDataSize := E_WriterErrorCode.InternalError;
 	RETURN;
 END_IF
+
+IF THIS^.nCountField = 0 THEN
+	nPackedDataSize := 0;
+	RETURN;
+END_IF 
 
 CalculatePackedDataSize := ipFieldCodecField.CalculatePackedDataSize(
 								anyFirstElem:= THIS^.anyFirstElemField,
@@ -55,11 +61,38 @@ CalculatePackedDataSize := ipFieldCodecField.CalculatePackedDataSize(
       </Implementation>
     </Method>
     <Method Name="CalculateSize" Id="{5892bb9f-d840-4406-badf-74aae82acf82}">
-      <Declaration><![CDATA[{warning 'Add method implementation '}
-METHOD CalculateSize : UDINT
-]]></Declaration>
+      <Declaration><![CDATA[METHOD CalculateSize : HRESULT
+VAR_OUTPUT
+	nSize : UDINT;
+END_VAR
+VAR
+	nPackedSize : UDINT;
+END_VAR]]></Declaration>
       <Implementation>
-        <ST><![CDATA[]]></ST>
+        <ST><![CDATA[IF ipFieldCodecField = NULL OR THIS^.anyFirstElemField.pValue = NULL THEN
+	CalculateSize := E_WriterErrorCode.InternalError;
+	RETURN;
+END_IF
+
+IF THIS^.nCountField = 0 THEN
+	nSize := 0;
+	RETURN;
+END_IF
+
+IF ipFieldCodecField.IsPackedRepeatedField(ipFieldCodecField.Tag) THEN
+	
+	CalculateSize := CalculatePackedDataSize(nPackedDataSize=> nPackedSize);
+	IF FAILED(CalculateSize) THEN
+		RETURN;
+	END_IF
+	nSize := F_ComputeRawVarint32Size(ipFieldCodecField.Tag) + F_ComputeLengthSize(nPackedSize) + nPackedSize;
+    RETURN;
+END_IF
+
+{warning 'TODO: Non packed repeated field'}
+nSize := 0;
+
+]]></ST>
       </Implementation>
     </Method>
     <Method Name="ComputeCapacity" Id="{afe8a243-10c9-425f-b110-73d6acc35475}">
