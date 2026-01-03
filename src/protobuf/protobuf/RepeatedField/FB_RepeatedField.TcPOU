@@ -186,6 +186,15 @@ END_VAR
           <ST><![CDATA[nCount := THIS^.nCountField;]]></ST>
         </Implementation>
       </Get>
+      <Set Name="Set" Id="{c305c29b-ef8e-4865-855b-a8c166b4bd19}">
+        <Declaration><![CDATA[
+VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[THIS^.nCountField := MIN(nCount, THIS^.nCapacityField);]]></ST>
+        </Implementation>
+      </Set>
     </Property>
     <Method Name="SetValue" Id="{4d35c2f2-eb7c-4eeb-82f5-c3ea1a9f1a96}">
       <Declaration><![CDATA[// Sets the given value at the current element and increases nCount
@@ -227,6 +236,24 @@ END_VAR]]></Declaration>
         <ST><![CDATA[refCtx REF= fbWriteCtx.refCtx;
 THIS^.ipFieldCodecField := ipFieldCodec;
 WriteTo := F_WriteRepeatedField(stCtx:= refCtx, ipRepeatedField:= THIS^);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="WriteToWithCount" Id="{600a3a4c-94da-405a-ab74-04f185c0bde4}">
+      <Declaration><![CDATA[// Writes the contents of this collection to the given write context, encoding each
+// value using the specified codec.
+METHOD WriteToWithCount : HRESULT
+VAR_IN_OUT CONSTANT
+	fbWriteCtx	: FB_WriteContext;
+END_VAR
+VAR_INPUT
+	ipFieldCodec : I_FieldCodec;
+	nCount		 : UDINT;			// Number of items in the collection.
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[
+THIS^.nCount := nCount;
+WriteToWithCount := WriteTo(fbWriteCtx, ipFieldCodec);]]></ST>
       </Implementation>
     </Method>
   </POU>

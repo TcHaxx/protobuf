@@ -41,6 +41,11 @@ END_VAR
       <Get Name="Get" Id="{6e0af163-7a85-41f2-a729-f468ec5e1d22}">
         <Declaration><![CDATA[]]></Declaration>
       </Get>
+      <Set Name="Set" Id="{47979acb-e7c8-45ac-8257-73f8a8fcbaca}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+      </Set>
     </Property>
     <Method Name="SetValue" Id="{04df43e2-7f98-460e-a299-274520714bef}">
       <Declaration><![CDATA[METHOD SetValue : HRESULT
