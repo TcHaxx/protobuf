@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" Version="1.1.0.1">
+  <DUT Name="E_Color" Id="9ef8cea3-3c38-4b6d-8b16-1ab74334cccd">
+    <Declaration><![CDATA[(*******************************************************************************
+                          protoc-gen-twincat V0.0.0.0                           
+                  https://github.com/TcHaxx/protoc-gen-twincat                  
+*******************************************************************************)
+{attribute 'qualified_only'}
+{attribute 'strict'}
+{attribute 'to_string'}
+// Enum with enum_prefix and enum_integer_type options
+TYPE E_Color :
+(
+	COLOR_DEFAULT := 0,
+	COLOR_RED := 1,
+	COLOR_GREEN := 2,
+	COLOR_BLUE := 3
+) WORD;
+END_TYPE]]></Declaration>
+  </DUT>
+</TcPlcObject>

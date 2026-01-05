@@ -91,7 +91,7 @@ CASE nTag OF
     16#0A:         // string name = 1;
         fbParseCtx.ReadString(anyStringOut:= stBar.name);
     16#10:         //uint32 age = 2;
-        fbParseCtx.ReadUint32(nValue=> stBar.age);        
+        fbParseCtx.ReadUint32(anyUdint:= stBar.age);        
     16#1A:         // optional string email = 3; 
         fbParseCtx.ReadString(anyStringOut:= stBar.email);
 ELSE

@@ -10,17 +10,17 @@ VAR_IN_OUT CONSTANT
     aBytes  : ARRAY[*] OF BYTE;
 END_VAR
 VAR_INPUT
-    nLength : UDINT;
+    nCount : UDINT;
 END_VAR]]></Declaration>
     <Implementation>
       <ST><![CDATA[F_WriteBytes := S_OK;
 
-F_WriteBytes := F_WriteLength(stCtx, nLength);
+F_WriteBytes := F_WriteLength(stCtx, nCount);
 IF FAILED(F_WriteBytes) THEN
     RETURN;
 END_IF
 
-F_WriteBytes := F_WriteRawBytes(stCtx, F_ToAnyBytes(aBytes), nLength);]]></ST>
+F_WriteBytes := F_WriteRawBytes(stCtx, F_ToAnyBytes(aBytes), nCount);]]></ST>
     </Implementation>
   </POU>
 </TcPlcObject>

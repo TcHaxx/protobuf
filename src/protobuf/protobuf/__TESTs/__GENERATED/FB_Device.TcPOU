@@ -1,0 +1,184 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1">
+  <POU Name="FB_Device" Id="{09e32396-db04-460c-8ec8-bd3d491ecccb}" SpecialFunc="None">
+    <Declaration><![CDATA[(*******************************************************************************
+                          protoc-gen-twincat V0.0.0.0                           
+                  https://github.com/TcHaxx/protoc-gen-twincat                  
+*******************************************************************************)
+{attribute 'no_explicit_call' := 'do not call this POU directly'}
+{attribute 'no-analysis'}
+// Message with st_prefix and attribute_pack_mode options
+FUNCTION_BLOCK INTERNAL FINAL FB_Device IMPLEMENTS I_Message
+VAR
+    _fbMessageParser : FB_MessageParser(ipMessage:= THIS^);
+    _fbMessageWriter : FB_MessageWriter(ipMessage:= THIS^);
+    _stDevice : ST_Device;
+    // repeated uint32 error_codes = 3;
+    _fbFieldCodecId3 : FB_FieldCodecUint32(nTag:= 16#1A);
+    _fbRepeatedId3 : FB_RepeatedField(anyArray:= F_ToAnyType(_stDevice.error_codes), anyFirstElem:= F_ToAnyType(_stDevice.error_codes[0]));
+    END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[]]></ST>
+    </Implementation>
+    <Method Name="CalculateSize" Id="{a731c815-3027-4fb8-a7c7-c7530380e763}">
+      <Declaration><![CDATA[(* Calculates the size of this message in Protocol Buffer wire format, in bytes. *)
+METHOD CalculateSize : UDINT
+VAR
+    nSize : UDINT;
+    nRepeatedFieldSize : UDINT;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[// string name = 1;
+nSize := nSize + 1 + F_ComputeStringSize(anyString:= _stDevice.name);
+// uint32 id = 2;
+nSize := nSize + 1 + F_ComputeUint32Size(anyUdint:= _stDevice.id);
+// repeated uint32 error_codes = 3;
+_fbRepeatedId3.CalculateSize(nSize => nRepeatedFieldSize);
+nSize := nSize + nRepeatedFieldSize;
+// int32 temperature = 4;
+nSize := nSize + 1 + F_ComputeInt32Size(anyDint:= _stDevice.temperature);
+// bytes data = 5;
+nSize := nSize + 1 + F_ComputeBytesSize(aBytes:= _stDevice.data);
+CalculateSize := nSize;
+]]></ST>
+      </Implementation>
+    </Method>
+    <Property Name="Device" Id="{1b8ca30f-b357-45ca-b3a1-1b0fa2ba3c63}">
+      <Declaration><![CDATA[PROPERTY PUBLIC Device : ST_Device]]></Declaration>
+      <Get Name="Get" Id="{21135f53-41b6-4a98-8e85-604a9025633e}">
+        <Declaration><![CDATA[VAR
+END_VAR]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[Device := _stDevice;]]></ST>
+        </Implementation>
+      </Get>
+      <Set Name="Set" Id="{9142bbb0-9cdc-4be9-8065-1d2595e72b1d}">
+        <Declaration><![CDATA[VAR
+END_VAR]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[_stDevice := Device;]]></ST>
+        </Implementation>
+      </Set>
+    </Property>
+    <Method Name="MergeFrom" Id="{70bc932b-aaee-476e-9c18-bf2b6e939aa6}">
+      <Declaration><![CDATA[(* Merges the data from the specified coded input stream with the current message.*)
+METHOD MergeFrom : HRESULT
+VAR_IN_OUT
+    fbParseCtx : FB_ParseContext;
+END_VAR
+VAR
+    nTag : UDINT;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[REPEAT
+MergeFrom := fbParseCtx.ReadTag(nTag=> nTag);
+IF SUCCEEDED(MergeFrom) AND nTag = 0 THEN
+    EXIT;
+END_IF;
+
+IF FAILED(MergeFrom) THEN
+    RETURN;
+END_IF
+
+CASE nTag OF
+    16#0A:    // string name = 1;
+        MergeFrom := fbParseCtx.ReadString(anyStringOut:= _stDevice.name); 
+    16#10:    // uint32 id = 2;
+        MergeFrom := fbParseCtx.ReadUint32(anyUdint:= _stDevice.id); 
+    16#18:    // repeated uint32 error_codes = 3;
+        MergeFrom := _fbRepeatedId3.AddEntriesFrom(fbParseCtx:= fbParseCtx, ipFieldCodec:= _fbFieldCodecId3,nCount=> _stDevice.error_codes_count);
+    16#20:    // int32 temperature = 4;
+        MergeFrom := fbParseCtx.ReadInt32(anyDint:= _stDevice.temperature); 
+    16#2A:    // bytes data = 5;
+        MergeFrom := fbParseCtx.ReadBytes(aBytes:= _stDevice.data, nCount=> _stDevice.data_count); 
+ELSE
+    MergeFrom := fbParseCtx.SkipLastField();
+END_CASE
+
+UNTIL (FAILED(MergeFrom) OR nTag = 0)
+END_REPEAT
+]]></ST>
+      </Implementation>
+    </Method>
+    <Property Name="MessageValue" Id="{d22f8a5c-0e60-4f47-8aab-52be61561f50}">
+      <Declaration><![CDATA[PROPERTY PUBLIC MessageValue : T_Any]]></Declaration>
+      <Get Name="Get" Id="{be32ed2e-e985-42a5-be4d-ce99e6ab0f03}">
+        <Declaration><![CDATA[]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[MessageValue := F_ToAnyType(anyArg:= _stDevice);]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Property Name="Parser" Id="{2603fe4e-d157-4c75-9755-a1ca9c42a578}">
+      <Declaration><![CDATA[PROPERTY PUBLIC Parser : REFERENCE TO FB_MessageParser]]></Declaration>
+      <Get Name="Get" Id="{6fc08eeb-2f0c-48c0-963e-ee0f13a2f226}">
+        <Declaration><![CDATA[]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[Parser REF= THIS^._fbMessageParser;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Property Name="Writer" Id="{9cbf7bce-5a0b-40aa-8c83-3db7558124a2}">
+      <Declaration><![CDATA[(* Writer for this message.*)
+PROPERTY PUBLIC Writer : REFERENCE TO FB_MessageWriter]]></Declaration>
+      <Get Name="Get" Id="{31efac16-c1fe-47c6-b3bc-7c8a98bc31c9}">
+        <Declaration><![CDATA[]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[Writer REF= THIS^._fbMessageWriter;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Method Name="WriteTo" Id="{166a53bb-af53-46c2-82d6-3f80bfa0b99d}">
+      <Declaration><![CDATA[(* Writes the data to the given coded output stream.*)
+METHOD WriteTo : HRESULT
+VAR_IN_OUT
+	(* Coded output stream to write the data to. *)
+	fbWriteCtx	: FB_WriteContext;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[// string name = 1;
+WriteTo := fbWriteCtx.WriteTag(1, E_WireType.LengthDelimited);
+IF FAILED(WriteTo) THEN
+    RETURN;
+END_IF
+WriteTo := fbWriteCtx.WriteString(sStringToWrite:= _stDevice.name);
+IF FAILED(WriteTo) THEN
+    RETURN;
+END_IF
+// uint32 id = 2;
+WriteTo := fbWriteCtx.WriteTag(2, E_WireType.Varint);
+IF FAILED(WriteTo) THEN
+    RETURN;
+END_IF
+WriteTo := fbWriteCtx.WriteUint32(anyUdint:= _stDevice.id);
+IF FAILED(WriteTo) THEN
+    RETURN;
+END_IF
+// repeated uint32 error_codes = 3;
+WriteTo := _fbRepeatedId3.WriteToWithCount(fbWriteCtx:= fbWriteCtx, ipFieldCodec:= _fbFieldCodecId3, nCount:= _stDevice.error_codes_count);
+IF FAILED(WriteTo) THEN
+    RETURN;
+END_IF
+// int32 temperature = 4;
+WriteTo := fbWriteCtx.WriteTag(4, E_WireType.Varint);
+IF FAILED(WriteTo) THEN
+    RETURN;
+END_IF
+WriteTo := fbWriteCtx.WriteInt32(anyDint:= _stDevice.temperature);
+IF FAILED(WriteTo) THEN
+    RETURN;
+END_IF
+// bytes data = 5;
+WriteTo := fbWriteCtx.WriteBytes(aBytes:= _stDevice.data, nCount:= _stDevice.data_count);
+IF FAILED(WriteTo) THEN
+    RETURN;
+END_IF
+]]></ST>
+      </Implementation>
+    </Method>
+  </POU>
+</TcPlcObject>

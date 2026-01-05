@@ -8,11 +8,12 @@ END_VAR
 VAR_INPUT CONSTANT
 	ipRepeatedField	: I_RepeatedField;
 END_VAR
-
+VAR_OUTPUT
+	nLength : UDINT;
+END_VAR
 VAR
 	nLastTag		: UDINT;
     hr          	: HRESULT;
-    nLength     	: UDINT;
     nCurrentLimit 	: UDINT;
     bTagConsumed	: BOOL;
     nBufferEnd  	: UDINT;  

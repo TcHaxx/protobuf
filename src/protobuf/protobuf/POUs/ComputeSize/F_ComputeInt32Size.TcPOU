@@ -3,11 +3,15 @@
   <POU Name="F_ComputeInt32Size" Id="{88b0525d-445f-4b96-bae4-76ae8cc87be9}" SpecialFunc="None">
     <Declaration><![CDATA[FUNCTION F_ComputeInt32Size : UDINT
 VAR_INPUT
+    anyDint : ANY;
+END_VAR
+VAR
     nValue  : DINT;
 END_VAR
 ]]></Declaration>
     <Implementation>
-      <ST><![CDATA[
+      <ST><![CDATA[memcpy(destAddr:= ADR(nValue), srcAddr:= anyDint.pValue, n:= MIN(TO_UDINT(anyDint.diSize), SIZEOF(nValue)));
+
 IF nValue >= 0 THEN
     F_ComputeInt32Size := F_ComputeRawVarint32Size(TO_UDINT(nValue));
 ELSE

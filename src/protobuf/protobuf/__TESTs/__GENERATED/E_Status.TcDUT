@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" Version="1.1.0.1">
+  <DUT Name="E_Status" Id="c79701e6-9582-4db3-8a8f-c3da9a9058d3">
+    <Declaration><![CDATA[(*******************************************************************************
+                          protoc-gen-twincat V0.0.0.0                           
+                  https://github.com/TcHaxx/protoc-gen-twincat                  
+*******************************************************************************)
+{attribute 'qualified_only'}
+{attribute 'strict'}
+{attribute 'to_string'}
+// Another enum for testing
+TYPE E_Status :
+(
+	STATUS_IDLE := 0,
+	STATUS_RUNNING := 1,
+	STATUS_ERROR := 2
+) DWORD;
+END_TYPE]]></Declaration>
+  </DUT>
+</TcPlcObject>

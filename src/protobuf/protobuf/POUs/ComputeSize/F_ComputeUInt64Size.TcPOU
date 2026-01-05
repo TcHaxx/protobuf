@@ -3,11 +3,14 @@
   <POU Name="F_ComputeUInt64Size" Id="{bb4b8e0f-6024-456c-8b41-ca1717cde303}" SpecialFunc="None">
     <Declaration><![CDATA[FUNCTION F_ComputeUInt64Size : UDINT
 VAR_INPUT
-    nValue  : ULINT;
+    anyUlint : ANY;
 END_VAR
-]]></Declaration>
+VAR
+    nTmp   : ULINT;
+END_VAR]]></Declaration>
     <Implementation>
-      <ST><![CDATA[F_ComputeUInt64Size := F_ComputeRawVarint64Size(nValue);]]></ST>
+      <ST><![CDATA[memcpy(destAddr:= ADR(nTmp), srcAddr:= anyUlint.pValue, n:= MIN(TO_UDINT(anyUlint.diSize), SIZEOF(nTmp)));
+F_ComputeUInt64Size := F_ComputeRawVarint64Size(nTmp);]]></ST>
     </Implementation>
   </POU>
 </TcPlcObject>

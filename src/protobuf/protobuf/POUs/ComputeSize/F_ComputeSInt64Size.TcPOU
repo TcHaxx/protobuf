@@ -3,11 +3,14 @@
   <POU Name="F_ComputeSInt64Size" Id="{abf6d1d4-f1e7-40d8-a715-d04005b02aea}" SpecialFunc="None">
     <Declaration><![CDATA[FUNCTION F_ComputeSInt64Size : UDINT
 VAR_INPUT
+    anyLint : ANY;
+END_VAR
+VAR
     nValue  : LINT;
 END_VAR
 ]]></Declaration>
     <Implementation>
-      <ST><![CDATA[
+      <ST><![CDATA[memcpy(destAddr:= ADR(nValue), srcAddr:= anyLint.pValue, n:= MIN(TO_UDINT(anyLint.diSize), SIZEOF(nValue)));
 F_ComputeSInt64Size := F_ComputeRawVarint64Size(F_EncodeZigZag64(nValue));]]></ST>
     </Implementation>
   </POU>

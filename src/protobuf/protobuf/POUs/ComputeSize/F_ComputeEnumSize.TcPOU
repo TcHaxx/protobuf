@@ -3,12 +3,17 @@
   <POU Name="F_ComputeEnumSize" Id="{fed8b217-7dd0-4101-8158-a06e03aee7a9}" SpecialFunc="None">
     <Declaration><![CDATA[FUNCTION F_ComputeEnumSize : UDINT
 VAR_INPUT
-    nValue  : DINT;
+    anyEnum  : ANY;
 END_VAR
-]]></Declaration>
+VAR
+	nTmp : DINT;
+END_VAR]]></Declaration>
     <Implementation>
-      <ST><![CDATA[
-F_ComputeEnumSize := F_ComputeInt32Size(nValue);]]></ST>
+      <ST><![CDATA[IF anyEnum.pValue = NULL OR anyEnum.TypeClass <> __SYSTEM.TYPE_CLASS.TYPE_ENUM THEN
+	RETURN;
+END_IF
+nTmp := PDINT_TO_DINT(anyEnum.pValue);
+F_ComputeEnumSize := F_ComputeInt32Size(nTmp);]]></ST>
     </Implementation>
   </POU>
 </TcPlcObject>

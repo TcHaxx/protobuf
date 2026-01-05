@@ -7,9 +7,10 @@ VAR_IN_OUT
     stCtx : ST_ParseContext; 
     aBytes  : ARRAY[*] OF BYTE;
 END_VAR
-VAR
-    nLength : UDINT;
-END_VAR]]></Declaration>
+VAR_OUTPUT
+	nLength : UDINT;
+END_VAR
+]]></Declaration>
     <Implementation>
       <ST><![CDATA[F_ReadBytes := S_OK;
 
@@ -18,7 +19,7 @@ IF FAILED(F_ReadBytes) THEN
     RETURN;
 END_IF
 
-F_ReadBytes := F_ReadRawBytes(stCtx, F_ToAnyBytes(aBytes), nLength,);]]></ST>
+F_ReadBytes := F_ReadRawBytes(stCtx, F_ToAnyBytes(aBytes), nLength);]]></ST>
     </Implementation>
   </POU>
 </TcPlcObject>

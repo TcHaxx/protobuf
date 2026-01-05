@@ -7,6 +7,15 @@ VAR
 {IF defined (UNIT_TEST)}
 
 {END_IF}
+// fbTestNestedMessage1 : FB_TestNestedMessage;
+// fbTestNestedMessage2 : FB_TestNestedMessage;
+fbMotor : FB_Motor;
+fbMotorDec : FB_Motor;
+fbcplx : FB_ComplexData;
+fbcplxDec : FB_ComplexData;
+fbDevice : FB_Device;
+aBuffer	: ARRAY[0..1023] OF BYTE;
+aBuffer1	: ARRAY[0..1023] OF BYTE;
 END_VAR
 ]]></Declaration>
     <Implementation>
@@ -21,7 +30,13 @@ PRG_HelperTests();
 PRG_SpanTests();
 TcUnit.RUN();
 
-{END_IF}]]></ST>
+{END_IF}
+//  fbMotor.Writer.WriteTo(aBuffer);
+//  fbMotorDec.Parser.ParseFrom(aBuffer);
+// fbcplx.Writer.WriteTo(aBuffer1);
+// fbcplxDec.Parser.ParseFrom(aBuffer1);
+// fbTestNestedMessage1.Writer.WriteTo(aBuffer);
+// fbTestNestedMessage2.Parser.ParseFrom(aBuffer);]]></ST>
     </Implementation>
     <ObjectProperties>
       <XmlArchive>

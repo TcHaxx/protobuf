@@ -102,7 +102,7 @@ CASE nTag OF
 		MergeFrom := fbRepeatedaUdintArray.AddEntriesFrom(fbParseCtx:= fbParseCtx, ipFieldCodec:= fbRepeatedaUdintArrayCodec);
 
     16#18:  // int32 (3)
-        MergeFrom := fbParseCtx.ReadInt32(nValue=> stExample.nDInt2);
+        MergeFrom := fbParseCtx.ReadInt32(anyDint:= stExample.nDInt2);
       
     16#22:  // string (4)
         MergeFrom := fbParseCtx.ReadString(anyStringOut:= stExample.sMyString);
@@ -261,7 +261,7 @@ WriteTo := fbWriteCtx.WriteRawTag(16#52);
 IF FAILED(WriteTo) THEN
     RETURN;
 END_IF
-WriteTo := fbWriteCtx.WriteBytes(aBytes:= stExample.aBytes, nLength:= 6); 
+WriteTo := fbWriteCtx.WriteBytes(aBytes:= stExample.aBytes, nCount:= 6); 
 IF FAILED(WriteTo) THEN
     RETURN;
 END_IF

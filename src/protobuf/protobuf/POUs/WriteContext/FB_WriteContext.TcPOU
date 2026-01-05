@@ -108,11 +108,11 @@ VAR_IN_OUT CONSTANT
     aBytes  : ARRAY [*] OF BYTE;
 END_VAR
 VAR_INPUT
-    nLength : UDINT;
+    nCount : UDINT;
 END_VAR]]></Declaration>
       <Implementation>
         <ST><![CDATA[
-WriteBytes := F_WriteBytes(THIS^.stCtx, aBytes, nLength);]]></ST>
+WriteBytes := F_WriteBytes(THIS^.stCtx, aBytes, nCount);]]></ST>
       </Implementation>
     </Method>
     <Method Name="WriteDouble" Id="{3b86ec3f-2cad-45c5-9a6f-d56de79d1415}">
@@ -128,12 +128,16 @@ END_VAR
     <Method Name="WriteEnum" Id="{4fb9d4ab-4be6-42ee-a3bb-3f86dbf2061c}">
       <Declaration><![CDATA[METHOD WriteEnum : HRESULT
 VAR_INPUT
-    nValue : DINT;
+    anyEnum : ANY;
 END_VAR
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[
-WriteEnum := F_WriteEnum(THIS^.stCtx, nValue);]]></ST>
+        <ST><![CDATA[IF anyEnum.pValue = NULL OR anyEnum.TypeClass <> __SYSTEM.TYPE_CLASS.TYPE_ENUM THEN
+	WriteEnum := E_HRESULTAdsErr.INVALIDDATA;
+	RETURN;
+END_IF
+
+WriteEnum := F_WriteEnum(THIS^.stCtx, PDINT_TO_DINT(anyEnum.pValue));]]></ST>
       </Implementation>
     </Method>
     <Method Name="WriteFixed32" Id="{75c23fcd-723d-4cbc-9e77-8e2301b57ac1}">
@@ -171,21 +175,41 @@ END_VAR
     <Method Name="WriteInt32" Id="{cb424f8c-2286-402b-adff-21634a582503}">
       <Declaration><![CDATA[METHOD WriteInt32 : HRESULT
 VAR_INPUT
-    nValue : DINT;
+    anyDint : ANY;
 END_VAR
-]]></Declaration>
+VAR
+    nTmp   : DINT;
+	retVal : UDINT;
+END_VAR]]></Declaration>
       <Implementation>
-        <ST><![CDATA[WriteInt32 := F_WriteInt32(THIS^.stCtx, nValue);]]></ST>
+        <ST><![CDATA[
+retVal := memcpy(destAddr:= ADR(nTmp), srcAddr:= anyDint.pValue, n:= MIN(TO_UDINT(anyDint.diSize), SIZEOF(nTmp)));
+IF retVal = 0 THEN
+	WriteInt32:= E_HRESULTAdsErr.INVALIDDATA;
+	RETURN;
+END_IF
+
+WriteInt32 := F_WriteInt32(THIS^.stCtx, nTmp);]]></ST>
       </Implementation>
     </Method>
     <Method Name="WriteInt64" Id="{470d349f-a883-451f-86ff-5add09c6bbc1}">
       <Declaration><![CDATA[METHOD WriteInt64 : HRESULT
 VAR_INPUT
-    nValue : LINT;
+    anyLint : ANY;
 END_VAR
-]]></Declaration>
+VAR
+    nTmp   : LINT;
+	retVal : UDINT;
+END_VAR]]></Declaration>
       <Implementation>
-        <ST><![CDATA[WriteInt64 := F_WriteInt64(THIS^.stCtx, nValue);]]></ST>
+        <ST><![CDATA[
+retVal := memcpy(destAddr:= ADR(nTmp), srcAddr:= anyLint.pValue, n:= MIN(TO_UDINT(anyLint.diSize), SIZEOF(nTmp)));
+IF retVal = 0 THEN
+	WriteInt64:= E_HRESULTAdsErr.INVALIDDATA;
+	RETURN;
+END_IF
+
+WriteInt64 := F_WriteInt64(THIS^.stCtx, nTmp);]]></ST>
       </Implementation>
     </Method>
     <Method Name="WriteLength" Id="{aefabf76-233a-48e5-bd46-c3bd214198fb}">
@@ -288,23 +312,42 @@ WriteTag := F_WriteTag(THIS^.stCtx, nFieldNumber, eWireType);]]></ST>
     <Method Name="WriteUint32" Id="{5d55f154-a20b-441b-9140-093b322d95f5}">
       <Declaration><![CDATA[METHOD WriteUint32 : HRESULT
 VAR_INPUT
-    nValue : UDINT;
+    anyUdint : ANY;
 END_VAR
-]]></Declaration>
+VAR
+    nTmp   : UDINT;
+	retVal : UDINT;
+END_VAR]]></Declaration>
       <Implementation>
         <ST><![CDATA[
 
-WriteUint32 := F_WriteUInt32(THIS^.stCtx, nValue);]]></ST>
+retVal := memcpy(destAddr:= ADR(nTmp), srcAddr:= anyUdint.pValue, n:= MIN(TO_UDINT(anyUdint.diSize), SIZEOF(nTmp)));
+IF retVal = 0 THEN
+	WriteUint32:= E_HRESULTAdsErr.INVALIDDATA;
+	RETURN;
+END_IF
+
+WriteUint32 := F_WriteUInt32(THIS^.stCtx, nTmp);]]></ST>
       </Implementation>
     </Method>
     <Method Name="WriteUint64" Id="{340b2f1b-3da7-48bf-82ca-67d4a8315258}">
       <Declaration><![CDATA[METHOD WriteUint64 : HRESULT
 VAR_INPUT
-    nValue : ULINT;
+    anyUlint : ANY;
 END_VAR
-]]></Declaration>
+VAR
+    nTmp   : ULINT;
+	retVal : UDINT;
+END_VAR]]></Declaration>
       <Implementation>
-        <ST><![CDATA[WriteUint64 := F_WriteUInt64(THIS^.stCtx, nValue);]]></ST>
+        <ST><![CDATA[
+retVal := memcpy(destAddr:= ADR(nTmp), srcAddr:= anyUlint.pValue, n:= MIN(TO_UDINT(anyUlint.diSize), SIZEOF(nTmp)));
+IF retVal = 0 THEN
+	WriteUint64:= E_HRESULTAdsErr.INVALIDDATA;
+	RETURN;
+END_IF
+
+WriteUint64 := F_WriteUInt64(THIS^.stCtx, nTmp);]]></ST>
       </Implementation>
     </Method>
   </POU>

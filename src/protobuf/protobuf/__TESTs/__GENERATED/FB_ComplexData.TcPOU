@@ -1,0 +1,262 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1">
+  <POU Name="FB_ComplexData" Id="{dd9ed84b-5c91-44ab-af2d-4b116cb0fa9c}" SpecialFunc="None">
+    <Declaration><![CDATA[(*******************************************************************************
+                          protoc-gen-twincat V0.0.0.0                           
+                  https://github.com/TcHaxx/protoc-gen-twincat                  
+*******************************************************************************)
+{attribute 'no_explicit_call' := 'do not call this POU directly'}
+{attribute 'no-analysis'}
+// Another message demonstrating all field options
+FUNCTION_BLOCK INTERNAL FINAL FB_ComplexData IMPLEMENTS I_Message
+VAR
+    _fbMessageParser : FB_MessageParser(ipMessage:= THIS^);
+    _fbMessageWriter : FB_MessageWriter(ipMessage:= THIS^);
+    _stComplexData : ST_ComplexData;
+    // repeated uint32 array_data = 5;
+    _fbFieldCodecId5 : FB_FieldCodecUint32(nTag:= 16#2A);
+    _fbRepeatedId5 : FB_RepeatedField(anyArray:= F_ToAnyType(_stComplexData.array_data), anyFirstElem:= F_ToAnyType(_stComplexData.array_data[0]));
+    // repeated SensorReading readings = 10;
+    _fbFieldCodecId10 : FB_FieldCodecMessage(nTag:= 16#52, ipMessage:= _fbSensorReading);
+    _fbRepeatedId10 : FB_RepeatedField(anyArray:= F_ToAnyType(_stComplexData.readings), anyFirstElem:= F_ToAnyType(_stComplexData.readings[0]));
+    _fbSensorReading : FB_SensorReading;
+    END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[]]></ST>
+    </Implementation>
+    <Method Name="CalculateSize" Id="{50d8f545-74b2-4eb2-a5ac-f0ca4d18ce45}">
+      <Declaration><![CDATA[(* Calculates the size of this message in Protocol Buffer wire format, in bytes. *)
+METHOD CalculateSize : UDINT
+VAR
+    nSize : UDINT;
+    nRepeatedFieldSize : UDINT;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[// string label = 1;
+nSize := nSize + 1 + F_ComputeStringSize(anyString:= _stComplexData.label);
+// int32 value_dint = 2;
+nSize := nSize + 1 + F_ComputeInt32Size(anyDint:= _stComplexData.value_dint);
+// int32 value_int = 3;
+nSize := nSize + 1 + F_ComputeInt32Size(anyDint:= _stComplexData.value_int);
+// uint32 value_word = 4;
+nSize := nSize + 1 + F_ComputeUint32Size(anyUdint:= _stComplexData.value_word);
+// repeated uint32 array_data = 5;
+_fbRepeatedId5.CalculateSize(nSize => nRepeatedFieldSize);
+nSize := nSize + nRepeatedFieldSize;
+// Status state = 6;
+nSize := nSize + 1 + F_ComputeEnumSize(anyEnum:= _stComplexData.state);
+// bytes raw_bytes = 7;
+nSize := nSize + 1 + F_ComputeBytesSize(aBytes:= _stComplexData.raw_bytes);
+// double measurement = 8;
+nSize := nSize + 1 + F_ComputeDoubleSize(fValue:= _stComplexData.measurement);
+// float calibration_factor = 9;
+nSize := nSize + 1 + F_ComputeFloatSize(fValue:= _stComplexData.calibration_factor);
+// repeated SensorReading readings = 10;
+nSize := nSize + 1 + F_ComputeMessageSize(iMessage:= _fbSensorReading);
+// DataType data_type = 11;
+nSize := nSize + 1 + F_ComputeEnumSize(anyEnum:= _stComplexData.data_type);
+CalculateSize := nSize;
+]]></ST>
+      </Implementation>
+    </Method>
+    <Property Name="ComplexData" Id="{eac6fa80-f719-4b63-8f97-7d3f7920748e}">
+      <Declaration><![CDATA[PROPERTY PUBLIC ComplexData : ST_ComplexData]]></Declaration>
+      <Get Name="Get" Id="{240f6e25-97f7-44f9-b182-1b7b35ad607f}">
+        <Declaration><![CDATA[VAR
+END_VAR]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[ComplexData := _stComplexData;]]></ST>
+        </Implementation>
+      </Get>
+      <Set Name="Set" Id="{63fcb843-5814-4d4c-b0c0-92c33ffbd651}">
+        <Declaration><![CDATA[VAR
+END_VAR]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[_stComplexData := ComplexData;]]></ST>
+        </Implementation>
+      </Set>
+    </Property>
+    <Method Name="MergeFrom" Id="{80a231b3-cc34-4cf7-9806-2a419847f802}">
+      <Declaration><![CDATA[(* Merges the data from the specified coded input stream with the current message.*)
+METHOD MergeFrom : HRESULT
+VAR_IN_OUT
+    fbParseCtx : FB_ParseContext;
+END_VAR
+VAR
+    nTag : UDINT;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[REPEAT
+MergeFrom := fbParseCtx.ReadTag(nTag=> nTag);
+IF SUCCEEDED(MergeFrom) AND nTag = 0 THEN
+    EXIT;
+END_IF;
+
+IF FAILED(MergeFrom) THEN
+    RETURN;
+END_IF
+
+CASE nTag OF
+    16#0A:    // string label = 1;
+        MergeFrom := fbParseCtx.ReadString(anyStringOut:= _stComplexData.label); 
+    16#10:    // int32 value_dint = 2;
+        MergeFrom := fbParseCtx.ReadInt32(anyDint:= _stComplexData.value_dint); 
+    16#18:    // int32 value_int = 3;
+        MergeFrom := fbParseCtx.ReadInt32(anyDint:= _stComplexData.value_int); 
+    16#20:    // uint32 value_word = 4;
+        MergeFrom := fbParseCtx.ReadUint32(anyUdint:= _stComplexData.value_word); 
+    16#28:    // repeated uint32 array_data = 5;
+        MergeFrom := _fbRepeatedId5.AddEntriesFrom(fbParseCtx:= fbParseCtx, ipFieldCodec:= _fbFieldCodecId5,nCount=> _stComplexData.array_data_count);
+    16#30:    // Status state = 6;
+        MergeFrom := fbParseCtx.ReadEnum(anyEnum:= _stComplexData.state); 
+    16#3A:    // bytes raw_bytes = 7;
+        MergeFrom := fbParseCtx.ReadBytes(aBytes:= _stComplexData.raw_bytes, nCount=> _stComplexData.raw_bytes_count); 
+    16#41:    // double measurement = 8;
+        MergeFrom := fbParseCtx.ReadDouble(fValue=> _stComplexData.measurement); 
+    16#4D:    // float calibration_factor = 9;
+        MergeFrom := fbParseCtx.ReadFloat(fValue=> _stComplexData.calibration_factor); 
+    16#52:    // repeated SensorReading readings = 10;
+        MergeFrom := _fbRepeatedId10.AddEntriesFrom(fbParseCtx:= fbParseCtx, ipFieldCodec:= _fbFieldCodecId10,nCount=> _stComplexData.readings_count);
+    16#58:    // DataType data_type = 11;
+        MergeFrom := fbParseCtx.ReadEnum(anyEnum:= _stComplexData.data_type); 
+ELSE
+    MergeFrom := fbParseCtx.SkipLastField();
+END_CASE
+
+UNTIL (FAILED(MergeFrom) OR nTag = 0)
+END_REPEAT
+]]></ST>
+      </Implementation>
+    </Method>
+    <Property Name="MessageValue" Id="{b68a216b-f675-4788-9753-e2baf28b3da0}">
+      <Declaration><![CDATA[PROPERTY PUBLIC MessageValue : T_Any]]></Declaration>
+      <Get Name="Get" Id="{80e8ab3d-6183-4647-8889-35dd5f4481c3}">
+        <Declaration><![CDATA[]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[MessageValue := F_ToAnyType(anyArg:= _stComplexData);]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Property Name="Parser" Id="{8a60ba12-abe3-49fc-92aa-6eec9ec45c00}">
+      <Declaration><![CDATA[PROPERTY PUBLIC Parser : REFERENCE TO FB_MessageParser]]></Declaration>
+      <Get Name="Get" Id="{5ddc7a47-8b24-474d-93c8-6d430def1b0b}">
+        <Declaration><![CDATA[]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[Parser REF= THIS^._fbMessageParser;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Property Name="Writer" Id="{71d40b91-7180-4023-bdd5-c1f18d51587f}">
+      <Declaration><![CDATA[(* Writer for this message.*)
+PROPERTY PUBLIC Writer : REFERENCE TO FB_MessageWriter]]></Declaration>
+      <Get Name="Get" Id="{5ef37ea3-8e70-40d0-8e82-b677b75707e8}">
+        <Declaration><![CDATA[]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[Writer REF= THIS^._fbMessageWriter;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Method Name="WriteTo" Id="{bb90c3e8-40c1-4ddb-a7d2-7dd39ef1d5bf}">
+      <Declaration><![CDATA[(* Writes the data to the given coded output stream.*)
+METHOD WriteTo : HRESULT
+VAR_IN_OUT
+	(* Coded output stream to write the data to. *)
+	fbWriteCtx	: FB_WriteContext;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[// string label = 1;
+WriteTo := fbWriteCtx.WriteTag(1, E_WireType.LengthDelimited);
+IF FAILED(WriteTo) THEN
+    RETURN;
+END_IF
+WriteTo := fbWriteCtx.WriteString(sStringToWrite:= _stComplexData.label);
+IF FAILED(WriteTo) THEN
+    RETURN;
+END_IF
+// int32 value_dint = 2;
+WriteTo := fbWriteCtx.WriteTag(2, E_WireType.Varint);
+IF FAILED(WriteTo) THEN
+    RETURN;
+END_IF
+WriteTo := fbWriteCtx.WriteInt32(anyDint:= _stComplexData.value_dint);
+IF FAILED(WriteTo) THEN
+    RETURN;
+END_IF
+// int32 value_int = 3;
+WriteTo := fbWriteCtx.WriteTag(3, E_WireType.Varint);
+IF FAILED(WriteTo) THEN
+    RETURN;
+END_IF
+WriteTo := fbWriteCtx.WriteInt32(anyDint:= _stComplexData.value_int);
+IF FAILED(WriteTo) THEN
+    RETURN;
+END_IF
+// uint32 value_word = 4;
+WriteTo := fbWriteCtx.WriteTag(4, E_WireType.Varint);
+IF FAILED(WriteTo) THEN
+    RETURN;
+END_IF
+WriteTo := fbWriteCtx.WriteUint32(anyUdint:= _stComplexData.value_word);
+IF FAILED(WriteTo) THEN
+    RETURN;
+END_IF
+// repeated uint32 array_data = 5;
+WriteTo := _fbRepeatedId5.WriteToWithCount(fbWriteCtx:= fbWriteCtx, ipFieldCodec:= _fbFieldCodecId5, nCount:= _stComplexData.array_data_count);
+IF FAILED(WriteTo) THEN
+    RETURN;
+END_IF
+// Status state = 6;
+WriteTo := fbWriteCtx.WriteTag(6, E_WireType.Varint);
+IF FAILED(WriteTo) THEN
+    RETURN;
+END_IF
+WriteTo := fbWriteCtx.WriteEnum(anyEnum:= _stComplexData.state);
+IF FAILED(WriteTo) THEN
+    RETURN;
+END_IF
+// bytes raw_bytes = 7;
+WriteTo := fbWriteCtx.WriteBytes(aBytes:= _stComplexData.raw_bytes, nCount:= _stComplexData.raw_bytes_count);
+IF FAILED(WriteTo) THEN
+    RETURN;
+END_IF
+// double measurement = 8;
+WriteTo := fbWriteCtx.WriteTag(8, E_WireType.Fixed64);
+IF FAILED(WriteTo) THEN
+    RETURN;
+END_IF
+WriteTo := fbWriteCtx.WriteDouble(fValue:= _stComplexData.measurement);
+IF FAILED(WriteTo) THEN
+    RETURN;
+END_IF
+// float calibration_factor = 9;
+WriteTo := fbWriteCtx.WriteTag(9, E_WireType.Fixed32);
+IF FAILED(WriteTo) THEN
+    RETURN;
+END_IF
+WriteTo := fbWriteCtx.WriteFloat(fValue:= _stComplexData.calibration_factor);
+IF FAILED(WriteTo) THEN
+    RETURN;
+END_IF
+// repeated SensorReading readings = 10;
+WriteTo := _fbRepeatedId10.WriteToWithCount(fbWriteCtx:= fbWriteCtx, ipFieldCodec:= _fbFieldCodecId10, nCount:= _stComplexData.readings_count);
+IF FAILED(WriteTo) THEN
+    RETURN;
+END_IF
+// DataType data_type = 11;
+WriteTo := fbWriteCtx.WriteTag(11, E_WireType.Varint);
+IF FAILED(WriteTo) THEN
+    RETURN;
+END_IF
+WriteTo := fbWriteCtx.WriteEnum(anyEnum:= _stComplexData.data_type);
+IF FAILED(WriteTo) THEN
+    RETURN;
+END_IF
+]]></ST>
+      </Implementation>
+    </Method>
+  </POU>
+</TcPlcObject>

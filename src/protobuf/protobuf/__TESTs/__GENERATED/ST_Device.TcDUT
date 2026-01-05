@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" Version="1.1.0.1">
+  <DUT Name="ST_Device" Id="29cf37b8-5e2d-4a7d-a481-ee5d6bce4ccf">
+    <Declaration><![CDATA[(*******************************************************************************
+                          protoc-gen-twincat V0.0.0.0                           
+                  https://github.com/TcHaxx/protoc-gen-twincat                  
+*******************************************************************************)
+{attribute 'no-analysis'}
+{attribute 'pack_mode' := '1'}
+// Message with st_prefix and attribute_pack_mode options
+TYPE ST_Device :
+STRUCT
+	name : STRING(256);
+	id : DWORD;
+	error_codes : ARRAY[0..9] OF WORD;
+	error_codes_count : UDINT; // Implict generated field for actual number of items in array error_codes
+	temperature : DINT;
+	data : ARRAY[0..63] OF BYTE;
+	data_count : UDINT; // Implict generated field for actual number of items in array data
+END_STRUCT
+END_TYPE]]></Declaration>
+  </DUT>
+</TcPlcObject>

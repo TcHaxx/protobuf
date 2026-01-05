@@ -28,13 +28,16 @@ END_VAR
 VAR_INPUT
 	ipFieldCodec : I_FieldCodec;
 END_VAR
+VAR_OUTPUT
+	nCount : UDINT;
+END_VAR
 VAR
 	refCtx	: REFERENCE TO ST_ParseContext;
 END_VAR]]></Declaration>
       <Implementation>
         <ST><![CDATA[refCtx REF= fbParseCtx.refCtx;
 THIS^.ipFieldCodecField := ipFieldCodec;
-AddEntriesFrom := F_ReadRepeatedField(stCtx:= refCtx, ipRepeatedField:= THIS^);]]></ST>
+AddEntriesFrom := F_ReadRepeatedField(stCtx:= refCtx, ipRepeatedField:= THIS^, nLength=> nCount);]]></ST>
       </Implementation>
     </Method>
     <Method Name="CalculatePackedDataSize" Id="{90e54b0d-eaa3-492d-97d1-6ecfaa9fb248}">

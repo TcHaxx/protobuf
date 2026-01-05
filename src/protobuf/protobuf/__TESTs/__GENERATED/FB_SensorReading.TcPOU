@@ -1,0 +1,161 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1">
+  <POU Name="FB_SensorReading" Id="{f5fb007c-5b44-4136-a9b7-fcb0038e17ea}" SpecialFunc="None">
+    <Declaration><![CDATA[(*******************************************************************************
+                          protoc-gen-twincat V0.0.0.0                           
+                  https://github.com/TcHaxx/protoc-gen-twincat                  
+*******************************************************************************)
+{attribute 'no_explicit_call' := 'do not call this POU directly'}
+{attribute 'no-analysis'}
+FUNCTION_BLOCK INTERNAL FINAL FB_SensorReading IMPLEMENTS I_Message
+VAR
+    _fbMessageParser : FB_MessageParser(ipMessage:= THIS^);
+    _fbMessageWriter : FB_MessageWriter(ipMessage:= THIS^);
+    _stSensorReading : ST_SensorReading;
+    END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[]]></ST>
+    </Implementation>
+    <Method Name="CalculateSize" Id="{d44be0df-5980-4b8f-8ffb-ee372ccb6702}">
+      <Declaration><![CDATA[(* Calculates the size of this message in Protocol Buffer wire format, in bytes. *)
+METHOD CalculateSize : UDINT
+VAR
+    nSize : UDINT;
+    nRepeatedFieldSize : UDINT;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[// double value = 1;
+nSize := nSize + 1 + F_ComputeDoubleSize(fValue:= _stSensorReading.value);
+// float precision = 2;
+nSize := nSize + 1 + F_ComputeFloatSize(fValue:= _stSensorReading.precision);
+// int64 timestamp = 3;
+nSize := nSize + 1 + F_ComputeInt64Size(anyLint:= _stSensorReading.timestamp);
+CalculateSize := nSize;
+]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="MergeFrom" Id="{fb0f1690-5ec3-4ed1-aa9b-ceefb2df6717}">
+      <Declaration><![CDATA[(* Merges the data from the specified coded input stream with the current message.*)
+METHOD MergeFrom : HRESULT
+VAR_IN_OUT
+    fbParseCtx : FB_ParseContext;
+END_VAR
+VAR
+    nTag : UDINT;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[REPEAT
+MergeFrom := fbParseCtx.ReadTag(nTag=> nTag);
+IF SUCCEEDED(MergeFrom) AND nTag = 0 THEN
+    EXIT;
+END_IF;
+
+IF FAILED(MergeFrom) THEN
+    RETURN;
+END_IF
+
+CASE nTag OF
+    16#09:    // double value = 1;
+        MergeFrom := fbParseCtx.ReadDouble(fValue=> _stSensorReading.value); 
+    16#15:    // float precision = 2;
+        MergeFrom := fbParseCtx.ReadFloat(fValue=> _stSensorReading.precision); 
+    16#18:    // int64 timestamp = 3;
+        MergeFrom := fbParseCtx.ReadInt64(anyLint:= _stSensorReading.timestamp); 
+ELSE
+    MergeFrom := fbParseCtx.SkipLastField();
+END_CASE
+
+UNTIL (FAILED(MergeFrom) OR nTag = 0)
+END_REPEAT
+]]></ST>
+      </Implementation>
+    </Method>
+    <Property Name="MessageValue" Id="{565e1155-cdcf-4a01-9835-6a3876b47389}">
+      <Declaration><![CDATA[PROPERTY PUBLIC MessageValue : T_Any]]></Declaration>
+      <Get Name="Get" Id="{c0a6a567-8ac1-4697-8d3b-321bbc75dde1}">
+        <Declaration><![CDATA[]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[MessageValue := F_ToAnyType(anyArg:= _stSensorReading);]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Property Name="Parser" Id="{e49e9719-01db-4bb2-bbf5-3c64a227d5be}">
+      <Declaration><![CDATA[PROPERTY PUBLIC Parser : REFERENCE TO FB_MessageParser]]></Declaration>
+      <Get Name="Get" Id="{5f685b76-bd3a-45ca-add2-9f90dead9314}">
+        <Declaration><![CDATA[]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[Parser REF= THIS^._fbMessageParser;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Property Name="SensorReading" Id="{d88d3314-ddf9-4d2b-a144-e230f00bdd43}">
+      <Declaration><![CDATA[PROPERTY PUBLIC SensorReading : ST_SensorReading]]></Declaration>
+      <Get Name="Get" Id="{bbd1a6df-9145-42bb-b2b5-d1508ca67b5c}">
+        <Declaration><![CDATA[VAR
+END_VAR]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[SensorReading := _stSensorReading;]]></ST>
+        </Implementation>
+      </Get>
+      <Set Name="Set" Id="{1c3b1d02-4d3f-4082-bc06-b93dadf68122}">
+        <Declaration><![CDATA[VAR
+END_VAR]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[_stSensorReading := SensorReading;]]></ST>
+        </Implementation>
+      </Set>
+    </Property>
+    <Property Name="Writer" Id="{e124602d-e14b-4e7b-b26d-2ab4d5decfe2}">
+      <Declaration><![CDATA[(* Writer for this message.*)
+PROPERTY PUBLIC Writer : REFERENCE TO FB_MessageWriter]]></Declaration>
+      <Get Name="Get" Id="{93ae3d49-ec18-4ca7-931f-7a2f14a74c95}">
+        <Declaration><![CDATA[]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[Writer REF= THIS^._fbMessageWriter;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Method Name="WriteTo" Id="{0e1f3d84-62e5-406c-9f28-f8a9e9ec2657}">
+      <Declaration><![CDATA[(* Writes the data to the given coded output stream.*)
+METHOD WriteTo : HRESULT
+VAR_IN_OUT
+	(* Coded output stream to write the data to. *)
+	fbWriteCtx	: FB_WriteContext;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[// double value = 1;
+WriteTo := fbWriteCtx.WriteTag(1, E_WireType.Fixed64);
+IF FAILED(WriteTo) THEN
+    RETURN;
+END_IF
+WriteTo := fbWriteCtx.WriteDouble(fValue:= _stSensorReading.value);
+IF FAILED(WriteTo) THEN
+    RETURN;
+END_IF
+// float precision = 2;
+WriteTo := fbWriteCtx.WriteTag(2, E_WireType.Fixed32);
+IF FAILED(WriteTo) THEN
+    RETURN;
+END_IF
+WriteTo := fbWriteCtx.WriteFloat(fValue:= _stSensorReading.precision);
+IF FAILED(WriteTo) THEN
+    RETURN;
+END_IF
+// int64 timestamp = 3;
+WriteTo := fbWriteCtx.WriteTag(3, E_WireType.Varint);
+IF FAILED(WriteTo) THEN
+    RETURN;
+END_IF
+WriteTo := fbWriteCtx.WriteInt64(anyLint:= _stSensorReading.timestamp);
+IF FAILED(WriteTo) THEN
+    RETURN;
+END_IF
+]]></ST>
+      </Implementation>
+    </Method>
+  </POU>
+</TcPlcObject>

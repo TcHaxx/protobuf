@@ -114,24 +114,41 @@ bValue := nTmp <> 0;]]></ST>
 VAR_IN_OUT
     aBytes : ARRAY [*] OF BYTE;
 END_VAR
+VAR_OUTPUT
+	nCount : UDINT;
+END_VAR
 ]]></Declaration>
       <Implementation>
         <ST><![CDATA[
-ReadBytes := F_ReadBytes(THIS^.stCtx, aBytes); ]]></ST>
+ReadBytes := F_ReadBytes(THIS^.stCtx, aBytes, nLength=> nCount); ]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="ReadDouble" Id="{8d396e64-f286-4fda-95f4-0e77be4101f8}">
+      <Declaration><![CDATA[METHOD PUBLIC ReadDouble : HRESULT
+VAR_OUTPUT
+    fValue : LREAL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[
+ReadDouble := F_ParseDouble(THIS^.stCtx, fValue=> fValue);]]></ST>
       </Implementation>
     </Method>
     <Method Name="ReadEnum" Id="{94929d12-39b1-4d65-901a-08d5f4ed083c}">
       <Declaration><![CDATA[METHOD PUBLIC ReadEnum : HRESULT
-VAR_OUTPUT
-    nValue : DINT;
+VAR_INPUT
+    anyEnum : ANY;
 END_VAR
 VAR
     nTmp   : UDINT;
 END_VAR]]></Declaration>
       <Implementation>
-        <ST><![CDATA[
+        <ST><![CDATA[IF anyEnum.pValue = NULL OR anyEnum.TypeClass <> __SYSTEM.TYPE_CLASS.TYPE_ENUM THEN
+	ReadEnum := E_HRESULTAdsErr.INVALIDDATA;
+	RETURN;
+END_IF
+
 ReadEnum := F_ParseRawVarint32(THIS^.stCtx, nTmp);
-nValue := TO_DINT(nTmp);]]></ST>
+memcpy(anyEnum.pValue, srcAddr:= ADR(nTmp), TO_UDINT(anyEnum.diSize)); ]]></ST>
       </Implementation>
     </Method>
     <Method Name="ReadFixed32" Id="{8472785f-a763-4cc4-aa20-d1a39159ff5f}">
@@ -166,30 +183,38 @@ ReadFloat := F_ParseFloat(THIS^.stCtx, fValue=> fValue);]]></ST>
     </Method>
     <Method Name="ReadInt32" Id="{98149cf0-c874-466c-84a8-ded7ed12b5d2}">
       <Declaration><![CDATA[METHOD PUBLIC ReadInt32 : HRESULT
-VAR_OUTPUT
-    nValue : DINT;
+VAR_INPUT
+    anyDint : ANY;
 END_VAR
 VAR
     nTmp   : UDINT;
+	retVal : UDINT;
 END_VAR]]></Declaration>
       <Implementation>
         <ST><![CDATA[
 ReadInt32 := F_ParseRawVarint32(THIS^.stCtx, nTmp);
-nValue := TO_DINT(nTmp);]]></ST>
+retVal := memcpy(destAddr:= anyDint.pValue, srcAddr:= ADR(nTmp), n:= MIN(TO_UDINT(anyDint.diSize), SIZEOF(nTmp)));
+IF retVal = 0 THEN
+	ReadInt32:= E_HRESULTAdsErr.INVALIDDATA;
+END_IF]]></ST>
       </Implementation>
     </Method>
     <Method Name="ReadInt64" Id="{71d759ea-e908-4166-9283-378861c10204}">
       <Declaration><![CDATA[METHOD PUBLIC ReadInt64 : HRESULT
-VAR_OUTPUT
-    nValue : LINT;
+VAR_INPUT
+    anyLint : ANY;
 END_VAR
 VAR
     nTmp   : ULINT;
+	retVal : UDINT;
 END_VAR]]></Declaration>
       <Implementation>
         <ST><![CDATA[
 ReadInt64 := F_ParseRawVarint64(THIS^.stCtx, nTmp);
-nValue := TO_LINT(nTmp);]]></ST>
+retVal := memcpy(destAddr:= anyLint.pValue, srcAddr:= ADR(nTmp), n:= MIN(TO_UDINT(anyLint.diSize), SIZEOF(nTmp)));
+IF retVal = 0 THEN
+	ReadInt64:= E_HRESULTAdsErr.INVALIDDATA;
+END_IF]]></ST>
       </Implementation>
     </Method>
     <Method Name="ReadLength" Id="{f8a2dea4-a747-4ce3-8692-a5ef550f442b}">
@@ -246,30 +271,42 @@ nValue := TO_LINT(nTmp);]]></ST>
     </Method>
     <Method Name="ReadSInt32" Id="{c895a857-fb22-484a-9a4e-0db57eebb101}">
       <Declaration><![CDATA[METHOD PUBLIC ReadSInt32 : HRESULT
-VAR_OUTPUT
-    nValue : DINT;
+VAR_INPUT
+    anyDint : ANY;
 END_VAR
 VAR
     nTmp   : UDINT;
+	nValue : DINT;
+	retVal : UDINT;
 END_VAR]]></Declaration>
       <Implementation>
         <ST><![CDATA[
 ReadSInt32 := F_ParseRawVarint32(THIS^.stCtx, nTmp);
-nValue := F_DecodeZigZag32(nTmp);]]></ST>
+nValue := F_DecodeZigZag32(nTmp);
+retVal := memcpy(destAddr:= anyDint.pValue, srcAddr:= ADR(nValue), n:= MIN(TO_UDINT(anyDint.diSize), SIZEOF(nValue)));
+IF retVal = 0 THEN
+	ReadSInt32:= E_HRESULTAdsErr.INVALIDDATA;
+END_IF]]></ST>
       </Implementation>
     </Method>
     <Method Name="ReadSInt64" Id="{ee9a35c1-3c2f-4206-8072-64dc56e43c72}">
       <Declaration><![CDATA[METHOD PUBLIC ReadSInt64 : HRESULT
-VAR_OUTPUT
-    nValue : LINT;
+VAR_INPUT
+    anyLint : ANY;
 END_VAR
 VAR
     nTmp   : ULINT;
+	nValue : LINT;
+	retVal : UDINT;
 END_VAR]]></Declaration>
       <Implementation>
         <ST><![CDATA[
-ReadSInt64 := F_ParseRawVarint32(THIS^.stCtx, nTmp);
-nValue := F_DecodeZigZag64(nTmp);]]></ST>
+ReadSInt64 := F_ParseRawVarint64(THIS^.stCtx, nTmp);
+nValue := F_DecodeZigZag64(nTmp);
+retVal := memcpy(destAddr:= anyLint.pValue, srcAddr:= ADR(nValue), n:= MIN(TO_UDINT(anyLint.diSize), SIZEOF(nValue)));
+IF retVal = 0 THEN
+	ReadSInt64:= E_HRESULTAdsErr.INVALIDDATA;
+END_IF]]></ST>
       </Implementation>
     </Method>
     <Method Name="ReadString" Id="{246de880-705a-44ea-a922-9753670627e5}">
@@ -296,22 +333,38 @@ END_VAR
     </Method>
     <Method Name="ReadUint32" Id="{0a5f59af-f75a-4d04-8959-1ec62b11e925}">
       <Declaration><![CDATA[METHOD PUBLIC ReadUint32 : HRESULT
-VAR_OUTPUT
-    nValue : UDINT;
+VAR_INPUT
+    anyUdint : ANY;
+END_VAR
+VAR
+    nTmp   : UDINT;
+	retVal : UDINT;
 END_VAR]]></Declaration>
       <Implementation>
         <ST><![CDATA[
-ReadUint32 := F_ParseRawVarint32(THIS^.stCtx, nValue);]]></ST>
+ReadUint32 := F_ParseRawVarint32(THIS^.stCtx, nTmp);
+retVal := memcpy(destAddr:= anyUdint.pValue, srcAddr:= ADR(nTmp), n:= MIN(TO_UDINT(anyUdint.diSize), SIZEOF(nTmp)));
+IF retVal = 0 THEN
+	ReadUint32:= E_HRESULTAdsErr.INVALIDDATA;
+END_IF]]></ST>
       </Implementation>
     </Method>
     <Method Name="ReadUint64" Id="{01b6070b-c07f-4367-85e7-1d9c2c63ec50}">
       <Declaration><![CDATA[METHOD PUBLIC ReadUint64 : HRESULT
-VAR_OUTPUT
-    nValue : UDINT;
+VAR_INPUT
+    anyUlint : ANY;
+END_VAR
+VAR
+    nTmp   : ULINT;
+	retVal : UDINT;
 END_VAR]]></Declaration>
       <Implementation>
         <ST><![CDATA[
-ReadUint64 := F_ParseRawVarint64(THIS^.stCtx, nValue);]]></ST>
+ReadUint64 := F_ParseRawVarint64(THIS^.stCtx, nTmp);
+retVal := memcpy(destAddr:= anyUlint.pValue, srcAddr:= ADR(nTmp), n:= MIN(TO_UDINT(anyUlint.diSize), SIZEOF(nTmp)));
+IF retVal = 0 THEN
+	ReadUint64:= E_HRESULTAdsErr.INVALIDDATA;
+END_IF]]></ST>
       </Implementation>
     </Method>
     <Property Name="refCtx" Id="{889a9bbf-4ef8-4348-a5eb-48336314fc4d}">
