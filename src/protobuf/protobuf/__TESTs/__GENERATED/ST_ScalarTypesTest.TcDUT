@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" Version="1.1.0.1">
+  <DUT Name="ST_ScalarTypesTest" Id="402c5afe-a119-4393-ac33-f9d020cf0cc9">
+    <Declaration><![CDATA[(*******************************************************************************
+                          protoc-gen-twincat V0.0.0.0                           
+                  https://github.com/TcHaxx/protoc-gen-twincat                  
+*******************************************************************************)
+{attribute 'no-analysis'}
+TYPE ST_ScalarTypesTest :
+STRUCT
+	double_value : LREAL;
+	float_value : REAL;
+	int32_value : DINT;
+	int32_value_as_word : WORD;
+	int64_value : LINT;
+	int64_value_as_dint : DINT;
+	uint32_value : UDINT;
+	uint32_value_as_byte : BYTE;
+	uint64_value : ULINT;
+	uint64_value_as_dword : DWORD;
+	sint32_value : DINT;
+	sint64_value : LINT;
+	fixed32_value : UDINT;
+	fixed64_value : ULINT;
+	sfixed32_value : DINT;
+	sfixed64_value : LINT;
+	bool_value : BOOL;
+	string_value : STRING(128);
+	bytes_value : ARRAY[0..15] OF BYTE;
+	bytes_value_count : UDINT; // Implict generated field for actual number of items in array bytes_value
+END_STRUCT
+END_TYPE]]></Declaration>
+  </DUT>
+</TcPlcObject>

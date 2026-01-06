@@ -14,8 +14,13 @@ fbMotorDec : FB_Motor;
 fbcplx : FB_ComplexData;
 fbcplxDec : FB_ComplexData;
 fbDevice : FB_Device;
+fbScalarSrc : FB_ScalarTypesTest;
+fbScalarDst : FB_ScalarTypesTest;
 aBuffer	: ARRAY[0..1023] OF BYTE;
 aBuffer1	: ARRAY[0..1023] OF BYTE;
+
+_profiler : Profiler;
+profilerData  : PROFILERSTRUCT;
 END_VAR
 ]]></Declaration>
     <Implementation>
@@ -36,7 +41,13 @@ TcUnit.RUN();
 // fbcplx.Writer.WriteTo(aBuffer1);
 // fbcplxDec.Parser.ParseFrom(aBuffer1);
 // fbTestNestedMessage1.Writer.WriteTo(aBuffer);
-// fbTestNestedMessage2.Parser.ParseFrom(aBuffer);]]></ST>
+// fbTestNestedMessage2.Parser.ParseFrom(aBuffer);
+
+_profiler(START:= TRUE, RESET:= TRUE);
+fbScalarSrc.Writer.WriteTo(aBuffer);
+fbScalarDst.Parser.ParseFrom(aBuffer);
+
+_profiler(START:=FALSE, RESET:= TRUE, DATA=> profilerData);]]></ST>
     </Implementation>
     <ObjectProperties>
       <XmlArchive>

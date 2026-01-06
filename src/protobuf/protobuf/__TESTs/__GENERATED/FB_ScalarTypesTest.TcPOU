@@ -1,0 +1,369 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1">
+  <POU Name="FB_ScalarTypesTest" Id="{c11db331-70d9-4dc1-8de5-f62ae22ec715}" SpecialFunc="None">
+    <Declaration><![CDATA[(*******************************************************************************
+                          protoc-gen-twincat V0.0.0.0                           
+                  https://github.com/TcHaxx/protoc-gen-twincat                  
+*******************************************************************************)
+{attribute 'no_explicit_call' := 'do not call this POU directly'}
+{attribute 'no-analysis'}
+FUNCTION_BLOCK INTERNAL FINAL FB_ScalarTypesTest IMPLEMENTS I_Message
+VAR
+    _fbMessageParser : FB_MessageParser(ipMessage:= THIS^);
+    _fbMessageWriter : FB_MessageWriter(ipMessage:= THIS^);
+    _stScalarTypesTest : ST_ScalarTypesTest;
+    END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[]]></ST>
+    </Implementation>
+    <Method Name="CalculateSize" Id="{1608b3a0-5d10-444a-a8da-d826a8e2786b}">
+      <Declaration><![CDATA[(* Calculates the size of this message in Protocol Buffer wire format, in bytes. *)
+METHOD CalculateSize : UDINT
+VAR
+    nSize : UDINT;
+    nRepeatedFieldSize : UDINT;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[// double double_value = 1;
+nSize := nSize + 1 + F_ComputeDoubleSize(fValue:= _stScalarTypesTest.double_value);
+// float float_value = 2;
+nSize := nSize + 1 + F_ComputeFloatSize(fValue:= _stScalarTypesTest.float_value);
+// int32 int32_value = 3;
+nSize := nSize + 1 + F_ComputeInt32Size(anyDint:= _stScalarTypesTest.int32_value);
+// int32 int32_value_as_word = 30;
+nSize := nSize + 2 + F_ComputeInt32Size(anyDint:= _stScalarTypesTest.int32_value_as_word);
+// int64 int64_value = 4;
+nSize := nSize + 1 + F_ComputeInt64Size(anyLint:= _stScalarTypesTest.int64_value);
+// int64 int64_value_as_dint = 40;
+nSize := nSize + 2 + F_ComputeInt64Size(anyLint:= _stScalarTypesTest.int64_value_as_dint);
+// uint32 uint32_value = 5;
+nSize := nSize + 1 + F_ComputeUint32Size(anyUdint:= _stScalarTypesTest.uint32_value);
+// uint32 uint32_value_as_byte = 50;
+nSize := nSize + 2 + F_ComputeUint32Size(anyUdint:= _stScalarTypesTest.uint32_value_as_byte);
+// uint64 uint64_value = 6;
+nSize := nSize + 1 + F_ComputeUint64Size(anyUlint:= _stScalarTypesTest.uint64_value);
+// uint64 uint64_value_as_dword = 60;
+nSize := nSize + 2 + F_ComputeUint64Size(anyUlint:= _stScalarTypesTest.uint64_value_as_dword);
+// sint32 sint32_value = 7;
+nSize := nSize + 1 + F_ComputeSint32Size(anyDint:= _stScalarTypesTest.sint32_value);
+// sint64 sint64_value = 8;
+nSize := nSize + 1 + F_ComputeSint64Size(anyLint:= _stScalarTypesTest.sint64_value);
+// fixed32 fixed32_value = 9;
+nSize := nSize + 1 + F_ComputeFixed32Size(nValue:= _stScalarTypesTest.fixed32_value);
+// fixed64 fixed64_value = 10;
+nSize := nSize + 1 + F_ComputeFixed64Size(nValue:= _stScalarTypesTest.fixed64_value);
+// sfixed32 sfixed32_value = 11;
+nSize := nSize + 1 + F_ComputeSfixed32Size(nValue:= _stScalarTypesTest.sfixed32_value);
+// sfixed64 sfixed64_value = 12;
+nSize := nSize + 1 + F_ComputeSfixed64Size(nValue:= _stScalarTypesTest.sfixed64_value);
+// bool bool_value = 13;
+nSize := nSize + 1 + F_ComputeBoolSize(bValue:= _stScalarTypesTest.bool_value);
+// string string_value = 14;
+nSize := nSize + 1 + F_ComputeStringSize(anyString:= _stScalarTypesTest.string_value);
+// bytes bytes_value = 15;
+nSize := nSize + 1 + F_ComputeBytesSize(aBytes:= _stScalarTypesTest.bytes_value);
+CalculateSize := nSize;
+]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="MergeFrom" Id="{331c56d7-dd6d-4745-b16a-3625d335d54f}">
+      <Declaration><![CDATA[(* Merges the data from the specified coded input stream with the current message.*)
+METHOD MergeFrom : HRESULT
+VAR_IN_OUT
+    fbParseCtx : FB_ParseContext;
+END_VAR
+VAR
+    nTag : UDINT;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[REPEAT
+MergeFrom := fbParseCtx.ReadTag(nTag=> nTag);
+IF SUCCEEDED(MergeFrom) AND nTag = 0 THEN
+    EXIT;
+END_IF;
+
+IF FAILED(MergeFrom) THEN
+    RETURN;
+END_IF
+
+CASE nTag OF
+    16#09:    // double double_value = 1;
+        MergeFrom := fbParseCtx.ReadDouble(fValue=> _stScalarTypesTest.double_value); 
+    16#15:    // float float_value = 2;
+        MergeFrom := fbParseCtx.ReadFloat(fValue=> _stScalarTypesTest.float_value); 
+    16#18:    // int32 int32_value = 3;
+        MergeFrom := fbParseCtx.ReadInt32(anyDint:= _stScalarTypesTest.int32_value); 
+    16#F0:    // int32 int32_value_as_word = 30;
+        MergeFrom := fbParseCtx.ReadInt32(anyDint:= _stScalarTypesTest.int32_value_as_word); 
+    16#20:    // int64 int64_value = 4;
+        MergeFrom := fbParseCtx.ReadInt64(anyLint:= _stScalarTypesTest.int64_value); 
+    16#140:    // int64 int64_value_as_dint = 40;
+        MergeFrom := fbParseCtx.ReadInt64(anyLint:= _stScalarTypesTest.int64_value_as_dint); 
+    16#28:    // uint32 uint32_value = 5;
+        MergeFrom := fbParseCtx.ReadUint32(anyUdint:= _stScalarTypesTest.uint32_value); 
+    16#190:    // uint32 uint32_value_as_byte = 50;
+        MergeFrom := fbParseCtx.ReadUint32(anyUdint:= _stScalarTypesTest.uint32_value_as_byte); 
+    16#30:    // uint64 uint64_value = 6;
+        MergeFrom := fbParseCtx.ReadUint64(anyUlint:= _stScalarTypesTest.uint64_value); 
+    16#1E0:    // uint64 uint64_value_as_dword = 60;
+        MergeFrom := fbParseCtx.ReadUint64(anyUlint:= _stScalarTypesTest.uint64_value_as_dword); 
+    16#38:    // sint32 sint32_value = 7;
+        MergeFrom := fbParseCtx.ReadSint32(anyDint:= _stScalarTypesTest.sint32_value); 
+    16#40:    // sint64 sint64_value = 8;
+        MergeFrom := fbParseCtx.ReadSint64(anyLint:= _stScalarTypesTest.sint64_value); 
+    16#4D:    // fixed32 fixed32_value = 9;
+        MergeFrom := fbParseCtx.ReadFixed32(nValue=> _stScalarTypesTest.fixed32_value); 
+    16#51:    // fixed64 fixed64_value = 10;
+        MergeFrom := fbParseCtx.ReadFixed64(nValue=> _stScalarTypesTest.fixed64_value); 
+    16#5D:    // sfixed32 sfixed32_value = 11;
+        MergeFrom := fbParseCtx.ReadSfixed32(nValue=> _stScalarTypesTest.sfixed32_value); 
+    16#61:    // sfixed64 sfixed64_value = 12;
+        MergeFrom := fbParseCtx.ReadSfixed64(nValue=> _stScalarTypesTest.sfixed64_value); 
+    16#68:    // bool bool_value = 13;
+        MergeFrom := fbParseCtx.ReadBool(bValue=> _stScalarTypesTest.bool_value); 
+    16#72:    // string string_value = 14;
+        MergeFrom := fbParseCtx.ReadString(anyStringOut:= _stScalarTypesTest.string_value); 
+    16#7A:    // bytes bytes_value = 15;
+        MergeFrom := fbParseCtx.ReadBytes(aBytes:= _stScalarTypesTest.bytes_value, nCount=> _stScalarTypesTest.bytes_value_count); 
+ELSE
+    MergeFrom := fbParseCtx.SkipLastField();
+END_CASE
+
+UNTIL (FAILED(MergeFrom) OR nTag = 0)
+END_REPEAT
+]]></ST>
+      </Implementation>
+    </Method>
+    <Property Name="MessageValue" Id="{d4aa0456-f3d7-44ed-ac75-19b58f9e88eb}">
+      <Declaration><![CDATA[PROPERTY PUBLIC MessageValue : T_Any]]></Declaration>
+      <Get Name="Get" Id="{2ba66e36-f108-4a68-beff-6f79076b64f0}">
+        <Declaration><![CDATA[]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[MessageValue := F_ToAnyType(anyArg:= _stScalarTypesTest);]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Property Name="Parser" Id="{116644e6-f612-4ad4-9d19-313375af44fc}">
+      <Declaration><![CDATA[PROPERTY PUBLIC Parser : REFERENCE TO FB_MessageParser]]></Declaration>
+      <Get Name="Get" Id="{901c9f29-e8c3-4f6b-908d-c964228cf671}">
+        <Declaration><![CDATA[]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[Parser REF= THIS^._fbMessageParser;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Property Name="ScalarTypesTest" Id="{0a6a70ba-2b64-4714-90cb-b0419950be86}">
+      <Declaration><![CDATA[PROPERTY PUBLIC ScalarTypesTest : ST_ScalarTypesTest]]></Declaration>
+      <Get Name="Get" Id="{4f7696d6-9d73-435b-84a5-1e421e22a804}">
+        <Declaration><![CDATA[VAR
+END_VAR]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[ScalarTypesTest := _stScalarTypesTest;]]></ST>
+        </Implementation>
+      </Get>
+      <Set Name="Set" Id="{4e38d47d-85b8-40f8-858b-0dccc36c16e8}">
+        <Declaration><![CDATA[VAR
+END_VAR]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[_stScalarTypesTest := ScalarTypesTest;]]></ST>
+        </Implementation>
+      </Set>
+    </Property>
+    <Property Name="Writer" Id="{257bade1-8c43-49e2-81b3-5fee6e9111f1}">
+      <Declaration><![CDATA[(* Writer for this message.*)
+PROPERTY PUBLIC Writer : REFERENCE TO FB_MessageWriter]]></Declaration>
+      <Get Name="Get" Id="{446282b6-4289-49bc-af3f-9cac2ea51eb8}">
+        <Declaration><![CDATA[]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[Writer REF= THIS^._fbMessageWriter;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Method Name="WriteTo" Id="{31cba443-fb21-4846-8b54-28136de5a6ab}">
+      <Declaration><![CDATA[(* Writes the data to the given coded output stream.*)
+METHOD WriteTo : HRESULT
+VAR_IN_OUT
+	(* Coded output stream to write the data to. *)
+	fbWriteCtx	: FB_WriteContext;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[// double double_value = 1;
+WriteTo := fbWriteCtx.WriteTag(1, E_WireType.Fixed64);
+IF FAILED(WriteTo) THEN
+    RETURN;
+END_IF
+WriteTo := fbWriteCtx.WriteDouble(fValue:= _stScalarTypesTest.double_value);
+IF FAILED(WriteTo) THEN
+    RETURN;
+END_IF
+// float float_value = 2;
+WriteTo := fbWriteCtx.WriteTag(2, E_WireType.Fixed32);
+IF FAILED(WriteTo) THEN
+    RETURN;
+END_IF
+WriteTo := fbWriteCtx.WriteFloat(fValue:= _stScalarTypesTest.float_value);
+IF FAILED(WriteTo) THEN
+    RETURN;
+END_IF
+// int32 int32_value = 3;
+WriteTo := fbWriteCtx.WriteTag(3, E_WireType.Varint);
+IF FAILED(WriteTo) THEN
+    RETURN;
+END_IF
+WriteTo := fbWriteCtx.WriteInt32(anyDint:= _stScalarTypesTest.int32_value);
+IF FAILED(WriteTo) THEN
+    RETURN;
+END_IF
+// int32 int32_value_as_word = 30;
+WriteTo := fbWriteCtx.WriteTag(30, E_WireType.Varint);
+IF FAILED(WriteTo) THEN
+    RETURN;
+END_IF
+WriteTo := fbWriteCtx.WriteInt32(anyDint:= _stScalarTypesTest.int32_value_as_word);
+IF FAILED(WriteTo) THEN
+    RETURN;
+END_IF
+// int64 int64_value = 4;
+WriteTo := fbWriteCtx.WriteTag(4, E_WireType.Varint);
+IF FAILED(WriteTo) THEN
+    RETURN;
+END_IF
+WriteTo := fbWriteCtx.WriteInt64(anyLint:= _stScalarTypesTest.int64_value);
+IF FAILED(WriteTo) THEN
+    RETURN;
+END_IF
+// int64 int64_value_as_dint = 40;
+WriteTo := fbWriteCtx.WriteTag(40, E_WireType.Varint);
+IF FAILED(WriteTo) THEN
+    RETURN;
+END_IF
+WriteTo := fbWriteCtx.WriteInt64(anyLint:= _stScalarTypesTest.int64_value_as_dint);
+IF FAILED(WriteTo) THEN
+    RETURN;
+END_IF
+// uint32 uint32_value = 5;
+WriteTo := fbWriteCtx.WriteTag(5, E_WireType.Varint);
+IF FAILED(WriteTo) THEN
+    RETURN;
+END_IF
+WriteTo := fbWriteCtx.WriteUint32(anyUdint:= _stScalarTypesTest.uint32_value);
+IF FAILED(WriteTo) THEN
+    RETURN;
+END_IF
+// uint32 uint32_value_as_byte = 50;
+WriteTo := fbWriteCtx.WriteTag(50, E_WireType.Varint);
+IF FAILED(WriteTo) THEN
+    RETURN;
+END_IF
+WriteTo := fbWriteCtx.WriteUint32(anyUdint:= _stScalarTypesTest.uint32_value_as_byte);
+IF FAILED(WriteTo) THEN
+    RETURN;
+END_IF
+// uint64 uint64_value = 6;
+WriteTo := fbWriteCtx.WriteTag(6, E_WireType.Varint);
+IF FAILED(WriteTo) THEN
+    RETURN;
+END_IF
+WriteTo := fbWriteCtx.WriteUint64(anyUlint:= _stScalarTypesTest.uint64_value);
+IF FAILED(WriteTo) THEN
+    RETURN;
+END_IF
+// uint64 uint64_value_as_dword = 60;
+WriteTo := fbWriteCtx.WriteTag(60, E_WireType.Varint);
+IF FAILED(WriteTo) THEN
+    RETURN;
+END_IF
+WriteTo := fbWriteCtx.WriteUint64(anyUlint:= _stScalarTypesTest.uint64_value_as_dword);
+IF FAILED(WriteTo) THEN
+    RETURN;
+END_IF
+// sint32 sint32_value = 7;
+WriteTo := fbWriteCtx.WriteTag(7, E_WireType.Varint);
+IF FAILED(WriteTo) THEN
+    RETURN;
+END_IF
+WriteTo := fbWriteCtx.WriteSint32(anyDint:= _stScalarTypesTest.sint32_value);
+IF FAILED(WriteTo) THEN
+    RETURN;
+END_IF
+// sint64 sint64_value = 8;
+WriteTo := fbWriteCtx.WriteTag(8, E_WireType.Varint);
+IF FAILED(WriteTo) THEN
+    RETURN;
+END_IF
+WriteTo := fbWriteCtx.WriteSint64(anyLint:= _stScalarTypesTest.sint64_value);
+IF FAILED(WriteTo) THEN
+    RETURN;
+END_IF
+// fixed32 fixed32_value = 9;
+WriteTo := fbWriteCtx.WriteTag(9, E_WireType.Fixed32);
+IF FAILED(WriteTo) THEN
+    RETURN;
+END_IF
+WriteTo := fbWriteCtx.WriteFixed32(nValue:= _stScalarTypesTest.fixed32_value);
+IF FAILED(WriteTo) THEN
+    RETURN;
+END_IF
+// fixed64 fixed64_value = 10;
+WriteTo := fbWriteCtx.WriteTag(10, E_WireType.Fixed64);
+IF FAILED(WriteTo) THEN
+    RETURN;
+END_IF
+WriteTo := fbWriteCtx.WriteFixed64(nValue:= _stScalarTypesTest.fixed64_value);
+IF FAILED(WriteTo) THEN
+    RETURN;
+END_IF
+// sfixed32 sfixed32_value = 11;
+WriteTo := fbWriteCtx.WriteTag(11, E_WireType.Fixed32);
+IF FAILED(WriteTo) THEN
+    RETURN;
+END_IF
+WriteTo := fbWriteCtx.WriteSfixed32(nValue:= _stScalarTypesTest.sfixed32_value);
+IF FAILED(WriteTo) THEN
+    RETURN;
+END_IF
+// sfixed64 sfixed64_value = 12;
+WriteTo := fbWriteCtx.WriteTag(12, E_WireType.Fixed64);
+IF FAILED(WriteTo) THEN
+    RETURN;
+END_IF
+WriteTo := fbWriteCtx.WriteSfixed64(nValue:= _stScalarTypesTest.sfixed64_value);
+IF FAILED(WriteTo) THEN
+    RETURN;
+END_IF
+// bool bool_value = 13;
+WriteTo := fbWriteCtx.WriteTag(13, E_WireType.Varint);
+IF FAILED(WriteTo) THEN
+    RETURN;
+END_IF
+WriteTo := fbWriteCtx.WriteBool(bValue:= _stScalarTypesTest.bool_value);
+IF FAILED(WriteTo) THEN
+    RETURN;
+END_IF
+// string string_value = 14;
+WriteTo := fbWriteCtx.WriteTag(14, E_WireType.LengthDelimited);
+IF FAILED(WriteTo) THEN
+    RETURN;
+END_IF
+WriteTo := fbWriteCtx.WriteString(sStringToWrite:= _stScalarTypesTest.string_value);
+IF FAILED(WriteTo) THEN
+    RETURN;
+END_IF
+// bytes bytes_value = 15;
+WriteTo := fbWriteCtx.WriteTag(15, E_WireType.LengthDelimited);
+IF FAILED(WriteTo) THEN
+    RETURN;
+END_IF
+WriteTo := fbWriteCtx.WriteBytes(aBytes:= _stScalarTypesTest.bytes_value, nCount:= _stScalarTypesTest.bytes_value_count);
+IF FAILED(WriteTo) THEN
+    RETURN;
+END_IF
+]]></ST>
+      </Implementation>
+    </Method>
+  </POU>
+</TcPlcObject>
