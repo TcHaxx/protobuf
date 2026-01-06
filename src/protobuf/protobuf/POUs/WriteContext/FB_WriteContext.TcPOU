@@ -248,8 +248,7 @@ END_VAR
       <Declaration><![CDATA[METHOD WriteSFixed32 : HRESULT
 VAR_INPUT
     nValue : DINT;
-END_VAR
-]]></Declaration>
+END_VAR]]></Declaration>
       <Implementation>
         <ST><![CDATA[
 WriteSFixed32 := F_WriteSFixed32(THIS^.stCtx, nValue);]]></ST>
@@ -269,21 +268,41 @@ WriteSFixed64 := F_WriteSFixed64(THIS^.stCtx, nValue);]]></ST>
     <Method Name="WriteSint32" Id="{9b3c1ae8-a598-4a54-9dcf-fc39ef583879}">
       <Declaration><![CDATA[METHOD WriteSint32 : HRESULT
 VAR_INPUT
-    nValue : DINT;
+    anyDint : ANY;
 END_VAR
-]]></Declaration>
+VAR
+    nTmp   : DINT;
+	retVal : UDINT;
+END_VAR]]></Declaration>
       <Implementation>
-        <ST><![CDATA[WriteSint32 := F_WriteSInt32(THIS^.stCtx, nValue);]]></ST>
+        <ST><![CDATA[
+retVal := memcpy(destAddr:= ADR(nTmp), srcAddr:= anyDint.pValue, n:= MIN(TO_UDINT(anyDint.diSize), SIZEOF(nTmp)));
+IF retVal = 0 THEN
+	WriteSint32:= E_HRESULTAdsErr.INVALIDDATA;
+	RETURN;
+END_IF
+
+WriteSint32 := F_WriteSInt32(THIS^.stCtx, nTmp);]]></ST>
       </Implementation>
     </Method>
     <Method Name="WriteSint64" Id="{b35dcafc-ac19-4012-a560-388617eee3d1}">
       <Declaration><![CDATA[METHOD WriteSint64 : HRESULT
 VAR_INPUT
-    nValue : LINT;
+    anyLint : ANY;
 END_VAR
-]]></Declaration>
+VAR
+    nTmp   : LINT;
+	retVal : UDINT;
+END_VAR]]></Declaration>
       <Implementation>
-        <ST><![CDATA[WriteSint64 := F_WriteSInt64(THIS^.stCtx, nValue);]]></ST>
+        <ST><![CDATA[
+retVal := memcpy(destAddr:= ADR(nTmp), srcAddr:= anyLint.pValue, n:= MIN(TO_UDINT(anyLint.diSize), SIZEOF(nTmp)));
+IF retVal = 0 THEN
+	WriteSint64:= E_HRESULTAdsErr.INVALIDDATA;
+	RETURN;
+END_IF
+
+WriteSint64 := F_WriteSInt64(THIS^.stCtx, nTmp);]]></ST>
       </Implementation>
     </Method>
     <Method Name="WriteString" Id="{e0704046-198b-43d6-993d-44c5595830da}">
