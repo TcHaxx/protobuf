@@ -37,7 +37,6 @@ END_VAR]]></Declaration>
       <Implementation>
         <ST><![CDATA[refCtx REF= fbParseCtx.refCtx;
 THIS^.ipFieldCodecField := ipFieldCodec;
-Initialize();
 AddEntriesFrom := F_ReadRepeatedField(stCtx:= refCtx, ipRepeatedField:= THIS^, nLength=> nCount);]]></ST>
       </Implementation>
     </Method>
