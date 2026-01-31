@@ -8,7 +8,7 @@ VAR_INPUT
 END_VAR
 ]]></Declaration>
     <Implementation>
-      <ST><![CDATA[F_DecodeZigZag64 := TO_LINT(SHR(nValue, TO_ULINT(1)) XOR TO_ULINT(-TO_LINT((nValue AND TO_ULINT(1)))));]]></ST>
+      <ST><![CDATA[F_DecodeZigZag64 := TO_LINT(SHR(nValue, ULINT#1) XOR TO_ULINT(-TO_LINT(nValue AND ULINT#1)));]]></ST>
     </Implementation>
   </POU>
 </TcPlcObject>

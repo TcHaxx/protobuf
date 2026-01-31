@@ -6,18 +6,18 @@ VAR_INPUT
     nValue : UDINT;
 END_VAR
 VAR
-    i       : UDINT;
+    i       : UDINT := 1;
+	nTemp	: UDINT;
 END_VAR]]></Declaration>
     <Implementation>
-      <ST><![CDATA[
-FOR i := 1 TO 4 DO    
-    IF (nValue AND SHL(16#FFFFFFFF, 7 * i)) = 0 THEN
-        F_ComputeRawVarint32Size := i;
-        RETURN;
-    END_IF
-END_FOR
+      <ST><![CDATA[nTemp := nValue;
 
-F_ComputeRawVarint32Size := 5;]]></ST>
+WHILE (nTemp > 16#7F) DO
+	nTemp := SHR(nTemp, 7);
+	 i := i + 1;
+END_WHILE
+
+F_ComputeRawVarint32Size := i;]]></ST>
     </Implementation>
   </POU>
 </TcPlcObject>

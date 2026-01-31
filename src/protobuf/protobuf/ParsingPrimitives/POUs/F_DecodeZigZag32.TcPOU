@@ -7,7 +7,7 @@ VAR_INPUT
     nValue : UDINT;
 END_VAR]]></Declaration>
     <Implementation>
-      <ST><![CDATA[F_DecodeZigZag32 := TO_DINT(SHR(nValue, TO_UDINT(1)) XOR TO_UDINT(-TO_DINT((nValue AND TO_UDINT(1)))));]]></ST>
+      <ST><![CDATA[F_DecodeZigZag32 := TO_DINT(SHR(nValue, UDINT#1) XOR TO_UDINT(-TO_DINT(nValue AND UDINT#1))); ]]></ST>
     </Implementation>
   </POU>
 </TcPlcObject>
