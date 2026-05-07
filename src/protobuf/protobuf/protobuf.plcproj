@@ -576,6 +576,18 @@
       <SubType>Code</SubType>
       <LinkAlways>true</LinkAlways>
     </Compile>
+    <Compile Include="__TESTs\EnumTests\DUTs\E_INT.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="__TESTs\EnumTests\DUTs\E_BYTE.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="__TESTs\EnumTests\FB_F_ComputeEnumSizeTests.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="__TESTs\EnumTests\PRG_EnumTests.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="__TESTs\HelperTests\FB_F_ToAnyBytesTests.TcPOU">
       <SubType>Code</SubType>
     </Compile>
@@ -894,11 +906,13 @@
     <Folder Include="WritingPrimitives\POUs" />
     <Folder Include="__TESTs" />
     <Folder Include="Project Information" />
+    <Folder Include="__TESTs\EnumTests\DUTs" />
     <Folder Include="__TESTs\MessagesTests" />
     <Folder Include="__TESTs\MessagesTests\DUTs" />
     <Folder Include="__TESTs\MessagesTests\POUs" />
     <Folder Include="__TESTs\HelperTests" />
     <Folder Include="__TESTs\MessagesTests\POUs\FooBarBaz" />
+    <Folder Include="__TESTs\EnumTests" />
     <Folder Include="__TESTs\__GENERATED" />
     <Folder Include="__TESTs\SpanTests" />
     <Folder Include="__TESTs\RepeatedFieldTests">

@@ -12,7 +12,8 @@ END_VAR]]></Declaration>
       <ST><![CDATA[IF anyEnum.pValue = NULL OR anyEnum.TypeClass <> __SYSTEM.TYPE_CLASS.TYPE_ENUM THEN
 	RETURN;
 END_IF
-nTmp := PDINT_TO_DINT(anyEnum.pValue);
+
+MEMCPY(destAddr:= ADR(nTmp), srcAddr:= anyEnum.pValue, MIN(TO_UDINT(anyEnum.diSize), SIZEOF(nTmp)));
 F_ComputeEnumSize := F_ComputeInt32Size(nTmp);]]></ST>
     </Implementation>
   </POU>

@@ -1,0 +1,32 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1">
+  <POU Name="FB_F_ComputeEnumSizeTests" Id="{8ab93401-7f2b-44f8-bae9-b4342ffb3b6a}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK INTERNAL FINAL FB_F_ComputeEnumSizeTests EXTENDS FB_TestSuite
+VAR_INPUT
+END_VAR
+VAR_OUTPUT
+END_VAR
+VAR
+	aValues	: ARRAY[0..5] OF E_INT := [E_INT.eVAL0, E_INT.eVAL1, E_INT.eVAL2, E_INT.eVAL3, E_INT.eMIN, E_INT.eMAX];
+	nActual : UDINT;
+	i : UDINT;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[TEST(__POUNAME());
+
+//Arrange
+nActual := 0;
+
+// Act
+FOR i := 0  TO 5 DO
+    nActual := nActual + F_ComputeEnumSize(anyEnum:= aValues[i]);
+END_FOR
+
+//Assert
+AssertEquals_UDINT(Expected:= 10, Actual:= nActual, Message:= '');
+
+TEST_FINISHED_NAMED(__POUNAME());]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>
