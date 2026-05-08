@@ -1,0 +1,120 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1">
+  <POU Name="FB_WriteEnumTests" Id="{3687b972-e912-4355-8828-d0d19dad7185}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK INTERNAL FINAL FB_WriteEnumTests EXTENDS FB_TestSuite
+VAR_INPUT
+END_VAR
+VAR_OUTPUT
+END_VAR
+VAR
+	eActual : (UNINITIALIZED:= 16#ABAB) := UNINITIALIZED;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[FailsWithInvalidDataForNonEnumType();
+ShouldWriteEnumValueTheory();]]></ST>
+    </Implementation>
+    <Method Name="FailsWithInvalidDataForNonEnumType" Id="{e0c584fa-cf9b-48cc-b3f9-25bcdf21e737}">
+      <Declaration><![CDATA[METHOD PRIVATE FailsWithInvalidDataForNonEnumType : BOOL
+VAR_INPUT
+END_VAR
+VAR_INST
+	fbSut	: FB_WriteContext;
+END_VAR
+VAR
+	aBuffer	: ARRAY[0..15] OF BYTE;
+	hr : HRESULT;
+	nNonEnumVar	: DINT;
+END_VAR
+VAR CONSTANT
+	cHrExpected : HRESULT := E_HRESULTAdsErr.INVALIDDATA;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST(__POUNAME());
+
+//Arrange
+fbSut.FromBuffer(aBuffer);
+
+// Act
+hr := fbSut.WriteEnum(anyEnum:= nNonEnumVar);
+
+//Assert
+AssertEquals_DINT(
+    Expected:= cHrExpected,
+    Actual:= hr,
+    Message:= CONCAT(CONCAT('Expected ', TO_STRING(cHrExpected)), ' for non Enum.'));
+
+AssertEquals_UDINT(
+	Expected:= 0,
+	Actual:= fbSut.refCtx.stState.nBufferPos,
+	Message:= 'Unexpected change to ParseContext buffer position.');
+
+TEST_FINISHED_NAMED(__POUNAME());]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="ShouldWriteEnumValue" Id="{4fede145-efd6-43fe-89fb-819e120f23e3}">
+      <Declaration><![CDATA[METHOD PRIVATE ShouldWriteEnumValue : BOOL
+VAR_IN_OUT CONSTANT
+    aExpectedBuffer     : ARRAY [*] OF BYTE;    
+END_VAR
+VAR_INPUT
+	nEnumValue : INT;
+	nExpectedBufferPos  : UDINT;
+END_VAR
+VAR_INST
+	fbSut : FB_WriteContext;
+END_VAR
+VAR
+	hr : HRESULT;
+	aActualBuffer : ARRAY[0..31] OF BYTE;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[// Arrange
+fbSut.FromBuffer(aActualBuffer);
+eActual := nEnumValue;
+
+// Act
+hr := fbSut.WriteEnum(anyEnum:= eActual);
+
+// Assert
+AssertEquals_DINT(
+     Expected:= S_OK,
+     Actual:= hr,
+     Message:= 'Expected S_OK instead of error');
+
+{warning disable C0041}
+AssertArrayEquals_BYTE(    
+    Expecteds:= aExpectedBuffer,
+    Actuals:= aActualBuffer,
+    MEssage:= CONCAT('Expected buffers to be equal for Enum value ', TO_STRING(nEnumValue))
+);
+
+AssertEquals_UDINT(
+    Expected:= nExpectedBufferPos,
+    Actual:= fbSut.refCtx.stState.nBufferPos,
+    Message:= CONCAT(CONCAT('Expected stState.nBufferPos to equal ', TO_STRING(nExpectedBufferPos)), CONCAT(', for Enum value ', TO_STRING(nExpectedBufferPos))));]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="ShouldWriteEnumValueTheory" Id="{d82408bc-9a2d-42cd-82a5-489495db5646}">
+      <Declaration><![CDATA[METHOD PRIVATE ShouldWriteEnumValueTheory : BOOL
+VAR CONSTANT
+	aBufferZero : ARRAY[0..31] OF BYTE := [];
+	aBufferOne :  ARRAY[0..31] OF BYTE := [16#01];
+	aBufferValue127 : ARRAY[0..31] OF BYTE := [16#7F];
+	aBufferValueNeg127 : ARRAY[0..31] OF BYTE := [16#81, 16#FF, 16#03];
+	aBufferValueNeg32768 : ARRAY[0..31] OF BYTE := [16#80, 16#80, 16#02];
+	aBufferValue32767 : ARRAY[0..31] OF BYTE := [16#FF, 16#FF, 16#01];
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST(__POUNAME());
+ShouldWriteEnumValue(aExpectedBuffer:= aBufferZero, nEnumValue:= 0, nExpectedBufferPos:= 1);
+ShouldWriteEnumValue(aExpectedBuffer:= aBufferOne, nEnumValue:= 1, nExpectedBufferPos:= 1);
+ShouldWriteEnumValue(aExpectedBuffer:= aBufferValue127, nEnumValue:= 127, nExpectedBufferPos:= 1);
+ShouldWriteEnumValue(aExpectedBuffer:= aBufferValueNeg127, nEnumValue:= -127, nExpectedBufferPos:= 3);
+ShouldWriteEnumValue(aExpectedBuffer:= aBufferValueNeg32768, nEnumValue:= -32768, nExpectedBufferPos:= 3);
+ShouldWriteEnumValue(aExpectedBuffer:= aBufferValue32767, nEnumValue:= 32767, nExpectedBufferPos:= 3);
+TEST_FINISHED_NAMED(__POUNAME());]]></ST>
+      </Implementation>
+    </Method>
+  </POU>
+</TcPlcObject>

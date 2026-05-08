@@ -30,9 +30,11 @@ PRG_RoundTripTests();
 PRG_WritingPrimitiveTests();
 PRG_MessageTests();
 PRG_WireFormatTests();
+PRG_EnumTests();
 PRG_RepeatedFieldTests();
 PRG_HelperTests();
 PRG_SpanTests();
+PRG_IssuesTests();
 TcUnit.RUN();
 
 {END_IF}

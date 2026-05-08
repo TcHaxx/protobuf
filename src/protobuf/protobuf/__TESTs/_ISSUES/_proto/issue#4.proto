@@ -1,0 +1,19 @@
+syntax = "proto3";
+
+package Issue4;
+
+import "tchaxx-extensions.proto";
+
+message RepeatedEnumTests {
+  enum EnumOfTypeSint {
+    option (tchaxx.enum_integer_type) = EIT_SINT;
+    VALUE_0 = 0;
+    VALUE_1 = 1;
+    VALUE_2 = 2;
+    VAULE_3 = 3;
+    VALUE_MIN = -127;
+    VALUE_MAX = 127;
+  }
+
+  repeated EnumOfTypeSint enum_values_sint = 1 [(tchaxx.array_len) = 16];
+}

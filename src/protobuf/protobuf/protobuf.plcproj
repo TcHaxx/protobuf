@@ -9,7 +9,7 @@
     <WriteProductVersion>false</WriteProductVersion>
     <GenerateTpy>false</GenerateTpy>
     <Name>protobuf</Name>
-    <ProgramVersion>3.1.4026.20</ProgramVersion>
+    <ProgramVersion>3.1.4026.23</ProgramVersion>
     <Application>{aab3386f-1433-4e51-aee9-b496d522750f}</Application>
     <TypeSystem>{aa3fbe6c-8030-475f-a685-e873b003fd01}</TypeSystem>
     <Implicit_Task_Info>{4c235652-0fed-4dea-be12-419d132604dd}</Implicit_Task_Info>
@@ -19,7 +19,6 @@
     <CompilerDefines />
     <Company>TcHaxx</Company>
     <Released>false</Released>
-    <AllowChecksForLibrary>false</AllowChecksForLibrary>
     <POUsForPropertyAccessIncluded>true</POUsForPropertyAccessIncluded>
     <GlobalVersionStructureIncluded>true</GlobalVersionStructureIncluded>
     <Title>protobuf</Title>
@@ -76,6 +75,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="FieldCodec\FB_FieldCodecBool.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="FieldCodec\FB_FieldCodecEnum.TcPOU">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="FieldCodec\FB_FieldCodecMessage.TcPOU">
@@ -585,6 +587,12 @@
     <Compile Include="__TESTs\EnumTests\FB_F_ComputeEnumSizeTests.TcPOU">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="__TESTs\EnumTests\FB_ReadEnumTests.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="__TESTs\EnumTests\FB_WriteEnumTests.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="__TESTs\EnumTests\PRG_EnumTests.TcPOU">
       <SubType>Code</SubType>
     </Compile>
@@ -668,6 +676,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="__TESTs\RepeatedFieldTests\PRG_RepeatedFieldTests.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="__TESTs\RepeatedFieldTests\Read\FB_ReadRepeatedFieldEnumTests.TcPOU">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="__TESTs\RepeatedFieldTests\Read\FB_ReadRepeatedFieldBoolTests.TcPOU">
@@ -829,6 +840,21 @@
     <Compile Include="__TESTs\WritingPrimitiveTests\PRG_WritingPrimitiveTests.TcPOU">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="__TESTs\_ISSUES\FB_Issue4Tests.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="__TESTs\_ISSUES\PRG_IssuesTests.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="__TESTs\_ISSUES\_gen\E_EnumOfTypeSint.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="__TESTs\_ISSUES\_gen\FB_RepeatedEnumTests.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="__TESTs\_ISSUES\_gen\ST_RepeatedEnumTests.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="__TESTs\__GENERATED\E_Color.TcDUT">
       <SubType>Code</SubType>
     </Compile>
@@ -913,6 +939,9 @@
     <Folder Include="__TESTs\HelperTests" />
     <Folder Include="__TESTs\MessagesTests\POUs\FooBarBaz" />
     <Folder Include="__TESTs\EnumTests" />
+    <Folder Include="__TESTs\_ISSUES" />
+    <Folder Include="__TESTs\_ISSUES\_gen" />
+    <Folder Include="__TESTs\_ISSUES\_proto" />
     <Folder Include="__TESTs\__GENERATED" />
     <Folder Include="__TESTs\SpanTests" />
     <Folder Include="__TESTs\RepeatedFieldTests">
@@ -969,11 +998,16 @@
       <SubType>Content</SubType>
     </None>
   </ItemGroup>
+  <ItemGroup>
+    <Content Include="__TESTs\_ISSUES\_proto\issue#4.proto">
+      <SubType>Content</SubType>
+    </Content>
+  </ItemGroup>
   <ProjectExtensions>
     <PlcProjectOptions>
       <XmlArchive>
-        <Data>
-          <o xml:space="preserve" t="OptionKey">
+  <Data>
+    <o xml:space="preserve" t="OptionKey">
       <v n="Name">"&lt;ProjectRoot&gt;"</v>
       <d n="SubKeys" t="Hashtable" ckt="String" cvt="OptionKey">
         <v>{192FAD59-8248-4824-A8DE-9177C94C195A}</v>
@@ -1008,7 +1042,7 @@
                   <d n="SubKeys" t="Hashtable" />
                   <d n="Values" t="Hashtable" ckt="String" cvt="Boolean">
                     <v>bActive</v>
-                    <v>True</v>
+                    <v>False</v>
                   </d>
                 </o>
                 <v>175</v>
@@ -1069,7 +1103,10 @@
               <d n="Values" t="Hashtable" />
             </o>
           </d>
-          <d n="Values" t="Hashtable" />
+          <d n="Values" t="Hashtable" ckt="String" cvt="Boolean">
+            <v>PerformStaticAnalyse</v>
+            <v>True</v>
+          </d>
         </o>
         <v>{40450F57-0AA3-4216-96F3-5444ECB29763}</v>
         <o>
@@ -1127,15 +1164,15 @@
       </d>
       <d n="Values" t="Hashtable" />
     </o>
-        </Data>
-        <TypeList>
-          <Type n="Boolean">System.Boolean</Type>
-          <Type n="Hashtable">System.Collections.Hashtable</Type>
-          <Type n="Int32">System.Int32</Type>
-          <Type n="OptionKey">{54dd0eac-a6d8-46f2-8c27-2f43c7e49861}</Type>
-          <Type n="String">System.String</Type>
-        </TypeList>
-      </XmlArchive>
+  </Data>
+  <TypeList>
+    <Type n="Boolean">System.Boolean</Type>
+    <Type n="Hashtable">System.Collections.Hashtable</Type>
+    <Type n="Int32">System.Int32</Type>
+    <Type n="OptionKey">{54dd0eac-a6d8-46f2-8c27-2f43c7e49861}</Type>
+    <Type n="String">System.String</Type>
+  </TypeList>
+</XmlArchive>
     </PlcProjectOptions>
   </ProjectExtensions>
 </Project>

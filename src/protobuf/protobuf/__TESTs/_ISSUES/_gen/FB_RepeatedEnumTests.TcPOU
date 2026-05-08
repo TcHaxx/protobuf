@@ -1,0 +1,136 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1">
+  <POU Name="FB_RepeatedEnumTests" Id="{93357f39-e9d1-4768-ab1d-f9d7f5cd48a1}" SpecialFunc="None">
+    <Declaration><![CDATA[(*******************************************************************************
+                          protoc-gen-twincat V0.0.0.0                           
+                  https://github.com/TcHaxx/protoc-gen-twincat                  
+*******************************************************************************)
+{attribute 'no_explicit_call' := 'do not call this POU directly'}
+{attribute 'no-analysis'}
+FUNCTION_BLOCK INTERNAL FINAL FB_RepeatedEnumTests IMPLEMENTS I_Message
+VAR
+    _fbMessageParser : FB_MessageParser(ipMessage:= THIS^);
+    _fbMessageWriter : FB_MessageWriter(ipMessage:= THIS^);
+    _stRepeatedEnumTests : ST_RepeatedEnumTests;
+    // repeated EnumOfTypeSint enum_values_sint = 1;
+    _fbFieldCodecId1 : FB_FieldCodecEnum(nTag:= 16#0A);
+    _fbRepeatedId1 : FB_RepeatedField(anyArray:= F_ToAnyType(_stRepeatedEnumTests.enum_values_sint), anyFirstElem:= F_ToAnyType(_stRepeatedEnumTests.enum_values_sint[0]));
+    END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[]]></ST>
+    </Implementation>
+    <Method Name="CalculateSize" Id="{be2845e7-ee6c-4cb8-b352-8d1f77f72ecf}">
+      <Declaration><![CDATA[(* Calculates the size of this message in Protocol Buffer wire format, in bytes. *)
+METHOD CalculateSize : UDINT
+VAR
+    nSize : UDINT;
+    nRepeatedFieldSize : UDINT;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[// repeated EnumOfTypeSint enum_values_sint = 1;
+_fbRepeatedId1.CalculateSize(nSize => nRepeatedFieldSize);
+nSize := nSize + nRepeatedFieldSize;
+CalculateSize := nSize;
+]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="MergeFrom" Id="{00fc8c9c-74b1-4cb6-81f1-dd0e07dcf0df}">
+      <Declaration><![CDATA[(* Merges the data from the specified coded input stream with the current message.*)
+METHOD MergeFrom : HRESULT
+VAR_IN_OUT
+    fbParseCtx : FB_ParseContext;
+END_VAR
+VAR
+    nTag : UDINT;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[_fbRepeatedId1.Initialize();
+REPEAT
+MergeFrom := fbParseCtx.ReadTag(nTag=> nTag);
+IF SUCCEEDED(MergeFrom) AND nTag = 0 THEN
+    EXIT;
+END_IF;
+
+IF FAILED(MergeFrom) THEN
+    RETURN;
+END_IF
+
+CASE nTag OF
+    16#0A:    // repeated EnumOfTypeSint enum_values_sint = 1;
+        MergeFrom := _fbRepeatedId1.AddEntriesFrom(fbParseCtx:= fbParseCtx, ipFieldCodec:= _fbFieldCodecId1,nCount=> _stRepeatedEnumTests.enum_values_sint_count);
+ELSE
+    MergeFrom := fbParseCtx.SkipLastField();
+END_CASE
+
+UNTIL (FAILED(MergeFrom) OR nTag = 0)
+END_REPEAT
+]]></ST>
+      </Implementation>
+    </Method>
+    <Property Name="MessageValue" Id="{2cec2d0e-ca52-437c-a601-b6013af1ac4e}">
+      <Declaration><![CDATA[PROPERTY PUBLIC MessageValue : T_Any]]></Declaration>
+      <Get Name="Get" Id="{7e2d31fd-fd46-4633-9043-302b0843d32f}">
+        <Declaration><![CDATA[]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[MessageValue := F_ToAnyType(anyArg:= _stRepeatedEnumTests);]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Property Name="Parser" Id="{6cc044f1-bfa3-4d13-88f6-53c0781b2d7c}">
+      <Declaration><![CDATA[PROPERTY PUBLIC Parser : REFERENCE TO FB_MessageParser]]></Declaration>
+      <Get Name="Get" Id="{10ebe63b-37a8-4273-9da0-594f1feae7d2}">
+        <Declaration><![CDATA[]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[Parser REF= THIS^._fbMessageParser;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Property Name="RepeatedEnumTests" Id="{4645ac45-6209-408b-b7ea-6c2bacb2bbf6}">
+      <Declaration><![CDATA[PROPERTY PUBLIC RepeatedEnumTests : ST_RepeatedEnumTests]]></Declaration>
+      <Get Name="Get" Id="{c2566113-e52a-4314-be6d-998116edf882}">
+        <Declaration><![CDATA[VAR
+END_VAR]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[RepeatedEnumTests := _stRepeatedEnumTests;]]></ST>
+        </Implementation>
+      </Get>
+      <Set Name="Set" Id="{b07b2115-e7da-4cad-a217-ac25e81cd687}">
+        <Declaration><![CDATA[VAR
+END_VAR]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[_stRepeatedEnumTests := RepeatedEnumTests;]]></ST>
+        </Implementation>
+      </Set>
+    </Property>
+    <Property Name="Writer" Id="{56e6a012-815c-4061-b416-0d65f361f946}">
+      <Declaration><![CDATA[(* Writer for this message.*)
+PROPERTY PUBLIC Writer : REFERENCE TO FB_MessageWriter]]></Declaration>
+      <Get Name="Get" Id="{6844eb87-4900-4a2d-8121-158d0b01ac59}">
+        <Declaration><![CDATA[]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[Writer REF= THIS^._fbMessageWriter;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Method Name="WriteTo" Id="{231eee27-c07e-4d68-992a-f65f247191e7}">
+      <Declaration><![CDATA[(* Writes the data to the given coded output stream.*)
+METHOD WriteTo : HRESULT
+VAR_IN_OUT
+	(* Coded output stream to write the data to. *)
+	fbWriteCtx	: FB_WriteContext;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[// repeated EnumOfTypeSint enum_values_sint = 1;
+WriteTo := _fbRepeatedId1.WriteToWithCount(fbWriteCtx:= fbWriteCtx, ipFieldCodec:= _fbFieldCodecId1, nCount:= _stRepeatedEnumTests.enum_values_sint_count);
+IF FAILED(WriteTo) THEN
+    RETURN;
+END_IF
+]]></ST>
+      </Implementation>
+    </Method>
+  </POU>
+</TcPlcObject>

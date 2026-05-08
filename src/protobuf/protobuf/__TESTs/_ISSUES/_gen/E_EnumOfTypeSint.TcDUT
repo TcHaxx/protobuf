@@ -1,0 +1,22 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1">
+  <DUT Name="E_EnumOfTypeSint" Id="{0a31c902-cd32-438c-aa4a-b7d7600bf669}">
+    <Declaration><![CDATA[(*******************************************************************************
+                          protoc-gen-twincat V0.0.0.0                           
+                  https://github.com/TcHaxx/protoc-gen-twincat                  
+*******************************************************************************)
+{attribute 'qualified_only'}
+{attribute 'strict'}
+{attribute 'to_string'}
+TYPE E_EnumOfTypeSint :
+(
+	VALUE_0 := 0,
+	VALUE_1 := 1,
+	VALUE_2 := 2,
+	VAULE_3 := 3,
+	VALUE_MIN := -127,
+	VALUE_MAX := 127
+) SINT;
+END_TYPE]]></Declaration>
+  </DUT>
+</TcPlcObject>

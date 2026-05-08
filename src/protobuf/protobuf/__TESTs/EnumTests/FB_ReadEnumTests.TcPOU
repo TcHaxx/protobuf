@@ -1,0 +1,113 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1">
+  <POU Name="FB_ReadEnumTests" Id="{d2a66fa2-e264-45ab-8bef-d566e920c59f}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK INTERNAL FINAL FB_ReadEnumTests EXTENDS FB_TestSuite
+VAR_INPUT
+END_VAR
+VAR_OUTPUT
+END_VAR
+VAR
+	eActual : (UNINITIALIZED:= 16#ABAB) := UNINITIALIZED;
+	eExpected : ARRAY[0..2] OF (NEG255:= -255, POS255:= 255, ZERO:= 0);
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[FailsWithInvalidDataForNonEnumType();
+ShouldReadEnumValueTheory();]]></ST>
+    </Implementation>
+    <Method Name="FailsWithInvalidDataForNonEnumType" Id="{87c2e7d2-0cdf-4848-8a04-24b469326621}">
+      <Declaration><![CDATA[METHOD PRIVATE FailsWithInvalidDataForNonEnumType : BOOL
+VAR_INPUT
+END_VAR
+VAR_INST
+	fbSut	: FB_ParseContext;
+END_VAR
+VAR
+	aBuffer	: ARRAY[0..15] OF BYTE := [16#80, 16#01];
+	hr : HRESULT;
+	nNonEnumVar	: DINT;
+END_VAR
+VAR CONSTANT
+	cHrExpected : HRESULT := E_HRESULTAdsErr.INVALIDDATA;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST(__POUNAME());
+
+//Arrange
+fbSut.FromBuffer(aBuffer);
+
+// Act
+hr := fbSut.ReadEnum(anyEnum:= nNonEnumVar);
+
+//Assert
+AssertEquals_DINT(
+    Expected:= cHrExpected,
+    Actual:= hr,
+    Message:= CONCAT(CONCAT('Expected ', TO_STRING(cHrExpected)), ' for non Enum.'));
+
+AssertEquals_UDINT(
+	Expected:= 0,
+	Actual:= fbSut.refCtx.stState.nBufferPos,
+	Message:= 'Unexpected change to ParseContext buffer position.');
+
+TEST_FINISHED_NAMED(__POUNAME());]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="ShouldReadEnumValue" Id="{31d59fb5-969f-46c3-a3d0-2e2bed780dae}">
+      <Declaration><![CDATA[METHOD PRIVATE ShouldReadEnumValue : BOOL
+// VAR_IN_OUT CONSTANT
+// 	aBuffer : ARRAY[*] OF BYTE;
+// END_VAR
+VAR_INPUT
+	nEnumValueBuffer : DINT;
+	nExpected : INT;
+END_VAR
+VAR_INST
+    fbSut : FB_ParseContext;
+	fbWrCtx : FB_WriteContext;
+END_VAR
+VAR
+	hr : HRESULT;
+	aBuffer : ARRAY[0..31] OF BYTE;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[// Arrange
+fbSut.FromBuffer(aBuffer);
+fbWrCtx.FromBuffer(aBuffer);
+F_WriteInt32(fbWrCtx.refCtx, nValue:= nEnumValueBuffer);
+eActual := UNINITIALIZED;
+eExpected[0] := UNINITIALIZED;	// neighbour guard
+eExpected[1] := nExpected;
+eExpected[2] := UNINITIALIZED;  // neighbour guard
+
+// Act
+hr := fbSut.ReadEnum(anyEnum:= eActual);
+
+//Assert
+AssertEquals_DINT(Expected:= S_OK, Actual:= hr, Message:= 'Failed to read enum value.');
+AssertEquals_INT(Expected:= eExpected[0], Actual:= UNINITIALIZED, Message:= 'Lower neighbor value was unexpectedly modified.');
+AssertEquals_INT(Expected:= eExpected[1], Actual:= eActual, Message:= '');
+AssertEquals_INT(Expected:= eExpected[2], Actual:= UNINITIALIZED, Message:= 'Upper neighbor value was unexpectedly modified.');]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="ShouldReadEnumValueTheory" Id="{612401ba-c75c-4fd0-a3b3-9209f64a10a3}">
+      <Declaration><![CDATA[METHOD PRIVATE ShouldReadEnumValueTheory : BOOL
+VAR_INPUT
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST(__POUNAME());
+ShouldReadEnumValue(nEnumValueBuffer:= 0, nExpected:= ZERO);
+ShouldReadEnumValue(nEnumValueBuffer:= POS255, nExpected:= POS255);
+ShouldReadEnumValue(nEnumValueBuffer:= 257, nExpected:= 257);
+ShouldReadEnumValue(nEnumValueBuffer:= NEG255, nExpected:= NEG255);
+ShouldReadEnumValue(nEnumValueBuffer:= 32767, nExpected:= 32767);
+ShouldReadEnumValue(nEnumValueBuffer:= -32768, nExpected:= -32768);
+ShouldReadEnumValue(nEnumValueBuffer:= 65535, nExpected:= -1);  // 16#0000_FFFF --> -1 (INT)
+ShouldReadEnumValue(nEnumValueBuffer:= 65536, nExpected:= 0);  // 16#0001_0000 --> 0 (INT)
+ShouldReadEnumValue(nEnumValueBuffer:= -65535, nExpected:= 1);  // 16#FFFF_0001 --> 16#0001 (INT)
+ShouldReadEnumValue(nEnumValueBuffer:= 65409, nExpected:= -127);
+TEST_FINISHED_NAMED(__POUNAME());]]></ST>
+      </Implementation>
+    </Method>
+  </POU>
+</TcPlcObject>

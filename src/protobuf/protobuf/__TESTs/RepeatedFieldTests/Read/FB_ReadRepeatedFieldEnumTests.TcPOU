@@ -1,0 +1,153 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1">
+  <POU Name="FB_ReadRepeatedFieldEnumTests" Id="{cb6f9c09-caf6-4468-99c4-58dac931554d}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK  INTERNAL FINAL FB_ReadRepeatedFieldEnumTests EXTENDS FB_TestSuite
+VAR_INPUT
+END_VAR
+VAR_OUTPUT
+END_VAR
+VAR
+	fbSUT : FB_FieldCodecEnum(nTag:= 16#0A);
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[ShouldReadEnumWithBaseTypeByte();
+ShouldReadEnumWithBaseTypeInt();]]></ST>
+    </Implementation>
+    <Method Name="ShouldReadEnumWithBaseTypeByte" Id="{a37253a3-c98d-48f1-8678-789fa7429c85}">
+      <Declaration><![CDATA[METHOD PRIVATE ShouldReadEnumWithBaseTypeByte : HRESULT
+{region 'proto'} (*
+syntax = "proto3";
+import "tchaxx-extensions.proto";
+message FieldCodecEnumTests {
+  enum ByteEnum {
+	option (tchaxx.enum_integer_type) = EIT_BYTE;
+    MIN = 0;
+    VAL1 = 1;
+    VAL2 = 2;
+    VAL3 = 3;
+    MAX = 255;
+  }
+  repeated ByteEnum byte_enum = 1 [(tchaxx.array_len) = 8;
+}
+*){endregion}
+
+VAR	
+	aActualValues : ARRAY[0..7] OF E_BYTE;
+	aExpectedValues : ARRAY[0..7] OF E_BYTE := [E_BYTE.eMIN, E_BYTE.eMAX, E_BYTE.eVAL3, E_BYTE.eVAL2, E_BYTE.eVAL1, E_BYTE.eVAL2, E_BYTE.eVAL3];
+	fbCtx : FB_ParseContext;
+	fbRepeatedField	: FB_RepeatedField(anyArray:= F_ToAnyType(aActualValues), anyFirstElem:= F_ToAnyType(aActualValues[0]));
+END_VAR
+VAR CONSTANT
+	// 0a0900ff01030201820203 -> decoded "byte_enum": [ "MIN", "MAX", "VAL3", "VAL2", "VAL1", 258, "VAL3" ] where 258 should overflow to "VAL2"
+	cBuffer : ARRAY[0..63] OF BYTE := [16#0A, 16#09, 16#00, 16#FF, 16#01, 16#03, 16#02, 16#01, 16#82, 16#02, 16#03];
+	cExpectedBufferPos : UDINT := 11;
+	cExpectedFieldIndex : UDINT := 7;
+END_VAR
+VAR
+	nTag : UDINT;
+	hr : HRESULT;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST(__POUNAME());
+
+// Arrange
+fbCtx.FromBuffer(cBuffer);
+
+// Act
+F_ParseTag(fbCtx.refCtx, nTag=> nTag);
+hr := fbRepeatedField.AddEntriesFrom(fbParseCtx:= fbCtx, ipFieldCodec:= fbSUT);
+
+// Assert
+AssertEquals_DINT(
+    Expected:= S_OK,
+    Actual:= hr,
+    Message:= 'Expected S_OK instead of error');
+	
+AssertEquals(Expected:= aExpectedValues, Actual:= aActualValues, Message:= '');
+AssertEquals_UDINT(
+    Expected:= cExpectedBufferPos,
+    Actual:= fbCtx.refCtx.stState.nBufferPos,
+    Message:= CONCAT('Expected stState.nBufferPos to equal ', TO_STRING(cExpectedBufferPos)));
+    
+AssertEquals_UDINT(
+    Expected:= cExpectedFieldIndex,
+    Actual:= fbRepeatedField.nCount,
+    Message:= CONCAT('Expected fbRepeatedField.nCount to equal ', TO_STRING(cExpectedFieldIndex)));
+	
+TEST_FINISHED_NAMED(__POUNAME());
+
+ 
+]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="ShouldReadEnumWithBaseTypeInt" Id="{1e298da6-5a3c-4a15-89b0-f2375f6e1c23}">
+      <Declaration><![CDATA[METHOD PRIVATE ShouldReadEnumWithBaseTypeInt : HRESULT
+{region 'proto'} (*
+syntax = "proto3";
+import "tchaxx-extensions.proto";
+message FieldCodecEnumTests {
+  enum IntEnum {
+	option (tchaxx.enum_integer_type) = EIT_INT;
+    VAL0 = 0;
+    MIN = -32768;
+    VAL1 = 1;
+    VAL2 = 2;
+    VAL3 = 3;
+    MAX = 32767;
+  }
+  repeated IntEnum int_enum = 1 [(tchaxx.array_len) = 8];
+}
+*){endregion}
+
+VAR	
+	aActualValues : ARRAY[0..7] OF E_INT;
+	aExpectedValues : ARRAY[0..7] OF E_INT := [E_INT.eVAL0, E_INT.eMIN, E_INT.eMAX, E_INT.eVAL3, E_INT.eVAL2, E_INT.eVAL1];
+	fbCtx : FB_ParseContext;
+	fbRepeatedField	: FB_RepeatedField(anyArray:= F_ToAnyType(aActualValues), anyFirstElem:= F_ToAnyType(aActualValues[0]));
+END_VAR
+VAR CONSTANT
+	// 0a11008080feffffffffffff01ffff01030201 -> decoded "byte_enum": [ "VAL0", "MIN", "MAX", "VAL3", "VAL2", "VAL1"]
+	cBuffer : ARRAY[0..63] OF BYTE := [16#0A, 16#11, 16#00, 16#80, 16#80, 16#FE, 16#FF, 16#FF, 16#FF, 16#FF, 16#FF, 16#FF, 16#01, 16#FF, 16#FF, 16#01, 16#03, 16#02, 16#01];
+	cExpectedBufferPos : UDINT := 19;
+	cExpectedFieldIndex : UDINT := 6;
+END_VAR
+VAR
+	nTag : UDINT;
+	hr : HRESULT;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST(__POUNAME());
+
+// Arrange
+fbCtx.FromBuffer(cBuffer);
+
+// Act
+F_ParseTag(fbCtx.refCtx, nTag=> nTag);
+hr := fbRepeatedField.AddEntriesFrom(fbParseCtx:= fbCtx, ipFieldCodec:= fbSUT);
+
+// Assert
+AssertEquals_DINT(
+    Expected:= S_OK,
+    Actual:= hr,
+    Message:= 'Expected S_OK instead of error');
+	
+AssertEquals(Expected:= aExpectedValues, Actual:= aActualValues, Message:= '');
+AssertEquals_UDINT(
+    Expected:= cExpectedBufferPos,
+    Actual:= fbCtx.refCtx.stState.nBufferPos,
+    Message:= CONCAT('Expected stState.nBufferPos to equal ', TO_STRING(cExpectedBufferPos)));
+    
+AssertEquals_UDINT(
+    Expected:= cExpectedFieldIndex,
+    Actual:= fbRepeatedField.nCount,
+    Message:= CONCAT('Expected fbRepeatedField.nCount to equal ', TO_STRING(cExpectedFieldIndex)));
+	
+TEST_FINISHED_NAMED(__POUNAME());
+
+ 
+]]></ST>
+      </Implementation>
+    </Method>
+  </POU>
+</TcPlcObject>

@@ -1,0 +1,99 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1">
+  <POU Name="FB_FieldCodecEnum" Id="{51053c22-4fc8-47e3-930a-74eb4c9c8e6a}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK FB_FieldCodecEnum EXTENDS FB_FieldCodec
+VAR_INPUT
+END_VAR
+VAR_OUTPUT
+END_VAR
+VAR
+	nValue : DINT;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[]]></ST>
+    </Implementation>
+    <Method Name="CalculatePackedDataSize" Id="{cd558771-2c71-46d8-87c3-13f30229ace5}">
+      <Declaration><![CDATA[METHOD CalculatePackedDataSize : HRESULT
+VAR_INPUT CONSTANT
+	anyFirstElem	: T_Any;
+	nLength	        : UDINT;        // items to write
+END_VAR
+VAR_OUTPUT
+    nPackedDataSize : UDINT;
+END_VAR
+VAR
+    anyItem         : T_ANY;
+    i               : UDINT;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF anyFirstElem.pValue = NULL OR anyFirstElem.TypeClass <> __SYSTEM.TYPE_CLASS.TYPE_ENUM THEN
+    CalculatePackedDataSize := E_HRESULTAdsErr.INVALIDDATA;
+    RETURN;
+END_IF
+
+anyItem := anyFirstElem;
+
+IF nLength < 1 THEN
+    nPackedDataSize := 0;
+    RETURN;
+END_IF
+
+FOR i := 0  TO nLength - 1 DO
+    anyItem.pValue := anyFirstElem.pValue + (i * TO_UDINT(anyFirstElem.diSize)); 
+    nPackedDataSize := nPackedDataSize + F_ComputeEnumSize(anyItem);
+END_FOR]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="IsPackedRepeatedField" Id="{3fa064e7-89fe-46ba-96c5-ce2eb0fee077}">
+      <Declaration><![CDATA[METHOD IsPackedRepeatedField : BOOL
+VAR_INPUT
+	nTag	: UDINT;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IsPackedRepeatedField := F_IsPackedRepeatedField(nTag);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="ValueReader" Id="{96a03a26-650a-464a-9307-8361516bd3b2}">
+      <Declaration><![CDATA[
+METHOD ValueReader : HRESULT
+VAR_IN_OUT      
+    stCtx : ST_ParseContext;
+END_VAR
+VAR_OUTPUT
+	anyOut	: T_Any;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[
+ValueReader := F_ParseRawVarint32(stCtx, nValue);
+IF FAILED(ValueReader) THEN
+    RETURN;
+END_IF
+anyOut := F_ToAnyType(anyArg:= nValue);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="ValueWriter" Id="{fd6adb85-9839-4b56-95d2-db99fcdba5be}">
+      <Declaration><![CDATA[METHOD ValueWriter : HRESULT
+VAR_IN_OUT
+    stCtx  : ST_WriteContext;
+END_VAR
+VAR_INPUT
+    anyIn : T_ANY;
+END_VAR
+VAR
+    nValue  : DINT;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF anyIn.pValue = NULL OR anyIn.TypeClass <> __SYSTEM.TYPE_CLASS.TYPE_ENUM THEN
+    ValueWriter := E_HRESULTAdsErr.INVALIDDATA;
+    RETURN;
+END_IF
+
+MEMCPY(destAddr:= ADR(nValue), srcAddr:= anyIn.pValue, MIN(TO_UDINT(anyIn.diSize), SIZEOF(nValue)));
+ValueWriter := F_WriteInt32(stCtx, nValue);]]></ST>
+      </Implementation>
+    </Method>
+  </POU>
+</TcPlcObject>

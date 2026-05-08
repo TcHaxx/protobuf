@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1">
+  <DUT Name="ST_RepeatedEnumTests" Id="{3ed750ce-ab8b-4218-9262-c69e422baad2}">
+    <Declaration><![CDATA[(*******************************************************************************
+                          protoc-gen-twincat V0.0.0.0                           
+                  https://github.com/TcHaxx/protoc-gen-twincat                  
+*******************************************************************************)
+{attribute 'no-analysis'}
+TYPE ST_RepeatedEnumTests :
+STRUCT
+	enum_values_sint : ARRAY[0..15] OF E_EnumOfTypeSint;
+	enum_values_sint_count : UDINT; // Implict generated field for actual number of items in array enum_values_sint
+END_STRUCT
+END_TYPE]]></Declaration>
+  </DUT>
+</TcPlcObject>
