@@ -449,3 +449,7 @@ FodyWeavers.xsd
 
 # JetBrains Rider
 *.sln.iml
+
+# Ignore verification files (snappy)
+!*.verified.txt
+*.received.txt

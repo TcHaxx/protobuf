@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" Version="1.1.0.1">
+  <DUT Name="E_DataType" Id="25886b0f-b5e0-4dcb-bf2b-5f9864943695">
+    <Declaration><![CDATA[(*******************************************************************************
+                          protoc-gen-twincat V0.0.0.0                           
+                  https://github.com/TcHaxx/protoc-gen-twincat                  
+*******************************************************************************)
+{attribute 'qualified_only'}
+{attribute 'strict'}
+{attribute 'to_string'}
+TYPE E_DataType :
+(
+	DATA_TYPE_UNKNOWN := 0,
+	DATA_TYPE_TEMPERATURE := 1,
+	DATA_TYPE_PRESSURE := 2,
+	DATA_TYPE_HUMIDITY := 3
+) BYTE;
+END_TYPE]]></Declaration>
+  </DUT>
+</TcPlcObject>

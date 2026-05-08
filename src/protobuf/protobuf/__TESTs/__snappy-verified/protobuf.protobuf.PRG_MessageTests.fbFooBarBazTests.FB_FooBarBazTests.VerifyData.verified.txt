@@ -1,0 +1,22 @@
+﻿{
+  bar: {
+    name: TestName ⚠!,
+    age: 123,
+    email: test@foo.bar
+  },
+  baz: [
+    {
+      value: 1,
+      name: baz1
+    },
+    {
+      value: 2,
+      name: baz2
+    },
+    {
+      value: 0,
+      name: 
+    }
+  ],
+  baz_count: 2
+}

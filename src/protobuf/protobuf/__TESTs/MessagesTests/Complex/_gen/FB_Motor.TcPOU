@@ -1,0 +1,212 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1">
+  <POU Name="FB_Motor" Id="{ad165659-7225-433f-b979-8f9694972570}" SpecialFunc="None">
+    <Declaration><![CDATA[(*******************************************************************************
+                          protoc-gen-twincat V0.0.0.0                           
+                  https://github.com/TcHaxx/protoc-gen-twincat                  
+*******************************************************************************)
+{attribute 'no_explicit_call' := 'do not call this POU directly'}
+{attribute 'no-analysis'}
+// Message with fb_prefix option (function block)
+FUNCTION_BLOCK INTERNAL FINAL FB_Motor IMPLEMENTS I_Message
+VAR
+    _fbMessageParser : FB_MessageParser(ipMessage:= THIS^);
+    _fbMessageWriter : FB_MessageWriter(ipMessage:= THIS^);
+    _stMotor : ST_Motor;
+    // repeated int32 sensor_readings = 4;
+    _fbFieldCodecId4 : FB_FieldCodecInt32(nTag:= 16#22);
+    _fbRepeatedId4 : FB_RepeatedField(anyArray:= F_ToAnyType(_stMotor.sensor_readings), anyFirstElem:= F_ToAnyType(_stMotor.sensor_readings[0]), ipFieldCodec:= _fbFieldCodecId4);
+    _fbmotor_config : FB_MotorConfig;
+    END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[]]></ST>
+    </Implementation>
+    <Method Name="CalculateSize" Id="{743f290f-1b99-4a6f-8239-ef9eee3f0076}">
+      <Declaration><![CDATA[{attribute 'no-analysis'}
+(* Calculates the size of this message in Protocol Buffer wire format, in bytes. *)
+METHOD CalculateSize : UDINT
+VAR
+    nSize : UDINT;
+    nRepeatedFieldSize : UDINT;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[// string name = 1;
+nSize := nSize + 1 + F_ComputeStringSize(anyString:= _stMotor.name);
+// Status status = 2;
+nSize := nSize + 1 + F_ComputeEnumSize(anyEnum:= _stMotor.status);
+// uint32 speed = 3;
+nSize := nSize + 1 + F_ComputeUint32Size(anyUdint:= _stMotor.speed);
+// repeated int32 sensor_readings = 4;
+_fbRepeatedId4.nCount := _stMotor.sensor_readings_count;
+_fbRepeatedId4.CalculateSize(nSize => nRepeatedFieldSize);
+nSize := nSize + nRepeatedFieldSize;
+// bytes config = 5;
+nSize := nSize + 1 + F_ComputeBytesSize(aBytes:= _stMotor.config, nCount:= _stMotor.config_count);
+// MotorConfig motor_config = 6;
+nSize := nSize + 1 + F_ComputeMessageSize(iMessage:= _fbmotor_config);
+CalculateSize := nSize;
+]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="MergeFrom" Id="{d8a3cba8-36db-4bde-9e27-2c0d04e48a8e}">
+      <Declaration><![CDATA[(* Merges the data from the specified coded input stream with the current message.*)
+{attribute 'no-analysis'}
+METHOD MergeFrom : HRESULT
+VAR_IN_OUT
+    fbParseCtx : FB_ParseContext;
+END_VAR
+VAR
+    nTag : UDINT;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[_fbRepeatedId4.Initialize();
+REPEAT
+MergeFrom := fbParseCtx.ReadTag(nTag=> nTag);
+IF SUCCEEDED(MergeFrom) AND nTag = 0 THEN
+    EXIT;
+END_IF;
+
+IF FAILED(MergeFrom) THEN
+    RETURN;
+END_IF
+
+CASE nTag OF
+    16#0A:    // string name = 1;
+        MergeFrom := fbParseCtx.ReadString(anyStringOut:= _stMotor.name); 
+    16#10:    // Status status = 2;
+        MergeFrom := fbParseCtx.ReadEnum(anyEnum:= _stMotor.status); 
+    16#18:    // uint32 speed = 3;
+        MergeFrom := fbParseCtx.ReadUint32(anyUdint:= _stMotor.speed); 
+    16#22:    // repeated int32 sensor_readings = 4;
+        MergeFrom := _fbRepeatedId4.AddEntriesFrom(fbParseCtx:= fbParseCtx, ipFieldCodec:= _fbFieldCodecId4,nCount=> _stMotor.sensor_readings_count);
+    16#2A:    // bytes config = 5;
+        MergeFrom := fbParseCtx.ReadBytes(aBytes:= _stMotor.config, nCount=> _stMotor.config_count); 
+    16#32:    // MotorConfig motor_config = 6;
+        MergeFrom := fbParseCtx.ReadMessage(ipMessage:= _fbmotor_config);
+        THIS^._stMotor.motor_config := _fbmotor_config.MotorConfig;
+ELSE
+    MergeFrom := fbParseCtx.SkipLastField();
+END_CASE
+
+UNTIL (FAILED(MergeFrom) OR nTag = 0)
+END_REPEAT
+]]></ST>
+      </Implementation>
+    </Method>
+    <Property Name="MessageValue" Id="{8388c66d-2c3f-4250-8a4f-aa9b17f13762}">
+      <Declaration><![CDATA[PROPERTY PUBLIC MessageValue : T_Any]]></Declaration>
+      <Get Name="Get" Id="{7dd5d031-a783-4c32-9898-46018501d1b0}">
+        <Declaration><![CDATA[]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[MessageValue := F_ToAnyType(anyArg:= _stMotor);]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Property Name="Motor" Id="{5b99cff3-2959-425f-ad10-3918931143ed}">
+      <Declaration><![CDATA[PROPERTY PUBLIC Motor : ST_Motor]]></Declaration>
+      <Get Name="Get" Id="{e89a9717-2ba8-4fe7-9a15-2e97522a368b}">
+        <Declaration><![CDATA[VAR
+END_VAR]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[Motor := _stMotor;]]></ST>
+        </Implementation>
+      </Get>
+      <Set Name="Set" Id="{41698f9b-0da1-48d2-b0fc-47820a16c822}">
+        <Declaration><![CDATA[VAR
+END_VAR]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[_stMotor := Motor;
+// MotorConfig motor_config = 6;
+_stMotor.motor_config := Motor.motor_config;
+]]></ST>
+        </Implementation>
+      </Set>
+    </Property>
+    <Property Name="Parser" Id="{0391b9aa-140c-43cc-93fb-9b1d6a7601a3}">
+      <Declaration><![CDATA[PROPERTY PUBLIC Parser : REFERENCE TO FB_MessageParser]]></Declaration>
+      <Get Name="Get" Id="{305c656f-3792-4a31-823c-996b25e4e21e}">
+        <Declaration><![CDATA[]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[Parser REF= THIS^._fbMessageParser;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Property Name="Writer" Id="{87264a56-78cb-4611-84b3-934970cf205c}">
+      <Declaration><![CDATA[(* Writer for this message.*)
+PROPERTY PUBLIC Writer : REFERENCE TO FB_MessageWriter]]></Declaration>
+      <Get Name="Get" Id="{d4c3f65c-8c4a-4e30-bc17-ec1ee1bb2175}">
+        <Declaration><![CDATA[]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[Writer REF= THIS^._fbMessageWriter;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Method Name="WriteTo" Id="{40546f97-9d54-446f-ab04-86b55e956aa1}">
+      <Declaration><![CDATA[(* Writes the data to the given coded output stream.*)
+{attribute 'no-analysis'}
+METHOD WriteTo : HRESULT
+VAR_IN_OUT
+	(* Coded output stream to write the data to. *)
+	fbWriteCtx	: FB_WriteContext;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[// string name = 1;
+WriteTo := fbWriteCtx.WriteTag(1, E_WireType.LengthDelimited);
+IF FAILED(WriteTo) THEN
+    RETURN;
+END_IF
+WriteTo := fbWriteCtx.WriteString(sStringToWrite:= _stMotor.name);
+IF FAILED(WriteTo) THEN
+    RETURN;
+END_IF
+// Status status = 2;
+WriteTo := fbWriteCtx.WriteTag(2, E_WireType.Varint);
+IF FAILED(WriteTo) THEN
+    RETURN;
+END_IF
+WriteTo := fbWriteCtx.WriteEnum(anyEnum:= _stMotor.status);
+IF FAILED(WriteTo) THEN
+    RETURN;
+END_IF
+// uint32 speed = 3;
+WriteTo := fbWriteCtx.WriteTag(3, E_WireType.Varint);
+IF FAILED(WriteTo) THEN
+    RETURN;
+END_IF
+WriteTo := fbWriteCtx.WriteUint32(anyUdint:= _stMotor.speed);
+IF FAILED(WriteTo) THEN
+    RETURN;
+END_IF
+// repeated int32 sensor_readings = 4;
+WriteTo := _fbRepeatedId4.WriteToWithCount(fbWriteCtx:= fbWriteCtx, ipFieldCodec:= _fbFieldCodecId4, nCount:= _stMotor.sensor_readings_count);
+IF FAILED(WriteTo) THEN
+    RETURN;
+END_IF
+// bytes config = 5;
+WriteTo := fbWriteCtx.WriteTag(5, E_WireType.LengthDelimited);
+IF FAILED(WriteTo) THEN
+    RETURN;
+END_IF
+WriteTo := fbWriteCtx.WriteBytes(aBytes:= _stMotor.config, nCount:= _stMotor.config_count);
+IF FAILED(WriteTo) THEN
+    RETURN;
+END_IF
+// MotorConfig motor_config = 6;
+WriteTo := fbWriteCtx.WriteTag(6, E_WireType.LengthDelimited);
+IF FAILED(WriteTo) THEN
+    RETURN;
+END_IF
+_fbmotor_config.MotorConfig := THIS^._stMotor.motor_config;
+WriteTo := fbWriteCtx.WriteMessage(ipMessage:= THIS^._fbmotor_config);
+IF FAILED(WriteTo) THEN
+    RETURN;
+END_IF
+]]></ST>
+      </Implementation>
+    </Method>
+  </POU>
+</TcPlcObject>

@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1">
+  <DUT Name="ST_Baz" Id="{82588dae-8bcc-4287-9610-8dfebcfed033}">
+    <Declaration><![CDATA[(*******************************************************************************
+                          protoc-gen-twincat v0.0.0.0                           
+             https://github.bhs-world.com/CorrML/protoc-gen-twincat             
+*******************************************************************************)
+{attribute 'no-analysis'}
+TYPE ST_Baz :
+STRUCT
+	value : UDINT;
+	name : STRING;
+END_STRUCT
+END_TYPE]]></Declaration>
+  </DUT>
+</TcPlcObject>

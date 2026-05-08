@@ -1,0 +1,144 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1">
+  <POU Name="FB_RepeatedComplexData" Id="{b8af4a3d-69be-4c74-9ec7-dea6a5fca506}" SpecialFunc="None">
+    <Declaration><![CDATA[(*******************************************************************************
+                          protoc-gen-twincat V0.0.0.0                           
+                  https://github.com/TcHaxx/protoc-gen-twincat                  
+*******************************************************************************)
+{attribute 'no_explicit_call' := 'do not call this POU directly'}
+{attribute 'no-analysis'}
+FUNCTION_BLOCK INTERNAL FINAL FB_RepeatedComplexData IMPLEMENTS I_Message
+VAR
+    _fbMessageParser : FB_MessageParser(ipMessage:= THIS^);
+    _fbMessageWriter : FB_MessageWriter(ipMessage:= THIS^);
+    _stRepeatedComplexData : ST_RepeatedComplexData;
+    // repeated ComplexData complex_data_list = 1;
+    _fbFieldCodecId1 : FB_FieldCodecMessage(nTag:= 16#0A, ipMessage:= _fbcomplex_data_list);
+    _fbRepeatedId1 : FB_RepeatedField(anyArray:= F_ToAnyType(_stRepeatedComplexData.complex_data_list), anyFirstElem:= F_ToAnyType(_stRepeatedComplexData.complex_data_list[0]), ipFieldCodec:= _fbFieldCodecId1);
+    _fbcomplex_data_list : FB_ComplexData;
+    END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[]]></ST>
+    </Implementation>
+    <Method Name="CalculateSize" Id="{58c3a35e-3bef-4689-8f2e-9282ad8486ab}">
+      <Declaration><![CDATA[{attribute 'no-analysis'}
+(* Calculates the size of this message in Protocol Buffer wire format, in bytes. *)
+METHOD CalculateSize : UDINT
+VAR
+    nSize : UDINT;
+    nRepeatedFieldSize : UDINT;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[// repeated ComplexData complex_data_list = 1;
+_fbRepeatedId1.nCount := _stRepeatedComplexData.complex_data_list_count;
+_fbRepeatedId1.CalculateSize(nSize => nRepeatedFieldSize);
+nSize := nSize + nRepeatedFieldSize;
+CalculateSize := nSize;
+]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="MergeFrom" Id="{744d3783-7961-4c57-a08f-61d95a884588}">
+      <Declaration><![CDATA[(* Merges the data from the specified coded input stream with the current message.*)
+{attribute 'no-analysis'}
+METHOD MergeFrom : HRESULT
+VAR_IN_OUT
+    fbParseCtx : FB_ParseContext;
+END_VAR
+VAR
+    nTag : UDINT;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[_fbRepeatedId1.Initialize();
+REPEAT
+MergeFrom := fbParseCtx.ReadTag(nTag=> nTag);
+IF SUCCEEDED(MergeFrom) AND nTag = 0 THEN
+    EXIT;
+END_IF;
+
+IF FAILED(MergeFrom) THEN
+    RETURN;
+END_IF
+
+CASE nTag OF
+    16#0A:    // repeated ComplexData complex_data_list = 1;
+        MergeFrom := _fbRepeatedId1.AddEntriesFrom(fbParseCtx:= fbParseCtx, ipFieldCodec:= _fbFieldCodecId1,nCount=> _stRepeatedComplexData.complex_data_list_count);
+ELSE
+    MergeFrom := fbParseCtx.SkipLastField();
+END_CASE
+
+UNTIL (FAILED(MergeFrom) OR nTag = 0)
+END_REPEAT
+]]></ST>
+      </Implementation>
+    </Method>
+    <Property Name="MessageValue" Id="{3fb580c5-9723-45a3-8eb6-20602481e639}">
+      <Declaration><![CDATA[PROPERTY PUBLIC MessageValue : T_Any]]></Declaration>
+      <Get Name="Get" Id="{763d43e5-717b-4ac8-86a7-1d63da0f2cbf}">
+        <Declaration><![CDATA[]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[MessageValue := F_ToAnyType(anyArg:= _stRepeatedComplexData);]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Property Name="Parser" Id="{692f6622-a7f7-467d-91a1-5d76e2d0b08a}">
+      <Declaration><![CDATA[PROPERTY PUBLIC Parser : REFERENCE TO FB_MessageParser]]></Declaration>
+      <Get Name="Get" Id="{66b800e6-ce25-48f3-ab7c-73e42ff678d8}">
+        <Declaration><![CDATA[]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[Parser REF= THIS^._fbMessageParser;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Property Name="RepeatedComplexData" Id="{6c3c2d1c-1545-4711-946b-67c30748b14c}">
+      <Declaration><![CDATA[PROPERTY PUBLIC RepeatedComplexData : ST_RepeatedComplexData]]></Declaration>
+      <Get Name="Get" Id="{bad84d4e-94f3-44cf-ba60-768f1d8a58ce}">
+        <Declaration><![CDATA[VAR
+END_VAR]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[RepeatedComplexData := _stRepeatedComplexData;]]></ST>
+        </Implementation>
+      </Get>
+      <Set Name="Set" Id="{6a0bc06c-8174-45e4-bf14-55f0b5b93c87}">
+        <Declaration><![CDATA[VAR
+END_VAR]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[_stRepeatedComplexData := RepeatedComplexData;
+// repeated ComplexData complex_data_list = 1;
+_stRepeatedComplexData.complex_data_list := RepeatedComplexData.complex_data_list;
+]]></ST>
+        </Implementation>
+      </Set>
+    </Property>
+    <Property Name="Writer" Id="{792b419b-baaa-432b-b5f1-3161b07d21c5}">
+      <Declaration><![CDATA[(* Writer for this message.*)
+PROPERTY PUBLIC Writer : REFERENCE TO FB_MessageWriter]]></Declaration>
+      <Get Name="Get" Id="{ea53ddda-9099-4f58-ab68-b4cf1abe3ca7}">
+        <Declaration><![CDATA[]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[Writer REF= THIS^._fbMessageWriter;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Method Name="WriteTo" Id="{0661ab05-6471-47ee-a677-44f62e36ae43}">
+      <Declaration><![CDATA[(* Writes the data to the given coded output stream.*)
+{attribute 'no-analysis'}
+METHOD WriteTo : HRESULT
+VAR_IN_OUT
+	(* Coded output stream to write the data to. *)
+	fbWriteCtx	: FB_WriteContext;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[// repeated ComplexData complex_data_list = 1;
+WriteTo := _fbRepeatedId1.WriteToWithCount(fbWriteCtx:= fbWriteCtx, ipFieldCodec:= _fbFieldCodecId1, nCount:= _stRepeatedComplexData.complex_data_list_count);
+IF FAILED(WriteTo) THEN
+    RETURN;
+END_IF
+]]></ST>
+      </Implementation>
+    </Method>
+  </POU>
+</TcPlcObject>

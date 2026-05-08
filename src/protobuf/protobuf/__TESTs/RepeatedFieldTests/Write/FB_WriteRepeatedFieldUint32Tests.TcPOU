@@ -9,7 +9,7 @@ END_VAR
 VAR
 	fbFieldCodec : FB_FieldCodecUInt32(nTag:= 0);
 	aActual    	 : ARRAY [0..7] OF UDINT;
-	fbRepeatedField		: FB_RepeatedField(anyArray:= F_ToAnyType(aActual), anyFirstElem:= F_ToAnyType(aActual[0]));
+	fbRepeatedField		: FB_RepeatedField(anyArray:= F_ToAnyType(aActual), anyFirstElem:= F_ToAnyType(aActual[0]), ipFieldCodec:= fbFieldCodec);
 END_VAR
 ]]></Declaration>
     <Implementation>

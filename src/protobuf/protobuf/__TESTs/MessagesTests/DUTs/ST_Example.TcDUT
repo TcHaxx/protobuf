@@ -5,6 +5,7 @@
                           protoc-gen-twincat V0.0.0.0                           
                   https://github.com/TcHaxx/protoc-gen-twincat                  
 *******************************************************************************)
+{attribute 'no-analysis'}
 // This is a message-level comment.
 TYPE ST_Example :
 STRUCT
@@ -12,6 +13,7 @@ STRUCT
 	// and it continues on the next line.
 	sName : STRING(256);	// Trailing comment for field1 (sName).
 	aUdintArray : ARRAY[0..6] OF UDINT;	// Trailing comment for field2 (aUdintArray).
+	aUdintArray_count	: UDINT;			// Number of items in the array.
 	nDInt2 : DINT;	// Trailing comment for field3 (nDInt2).
 	sMyString : STRING;
 	nFixed64 : ULINT;
@@ -19,9 +21,12 @@ STRUCT
 	// Leading comment for field7 (aByteArray),
 	// also multiline...
 	aByteArray : ARRAY[0..31] OF BYTE;	// Trailing comment for field7 (aByteArray).
+	aByteArray_count	: UDINT;			// Number of items in the array.
 	fReal : REAL;
 	aLReal : ARRAY[0..7] OF LREAL;	// Trailing comment for field9 (fLReal).
+	aLReal_count		: UDINT;			// Number of items in the array.
 	aBytes : ARRAY[0..15] OF BYTE;	// Fields of type 'bytes' must have a 'array_length' attribute.
+	aBytes_count		: UDINT;			// Number of items in the array.
 END_STRUCT
 END_TYPE
 ]]></Declaration>

@@ -1,0 +1,30 @@
+syntax = "proto3";
+
+import "tchaxx-extensions.proto";
+
+package test.scalars;
+
+option (tchaxx.global_st_prefix) = {type: "ST_" instance: "_st"};
+option (tchaxx.global_fb_prefix) = {type: "FB_" instance: "_fb"};
+
+message ScalarTypes {
+  double double_value = 1;
+  float float_value = 2;
+  int32 int32_value = 3;
+  int32 int32_value_as_word = 30 [(tchaxx.integer_type) = EIT_WORD];
+  int64 int64_value = 4;
+  int64 int64_value_as_dint = 40 [(tchaxx.integer_type) = EIT_DINT];
+  uint32 uint32_value = 5;
+  uint32 uint32_value_as_byte = 50 [(tchaxx.integer_type) = EIT_BYTE];
+  uint64 uint64_value = 6;
+  uint64 uint64_value_as_dword = 60 [(tchaxx.integer_type) = EIT_DWORD];
+  sint32 sint32_value = 7;
+  sint64 sint64_value = 8;
+  fixed32 fixed32_value = 9;
+  fixed64 fixed64_value = 10;
+  sfixed32 sfixed32_value = 11;
+  sfixed64 sfixed64_value = 12;
+  bool bool_value = 13;
+  string string_value = 14 [(tchaxx.max_string_len) = 128];
+  bytes bytes_value = 15 [(tchaxx.array_len) = 16];
+}

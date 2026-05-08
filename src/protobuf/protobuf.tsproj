@@ -40,14 +40,11 @@
 				<ProjectVariant PvUseDefine="true">
 					<Variant>
 						<Name>LIB</Name>
-						<Defines/>
-					</Variant>
-					<Variant>
 						<Name>UNIT_TEST</Name>
 						<Defines></Defines>
 					</Variant>
 				</ProjectVariant>
-				<Instance Id="#x08502000" TcSmClass="TComPlcObjDef" KeepUnrestoredLinks="2" TmcHash="{89D6C3F2-B786-FF55-017B-5D08FCC438A7}" TmcPath="protobuf\protobuf.tmc">
+				<Instance Id="#x08502000" TcSmClass="TComPlcObjDef" KeepUnrestoredLinks="2" TmcHash="{A921B565-5C1F-2135-5722-46846F35C445}" TmcPath="protobuf\protobuf.tmc">
 					<Name>protobuf Instance</Name>
 					<CLSID ClassFactory="TcPlc30">{08500001-0000-0000-F000-000000000064}</CLSID>
 					<Contexts>

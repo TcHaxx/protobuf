@@ -1,0 +1,82 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1">
+  <POU Name="FB_ComplexDataTests" Id="{3052df54-0c16-4cde-907e-5344240fef44}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK INTERNAL FINAL FB_ComplexDataTests EXTENDS FB_TestSuite
+VAR
+	fbVerify			: FB_TcUnitAdapter;
+	fbVerifyBuffer 		: FB_TcUnitAdapter;
+	fbWriterSUT			: FB_ComplexData;
+	fbParserSUT			: FB_ComplexData;
+	stActual			: ST_ComplexData;
+	aBuffer				: ARRAY[0..255] OF BYTE;
+	eTestState			: (DATA, BUFFER);
+END_VAR
+VAR CONSTANT
+	cExpected			: ST_ComplexData := (label:= 'test-label 🐞!', value_dint:= -1, value_int:= -2, value_word:= 2,
+											raw_bytes:= [44,33,22], raw_bytes_count:= 3,
+											readings:= [(value:= 12345.67892, precision:= 2.3, timestamp:= 12345678), (value:= 999.888, precision:= 0.111, timestamp:= 777666555)], readings_count:= 2,
+											data_type:= E_DataType.DATA_TYPE_TEMPERATURE);
+END_VAR ]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[VerifyData();
+VerifyBuffer();
+]]></ST>
+    </Implementation>
+    <Method Name="VerifyBuffer" Id="{1f7da5aa-5efa-46a9-9034-05565ea91de6}">
+      <Declaration><![CDATA[METHOD PRIVATE VerifyBuffer
+VAR
+	hr : HRESULT;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST(__POUNAME());
+
+IF eTestState <> BUFFER THEN
+	RETURN;
+END_IF
+
+hr := fbVerifyBuffer.Verify(anyArg:= aBuffer);
+
+IF NOT PENDING(hr) THEN	
+	TEST_FINISHED_NAMED(__POUNAME());
+END_IF
+]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="VerifyData" Id="{7678da3c-e1d0-48ab-ba91-75846abc216d}">
+      <Declaration><![CDATA[METHOD PRIVATE VerifyData
+VAR_INST
+	hr, hrWriter, hrParser : HRESULT;
+	bOnce : BOOL := TRUE;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST(__POUNAME());
+IF eTestState <> DATA THEN
+	RETURN;
+END_IF
+
+// ARRANGE
+fbWriterSUT.ComplexData := cExpected;
+
+// ACT
+IF bOnce THEN
+	bOnce := FALSE;
+	hrWriter := fbWriterSUT.Writer.WriteTo(aBuffer);
+	hrParser := fbParserSUT.Parser.ParseFrom(aBuffer);
+	stActual := fbParserSUT.ComplexData;
+END_IF;
+
+// ASSERT
+hr := fbVerify.Verify(anyArg:= stActual);
+
+IF NOT PENDING(hr) THEN
+	AssertEquals_DINT(Expected:= 0, Actual:= hrWriter, Message:= 'Writer failed');
+	AssertEquals_DINT(Expected:= 0, Actual:= hrParser, Message:= 'Parser failed');
+	TEST_FINISHED_NAMED(__POUNAME());
+	eTestState := BUFFER;
+END_IF
+]]></ST>
+      </Implementation>
+    </Method>
+  </POU>
+</TcPlcObject>

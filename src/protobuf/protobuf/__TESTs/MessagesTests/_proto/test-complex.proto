@@ -1,0 +1,97 @@
+﻿syntax = "proto3";
+
+import "tchaxx-extensions.proto";
+
+package test.complex;
+
+// File-level options - testing global prefixes for all types
+option (tchaxx.global_st_prefix) = {type: "ST_" instance: "_st"};
+option (tchaxx.global_fb_prefix) = {type: "FB_" instance: "_fb"};
+option (tchaxx.global_enum_prefix) = {type: "E_" instance: "_e"};
+
+// Enum with enum_prefix and enum_integer_type options
+enum Color {
+  option (tchaxx.enum_prefix) = {type: "E_" instance: "e"};
+  option (tchaxx.enum_integer_type) = EIT_WORD;
+  COLOR_DEFAULT = 0;
+  COLOR_RED = 1;
+  COLOR_GREEN = 2;
+  COLOR_BLUE = 3;
+}
+
+// Another enum for testing
+enum Status {
+  option (tchaxx.enum_prefix) = {type: "E_" instance: "e"};
+  option (tchaxx.enum_integer_type) = EIT_DWORD;
+  STATUS_IDLE = 0;
+  STATUS_RUNNING = 1;
+  STATUS_ERROR = 2;
+}
+
+// Message with st_prefix and attribute_pack_mode options
+message Device {
+  option (tchaxx.st_prefix) = {type: "ST_" instance: "_st"};
+  option (tchaxx.attribute_pack_mode) = EPM_ONE_BYTE_ALIGNED;
+  
+  string name = 1 [(tchaxx.max_string_len) = 256];
+  uint32 id = 2 [(tchaxx.integer_type) = EIT_DWORD];
+  repeated uint32 error_codes = 3 [(tchaxx.array_len) = 10, (tchaxx.integer_type) = EIT_WORD];
+  int32 temperature = 4 [(tchaxx.integer_type) = EIT_DINT, (tchaxx.attribute_display_mode) = EDM_DEC];
+  bytes data = 5 [(tchaxx.array_len) = 64];
+}
+
+// Message with fb_prefix option (function block)
+message Motor {
+  option (tchaxx.fb_prefix) = {type: "FB_" instance: "_fb"};
+  option (tchaxx.attribute_pack_mode) = EPM_FOUR_BYTES_ALIGNED;
+  
+  // Nested message for motor configuration
+  message MotorConfig {
+    option (tchaxx.st_prefix) = {type: "ST_" instance: "_st"};
+    float max_speed = 1;
+    double acceleration = 2;
+    uint32 timeout_ms = 3 [(tchaxx.integer_type) = EIT_DWORD];
+  }
+  
+  string name = 1 [(tchaxx.max_string_len) = 128];
+  Status status = 2;
+  uint32 speed = 3 [(tchaxx.integer_type) = EIT_DWORD];
+  repeated int32 sensor_readings = 4 [(tchaxx.array_len) = 8, (tchaxx.integer_type) = EIT_SINT];
+  bytes config = 5 [(tchaxx.array_len) = 32];
+  MotorConfig motor_config = 6;
+}
+
+// Another message demonstrating all field options
+message ComplexData {
+  option (tchaxx.st_prefix) = {type: "ST_" instance: "_st"};
+  option (tchaxx.attribute_pack_mode) = EPM_TWO_BYTES_ALIGNED;
+  
+  // Nested message for sensor data
+  message SensorReading {
+    option (tchaxx.st_prefix) = {type: "ST_" instance: "_st"};
+    double value = 1;
+    float precision = 2;
+    int64 timestamp = 3 [(tchaxx.integer_type) = EIT_LINT];
+  }
+  
+  // Nested enum for data types
+  enum DataType {
+    option (tchaxx.enum_integer_type) = EIT_BYTE;
+    DATA_TYPE_UNKNOWN = 0;
+    DATA_TYPE_TEMPERATURE = 1;
+    DATA_TYPE_PRESSURE = 2;
+    DATA_TYPE_HUMIDITY = 3;
+  }
+  
+  string label = 1 [(tchaxx.max_string_len) = 512];
+  int32 value_dint = 2 [(tchaxx.integer_type) = EIT_DINT, (tchaxx.attribute_display_mode) = EDM_HEX];
+  int32 value_int = 3 [(tchaxx.integer_type) = EIT_INT, (tchaxx.attribute_display_mode) = EDM_BIN];
+  uint32 value_word = 4 [(tchaxx.integer_type) = EIT_WORD];
+  repeated uint32 array_data = 5 [(tchaxx.array_len) = 16, (tchaxx.integer_type) = EIT_BYTE];
+  Status state = 6;
+  bytes raw_bytes = 7 [(tchaxx.array_len) = 128];
+  double measurement = 8;
+  float calibration_factor = 9;
+  repeated SensorReading readings = 10 [(tchaxx.array_len) = 32];
+  DataType data_type = 11;
+}

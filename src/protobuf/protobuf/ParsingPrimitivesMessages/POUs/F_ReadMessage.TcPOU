@@ -32,6 +32,9 @@ END_IF
 
 fbCtx.refCtx.stState.nRecursionDepth := fbCtx.refCtx.stState.nRecursionDepth + 1;
 F_ReadMessage := F_ReadRawMessage(fbCtx, iMessage);
+IF FAILED(F_ReadMessage) THEN
+    RETURN;
+END_IF
 
 F_ReadMessage := F_CheckReadEndOfStreamTag(fbCtx.refCtx.stState);
 IF FAILED(F_ReadMessage) THEN

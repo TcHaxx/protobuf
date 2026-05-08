@@ -1,0 +1,77 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1">
+  <POU Name="FB_DeviceTests" Id="{6f28bde1-b5e9-4019-8ab3-343bb8d2c66e}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK INTERNAL FINAL FB_DeviceTests EXTENDS FB_TestSuite
+VAR
+	fbVerify			: FB_TcUnitAdapter;
+	fbVerifyBuffer 		: FB_TcUnitAdapter;
+	fbWriterSUT			: FB_Device;
+	fbParserSUT			: FB_Device;
+	stActual			: ST_Device;
+	aBuffer				: ARRAY[0..255] OF BYTE;
+	eTestState			: (DATA, BUFFER);
+END_VAR
+VAR CONSTANT
+	cExpected			: ST_Device := (name:= 'test-name ⚠️!', id:= 16#1234,
+									   error_codes:= [1,2,3,4,5,6,7,8,9,10], error_codes_count:= 10,
+									   temperature:= -3,
+									   data:= [62(16#CC), 13,37], data_count:= 64);
+END_VAR ]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[VerifyData();
+VerifyBuffer();]]></ST>
+    </Implementation>
+    <Method Name="VerifyBuffer" Id="{30259045-3f5d-4f22-af3d-145d93835848}">
+      <Declaration><![CDATA[METHOD PRIVATE VerifyBuffer
+VAR
+	hr : HRESULT;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST(__POUNAME());
+
+IF eTestState <> BUFFER THEN
+	RETURN;
+END_IF
+
+hr := fbVerifyBuffer.Verify(anyArg:= aBuffer);
+
+IF NOT PENDING(hr) THEN	
+	TEST_FINISHED_NAMED(__POUNAME());
+END_IF
+]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="VerifyData" Id="{4b9c535f-fa8c-4c82-a6e5-3753c8055bff}">
+      <Declaration><![CDATA[METHOD PRIVATE VerifyData
+VAR
+	hr, hrWriter, hrParser : HRESULT;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST(__POUNAME());
+IF eTestState <> DATA THEN
+	RETURN;
+END_IF
+
+// ARRANGE
+fbWriterSUT.Device := cExpected;
+
+// ACT
+hrWriter := fbWriterSUT.Writer.WriteTo(aBuffer);
+hrParser := fbParserSUT.Parser.ParseFrom(aBuffer);
+stActual := fbParserSUT.Device;
+
+// ASSERT
+hr := fbVerify.Verify(anyArg:= stActual);
+
+IF NOT PENDING(hr) THEN
+	AssertEquals_DINT(Expected:= 0, Actual:= hrWriter, Message:= '');
+	AssertEquals_DINT(Expected:= 0, Actual:= hrParser, Message:= '');
+	TEST_FINISHED_NAMED(__POUNAME());
+	eTestState := BUFFER;
+END_IF
+]]></ST>
+      </Implementation>
+    </Method>
+  </POU>
+</TcPlcObject>

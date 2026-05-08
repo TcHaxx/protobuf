@@ -9,7 +9,7 @@ END_VAR
 VAR
 	aActual             : ARRAY [0..7] OF LINT;
     fbFieldCodec 		: FB_FieldCodecFixed64(nTag:= 16#0A);
-	fbRepeatedField		: FB_RepeatedField(anyArray:= F_ToAnyType(aActual), anyFirstElem:= F_ToAnyType(aActual[0]));
+	fbRepeatedField		: FB_RepeatedField(anyArray:= F_ToAnyType(aActual), anyFirstElem:= F_ToAnyType(aActual[0]), ipFieldCodec:= fbFieldCodec);
 END_VAR
 ]]></Declaration>
     <Implementation>

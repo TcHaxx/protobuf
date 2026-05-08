@@ -1,0 +1,85 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1">
+  <POU Name="FB_ScalarTypesTest" Id="{a4c1e883-96f6-4607-b34a-c0464776ca64}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK INTERNAL FINAL FB_ScalarTypesTest  EXTENDS FB_TestSuite
+VAR	
+	fbVerifyScalarTypes : FB_TcUnitAdapter;
+	fbVerifyBuffer 		: FB_TcUnitAdapter;
+	fbWriterSUT			: FB_ScalarTypes;
+	fbParserSUT			: FB_ScalarTypes;
+	stActual			: ST_ScalarTypes;
+	aBuffer				: ARRAY[0..255] OF BYTE;
+	eTestState			: (DATA, BUFFER);
+END_VAR
+VAR CONSTANT
+	cExpected		: ST_ScalarTypes := (double_value:= 123456.78912, float_value:= 9.87654, int32_value:= -42, int32_value_as_word:= 16#F00D,
+										 int64_value:= -12345678901112131415, int64_value_as_dint:= -123456789,
+										 uint32_value:= 16#F00DBABE, uint32_value_as_byte:= 254,
+										 uint64_value:=16#F00DBABEF00DBABE, uint64_value_as_dword:= 16#DDFABCEE,
+										 sint32_value:= -420, sint64_value:= -123456789,
+										 fixed32_value:= 16#FEDCBA09, fixed64_value:= 16#FEDCBA0908070605,
+										 sfixed32_value:= TO_DINT(16#FEDCBA09), sfixed64_value:= TO_LINT(16#FEDCBA0908070605),
+										 bool_value:= TRUE,
+										 string_value:= 'this is a test string with 🚀🐞✔️!',
+										 bytes_value := [1,2,3,4,5,6,7,8,9,0,10,11,12,13,128,255], bytes_value_count:= 16);
+END_VAR]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[VerifyData();
+VerifyBuffer();
+]]></ST>
+    </Implementation>
+    <Method Name="VerifyBuffer" Id="{3d786561-5732-4f75-84d2-726fadd10793}">
+      <Declaration><![CDATA[METHOD PRIVATE VerifyBuffer
+VAR
+	hr : HRESULT;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST(__POUNAME());
+
+IF eTestState <> BUFFER THEN
+	RETURN;
+END_IF
+
+hr := fbVerifyBuffer.Verify(anyArg:= aBuffer);
+
+IF NOT PENDING(hr) THEN	
+	TEST_FINISHED_NAMED(__POUNAME());
+END_IF
+]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="VerifyData" Id="{9002ec1a-0db6-483c-b7e0-9be2b8dc4d9c}">
+      <Declaration><![CDATA[METHOD PRIVATE VerifyData
+VAR
+	hr, hrWriter, hrParser : HRESULT;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST(__POUNAME());
+IF eTestState <> DATA THEN
+	RETURN;
+END_IF
+
+// ARRANGE
+fbWriterSUT.ScalarTypes := cExpected;
+
+// ACT
+hrWriter := fbWriterSUT.Writer.WriteTo(aBuffer);
+hrParser := fbParserSUT.Parser.ParseFrom(aBuffer);
+stActual := fbParserSUT.ScalarTypes;
+
+// ASSERT
+hr := fbVerifyScalarTypes.Verify(anyArg:= stActual);
+
+IF NOT PENDING(hr) THEN
+	AssertEquals_DINT(Expected:= 0, Actual:= hrWriter, Message:= '');
+	AssertEquals_DINT(Expected:= 0, Actual:= hrParser, Message:= '');
+	TEST_FINISHED_NAMED(__POUNAME());
+	eTestState := BUFFER;
+END_IF
+
+]]></ST>
+      </Implementation>
+    </Method>
+  </POU>
+</TcPlcObject>

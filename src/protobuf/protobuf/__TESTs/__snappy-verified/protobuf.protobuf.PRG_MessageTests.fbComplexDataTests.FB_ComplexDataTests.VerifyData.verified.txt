@@ -1,0 +1,323 @@
+﻿{
+  label: test-label 🐞!,
+  value_dint: -1,
+  value_int: -2,
+  value_word: 2,
+  array_data: [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+  ],
+  array_data_count: 0,
+  state: 0,
+  raw_bytes: [
+    44,
+    33,
+    22,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+  ],
+  raw_bytes_count: 3,
+  measurement: 0.00000,
+  calibration_factor: 0.00000,
+  readings: [
+    {
+      value: 12345.67892,
+      precision: 2.30000,
+      timestamp: 12345678
+    },
+    {
+      value: 999.88800,
+      precision: 0.11100,
+      timestamp: 777666555
+    },
+    {
+      value: 0.00000,
+      precision: 0.00000,
+      timestamp: 0
+    },
+    {
+      value: 0.00000,
+      precision: 0.00000,
+      timestamp: 0
+    },
+    {
+      value: 0.00000,
+      precision: 0.00000,
+      timestamp: 0
+    },
+    {
+      value: 0.00000,
+      precision: 0.00000,
+      timestamp: 0
+    },
+    {
+      value: 0.00000,
+      precision: 0.00000,
+      timestamp: 0
+    },
+    {
+      value: 0.00000,
+      precision: 0.00000,
+      timestamp: 0
+    },
+    {
+      value: 0.00000,
+      precision: 0.00000,
+      timestamp: 0
+    },
+    {
+      value: 0.00000,
+      precision: 0.00000,
+      timestamp: 0
+    },
+    {
+      value: 0.00000,
+      precision: 0.00000,
+      timestamp: 0
+    },
+    {
+      value: 0.00000,
+      precision: 0.00000,
+      timestamp: 0
+    },
+    {
+      value: 0.00000,
+      precision: 0.00000,
+      timestamp: 0
+    },
+    {
+      value: 0.00000,
+      precision: 0.00000,
+      timestamp: 0
+    },
+    {
+      value: 0.00000,
+      precision: 0.00000,
+      timestamp: 0
+    },
+    {
+      value: 0.00000,
+      precision: 0.00000,
+      timestamp: 0
+    },
+    {
+      value: 0.00000,
+      precision: 0.00000,
+      timestamp: 0
+    },
+    {
+      value: 0.00000,
+      precision: 0.00000,
+      timestamp: 0
+    },
+    {
+      value: 0.00000,
+      precision: 0.00000,
+      timestamp: 0
+    },
+    {
+      value: 0.00000,
+      precision: 0.00000,
+      timestamp: 0
+    },
+    {
+      value: 0.00000,
+      precision: 0.00000,
+      timestamp: 0
+    },
+    {
+      value: 0.00000,
+      precision: 0.00000,
+      timestamp: 0
+    },
+    {
+      value: 0.00000,
+      precision: 0.00000,
+      timestamp: 0
+    },
+    {
+      value: 0.00000,
+      precision: 0.00000,
+      timestamp: 0
+    },
+    {
+      value: 0.00000,
+      precision: 0.00000,
+      timestamp: 0
+    },
+    {
+      value: 0.00000,
+      precision: 0.00000,
+      timestamp: 0
+    },
+    {
+      value: 0.00000,
+      precision: 0.00000,
+      timestamp: 0
+    },
+    {
+      value: 0.00000,
+      precision: 0.00000,
+      timestamp: 0
+    },
+    {
+      value: 0.00000,
+      precision: 0.00000,
+      timestamp: 0
+    },
+    {
+      value: 0.00000,
+      precision: 0.00000,
+      timestamp: 0
+    },
+    {
+      value: 0.00000,
+      precision: 0.00000,
+      timestamp: 0
+    },
+    {
+      value: 0.00000,
+      precision: 0.00000,
+      timestamp: 0
+    }
+  ],
+  readings_count: 2,
+  data_type: 1
+}

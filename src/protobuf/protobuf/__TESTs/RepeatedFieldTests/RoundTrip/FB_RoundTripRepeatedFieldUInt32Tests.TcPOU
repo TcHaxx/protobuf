@@ -16,8 +16,8 @@ VAR
 	fbParseCtx_SUT      : FB_ParseContext;
 	fbWriteCtx_SUT  	: FB_WriteContext;
 	fbFieldCodec 		: FB_FieldCodecUint32(nTag:= F_MakeTag(nFieldNumber:= 3, eWireType:= E_WireType.LengthDelimited));
-	fbRepeatedField_Write : FB_RepeatedField(anyArray := F_ToAnyType(aValues), anyFirstElem:= F_ToAnyType(aValues[0]));
-	fbRepeatedField_Parse : FB_RepeatedField(anyArray:= F_ToAnyType(aActuals), anyFirstElem:= F_ToAnyType(aActuals[0]));	
+	fbRepeatedField_Write : FB_RepeatedField(anyArray := F_ToAnyType(aValues), anyFirstElem:= F_ToAnyType(aValues[0]), ipFieldCodec:= fbFieldCodec);
+	fbRepeatedField_Parse : FB_RepeatedField(anyArray:= F_ToAnyType(aActuals), anyFirstElem:= F_ToAnyType(aActuals[0]), ipFieldCodec:= fbFieldCodec);	
 END_VAR]]></Declaration>
     <Implementation>
       <ST><![CDATA[TEST(__POUNAME());

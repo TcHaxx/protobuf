@@ -32,11 +32,11 @@ message FieldCodecEnumTests {
 }
 *){endregion}
 
-VAR	
+VAR
 	aActualValues : ARRAY[0..7] OF E_BYTE;
 	aExpectedValues : ARRAY[0..7] OF E_BYTE := [E_BYTE.eMIN, E_BYTE.eMAX, E_BYTE.eVAL3, E_BYTE.eVAL2, E_BYTE.eVAL1, E_BYTE.eVAL2, E_BYTE.eVAL3];
 	fbCtx : FB_ParseContext;
-	fbRepeatedField	: FB_RepeatedField(anyArray:= F_ToAnyType(aActualValues), anyFirstElem:= F_ToAnyType(aActualValues[0]));
+	fbRepeatedField	: FB_RepeatedField(anyArray:= F_ToAnyType(aActualValues), anyFirstElem:= F_ToAnyType(aActualValues[0]), ipFieldCodec:= fbSUT);
 END_VAR
 VAR CONSTANT
 	// 0a0900ff01030201820203 -> decoded "byte_enum": [ "MIN", "MAX", "VAL3", "VAL2", "VAL1", 258, "VAL3" ] where 258 should overflow to "VAL2"
@@ -104,7 +104,7 @@ VAR
 	aActualValues : ARRAY[0..7] OF E_INT;
 	aExpectedValues : ARRAY[0..7] OF E_INT := [E_INT.eVAL0, E_INT.eMIN, E_INT.eMAX, E_INT.eVAL3, E_INT.eVAL2, E_INT.eVAL1];
 	fbCtx : FB_ParseContext;
-	fbRepeatedField	: FB_RepeatedField(anyArray:= F_ToAnyType(aActualValues), anyFirstElem:= F_ToAnyType(aActualValues[0]));
+	fbRepeatedField	: FB_RepeatedField(anyArray:= F_ToAnyType(aActualValues), anyFirstElem:= F_ToAnyType(aActualValues[0]), ipFieldCodec:= fbSUT);
 END_VAR
 VAR CONSTANT
 	// 0a11008080feffffffffffff01ffff01030201 -> decoded "byte_enum": [ "VAL0", "MIN", "MAX", "VAL3", "VAL2", "VAL1"]

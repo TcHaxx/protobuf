@@ -5,12 +5,15 @@
 PROGRAM INTERNAL PRG_MessageTests
 VAR
     {IF defined (UNIT_TEST)}
-    fbMessageTests  : FB_MessageTests;
-    //fbRepeatedStringMessageTests : FB_RepeatedStringMessageTests;
-    fbfbb : FB_FooMessage;
-    fbExam : FB_ExampleMessage;
-    
     fbRoundTripMessageExampleTest : FB_RoundTripMessageExampleTest;
+	
+	// following tests using TcHaxx.Snappy.CLI (https://github.com/TcHaxx/snappy)
+	fbScalarTypesTest	: FB_ScalarTypesTest;
+	fbFooBarBazTests  	: FB_FooBarBazTests;
+	fbComplexDataTests	: FB_ComplexDataTests;
+	fbRepeatedComplexDataTests : FB_RepeatedComplexDataTests;
+	fbMotorTests		: FB_MotorTests;
+	fbDeviceTests 		: FB_DeviceTests;
     {END_IF}
 END_VAR
 ]]></Declaration>

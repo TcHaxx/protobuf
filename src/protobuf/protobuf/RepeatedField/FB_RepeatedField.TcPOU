@@ -43,6 +43,7 @@ nCount := nCountField;]]></ST>
     </Method>
     <Method Name="CalculatePackedDataSize" Id="{90e54b0d-eaa3-492d-97d1-6ecfaa9fb248}">
       <Declaration><![CDATA[METHOD CalculatePackedDataSize : HRESULT
+
 VAR_OUTPUT
     nPackedDataSize : UDINT;
 END_VAR
@@ -70,7 +71,10 @@ VAR_OUTPUT
 	nSize : UDINT;
 END_VAR
 VAR
-	nPackedSize : UDINT;
+	nFieldSize : UDINT;
+	i : UDINT;
+	anyItem         : T_Any;
+	anyDst			: T_Any;
 END_VAR]]></Declaration>
       <Implementation>
         <ST><![CDATA[IF ipFieldCodecField = NULL OR THIS^.anyFirstElemField.pValue = NULL THEN
@@ -85,18 +89,31 @@ END_IF
 
 IF ipFieldCodecField.IsPackedRepeatedField(ipFieldCodecField.Tag) THEN
 	
-	CalculateSize := CalculatePackedDataSize(nPackedDataSize=> nPackedSize);
+	CalculateSize := CalculatePackedDataSize(nPackedDataSize=> nFieldSize);
 	IF FAILED(CalculateSize) THEN
 		RETURN;
 	END_IF
-	nSize := F_ComputeRawVarint32Size(ipFieldCodecField.Tag) + F_ComputeLengthSize(nPackedSize) + nPackedSize;
+	nSize := F_ComputeRawVarint32Size(ipFieldCodecField.Tag) + F_ComputeLengthSize(nFieldSize) + nFieldSize;
     RETURN;
 END_IF
 
-{warning 'TODO: Non packed repeated field'}
 nSize := 0;
 
-]]></ST>
+// Not packed: a simple tag/value pair for each value.
+nSize := nSize + F_ComputeRawVarint32Size(ipFieldCodecField.Tag);
+FOR i := 0 TO nCount - 1 DO
+	anyItem := ElementAtIndex(i);
+	anyDst := THIS^.ipFieldCodec.ipMessage.MessageValue;
+	IF anyItem.diSize <> anyDst.diSize THEN
+		nSize := 0;
+		CalculateSize := E_WriterErrorCode.InvalidDataType;
+		RETURN;
+	END_IF
+	
+	MEMCPY(anyDst.pValue, anyITem.pValue, TO_UDINT(anyitem.diSize));		
+	nFieldSize := THIS^.ipFieldCodec.ipMessage.CalculateSize();
+  	nSize := nSize + F_ComputeLengthSize(nFieldSize) + nFieldSize;
+END_FOR]]></ST>
       </Implementation>
     </Method>
     <Method Name="ComputeCapacity" Id="{afe8a243-10c9-425f-b110-73d6acc35475}">
@@ -151,11 +168,12 @@ VAR_INPUT
     bInCopyCode: BOOL;  // TRUE: the instance will be copied to the copy code afterward (online change)   
 	anyArray        : T_Any;
     anyFirstElem    : T_Any;
+	ipFieldCodec	: I_FieldCodec := NULL;
 END_VAR]]></Declaration>
       <Implementation>
         <ST><![CDATA[anyArrayField       := anyArray;
 anyFirstElemField   := anyFirstElem;
-
+ipFieldCodecField	:= ipFieldCodec;
 Initialize();]]></ST>
       </Implementation>
     </Method>

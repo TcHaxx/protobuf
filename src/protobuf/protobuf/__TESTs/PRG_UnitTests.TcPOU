@@ -7,20 +7,6 @@ VAR
 {IF defined (UNIT_TEST)}
 
 {END_IF}
-// fbTestNestedMessage1 : FB_TestNestedMessage;
-// fbTestNestedMessage2 : FB_TestNestedMessage;
-fbMotor : FB_Motor;
-fbMotorDec : FB_Motor;
-fbcplx : FB_ComplexData;
-fbcplxDec : FB_ComplexData;
-fbDevice : FB_Device;
-fbScalarSrc : FB_ScalarTypesTest;
-fbScalarDst : FB_ScalarTypesTest;
-aBuffer	: ARRAY[0..1023] OF BYTE;
-aBuffer1	: ARRAY[0..1023] OF BYTE;
-
-_profiler : Profiler;
-profilerData  : PROFILERSTRUCT;
 END_VAR
 ]]></Declaration>
     <Implementation>
@@ -38,18 +24,7 @@ PRG_IssuesTests();
 TcUnit.RUN();
 
 {END_IF}
-//  fbMotor.Writer.WriteTo(aBuffer);
-//  fbMotorDec.Parser.ParseFrom(aBuffer);
-// fbcplx.Writer.WriteTo(aBuffer1);
-// fbcplxDec.Parser.ParseFrom(aBuffer1);
-// fbTestNestedMessage1.Writer.WriteTo(aBuffer);
-// fbTestNestedMessage2.Parser.ParseFrom(aBuffer);
-
-_profiler(START:= TRUE, RESET:= TRUE);
-fbScalarSrc.Writer.WriteTo(aBuffer);
-fbScalarDst.Parser.ParseFrom(aBuffer);
-
-_profiler(START:=FALSE, RESET:= TRUE, DATA=> profilerData);]]></ST>
+]]></ST>
     </Implementation>
     <ObjectProperties>
       <XmlArchive>

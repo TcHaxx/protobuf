@@ -22,7 +22,7 @@
     <POUsForPropertyAccessIncluded>true</POUsForPropertyAccessIncluded>
     <GlobalVersionStructureIncluded>true</GlobalVersionStructureIncluded>
     <Title>protobuf</Title>
-    <ProjectVersion>0.0.0.0</ProjectVersion>
+    <ProjectVersion>0.0.1.0</ProjectVersion>
     <LibraryCategories>
       <LibraryCategory xmlns="">
         <Id>{9c7e50a7-dead-beef-897b-4cdbc169222d}</Id>
@@ -602,41 +602,103 @@
     <Compile Include="__TESTs\HelperTests\PRG_HelperTests.TcPOU">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="__TESTs\MessagesTests\DUTs\ST_Bar.TcDUT">
+    <Compile Include="__TESTs\MessagesTests\Complex\FB_ComplexDataTests.TcPOU">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="__TESTs\MessagesTests\DUTs\ST_Baz.TcDUT">
+    <Compile Include="__TESTs\MessagesTests\Complex\FB_RepeatedComplexDataTests.TcPOU">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="__TESTs\MessagesTests\DUTs\ST_Foo.TcDUT">
+    <Compile Include="__TESTs\MessagesTests\Complex\FB_DeviceTests.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="__TESTs\MessagesTests\Complex\FB_MotorTests.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="__TESTs\MessagesTests\Complex\_gen\E_Color.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="__TESTs\MessagesTests\Complex\_gen\E_DataType.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="__TESTs\MessagesTests\Complex\_gen\E_Status.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="__TESTs\MessagesTests\Complex\_gen\FB_ComplexData.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="__TESTs\MessagesTests\Complex\_gen\FB_Device.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="__TESTs\MessagesTests\Complex\_gen\FB_Motor.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="__TESTs\MessagesTests\Complex\_gen\FB_MotorConfig.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="__TESTs\MessagesTests\Complex\_gen\FB_RepeatedComplexData.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="__TESTs\MessagesTests\Complex\_gen\FB_SensorReading.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="__TESTs\MessagesTests\Complex\_gen\ST_ComplexData.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="__TESTs\MessagesTests\Complex\_gen\ST_Device.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="__TESTs\MessagesTests\Complex\_gen\ST_Motor.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="__TESTs\MessagesTests\Complex\_gen\ST_MotorConfig.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="__TESTs\MessagesTests\Complex\_gen\ST_RepeatedComplexData.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="__TESTs\MessagesTests\Complex\_gen\ST_SensorReading.TcDUT">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="__TESTs\MessagesTests\DUTs\ST_Example.TcDUT">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="__TESTs\MessagesTests\FB_MessageTests.TcPOU">
+    <Compile Include="__TESTs\MessagesTests\FooBarBaz\FB_FooBarBazTests.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="__TESTs\MessagesTests\FooBarBaz\_gen\FB_Bar.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="__TESTs\MessagesTests\FooBarBaz\_gen\FB_Baz.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="__TESTs\MessagesTests\FooBarBaz\_gen\FB_Foo.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="__TESTs\MessagesTests\FooBarBaz\_gen\ST_Bar.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="__TESTs\MessagesTests\FooBarBaz\_gen\ST_Baz.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="__TESTs\MessagesTests\FooBarBaz\_gen\ST_Foo.TcDUT">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="__TESTs\MessagesTests\POUs\FB_ExampleMessage.TcPOU">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="__TESTs\MessagesTests\POUs\FB_RepeatedStringMessageTests.TcPOU">
-      <SubType>Code</SubType>
-      <ExcludeFromBuild>false</ExcludeFromBuild>
-    </Compile>
     <Compile Include="__TESTs\MessagesTests\POUs\FB_RoundTripMessageExampleTest.TcPOU">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="__TESTs\MessagesTests\POUs\FooBarBaz\FB_BarMessage.TcPOU">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="__TESTs\MessagesTests\POUs\FooBarBaz\FB_BazMessage.TcPOU">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="__TESTs\MessagesTests\POUs\FooBarBaz\FB_FooMessage.TcPOU">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="__TESTs\MessagesTests\PRG_MessageTests.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="__TESTs\MessagesTests\Scalars\FB_ScalarTypesTest.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="__TESTs\MessagesTests\Scalars\_gen\FB_ScalarTypes.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="__TESTs\MessagesTests\Scalars\_gen\ST_ScalarTypes.TcDUT">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="__TESTs\ParsingPrimitivesTests\FB_DecodeZigZag32Tests.TcPOU">
@@ -855,51 +917,6 @@
     <Compile Include="__TESTs\_ISSUES\_gen\ST_RepeatedEnumTests.TcDUT">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="__TESTs\__GENERATED\E_Color.TcDUT">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="__TESTs\__GENERATED\E_DataType.TcDUT">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="__TESTs\__GENERATED\E_Status.TcDUT">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="__TESTs\__GENERATED\FB_ComplexData.TcPOU">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="__TESTs\__GENERATED\FB_Device.TcPOU">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="__TESTs\__GENERATED\FB_Motor.TcPOU">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="__TESTs\__GENERATED\FB_MotorConfig.TcPOU">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="__TESTs\__GENERATED\FB_ScalarTypesTest.TcPOU">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="__TESTs\__GENERATED\FB_SensorReading.TcPOU">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="__TESTs\__GENERATED\ST_ComplexData.TcDUT">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="__TESTs\__GENERATED\ST_Device.TcDUT">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="__TESTs\__GENERATED\ST_Motor.TcDUT">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="__TESTs\__GENERATED\ST_MotorConfig.TcDUT">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="__TESTs\__GENERATED\ST_ScalarTypesTest.TcDUT">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="__TESTs\__GENERATED\ST_SensorReading.TcDUT">
-      <SubType>Code</SubType>
-    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Helper\DUTs" />
@@ -934,15 +951,21 @@
     <Folder Include="Project Information" />
     <Folder Include="__TESTs\EnumTests\DUTs" />
     <Folder Include="__TESTs\MessagesTests" />
-    <Folder Include="__TESTs\MessagesTests\DUTs" />
-    <Folder Include="__TESTs\MessagesTests\POUs" />
     <Folder Include="__TESTs\HelperTests" />
-    <Folder Include="__TESTs\MessagesTests\POUs\FooBarBaz" />
     <Folder Include="__TESTs\EnumTests" />
+    <Folder Include="__TESTs\MessagesTests\Complex" />
+    <Folder Include="__TESTs\MessagesTests\Complex\_gen" />
+    <Folder Include="__TESTs\MessagesTests\DUTs" />
+    <Folder Include="__TESTs\MessagesTests\FooBarBaz" />
+    <Folder Include="__TESTs\MessagesTests\FooBarBaz\_gen" />
+    <Folder Include="__TESTs\MessagesTests\POUs" />
+    <Folder Include="__TESTs\MessagesTests\_proto" />
+    <Folder Include="__TESTs\MessagesTests\Scalars" />
+    <Folder Include="__TESTs\MessagesTests\Scalars\_gen" />
+    <Folder Include="__TESTs\__snappy-verified" />
     <Folder Include="__TESTs\_ISSUES" />
     <Folder Include="__TESTs\_ISSUES\_gen" />
     <Folder Include="__TESTs\_ISSUES\_proto" />
-    <Folder Include="__TESTs\__GENERATED" />
     <Folder Include="__TESTs\SpanTests" />
     <Folder Include="__TESTs\RepeatedFieldTests">
       <ExcludeFromBuild>false</ExcludeFromBuild>
@@ -959,6 +982,18 @@
     <Folder Include="Version" />
   </ItemGroup>
   <ItemGroup>
+    <PlaceholderReference Include="snappy">
+      <DefaultResolution>snappy, * (TcHaxx)</DefaultResolution>
+      <Namespace>TcHaxx_Snappy</Namespace>
+      <Condition>UNIT_TEST</Condition>
+      <Optional>true</Optional>
+      <Parameters>
+        <Parameter ListName="PARAM_TCHAXX_SNAPPY" xmlns="">
+          <Key>CSNAPPYVERIFYAMSNETID</Key>
+          <Value>'192.168.1.158.1.1'</Value>
+        </Parameter>
+      </Parameters>
+    </PlaceholderReference>
     <PlaceholderReference Include="Tc2_Standard">
       <DefaultResolution>Tc2_Standard, * (Beckhoff Automation GmbH)</DefaultResolution>
       <Namespace>Tc2_Standard</Namespace>
@@ -979,18 +1014,17 @@
     <PlaceholderReference Include="TcUnit">
       <DefaultResolution>TcUnit, * (www.tcunit.org)</DefaultResolution>
       <Parameters>
-        <Parameter ListName="GVL_PARAM_TCUNIT" xmlns="">
+        <Parameter ListName="GVL_PARAM_TCUNIT">
           <Key>MAXNUMBEROFASSERTSFOREACHTESTSUITE</Key>
           <Value>100</Value>
         </Parameter>
-        <Parameter ListName="GVL_PARAM_TCUNIT" xmlns="">
+        <Parameter ListName="GVL_PARAM_TCUNIT">
           <Key>MAXNUMBEROFTESTSUITES</Key>
           <Value>100</Value>
         </Parameter>
       </Parameters>
       <Namespace>TcUnit</Namespace>
-      <Condition>
-      </Condition>
+      <Condition>UNIT_TEST</Condition>
     </PlaceholderReference>
   </ItemGroup>
   <ItemGroup>
@@ -999,15 +1033,63 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="__TESTs\MessagesTests\_proto\test-complex.proto">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="__TESTs\MessagesTests\_proto\test-foobarbaz.proto">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="__TESTs\MessagesTests\_proto\test-scalars.proto">
+      <SubType>Content</SubType>
+    </Content>
     <Content Include="__TESTs\_ISSUES\_proto\issue#4.proto">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="__TESTs\__snappy-verified\protobuf.protobuf.PRG_MessageTests.fbComplexDataTests.FB_ComplexDataTests.VerifyBuffer.verified.txt">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="__TESTs\__snappy-verified\protobuf.protobuf.PRG_MessageTests.fbComplexDataTests.FB_ComplexDataTests.VerifyData.verified.txt">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="__TESTs\__snappy-verified\protobuf.protobuf.PRG_MessageTests.fbDeviceTests.FB_DeviceTests.VerifyBuffer.verified.txt">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="__TESTs\__snappy-verified\protobuf.protobuf.PRG_MessageTests.fbDeviceTests.FB_DeviceTests.VerifyData.verified.txt">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="__TESTs\__snappy-verified\protobuf.protobuf.PRG_MessageTests.fbFooBarBazTests.FB_FooBarBazTests.VerifyBuffer.verified.txt">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="__TESTs\__snappy-verified\protobuf.protobuf.PRG_MessageTests.fbFooBarBazTests.FB_FooBarBazTests.VerifyData.verified.txt">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="__TESTs\__snappy-verified\protobuf.protobuf.PRG_MessageTests.fbMotorTests.FB_MotorTests.VerifyBuffer.verified.txt">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="__TESTs\__snappy-verified\protobuf.protobuf.PRG_MessageTests.fbMotorTests.FB_MotorTests.VerifyData.verified.txt">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="__TESTs\__snappy-verified\protobuf.protobuf.PRG_MessageTests.fbRepeatedComplexDataTests.FB_ComplexDataTests_1.VerifyBuffer.verified.txt">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="__TESTs\__snappy-verified\protobuf.protobuf.PRG_MessageTests.fbRepeatedComplexDataTests.FB_RepeatedComplexDataTests.VerifyBuffer.verified.txt">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="__TESTs\__snappy-verified\protobuf.protobuf.PRG_MessageTests.fbRepeatedComplexDataTests.FB_RepeatedComplexDataTests.VerifyData.verified.txt">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="__TESTs\__snappy-verified\protobuf.protobuf.PRG_MessageTests.fbScalarTypesTest.FB_ScalarTypesTest.VerifyBuffer.verified.txt">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="__TESTs\__snappy-verified\protobuf.protobuf.PRG_MessageTests.fbScalarTypesTest.FB_ScalarTypesTest.VerifyData.verified.txt">
       <SubType>Content</SubType>
     </Content>
   </ItemGroup>
   <ProjectExtensions>
     <PlcProjectOptions>
       <XmlArchive>
-  <Data>
-    <o xml:space="preserve" t="OptionKey">
+        <Data>
+          <o xml:space="preserve" t="OptionKey">
       <v n="Name">"&lt;ProjectRoot&gt;"</v>
       <d n="SubKeys" t="Hashtable" ckt="String" cvt="OptionKey">
         <v>{192FAD59-8248-4824-A8DE-9177C94C195A}</v>
@@ -1164,15 +1246,15 @@
       </d>
       <d n="Values" t="Hashtable" />
     </o>
-  </Data>
-  <TypeList>
-    <Type n="Boolean">System.Boolean</Type>
-    <Type n="Hashtable">System.Collections.Hashtable</Type>
-    <Type n="Int32">System.Int32</Type>
-    <Type n="OptionKey">{54dd0eac-a6d8-46f2-8c27-2f43c7e49861}</Type>
-    <Type n="String">System.String</Type>
-  </TypeList>
-</XmlArchive>
+        </Data>
+        <TypeList>
+          <Type n="Boolean">System.Boolean</Type>
+          <Type n="Hashtable">System.Collections.Hashtable</Type>
+          <Type n="Int32">System.Int32</Type>
+          <Type n="OptionKey">{54dd0eac-a6d8-46f2-8c27-2f43c7e49861}</Type>
+          <Type n="String">System.String</Type>
+        </TypeList>
+      </XmlArchive>
     </PlcProjectOptions>
   </ProjectExtensions>
 </Project>

@@ -1,0 +1,28 @@
+syntax = "proto3";
+
+import "tchaxx-extensions.proto";
+
+package test.foobarbaz;
+
+option (tchaxx.global_st_prefix) = {type: "ST_" instance: "_st"};
+option (tchaxx.global_fb_prefix) = {type: "FB_" instance: "_fb"};
+option (tchaxx.global_enum_prefix) = {type: "E_" instance: "_e"};
+
+message Foo
+{
+  Bar bar = 1;
+  repeated Baz baz = 2 [(tchaxx.array_len) = 3];
+}
+
+message Bar
+{
+  string name = 1;
+  uint32 age = 2;
+  optional string email = 3;
+}
+
+message Baz
+{
+  fixed32 value = 1;
+  string name = 2;
+}

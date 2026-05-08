@@ -9,7 +9,7 @@ END_VAR
 VAR
 	aActual             : ARRAY[0..3] OF ARRAY[0..15] OF BYTE;
     fbFieldCodec 		: FB_FieldCodecBytes(nTag:= 16#22);
-	fbRepeatedField		: FB_RepeatedField(anyArray:= F_ToAnyType(aActual), anyFirstElem:= F_ToAnyType(aActual[0]));
+	fbRepeatedField		: FB_RepeatedField(anyArray:= F_ToAnyType(aActual), anyFirstElem:= F_ToAnyType(aActual[0]), ipFieldCodec:= fbFieldCodec);
 END_VAR
 ]]></Declaration>
     <Implementation>

@@ -41,7 +41,7 @@ IF ipRepeatedField.ipFieldCodec.IsPackedRepeatedField(nTag)  THEN
         RETURN;
     END_IF
     
-    hr := ipRepeatedField.CalculatePackedDataSize(nPackedDataSize=> nPackedDataSize);
+    hr := ipRepeatedField.CalculatePackedDataSize( nPackedDataSize=> nPackedDataSize);
 	IF FAILED(hr) THEN
         F_WriteRepeatedField := hr;
         RETURN;

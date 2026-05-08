@@ -5,14 +5,23 @@
 VAR_IN_OUT CONSTANT
     aBytes  : ARRAY [*] OF BYTE;
 END_VAR
+VAR_INPUT
+	nCount : UDINT;
+END_VAR
 VAR 
     tAnyBytes   : T_AnyBytes;
     nLength     : UDINT;  
+	i : UDINT;
+	nTmp : UDINT;
 END_VAR]]></Declaration>
     <Implementation>
       <ST><![CDATA[
 tAnyBytes := F_ToAnyBytes(aBytes);
-nLength := TO_UDINT(tAnyBytes.diSize);
+
+FOR i := 0 TO MIN(nCount, TO_UDINT(tAnyBytes.diSize)) DO
+	nTmp := TO_UDINT(aBytes[i]);
+	nLength := nLength + F_ComputeUInt32Size(anyUdint:= nTmp);
+END_FOR
 F_ComputeBytesSize := F_ComputeLengthSize(nLength) + nLength;]]></ST>
     </Implementation>
   </POU>

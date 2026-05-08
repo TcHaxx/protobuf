@@ -41,11 +41,11 @@ END_VAR
 // Repeated Fields
 VAR
 	fbRepeatedaUdintArrayCodec	: FB_FieldCodecUInt32(nTag:= 16#12);
-	fbRepeatedaUdintArray		: FB_RepeatedField(anyArray:= F_ToAnyType(stExample.aUdintArray ), anyFirstElem:= F_ToAnyType(stExample.aUdintArray [0]));
+	fbRepeatedaUdintArray		: FB_RepeatedField(anyArray:= F_ToAnyType(stExample.aUdintArray ), anyFirstElem:= F_ToAnyType(stExample.aUdintArray [0]), ipFieldCodec:= fbRepeatedaUdintArrayCodec);
 	fbRepeatedaByteArrayCodec	: FB_FieldCodecUInt32(nTag:= 16#3A);
-	fbRepeatedaByteArray		: FB_RepeatedField(anyArray:= F_ToAnyType(stExample.aByteArray), anyFirstElem:= F_ToAnyType(stExample.aByteArray[0]));
+	fbRepeatedaByteArray		: FB_RepeatedField(anyArray:= F_ToAnyType(stExample.aByteArray), anyFirstElem:= F_ToAnyType(stExample.aByteArray[0]), ipFieldCodec:= fbRepeatedaByteArrayCodec);
 	fbRepeatedaLRealCodec		: FB_FieldCodecDouble(nTag:= 16#4A);
-	fbRepeatedaLReal			: FB_RepeatedField(anyArray:= F_ToAnyType(stExample.aLReal), anyFirstElem:= F_ToAnyType(stExample.aLReal[0]));
+	fbRepeatedaLReal			: FB_RepeatedField(anyArray:= F_ToAnyType(stExample.aLReal), anyFirstElem:= F_ToAnyType(stExample.aLReal[0]), ipFieldCodec:= fbRepeatedaLRealCodec);
 END_VAR]]></Declaration>
     <Implementation>
       <ST><![CDATA[]]></ST>

@@ -1,0 +1,153 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1">
+  <POU Name="FB_Foo" Id="{6308fd27-f7d9-48f6-b092-077c5680b57e}" SpecialFunc="None">
+    <Declaration><![CDATA[(*******************************************************************************
+                          protoc-gen-twincat V0.0.0.0                           
+             https://github.bhs-world.com/CorrML/protoc-gen-twincat             
+*******************************************************************************)
+{attribute 'no_explicit_call' := 'do not call this POU directly'}
+{attribute 'no-analysis'}
+FUNCTION_BLOCK INTERNAL FINAL FB_Foo IMPLEMENTS I_Message
+VAR
+    _fbMessageParser : FB_MessageParser(ipMessage:= THIS^);
+    _fbMessageWriter : FB_MessageWriter(ipMessage:= THIS^);
+    _stFoo : ST_Foo;
+    // repeated Baz baz = 2;
+    _fbFieldCodecId2 : FB_FieldCodecMessage(nTag:= 16#12, ipMessage:= _fbBaz);
+    _fbRepeatedId2 : FB_RepeatedField(anyArray:= F_ToAnyType(_stFoo.baz), anyFirstElem:= F_ToAnyType(_stFoo.baz[0]), ipFieldCodec:= _fbFieldCodecId2);
+    _fbBar : FB_Bar;
+    _fbBaz : FB_Baz;
+    END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[]]></ST>
+    </Implementation>
+    <Method Name="CalculateSize" Id="{c8bbbb20-593e-4933-a4cb-422e89c3913d}">
+      <Declaration><![CDATA[{attribute 'no-analysis'}
+(* Calculates the size of this message in Protocol Buffer wire format, in bytes. *)
+METHOD CalculateSize : UDINT
+VAR
+    nSize : UDINT;
+    nRepeatedFieldSize : UDINT;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[// Bar bar = 1;
+nSize := nSize + 1 + F_ComputeMessageSize(iMessage:= _fbBar);
+// repeated Baz baz = 2;
+nSize := nSize + 1 + F_ComputeMessageSize(iMessage:= _fbBaz);
+CalculateSize := nSize;
+]]></ST>
+      </Implementation>
+    </Method>
+    <Property Name="Foo" Id="{60f65795-802e-4765-839d-149ae6e1cf27}">
+      <Declaration><![CDATA[PROPERTY PUBLIC Foo : ST_Foo]]></Declaration>
+      <Get Name="Get" Id="{bcca8a3c-71db-4482-9428-67c25a6c26ef}">
+        <Declaration><![CDATA[VAR
+END_VAR]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[Foo := _stFoo;]]></ST>
+        </Implementation>
+      </Get>
+      <Set Name="Set" Id="{e14e4b8f-dba5-4741-9f49-0cd87a057c87}">
+        <Declaration><![CDATA[VAR
+END_VAR]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[_stFoo := Foo;]]></ST>
+        </Implementation>
+      </Set>
+    </Property>
+    <Method Name="MergeFrom" Id="{4055f139-bca3-47c5-a130-33a57e64042e}">
+      <Declaration><![CDATA[(* Merges the data from the specified coded input stream with the current message.*)
+METHOD MergeFrom : HRESULT
+VAR_IN_OUT
+    fbParseCtx : FB_ParseContext;
+END_VAR
+VAR
+    nTag : UDINT;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[_fbRepeatedId2.Initialize();
+REPEAT
+MergeFrom := fbParseCtx.ReadTag(nTag=> nTag);
+IF SUCCEEDED(MergeFrom) AND nTag = 0 THEN
+    EXIT;
+END_IF;
+
+IF FAILED(MergeFrom) THEN
+    RETURN;
+END_IF
+
+CASE nTag OF
+    16#0A:    // Bar bar = 1;
+        MergeFrom := fbParseCtx.ReadMessage(ipMessage:= _fbBar);
+        THIS^._stFoo.bar := _fbBar.Bar;
+    16#12:    // repeated Baz baz = 2;
+        MergeFrom := _fbRepeatedId2.AddEntriesFrom(fbParseCtx:= fbParseCtx, ipFieldCodec:= _fbFieldCodecId2,nCount=> _stFoo.baz_count);
+ELSE
+    MergeFrom := fbParseCtx.SkipLastField();
+END_CASE
+
+UNTIL (FAILED(MergeFrom) OR nTag = 0)
+END_REPEAT
+]]></ST>
+      </Implementation>
+    </Method>
+    <Property Name="MessageValue" Id="{f1446de9-73cd-4211-931d-a08806494dfb}">
+      <Declaration><![CDATA[PROPERTY PUBLIC MessageValue : T_Any]]></Declaration>
+      <Get Name="Get" Id="{0148523b-3cc3-45ab-b71b-85dbb6d867b5}">
+        <Declaration><![CDATA[]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[MessageValue := F_ToAnyType(anyArg:= _stFoo);]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Property Name="Parser" Id="{6ddd2ff4-f9b2-4150-9ecf-c6189a8c6b42}">
+      <Declaration><![CDATA[PROPERTY PUBLIC Parser : REFERENCE TO FB_MessageParser]]></Declaration>
+      <Get Name="Get" Id="{b12b5751-ffd6-4158-8ed1-aac9c262a89e}">
+        <Declaration><![CDATA[]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[Parser REF= THIS^._fbMessageParser;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Property Name="Writer" Id="{0a895c39-ffc5-4f2b-8a2b-dedd81852be9}">
+      <Declaration><![CDATA[(* Writer for this message.*)
+PROPERTY PUBLIC Writer : REFERENCE TO FB_MessageWriter]]></Declaration>
+      <Get Name="Get" Id="{bb58b2a1-028e-41f5-8ea9-f535b528b66b}">
+        <Declaration><![CDATA[]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[Writer REF= THIS^._fbMessageWriter;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Method Name="WriteTo" Id="{78d9135a-ffb3-42db-9fd5-d676efd75a1c}">
+      <Declaration><![CDATA[(* Writes the data to the given coded output stream.*)
+METHOD WriteTo : HRESULT
+VAR_IN_OUT
+	(* Coded output stream to write the data to. *)
+	fbWriteCtx	: FB_WriteContext;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[// Bar bar = 1;
+WriteTo := fbWriteCtx.WriteTag(1, E_WireType.LengthDelimited);
+IF FAILED(WriteTo) THEN
+    RETURN;
+END_IF
+_fbBar.Bar := THIS^._stFoo.bar;
+WriteTo := fbWriteCtx.WriteMessage(ipMessage:= THIS^._fbBar);
+IF FAILED(WriteTo) THEN
+    RETURN;
+END_IF
+// repeated Baz baz = 2;
+WriteTo := _fbRepeatedId2.WriteToWithCount(fbWriteCtx:= fbWriteCtx, ipFieldCodec:= _fbFieldCodecId2, nCount:= _stFoo.baz_count);
+IF FAILED(WriteTo) THEN
+    RETURN;
+END_IF
+]]></ST>
+      </Implementation>
+    </Method>
+  </POU>
+</TcPlcObject>

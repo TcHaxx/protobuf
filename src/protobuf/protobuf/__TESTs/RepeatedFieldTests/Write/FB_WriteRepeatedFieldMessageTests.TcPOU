@@ -4,7 +4,7 @@
     <Declaration><![CDATA[FUNCTION_BLOCK INTERNAL FB_WriteRepeatedFieldMessageTests EXTENDS FB_TestSuite
 VAR
 	fbWriteCtx		: FB_WriteContext;
-	fbFoo   		: FB_FooMessage;
+	fbFoo   		: FB_Foo;
 	stFoo           : ST_Foo;
 	aBuffer 		: ARRAY[0..255] OF BYTE;
 END_VAR

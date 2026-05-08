@@ -1,0 +1,165 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1">
+  <POU Name="FB_MotorConfig" Id="{c64ec2ee-376b-4e36-87c6-ff083384275a}" SpecialFunc="None">
+    <Declaration><![CDATA[(*******************************************************************************
+                          protoc-gen-twincat V0.0.0.0                           
+                  https://github.com/TcHaxx/protoc-gen-twincat                  
+*******************************************************************************)
+{attribute 'no_explicit_call' := 'do not call this POU directly'}
+{attribute 'no-analysis'}
+FUNCTION_BLOCK INTERNAL FINAL FB_MotorConfig IMPLEMENTS I_Message
+VAR
+    _fbMessageParser : FB_MessageParser(ipMessage:= THIS^);
+    _fbMessageWriter : FB_MessageWriter(ipMessage:= THIS^);
+    _stMotorConfig : ST_MotorConfig;
+    END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[]]></ST>
+    </Implementation>
+    <Method Name="CalculateSize" Id="{b511b10a-3d6e-4779-8049-4dbd4edd52f4}">
+      <Declaration><![CDATA[{attribute 'no-analysis'}
+(* Calculates the size of this message in Protocol Buffer wire format, in bytes. *)
+METHOD CalculateSize : UDINT
+VAR
+    nSize : UDINT;
+    nRepeatedFieldSize : UDINT;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[// float max_speed = 1;
+nSize := nSize + 1 + F_ComputeFloatSize(fValue:= _stMotorConfig.max_speed);
+// double acceleration = 2;
+nSize := nSize + 1 + F_ComputeDoubleSize(fValue:= _stMotorConfig.acceleration);
+// uint32 timeout_ms = 3;
+nSize := nSize + 1 + F_ComputeUint32Size(anyUdint:= _stMotorConfig.timeout_ms);
+CalculateSize := nSize;
+]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="MergeFrom" Id="{f993e7d0-8538-4d79-8ae4-cf9759c5cfea}">
+      <Declaration><![CDATA[(* Merges the data from the specified coded input stream with the current message.*)
+{attribute 'no-analysis'}
+METHOD MergeFrom : HRESULT
+VAR_IN_OUT
+    fbParseCtx : FB_ParseContext;
+END_VAR
+VAR
+    nTag : UDINT;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[REPEAT
+MergeFrom := fbParseCtx.ReadTag(nTag=> nTag);
+IF SUCCEEDED(MergeFrom) AND nTag = 0 THEN
+    EXIT;
+END_IF;
+
+IF FAILED(MergeFrom) THEN
+    RETURN;
+END_IF
+
+CASE nTag OF
+    16#0D:    // float max_speed = 1;
+        MergeFrom := fbParseCtx.ReadFloat(fValue=> _stMotorConfig.max_speed); 
+    16#11:    // double acceleration = 2;
+        MergeFrom := fbParseCtx.ReadDouble(fValue=> _stMotorConfig.acceleration); 
+    16#18:    // uint32 timeout_ms = 3;
+        MergeFrom := fbParseCtx.ReadUint32(anyUdint:= _stMotorConfig.timeout_ms); 
+ELSE
+    MergeFrom := fbParseCtx.SkipLastField();
+END_CASE
+
+UNTIL (FAILED(MergeFrom) OR nTag = 0)
+END_REPEAT
+]]></ST>
+      </Implementation>
+    </Method>
+    <Property Name="MessageValue" Id="{7594e424-56d7-4a2b-bf4b-14a2febbd6ea}">
+      <Declaration><![CDATA[PROPERTY PUBLIC MessageValue : T_Any]]></Declaration>
+      <Get Name="Get" Id="{a795ef43-579b-4f43-a745-2ed5d8dcc8ef}">
+        <Declaration><![CDATA[]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[MessageValue := F_ToAnyType(anyArg:= _stMotorConfig);]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Property Name="MotorConfig" Id="{319b9f3d-5b4c-4b7b-851c-39422dc07f49}">
+      <Declaration><![CDATA[PROPERTY PUBLIC MotorConfig : ST_MotorConfig]]></Declaration>
+      <Get Name="Get" Id="{72a6a36f-836d-4a85-a6f9-24befc03aa13}">
+        <Declaration><![CDATA[VAR
+END_VAR]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[MotorConfig := _stMotorConfig;]]></ST>
+        </Implementation>
+      </Get>
+      <Set Name="Set" Id="{e9380a29-eda8-4d0f-842a-a347585495b5}">
+        <Declaration><![CDATA[VAR
+END_VAR]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[_stMotorConfig := MotorConfig;
+]]></ST>
+        </Implementation>
+      </Set>
+    </Property>
+    <Property Name="Parser" Id="{22a12cc8-2399-4198-9b3c-9ee32442dc45}">
+      <Declaration><![CDATA[PROPERTY PUBLIC Parser : REFERENCE TO FB_MessageParser]]></Declaration>
+      <Get Name="Get" Id="{4403d7df-547a-4d46-9ed6-8446dcdfa75b}">
+        <Declaration><![CDATA[]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[Parser REF= THIS^._fbMessageParser;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Property Name="Writer" Id="{eda7e153-9aa2-48ad-8c1e-37cd9994871c}">
+      <Declaration><![CDATA[(* Writer for this message.*)
+PROPERTY PUBLIC Writer : REFERENCE TO FB_MessageWriter]]></Declaration>
+      <Get Name="Get" Id="{8f4b9ad3-838d-4b80-859d-ae3b6250c72c}">
+        <Declaration><![CDATA[]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[Writer REF= THIS^._fbMessageWriter;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Method Name="WriteTo" Id="{1157e776-3307-450c-addc-95393c987114}">
+      <Declaration><![CDATA[(* Writes the data to the given coded output stream.*)
+{attribute 'no-analysis'}
+METHOD WriteTo : HRESULT
+VAR_IN_OUT
+	(* Coded output stream to write the data to. *)
+	fbWriteCtx	: FB_WriteContext;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[// float max_speed = 1;
+WriteTo := fbWriteCtx.WriteTag(1, E_WireType.Fixed32);
+IF FAILED(WriteTo) THEN
+    RETURN;
+END_IF
+WriteTo := fbWriteCtx.WriteFloat(fValue:= _stMotorConfig.max_speed);
+IF FAILED(WriteTo) THEN
+    RETURN;
+END_IF
+// double acceleration = 2;
+WriteTo := fbWriteCtx.WriteTag(2, E_WireType.Fixed64);
+IF FAILED(WriteTo) THEN
+    RETURN;
+END_IF
+WriteTo := fbWriteCtx.WriteDouble(fValue:= _stMotorConfig.acceleration);
+IF FAILED(WriteTo) THEN
+    RETURN;
+END_IF
+// uint32 timeout_ms = 3;
+WriteTo := fbWriteCtx.WriteTag(3, E_WireType.Varint);
+IF FAILED(WriteTo) THEN
+    RETURN;
+END_IF
+WriteTo := fbWriteCtx.WriteUint32(anyUdint:= _stMotorConfig.timeout_ms);
+IF FAILED(WriteTo) THEN
+    RETURN;
+END_IF
+]]></ST>
+      </Implementation>
+    </Method>
+  </POU>
+</TcPlcObject>
